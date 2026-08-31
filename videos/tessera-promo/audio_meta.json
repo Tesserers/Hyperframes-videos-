@@ -1,5 +1,11 @@
 {
-  "bgm": null,
+  "bgm": {
+    "path": "assets/bgm/bed.wav",
+    "volume": 1.0,
+    "mode": "client-supplied",
+    "query": "nastelbom \u00b7 corporate background",
+    "duration_s": 37.8
+  },
   "bgm_pending": false,
   "voices": [],
   "sfx": [

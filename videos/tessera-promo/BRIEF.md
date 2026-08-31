@@ -62,9 +62,17 @@ aburrido, y sin voz** — la locución sintética sonaba mal. Sin voz, el ritmo 
   "Better decisions, together.", los 7 servicios y los 5 hitos del proceso.
 - **Cifras, todas verificadas en su web**: +€500M asesorados · +40 operaciones · +15 años ·
   72 h primer shortlist · 7 d informe de mercado · 87 % tasa de cierre. No hay ninguna otra.
-- **Sigue sin música.** MusicGen necesita descargar su modelo de HuggingFace y el proxy lo
-  bloquea (403); la biblioteca de HeyGen exige sesión iniciada. Para añadirla: `npx hyperframes
-  auth login` y relanzar el paso de audio, o dejar un MP3 y lo mezclo bajo los efectos.
+- **Música: pista aportada por el cliente** (`nastelbom · corporate background`, 122 s).
+  Ninguna vía de *conseguir* música funciona en este entorno — `api.heygen.com` bloqueado,
+  HuggingFace bloqueado (el modelo de MusicGen), y el `bgm.mp3` que trae la skill es un puntero
+  de Git LFS de 132 bytes cuyos 5,3 MB reales viven en un host bloqueado. Usar música sí
+  funciona; solo estaba bloqueado obtenerla.
+  El montaje: la pista arranca en el segundo **14,851**, no en el 0. Dos razones — su propia
+  entrada (0–10 s) va 4 dB por debajo del cuerpo y se comería la apertura; y ese offset hace
+  que **dos de los cortes más fuertes del vídeo caigan en el primer tiempo del compás**, el
+  zoom del 21,2 s y el flash amarillo del 30,6 s (128 BPM medidos, compás de 1,879 s).
+  Normalizada a −17 LUFS con entrada de 1 s y salida de 2,6 s; el vídeo entero queda en
+  **−16,1 LUFS**, dentro de lo estándar para web y redes.
 - **La web sigue bloqueada** por la política de red del entorno (403 en el CONNECT, igual que
   Google, LinkedIn o Wikipedia — es una lista blanca estricta). Ya no importa para este vídeo,
   porque el material lo aportó el cliente, pero sí impide capturar pantallazos de la web si en

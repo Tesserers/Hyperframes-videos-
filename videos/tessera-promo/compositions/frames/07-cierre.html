@@ -1,0 +1,98 @@
+<template>
+  <style>
+    @font-face { font-family: "Ailerons"; src: url("assets/fonts/Ailerons.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-200.woff2") format("woff2"); font-weight: 200; font-style: normal; font-display: block; }
+    @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute; inset: 0; overflow: hidden;
+      --deep: #0a1a1c; --teal: #587579; --teal-lt: #6e9195;
+      --beige: #f0e8de; --yellow: #fbe0a0;
+    }
+    /* No opaque ground here: the hoisted footage IS this frame's ground. */
+    .ci-ground { position: absolute; inset: 0; background: transparent; }
+    .ci-video { position: absolute; inset: 0; width: 1920px; height: 1080px; object-fit: cover; }
+    .ci-overlay { position: absolute; inset: 0; background: rgba(10, 26, 28, 0.58); }
+    .ci-grain {
+      position: absolute; inset: 0; opacity: 0.05; background-size: 200px;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    }
+
+    .ci-wordmark {
+      position: absolute; left: 0; top: 386px; width: 1920px; text-align: center;
+      font-family: "Ailerons", sans-serif; font-weight: 400; font-size: 168px; line-height: 1;
+      text-transform: uppercase; letter-spacing: 0.06em; color: var(--beige);
+    }
+    .ci-ch { display: inline-block; }
+    .ci-hair { position: absolute; left: 760px; top: 606px; width: 400px; height: 1px; background: var(--teal); transform-origin: center; }
+    .ci-tag {
+      position: absolute; left: 0; top: 650px; width: 1920px; text-align: center;
+      font-family: "Raleway", sans-serif; font-weight: 200; font-size: 50px; color: rgba(240,232,222,0.86);
+      letter-spacing: 0.02em;
+    }
+    .ci-domain {
+      position: absolute; left: 0; top: 762px; width: 1920px; text-align: center;
+      font-family: "Raleway", sans-serif; font-weight: 600; font-size: 27px;
+      letter-spacing: 0.24em; text-transform: uppercase; color: var(--yellow);
+    }
+    .ci-fade { position: absolute; inset: 0; background: var(--deep); }
+  </style>
+
+  <div id="root" data-composition-id="07-cierre" data-width="1920" data-height="1080" data-duration="4.7">
+    <div id="ci-ground" class="clip ci-ground" data-start="0" data-duration="4.7" data-track-index="0"></div>
+
+    <!-- approved frame video hoisted by assemble-index -->
+
+    <div id="ci-treat" class="clip ci-treat" data-start="0" data-duration="4.7" data-track-index="2">
+      <div class="ci-overlay"></div>
+      <div class="ci-grain"></div>
+    </div>
+
+    <div id="ci-lockup" class="clip ci-lockup" data-start="0" data-duration="4.7" data-track-index="3">
+      <div class="ci-wordmark" id="ci-wordmark"></div>
+      <div class="ci-hair" id="ci-hair"></div>
+      <div class="ci-tag" id="ci-tag">Better decisions, together.</div>
+      <div class="ci-domain" id="ci-domain">tesseraservices.com</div>
+    </div>
+
+    <div id="ci-fade" class="clip ci-fade" style="opacity:0;visibility:hidden" data-start="0" data-duration="4.7" data-track-index="4"></div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="07-cierre"]');
+      var wordmark = root.querySelector("#ci-wordmark");
+      var chars = [];
+      var TXT = "Tessera";
+      for (var i = 0; i < TXT.length; i++) {
+        var ch = document.createElement("span");
+        ch.className = "ci-ch";
+        ch.textContent = TXT[i];
+        wordmark.appendChild(ch);
+        chars.push(ch);
+      }
+
+      var tl = gsap.timeline({ paused: true });
+
+      // The logotype resolves once and then holds — this frame has to survive
+      // being paused on as a still, so nothing here keeps moving.
+      for (var k = 0; k < chars.length; k++) {
+        tl.fromTo(
+          chars[k],
+          { autoAlpha: 0, y: 40 },
+          { autoAlpha: 1, y: 0, duration: 0.66, ease: "power3.out" },
+          0.05 + k * 0.045
+        );
+      }
+      tl.fromTo(root.querySelector("#ci-hair"), { scaleX: 0 }, { scaleX: 1, duration: 0.66, ease: "power3.out" }, 0.5);
+      tl.fromTo(root.querySelector("#ci-tag"), { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: 0.54, ease: "power3.out" }, 0.66);
+      tl.fromTo(root.querySelector("#ci-domain"), { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out" }, 1.2);
+
+      // The film's only exit.
+      tl.set(root.querySelector("#ci-fade"), { autoAlpha: 0 }, 4.0);
+      tl.to(root.querySelector("#ci-fade"), { autoAlpha: 1, duration: 0.42, ease: "power2.in" }, 4.28);
+
+      window.__timelines["07-cierre"] = tl;
+    })();
+  </script>
+</template>

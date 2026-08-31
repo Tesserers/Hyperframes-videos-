@@ -1,0 +1,150 @@
+<template>
+  <style>
+    @font-face { font-family: "Ailerons"; src: url("assets/fonts/Ailerons.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-200.woff2") format("woff2"); font-weight: 200; font-style: normal; font-display: block; }
+    @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute; inset: 0; overflow: hidden;
+      --navy: #202031; --deep: #0a1a1c;
+      --teal: #587579; --teal-lt: #6e9195;
+      --beige: #f0e8de; --yellow: #fbe0a0;
+    }
+
+    /* Full-bleed ground rides a clip layer, never #root. */
+    /* No opaque ground here: the hoisted footage IS this frame's ground. */
+    .ap-ground { position: absolute; inset: 0; background: transparent; }
+    .ap-video { position: absolute; inset: 0; width: 1920px; height: 1080px; object-fit: cover; }
+    .ap-overlay { position: absolute; inset: 0; background: rgba(10, 26, 28, 0.46); }
+    /* The site's own grain plate, same SVG turbulence, same 0.04 weight. */
+    .ap-grain {
+      position: absolute; inset: 0; opacity: 0.05; pointer-events: none;
+      background-size: 200px;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    }
+
+    /* The site's fixed teal scroll indicator, promoted to a title-card device. */
+    .ap-scrollbar { position: absolute; top: 0; left: 0; height: 3px; width: 1920px; background: var(--teal); transform-origin: left center; }
+
+    .ap-stage { position: absolute; inset: 0; }
+
+    .ap-wordmark {
+      position: absolute; left: 0; top: 430px; width: 1920px; text-align: center;
+      font-family: "Ailerons", sans-serif; font-weight: 400; font-size: 178px; line-height: 1;
+      text-transform: uppercase; color: var(--beige); letter-spacing: 0.06em;
+    }
+    .ap-ch { display: inline-block; }
+    .ap-eyebrow {
+      position: absolute; left: 0; top: 676px; width: 1920px; text-align: center;
+      font-family: "Raleway", sans-serif; font-weight: 600; font-size: 26px;
+      letter-spacing: 0.28em; text-transform: uppercase; color: var(--teal-lt);
+    }
+    .ap-hair { position: absolute; left: 810px; top: 634px; width: 300px; height: 1px; background: var(--teal); transform-origin: center; }
+
+    .ap-hook { position: absolute; left: 0; top: 360px; width: 1920px; text-align: center; }
+    .ap-l {
+      display: block; font-family: "Raleway", sans-serif; line-height: 0.98; letter-spacing: 0.02em;
+    }
+    .ap-l1 { font-weight: 200; font-size: 128px; color: var(--beige); }
+    .ap-l2 { font-weight: 800; font-size: 128px; color: var(--yellow); }
+    .ap-w { display: inline-block; }
+  </style>
+
+  <div id="root" data-composition-id="01-apertura" data-width="1920" data-height="1080" data-duration="8.5">
+    <div id="ap-ground" class="clip ap-ground" data-start="0" data-duration="8.5" data-track-index="0"></div>
+
+    <!-- approved frame video hoisted by assemble-index -->
+
+    <div id="ap-treat" class="clip ap-treat" data-start="0" data-duration="8.5" data-track-index="2">
+      <div class="ap-overlay"></div>
+      <div class="ap-grain"></div>
+      <div class="ap-scrollbar" id="ap-scrollbar"></div>
+    </div>
+
+    <div id="ap-mark" class="clip ap-stage" data-start="0" data-duration="8.5" data-track-index="3">
+      <div class="ap-wordmark" id="ap-wordmark"></div>
+      <div class="ap-hair" id="ap-hair"></div>
+      <div class="ap-eyebrow" id="ap-eyebrow">Finanzas &middot; Capital Humano &middot; Estrategia</div>
+    </div>
+
+    <div id="ap-hook" class="clip ap-hook" style="opacity:0;visibility:hidden" data-start="0" data-duration="8.5" data-track-index="4">
+      <span class="ap-l ap-l1" id="ap-l1"></span>
+      <span class="ap-l ap-l2" id="ap-l2"></span>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="01-apertura"]');
+      var wordmark = root.querySelector("#ap-wordmark");
+      var hair = root.querySelector("#ap-hair");
+      var eyebrow = root.querySelector("#ap-eyebrow");
+      var scrollbar = root.querySelector("#ap-scrollbar");
+      var markStage = root.querySelector("#ap-mark");
+      var hookStage = root.querySelector("#ap-hook");
+
+      function words(el, text, cls) {
+        var out = [], parts = text.split(" ");
+        for (var i = 0; i < parts.length; i++) {
+          var s = document.createElement("span");
+          s.className = "ap-w";
+          s.textContent = parts[i];
+          el.appendChild(s);
+          if (i < parts.length - 1) el.appendChild(document.createTextNode(" "));
+          out.push(s);
+        }
+        return out;
+      }
+      var w1 = words(root.querySelector("#ap-l1"), "Las decisiones que");
+      var w2 = words(root.querySelector("#ap-l2"), "definen tu empresa.");
+
+      var tl = gsap.timeline({ paused: true });
+
+      // — Beat 1 (0.0–3.4): the logotype comes to rest. Ailerons opens tight and
+      //   tracks out to the .22em the brand actually sets it at. —
+      // Per-glyph x, converging on the brand's static .22em: a real tracking-out
+      // that interpolates sub-pixel, where a letterSpacing tween would stutter.
+      var chars = [];
+      var TXT = "Tessera", TIGHTEN = 30;
+      for (var ci = 0; ci < TXT.length; ci++) {
+        var ch = document.createElement("span");
+        ch.className = "ap-ch";
+        ch.textContent = TXT[ci];
+        wordmark.appendChild(ch);
+        chars.push(ch);
+      }
+      for (var k = 0; k < chars.length; k++) {
+        tl.fromTo(
+          chars[k],
+          { x: (k - (chars.length - 1) / 2) * -TIGHTEN, autoAlpha: 0 },
+          { x: 0, autoAlpha: 1, duration: 1.5, ease: "expo.out" },
+          0.15 + k * 0.035
+        );
+      }
+      tl.fromTo(
+        wordmark,
+        { scale: 1.12, filter: "blur(14px)" },
+        { scale: 1, filter: "blur(0px)", duration: 1.5, ease: "expo.out" },
+        0.15
+      );
+      tl.fromTo(scrollbar, { scaleX: 0 }, { scaleX: 1, duration: 3.2, ease: "power2.inOut" }, 0);
+      tl.fromTo(hair, { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.out" }, 1.1);
+      tl.fromTo(eyebrow, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out" }, 1.35);
+
+      // — Internal seam (3.4): zoom-through. The mark accelerates at the viewer and
+      //   the claim continues that same forward Z from behind — one move, two texts. —
+      tl.to(markStage, { scale: 1.22, filter: "blur(10px)", duration: 0.22, ease: "power3.in" }, 3.36);
+      tl.to(markStage, { opacity: 0.15, duration: 0.22, ease: "none" }, 3.36);
+      tl.set(markStage, { autoAlpha: 0 }, 3.58);
+      tl.set(hookStage, { autoAlpha: 1, scale: 0.76, filter: "blur(10px)", opacity: 0.15 }, 3.58);
+      tl.to(hookStage, { scale: 1, filter: "blur(0px)", opacity: 1, duration: 0.52, ease: "expo.out" }, 3.58);
+
+      // — Beat 2 (3.6–8.0): the site's own hero claim, word by word, the payoff in yellow. —
+      tl.fromTo(w1, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.08 }, 3.7);
+      tl.fromTo(w2, { autoAlpha: 0, y: 52 }, { autoAlpha: 1, y: 0, duration: 0.56, ease: "power3.out", stagger: 0.085 }, 4.35);
+
+      window.__timelines["01-apertura"] = tl;
+    })();
+  </script>
+</template>

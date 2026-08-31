@@ -1,0 +1,72 @@
+<template>
+  <style>
+    @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-200.woff2") format("woff2"); font-weight: 200; font-style: normal; font-display: block; }
+    @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute; inset: 0; overflow: hidden;
+      --navy: #202031; --yellow: #fbe0a0; --teal: #587579;
+    }
+    /* The film's one bright frame. Yellow is the brand's scarcest colour, so
+       spending a whole ground on it lands as a punchline, not as decoration. */
+    .eb-ground { position: absolute; inset: 0; background: var(--yellow); }
+    .eb-grain {
+      position: absolute; inset: 0; opacity: 0.05; background-size: 200px;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    }
+    .eb-block { position: absolute; left: 0; top: 404px; width: 1920px; text-align: center; }
+    .eb-l {
+      display: block; font-family: "Raleway", sans-serif; color: var(--navy);
+      line-height: 1.0; letter-spacing: 0.005em;
+    }
+    .eb-a { font-weight: 200; font-size: 96px; font-style: italic; }
+    .eb-b { font-weight: 800; font-size: 186px; margin-top: 6px; }
+    .eb-w { display: inline-block; }
+    .eb-rule {
+      position: absolute; left: 700px; top: 792px; width: 520px; height: 6px;
+      background: var(--navy); transform-origin: center;
+    }
+  </style>
+
+  <div id="root" data-composition-id="06-ebitda" data-width="1920" data-height="1080" data-duration="3">
+    <div id="eb-ground" class="clip eb-ground" data-start="0" data-duration="3" data-track-index="0">
+      <div class="eb-grain"></div>
+    </div>
+    <div id="eb-block" class="clip eb-block" data-start="0" data-duration="3" data-track-index="1">
+      <span class="eb-l eb-a" id="eb-a">Y sí, lo decimos en voz alta:</span>
+      <span class="eb-l eb-b" id="eb-b"></span>
+    </div>
+    <div id="eb-rule" class="clip eb-rule" data-start="0" data-duration="3" data-track-index="2"></div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="06-ebitda"]');
+      var b = root.querySelector("#eb-b");
+      var chars = [];
+      var TXT = "We love EBITDA.";
+      for (var i = 0; i < TXT.length; i++) {
+        var s = document.createElement("span");
+        s.className = "eb-w";
+        s.textContent = TXT[i] === " " ? " " : TXT[i];
+        b.appendChild(s);
+        chars.push(s);
+      }
+
+      var tl = gsap.timeline({ paused: true });
+
+      // Hard cut in from the dark frame before it — no transition is stamped at
+      // this seam, and the flash to full yellow IS the joke.
+      tl.fromTo(root.querySelector("#eb-a"), { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.34, ease: "power3.out" }, 0.04);
+      tl.fromTo(
+        chars,
+        { autoAlpha: 0, y: 60, scale: 0.9 },
+        { autoAlpha: 1, y: 0, scale: 1, duration: 0.42, ease: "power3.out", stagger: 0.028 },
+        0.3
+      );
+      tl.fromTo(root.querySelector("#eb-rule"), { scaleX: 0 }, { scaleX: 1, duration: 0.44, ease: "power3.out" }, 0.86);
+
+      window.__timelines["06-ebitda"] = tl;
+    })();
+  </script>
+</template>

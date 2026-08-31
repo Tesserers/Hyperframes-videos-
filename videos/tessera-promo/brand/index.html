@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TESSERA · Finanzas y Capital Humano para PYMES</title>
+  <meta name="description" content="Especialistas en M&A, CFO part-time, reestructuración y selección directiva para PYMES y startups en España." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel='icon' type='image/png' href='https://images.teamtailor-cdn.com/images/s3/teamtailor-production/favicon-v3/image_uploads/30564067-d582-4b42-8b3f-ea7ff035dd05/original.png'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link href="https://fonts.cdnfonts.com/css/ailerons" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Cortinilla de carga -->
+<div class="page-curtain" aria-hidden="true"><span>TESSERA</span></div>
+
+<div id="scroll-bar"></div>
+
+<!-- Vídeo de fondo único, compartido por el hero y "Quiénes somos" -->
+<video class="home-bg-video" autoplay muted loop playsinline preload="auto">
+  <source src="media/videociudadcampo.webm" type="video/webm" />
+</video>
+
+<nav class="mobile-nav" id="mobileNav">
+  <a href="#about"       onclick="closeMobile()" data-i18n="nav.about">Nosotros</a>
+  <a href="#servicios"   onclick="closeMobile()" data-i18n="nav.finance">Finanzas</a>
+  <a href="#metodologia" onclick="closeMobile()">Human Capital</a>
+  <a href="#casos"       onclick="closeMobile()" data-i18n="nav.cases">Casos</a>
+  <a href="https://jobs.tesseraservices.com/" target="_blank">Careers</a>
+  <a href="#" onclick="closeMobile(); openModal(); return false;" class="mobile-cta" data-i18n="nav.cta">Hablemos</a>
+</nav>
+
+<nav id="mainNav">
+  <a href="#top" class="nav-logo" aria-label="Tessera">TESSERA</a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#servicios" data-i18n="nav.finance">Finanzas</a></li>
+      <li><a href="#metodologia">Human Capital</a></li>
+      <li><a href="#casos" data-i18n="nav.cases">Casos</a></li>
+      <li><a href="https://jobs.tesseraservices.com/" target="_blank">Careers</a></li>
+      <li><a href="#" onclick="openModal(); return false;" class="nav-cta" data-i18n="nav.cta">Hablemos</a></li>
+    </ul>
+    <button class="lang-switch" id="langSwitch" type="button" onclick="toggleLanguage()" aria-label="Cambiar idioma a inglés">ENG</button>
+    <button class="hamburger" id="hamburger" aria-label="Abrir menú" data-i18n-aria="nav.menuOpen" aria-expanded="false" onclick="toggleMobile()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section id="top" class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-grain"></div>
+
+  <p class="hero-eyebrow" data-i18n="hero.eyebrow">Finanzas · Capital Humano · Estrategia</p>
+  <h1 class="hero-title" data-i18n="hero.title">
+    Las decisiones que<br>
+    <strong>definen tu empresa.</strong>
+  </h1>
+  <p class="hero-sub" data-i18n="hero.sub">
+    La profundidad de una gran firma. La cercanía de un equipo que se sienta en tu mesa.
+  </p>
+  <div class="hero-actions">
+    <button onclick="openModal()" class="btn-primary">
+      <span data-i18n="hero.ctaPrimary">Hablemos de tu operación</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+    <a href="#servicios" class="btn-ghost" data-i18n="hero.ctaGhost">Ver servicios</a>
+  </div>
+
+  <div class="hero-social-proof">
+    <div class="hero-proof-item">
+      <span class="hero-proof-num">+€<span class="proof-count" data-target="500">0</span>M</span>
+      <span class="hero-proof-label" data-i18n="hero.proof.advised">asesorados</span>
+    </div>
+    <div class="hero-proof-sep"></div>
+    <div class="hero-proof-item">
+      <span class="hero-proof-num">+<span class="proof-count" data-target="40">0</span></span>
+      <span class="hero-proof-label" data-i18n="hero.proof.deals">operaciones</span>
+    </div>
+    <div class="hero-proof-sep"></div>
+    <div class="hero-proof-item">
+      <span class="hero-proof-num">+<span class="proof-count" data-target="15">0</span><span data-i18n="hero.proof.years"> años</span></span>
+      <span class="hero-proof-label" data-i18n="hero.proof.experience">de experiencia</span>
+    </div>
+  </div>
+
+  <div class="hero-scroll-hint" aria-hidden="true">
+    <span>scroll</span>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-video-overlay"></div>
+  <div class="section-inner">
+
+    <div class="about-intro reveal">
+      <p class="section-label" data-i18n="about.label">Quiénes somos</p>
+      <h2 class="section-title" data-i18n="about.title">Especialistas en finanzas y <strong>capital humano.</strong></h2>
+      <p class="about-lead" data-i18n="about.lead">Acompañamos a PYMES y startups en las decisiones que marcan su rumbo. Nos integramos dentro de tu compañía, en finanzas y en capital humano, para profesionalizar, ordenar y llevar el negocio al siguiente nivel.</p>
+    </div>
+
+    <div class="about-stats reveal reveal-delay-1">
+      <div class="about-stat">
+        <div class="about-stat-num" data-i18n="about.stat1num">Senior</div>
+        <p data-i18n="about.stat1">Equipo directivo con experiencia en banca de inversión, consultoría y operaciones reales</p>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-num" data-i18n="about.stat2num">3 áreas</div>
+        <p data-i18n="about.stat2desc">Finanzas corporativas y capital humano bajo el mismo techo, sin silos</p>
+      </div>
+    </div>
+
+    <div class="about-pillars reveal reveal-delay-2">
+      <div class="pillar">
+        <span class="pillar-num">01</span>
+        <div class="pillar-content">
+          <h4 data-i18n="nav.finance">Finanzas</h4>
+          <p data-i18n="pillar.finance.desc">M&amp;A, dirección financiera part-time, reestructuración y financiación.</p>
+        </div>
+      </div>
+      <div class="pillar">
+        <span class="pillar-num">02</span>
+        <div class="pillar-content">
+          <h4>Capital Humano</h4>
+          <p data-i18n="pillar.hc.desc">Head hunting y selección de perfiles directivos y estratégicos.</p>
+        </div>
+      </div>
+      <div class="pillar">
+        <span class="pillar-num">03</span>
+        <div class="pillar-content">
+          <h4 data-i18n="common.strategy">Estrategia</h4>
+          <p data-i18n="pillar.strategy.desc">Consultoría, control de gestión y crecimiento con criterio y datos.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<section id="servicios">
+  <svg class="duotone-def" aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden">
+    <filter id="tessera-duotone" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="0.2126 0.7152 0.0722 0 0
+                                           0.2126 0.7152 0.0722 0 0
+                                           0.2126 0.7152 0.0722 0 0
+                                           0      0      0      1 0"/>
+      <feComponentTransfer>
+        <!-- Sombras: Negro puro (0) | Luces: Blanco puro (1) -->
+        <feFuncR type="table" tableValues="0 1"/>
+        <feFuncG type="table" tableValues="0 1"/>
+        <feFuncB type="table" tableValues="0 1"/>
+      </feComponentTransfer>
+    </filter>
+  </svg>
+  <div class="section-inner">
+    <div class="services-header reveal">
+      <p class="section-label" data-i18n="services.label">Servicios · Finanzas</p>
+      <h2 class="section-title" data-i18n="services.title">Capacidades financieras de <strong>principio a fin.</strong></h2>
+      <p data-i18n="services.lead">No vendemos informes. Nos sentamos en tu mesa, entendemos tu negocio por dentro y tomamos las decisiones difíciles contigo.</p>
+    </div>
+
+    <div class="services-md reveal">
+      <div class="services-md-list" role="tablist" aria-label="Servicios">
+        <button type="button" class="svc-tab active" role="tab" aria-selected="true" aria-controls="svc-detail-01" data-svc="01" onclick="selectService(this)">
+          <span class="service-num">01</span>
+          <span class="service-name" data-i18n="svc.ma.title">M&amp;A</span>
+          <span class="svc-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></span>
+        </button>
+        <button type="button" class="svc-tab" role="tab" aria-selected="false" aria-controls="svc-detail-02" data-svc="02" onclick="selectService(this)">
+          <span class="service-num">02</span>
+          <span class="service-name">CFO Part-Time</span>
+          <span class="svc-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></span>
+        </button>
+        <button type="button" class="svc-tab" role="tab" aria-selected="false" aria-controls="svc-detail-03" data-svc="03" onclick="selectService(this)">
+          <span class="service-num">03</span>
+          <span class="service-name" data-i18n="svc.restructuring.title">Reestructuración</span>
+          <span class="svc-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></span>
+        </button>
+        <button type="button" class="svc-tab" role="tab" aria-selected="false" aria-controls="svc-detail-04" data-svc="04" onclick="selectService(this)">
+          <span class="service-num">04</span>
+          <span class="service-name" data-i18n="svc.bp.title">Business Plan</span>
+          <span class="svc-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></span>
+        </button>
+        <button type="button" class="svc-tab" role="tab" aria-selected="false" aria-controls="svc-detail-05" data-svc="05" onclick="selectService(this)">
+          <span class="service-num">05</span>
+          <span class="service-name" data-i18n="svc.financing.title">Financiación</span>
+          <span class="svc-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></span>
+        </button>
+        <button type="button" class="svc-tab" role="tab" aria-selected="false" aria-controls="svc-detail-06" data-svc="06" onclick="selectService(this)">
+          <span class="service-num">06</span>
+          <span class="service-name" data-i18n="svc.consulting.title">Consultoría estratégica</span>
+          <span class="svc-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></span>
+        </button>
+        <button type="button" class="svc-tab" role="tab" aria-selected="false" aria-controls="svc-detail-07" data-svc="07" onclick="selectService(this)">
+          <span class="service-num">07</span>
+          <span class="service-name" data-i18n="svc.erp.title">Implementación de ERP</span>
+          <span class="svc-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></span>
+        </button>
+      </div>
+
+      <div class="services-md-detail">
+        <div class="svc-detail active" id="svc-detail-01" role="tabpanel" data-svc="01">
+          <div class="svc-detail-photo">
+            <img src="media/serv-ma.jpg" alt="" loading="lazy" onerror="this.style.display='none'">
+          </div>
+          <h3 class="svc-detail-title" data-i18n="svc.ma.title">M&amp;A</h3>
+          <p data-i18n="svc.ma.desc">Te acompañamos en todo el proceso de compraventa: valoración, preparación de la compañía, due diligence, negociación y cierre. Buscamos y filtramos contrapartes, estructuramos la operación y defendemos tus intereses en cada mesa. El objetivo es uno: maximizar el valor de salida y que firmes en las mejores condiciones, sin sorpresas de última hora.</p>
+        </div>
+        <div class="svc-detail" id="svc-detail-02" role="tabpanel" data-svc="02">
+          <div class="svc-detail-photo">
+            <img src="media/serv-cfo.jpg" alt="" loading="lazy" onerror="this.style.display='none'">
+          </div>
+          <h3 class="svc-detail-title">CFO Part-Time</h3>
+          <p data-i18n="svc.cfo.desc">Incorporamos una dirección financiera senior a tu equipo sin el coste de un CFO a tiempo completo. Nos hacemos cargo del reporting, la tesorería, el control de gestión y la relación con bancos e inversores. Te damos visibilidad real sobre tus números y un cuadro de mando con el que decidir con criterio, mes a mes.</p>
+        </div>
+        <div class="svc-detail" id="svc-detail-03" role="tabpanel" data-svc="03">
+          <div class="svc-detail-photo">
+            <img src="media/serv-restructuring.jpg" alt="" loading="lazy" onerror="this.style.display='none'">
+          </div>
+          <h3 class="svc-detail-title" data-i18n="svc.restructuring.title">Reestructuración</h3>
+          <p data-i18n="svc.restructuring.desc">Cuando el negocio aprieta, ponemos orden y un plan encima de la mesa. Renegociamos la deuda con bancos y acreedores, diseñamos planes de viabilidad realistas y tomamos contigo las decisiones difíciles para reflotar la compañía. Priorizamos la caja, frenamos la sangría y devolvemos el control de la situación a tus manos.</p>
+        </div>
+        <div class="svc-detail" id="svc-detail-04" role="tabpanel" data-svc="04">
+          <div class="svc-detail-photo">
+            <img src="media/serv-bp.jpg" alt="" loading="lazy" onerror="this.style.display='none'">
+          </div>
+          <h3 class="svc-detail-title" data-i18n="svc.bp.title">Business Plan</h3>
+          <p data-i18n="svc.bp.desc">Construimos planes de negocio que resisten el escrutinio de un comité de inversión o de cualquier banco. Modelizamos escenarios, proyecciones financieras y necesidades de financiación con hipótesis defendibles, no con humo. El resultado es un documento que convence a terceros y, sobre todo, una hoja de ruta que respalda tus decisiones de crecimiento.</p>
+        </div>
+        <div class="svc-detail" id="svc-detail-05" role="tabpanel" data-svc="05">
+          <div class="svc-detail-photo">
+            <img src="media/serv-financing.jpg" alt="" loading="lazy" onerror="this.style.display='none'">
+          </div>
+          <h3 class="svc-detail-title" data-i18n="svc.financing.title">Financiación</h3>
+          <p data-i18n="svc.financing.desc">Diseñamos la estructura de financiación que tu compañía necesita y salimos a buscarla: deuda bancaria, equity, deuda alternativa y subvenciones. Preparamos el material, abrimos las puertas de nuestra red de inversores y entidades y negociamos las condiciones contigo. Conseguimos los recursos para crecer sin que pierdas el control de tu empresa.</p>
+        </div>
+        <div class="svc-detail" id="svc-detail-06" role="tabpanel" data-svc="06">
+          <div class="svc-detail-photo">
+            <img src="media/serv-consulting.jpg" alt="" loading="lazy" onerror="this.style.display='none'">
+          </div>
+          <h3 class="svc-detail-title" data-i18n="svc.consulting.title">Consultoría estratégica</h3>
+          <p data-i18n="svc.consulting.desc">Convertimos tus datos en decisiones que generan valor. Analizamos márgenes, EBITDA, costes y unidades de negocio para entender de dónde sale, y por dónde se escapa, tu rentabilidad. Montamos el control de gestión y los KPIs que de verdad importan, y nos sentamos contigo a definir la estrategia y a ejecutarla, no solo a recomendarla.</p>
+        </div>
+        <div class="svc-detail" id="svc-detail-07" role="tabpanel" data-svc="07">
+          <div class="svc-detail-photo">
+            <img src="media/serv-erp.jpg" alt="" loading="lazy" onerror="this.style.display='none'">
+          </div>
+          <h3 class="svc-detail-title" data-i18n="svc.erp.title">Implementación de ERP</h3>
+          <p data-i18n="svc.erp.desc">Implementación y migración de ERP. Somos partners de diferentes ERP y te ayudamos con la migración o implementación de los más actuales del mercado como: Odoo, Holded...</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-ebitda reveal">
+      <p data-i18n="services.ebitda">Y sí, lo decimos en voz alta: <strong>We love EBITDA.</strong></p>
+    </div>
+  </div>
+</section>
+
+<section id="metodologia">
+  <video class="section-video" autoplay muted loop playsinline preload="none">
+    <source src="media/hero-bg.webm" type="video/webm" />
+  </video>
+  <div class="section-video-overlay section-video-overlay--dark"></div>
+  <div class="section-inner">
+
+    <!-- Cabecera -->
+    <div class="methodology-header reveal">
+      <p class="section-label" data-i18n="meth.label">Human Capital · Selección</p>
+      <h2 class="section-title meth-title" data-i18n="meth.title">Encontramos el talento que <em>tu empresa necesita.</em></h2>
+      <p class="meth-sub" data-i18n="meth.sub">Identificamos, atraemos y seleccionamos perfiles directivos y estratégicos para PYMES y startups. No usamos bases de datos genéricas, hacemos búsqueda activa, directa y confidencial. Y nos comprometemos con plazos reales.</p>
+    </div>
+
+    <!-- Bloque explicativo de qué hace Human Capital -->
+    <div class="hc-intro reveal">
+      <div class="hc-intro-item">
+        <span class="hc-intro-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </span>
+        <div>
+          <h4 data-i18n="hc.item1.title">Head hunting directivo</h4>
+          <p data-i18n="hc.item1.desc">Selección de C-level, directores de área y mandos intermedios clave. Perfiles que marcan la diferencia.</p>
+        </div>
+      </div>
+      <div class="hc-intro-item">
+        <span class="hc-intro-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </span>
+        <div>
+          <h4>Outsourcing</h4>
+          <p data-i18n="hc.item2.desc">Gestión externa del talento para que tu equipo se centre en lo que importa. Flexible, eficiente y sin fricciones.</p>
+        </div>
+      </div>
+      <div class="hc-intro-item">
+        <span class="hc-intro-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </span>
+        <div>
+          <h4 data-i18n="hc.item3.title">Shortlist validado</h4>
+          <p data-i18n="hc.item3.desc">Solo llegan candidatos que encajan de verdad. Cada perfil viene con informe individual y disponibilidad confirmada.</p>
+        </div>
+      </div>
+      <div class="hc-intro-item">
+        <span class="hc-intro-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </span>
+        <div>
+          <h4 data-i18n="hc.item4.title">Plazos comprometidos</h4>
+          <p data-i18n="hc.item4.desc">Primer shortlist en 72 horas. Informe de mercado en 7 días. Sin excusas, sin dilaciones.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="meth-numbers-title reveal" data-i18n="meth.numbersTitle">Dos números. <strong>Un compromiso.</strong></h3>
+
+    <!-- Fila 1: cifras grandes como protagonistas -->
+    <div class="meto-numbers reveal">
+      <div class="meto-num-item">
+        <div class="meto-big">
+          <span class="count-anim" data-target="72">0</span><span class="meto-unit">h</span>
+        </div>
+        <div class="meto-num-body">
+          <p class="meto-num-label" data-i18n="meto.num1.label">Primer shortlist</p>
+          <p class="meto-num-desc" data-i18n="meto.num1.desc">Candidatos reales encima de tu mesa. Validados, disponibles y alineados con el rol.</p>
+        </div>
+      </div>
+      <div class="meto-num-sep"></div>
+      <div class="meto-num-item">
+        <div class="meto-big">
+          <span class="count-anim" data-target="7">0</span><span class="meto-unit">d</span>
+        </div>
+        <div class="meto-num-body">
+          <p class="meto-num-label" data-i18n="meto.num2.label">Informe de mercado</p>
+          <p class="meto-num-desc" data-i18n="meto.num2.desc">Benchmarking salarial, mapa de talento, competidores y realidades que nadie te cuenta.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fila 2: Tessa (izquierda) + barras (derecha) -->
+    <div class="meto-mid reveal">
+
+      <div class="tessa-card">
+        <div class="tessa-card-top">
+          <span class="tessa-logo">Tessa®</span>
+          <span class="tessa-tag" data-i18n="tessa.tag">IA propia de selección</span>
+        </div>
+        <p data-i18n="tessa.desc">Nuestra inteligencia artificial rastrea, identifica y prioriza al mejor talento del mercado en cada búsqueda. Tu shortlist no depende del azar, <strong>depende de datos</strong>.</p>
+        <div class="tessa-glow"></div>
+      </div>
+
+      <div class="progress-section">
+        <h3 class="progress-title" data-i18n="progress.title">Lo que incluye cada proceso</h3>
+        <div class="progress-list">
+          <div class="progress-item">
+            <div class="progress-header"><span class="progress-label" data-i18n="progress.item1">Identificación de talento</span><span class="progress-value">98%</span></div>
+            <div class="progress-track"><div class="progress-fill" data-width="98"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-header"><span class="progress-label" data-i18n="progress.item2">Benchmarking salarial</span><span class="progress-value">95%</span></div>
+            <div class="progress-track"><div class="progress-fill" data-width="95"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-header"><span class="progress-label" data-i18n="progress.item3">Análisis de mercado</span><span class="progress-value">90%</span></div>
+            <div class="progress-track"><div class="progress-fill" data-width="90"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-header"><span class="progress-label" data-i18n="progress.item4">Shortlist en 72h</span><span class="progress-value">100%</span></div>
+            <div class="progress-track"><div class="progress-fill" data-width="100"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-header"><span class="progress-label" data-i18n="progress.item5">Tasa de cierre</span><span class="progress-value">87%</span></div>
+            <div class="progress-track"><div class="progress-fill" data-width="87"></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Fila 3: timeline a ancho completo -->
+    <div class="reveal">
+      <h3 class="timeline-title" data-i18n="timeline.title">Lo que pasa desde que firmamos hasta tu <strong>primer shortlist.</strong></h3>
+      <div class="h-timeline" id="hTimeline">
+        <div class="h-cols">
+          <div class="h-col">
+            <div class="h-col-time">H+0</div>
+            <div class="h-col-dot"><div class="h-dot" data-label="Kickoff"></div></div>
+            <div class="h-step"><div class="h-step-name">Kickoff</div><p class="h-step-desc" data-i18n="timeline.step1.desc">Briefing profundo con el hiring manager. Nada de formularios genéricos.</p></div>
+          </div>
+          <div class="h-col">
+            <div class="h-col-time">H+12</div>
+            <div class="h-col-dot"><div class="h-dot" data-label="Estrategia" data-i18n-label="common.strategy"></div></div>
+            <div class="h-step"><div class="h-step-name" data-i18n="common.strategy">Estrategia</div><p class="h-step-desc" data-i18n="timeline.step2.desc">Mapa de empresas objetivo, boolean strings y canales activos y pasivos.</p></div>
+          </div>
+          <div class="h-col">
+            <div class="h-col-time">H+24</div>
+            <div class="h-col-dot"><div class="h-dot" data-label="Outreach activo" data-i18n-label="common.activeOutreach"></div></div>
+            <div class="h-step"><div class="h-step-name" data-i18n="common.activeOutreach">Outreach activo</div><p class="h-step-desc" data-i18n="timeline.step3.desc">Contacto directo con talento pasivo. Mensajes personalizados, no plantillas.</p></div>
+          </div>
+          <div class="h-col">
+            <div class="h-col-time">H+48</div>
+            <div class="h-col-dot"><div class="h-dot" data-label="Screening"></div></div>
+            <div class="h-step"><div class="h-step-name">Screening</div><p class="h-step-desc" data-i18n="timeline.step4.desc">Entrevistas estructuradas. Solo avanzan candidatos que encajan de verdad.</p></div>
+          </div>
+          <div class="h-col">
+            <div class="h-col-time">H+72</div>
+            <div class="h-col-dot"><div class="h-dot" data-label="Shortlist"></div></div>
+            <div class="h-step"><div class="h-step-name">Shortlist</div><p class="h-step-desc" data-i18n="timeline.step5.desc">Perfiles validados, con informe individual y disponibilidad confirmada.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transparencia salarial -->
+    <div class="salary-block reveal">
+      <div class="salary-glow"></div>
+      <div class="salary-content">
+        <p class="section-label salary-label" data-i18n="salary.label">Transparencia salarial</p>
+        <h3 class="salary-title" data-i18n="salary.title">Estudio y consultoría de <strong>transparencia salarial.</strong></h3>
+        <p class="salary-desc" data-i18n="salary.desc">Te ayudamos a anticiparte a la nueva normativa europea de transparencia salarial: análisis y diseño de bandas retributivas, auditoría de equidad y brecha salarial, y planes de acción para tu plantilla.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="casos">
+  <!-- Fondo de partículas WebGL (parte del paquete de animaciones — borrar este div para quitarlo) -->
+  <div class="casos-particles" id="casosParticles" aria-hidden="true"></div>
+  <div class="section-inner">
+    <div class="reveal">
+      <p class="section-label" data-i18n="cases.label">Lo que dicen de nosotros</p>
+      <h2 class="section-title" data-i18n="cases.title">Empresarios que <strong>ya tomaron la decisión.</strong></h2>
+    </div>
+
+    <!-- Carousel -->
+    <div class="carousel-wrap">
+      <div class="carousel" id="testimonialsCarousel">
+        <div class="carousel-track" id="carouselTrack">
+          <div class="testimonial-card">
+            <div class="testimonial-result" data-i18n="t1.result">Financiación conseguida</div>
+            <span class="quote-mark">"</span>
+            <p data-i18n="t1.quote">Para nosotros fue determinante su involucración en profundizar en el entendimiento del negocio. Mejoraron la contabilidad, optimizaron la fiscalidad y nos consiguieron la financiación que necesitábamos.</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">AG</div>
+              <div class="author-info">
+                <strong>Antonio Gallo</strong>
+                <span data-i18n="t1.role">CEO · Sector tecnología</span>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-result" data-i18n="t2.result">2 adquisiciones cerradas</div>
+            <span class="quote-mark">"</span>
+            <p data-i18n="t2.quote">Les estoy muy agradecido porque me ayudaron, con un éxito mayor del que imaginaba, a negociar y comprar dos compañías que me permitieron expandir mi negocio.</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">AM</div>
+              <div class="author-info">
+                <strong>Aecio de la Mora</strong>
+                <span data-i18n="t2.role">CEO · Expansión internacional</span>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-result" data-i18n="t3.result">Reestructuración en plazo</div>
+            <span class="quote-mark">"</span>
+            <p data-i18n="t3.quote">Entendieron perfectamente la problemática financiera de la compañía y se adentraron hasta el fondo, incluso en fin de semana, para ayudarnos en el plazo que requería.</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">EH</div>
+              <div class="author-info">
+                <strong>Enrique Huertas</strong>
+                <span data-i18n="t3.role">CEO · Reestructuración financiera</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controles del carousel -->
+      <div class="carousel-controls">
+        <button class="carousel-btn carousel-prev" id="carouselPrev" data-i18n-aria="carousel.prev" aria-label="Anterior">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="carousel-dots" id="carouselDots">
+          <button class="carousel-dot active" data-idx="0"></button>
+          <button class="carousel-dot" data-idx="1"></button>
+          <button class="carousel-dot" data-idx="2"></button>
+        </div>
+        <button class="carousel-btn carousel-next" id="carouselNext" data-i18n-aria="carousel.next" aria-label="Siguiente">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="contacto">
+  <!-- ══ AÑADIDO: VÍDEO DE FONDO EN CONTACTO ══ -->
+  <video class="section-video" autoplay muted loop playsinline preload="none">
+    <!-- Pon aquí la ruta de tu vídeo de contacto -->
+    <source src="media/video3.webm" type="video/webm" />
+  </video>
+  <!-- Capa de superposición para asegurar que el texto se lea bien -->
+  <div class="section-video-overlay section-video-overlay--dark"></div>
+
+  <div class="section-inner">
+    <div class="contact-inner reveal">
+      <p class="section-label" data-i18n="nav.cta">Hablemos</p>
+      <h2 class="contact-title" data-i18n="contact.title">¿Tu operación merece<br><em>una conversación seria?</em></h2>
+      <p class="contact-sub" data-i18n="contact.sub">Cuéntanos el reto. En <span class="num">24</span> horas tienes respuesta y en <span class="num">72</span> una propuesta sobre la mesa.</p>
+      <div class="contact-actions">
+        <button onclick="openModal()" class="btn-primary">
+          <span data-i18n="contact.ctaPrimary">Contactar ahora</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <a href="mailto:info@tesseraservices.com" class="contact-email">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+          info@tesseraservices.com
+        </a>
+      </div>
+      <div class="contact-guarantees">
+        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="contact.g1">Respuesta en <span class="num">24h</span></span></span>
+        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="contact.g2">Sin compromiso</span></span>
+        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="contact.g3">Confidencial</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#top" class="footer-logo">TESSERA</a>
+      <p data-i18n="footer.about">Especialistas en finanzas y capital humano para PYMES y startups en España.</p>
+      <div class="footer-social">
+        <a href="https://www.linkedin.com/company/tesseraservices" target="_blank" class="social-link" aria-label="LinkedIn">
+          <i class="fa-brands fa-linkedin"></i>
+        </a>
+        <a href="https://www.instagram.com/tessera.services/" target="_blank" class="social-link" aria-label="Instagram">
+          <i class="fa-brands fa-instagram"></i>
+        </a>
+        <a href="https://www.tiktok.com/@tessera.services" target="_blank" class="social-link" aria-label="TikTok">
+          <i class="fa-brands fa-tiktok"></i>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5 data-i18n="footer.servicesHeading">Servicios</h5>
+      <ul>
+        <li><a href="#servicios" data-i18n="svc.ma.title">M&amp;A · Compraventa de Empresas</a></li>
+        <li><a href="#servicios">CFO Part-Time</a></li>
+        <li><a href="#servicios" data-i18n="svc.restructuring.title">Reestructuración</a></li>
+        <li><a href="#servicios" data-i18n="svc.bp.title">Business Plan</a></li>
+        <li><a href="#servicios" data-i18n="svc.financing.title">Financiación</a></li>
+        <li><a href="#servicios" data-i18n="svc.consulting.title">Consultoría estratégica</a></li>
+        <li><a href="#servicios" data-i18n="svc.erp.title">Implementación de ERP</a></li>
+        <li><a href="#metodologia" data-i18n="footer.selection72">Selección 72h</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5 data-i18n="footer.companyHeading">Empresa</h5>
+      <ul>
+        <li><a href="#about" data-i18n="nav.about">Nosotros</a></li>
+        <li><a href="#casos" data-i18n="nav.cases">Casos</a></li>
+        <li><a href="https://jobs.tesseraservices.com/" target="_blank">Careers</a></li>
+        <li><a href="#contacto" data-i18n="nav.contact">Contacto</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5 data-i18n="nav.contact">Contacto</h5>
+      <ul>
+        <li><a href="mailto:info@tesseraservices.com">info@tesseraservices.com</a></li>
+        <li><a href="https://www.linkedin.com/company/tesseraservices" target="_blank">LinkedIn</a></li>
+        <li><a href="https://www.instagram.com/tessera.services/" target="_blank">Instagram</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Tessera · Better decisions, together.</p>
+    <div class="footer-legal">
+      <a href="https://jobs.tesseraservices.com/privacy-policy" target="_blank" data-i18n="footer.legalNotice">Aviso legal</a>
+      <a href="https://jobs.tesseraservices.com/privacy-policy" target="_blank" data-i18n="footer.privacy">Privacidad</a>
+      <a href="https://jobs.tesseraservices.com/cookie-policy" target="_blank">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ MODAL DE CONTACTO ══ -->
+<div class="modal-overlay" id="contactModal" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()" data-i18n-aria="modal.close" aria-label="Cerrar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="modal-header">
+      <p class="modal-eyebrow" data-i18n="nav.cta">Hablemos</p>
+      <h3 class="modal-title" data-i18n="contact.title">¿Tu operación merece<br><em>una conversación seria?</em></h3>
+      <p class="modal-sub" data-i18n="modal.sub">Cuéntanos el reto. En <span class="num">24h</span> tienes respuesta.</p>
+    </div>
+    <form class="modal-form" id="contactForm" onsubmit="submitModal(event)">
+      <div class="modal-field">
+        <label for="mNombre" data-i18n="modal.name">Nombre *</label>
+        <input type="text" id="mNombre" name="nombre" placeholder="Tu nombre" data-i18n-placeholder="modal.namePh" required />
+      </div>
+      <div class="modal-field">
+        <label for="mEmpresa" data-i18n="modal.company">Empresa *</label>
+        <input type="text" id="mEmpresa" name="empresa" placeholder="Nombre de tu empresa" data-i18n-placeholder="modal.companyPh" required />
+      </div>
+      <div class="modal-row">
+        <div class="modal-field">
+          <label for="mEmail">Email *</label>
+          <input type="email" id="mEmail" name="email" placeholder="correo@empresa.com" data-i18n-placeholder="modal.emailPh" required />
+        </div>
+        <div class="modal-field">
+          <label for="mTelefono" data-i18n="modal.phone">Teléfono</label>
+          <input type="tel" id="mTelefono" name="telefono" placeholder="+34 600 000 000" />
+        </div>
+      </div>
+      <button type="submit" class="modal-submit">
+        <span data-i18n="modal.submit">Enviar mensaje</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <p class="modal-legal" data-i18n="modal.legal">Al enviar aceptas nuestra <a href="https://jobs.tesseraservices.com/privacy-policy" target="_blank">política de privacidad</a>.</p>
+    </form>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
+<script src="js/animations.js"></script>
+</body>
+</html>

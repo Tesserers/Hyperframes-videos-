@@ -1,0 +1,178 @@
+<template>
+  <style>
+    @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-200.woff2") format("woff2"); font-weight: 200; font-style: normal; font-display: block; }
+    @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+    @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-200.woff2") format("woff2"); font-weight: 200; font-style: normal; font-display: block; }
+    @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
+    @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute; inset: 0; overflow: hidden;
+      --navy: #202031; --deep: #0a1a1c; --teal: #587579; --teal-lt: #6e9195;
+      --beige: #f0e8de; --yellow: #fbe0a0;
+    }
+    .tl-ground { position: absolute; inset: 0; background: var(--navy); }
+    .tl-glow {
+      position: absolute; left: -160px; top: -140px; width: 1150px; height: 1000px;
+      background: radial-gradient(circle, rgba(88,117,121,0.28) 0%, transparent 68%);
+    }
+    .tl-grain {
+      position: absolute; inset: 0; opacity: 0.04; background-size: 200px;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    }
+
+    .tl-label {
+      position: absolute; left: 130px; top: 126px;
+      font-family: "Raleway", sans-serif; font-weight: 600; font-size: 24px;
+      letter-spacing: 0.28em; text-transform: uppercase; color: var(--teal-lt);
+    }
+
+    .tl-pair { position: absolute; left: 130px; top: 176px; width: 900px; }
+    .tl-big { display: inline-block; margin-right: 92px; }
+    .tl-num {
+      font-family: "Manrope", sans-serif; font-weight: 200; font-size: 148px; line-height: 1.08;
+      color: var(--beige); letter-spacing: -0.03em;
+    }
+    .tl-unit { font-weight: 800; font-size: 82px; color: var(--yellow); }
+    .tl-cap {
+      margin-top: 30px;
+      font-family: "Raleway", sans-serif; font-weight: 600; font-size: 23px;
+      letter-spacing: 0.2em; text-transform: uppercase; color: rgba(240,232,222,0.6);
+    }
+
+    /* The site's own H+ timeline, run as a race rather than a diagram. */
+    .tl-rail { position: absolute; left: 130px; top: 500px; width: 1660px; height: 2px; background: rgba(240,232,222,0.14); }
+    .tl-railfill {
+      position: absolute; left: 130px; top: 500px; width: 1660px; height: 2px;
+      background: linear-gradient(90deg, rgba(110,145,149,0.5) 0%, var(--teal-lt) 100%);
+      transform-origin: left center;
+    }
+    .tl-stop { position: absolute; top: 492px; width: 320px; text-align: center; }
+    .tl-dot { width: 18px; height: 18px; border-radius: 50%; background: var(--teal-lt); margin: 0 auto 26px; }
+    .tl-time {
+      font-family: "Manrope", sans-serif; font-weight: 700; font-size: 24px;
+      letter-spacing: 0.1em; color: rgba(240,232,222,0.66); position: absolute; top: -46px; left: 0; width: 320px; text-align: center;
+    }
+    .tl-step {
+      font-family: "Raleway", sans-serif; font-weight: 800; font-size: 30px;
+      color: var(--beige); letter-spacing: 0.02em;
+    }
+
+    .tl-close { position: absolute; left: 130px; top: 700px; width: 1660px; }
+    .tl-ctitle {
+      font-family: "Raleway", sans-serif; font-weight: 600; font-size: 24px;
+      letter-spacing: 0.2em; text-transform: uppercase; color: rgba(240,232,222,0.6);
+      display: inline-block;
+    }
+    .tl-cval {
+      font-family: "Manrope", sans-serif; font-weight: 800; font-size: 30px;
+      color: var(--yellow); float: right;
+    }
+    .tl-track { margin-top: 22px; width: 1660px; height: 8px; background: rgba(240,232,222,0.12); border-radius: 4px; overflow: hidden; }
+    .tl-fill {
+      height: 8px; width: 1660px; border-radius: 4px; transform-origin: left center;
+      background: linear-gradient(90deg, var(--teal) 0%, var(--yellow) 100%);
+    }
+  </style>
+
+  <div id="root" data-composition-id="05-talento" data-width="1920" data-height="1080" data-duration="6.4">
+    <div id="tl-ground" class="clip tl-ground" data-start="0" data-duration="6.4" data-track-index="0">
+      <div class="tl-glow" id="tl-glow"></div>
+      <div class="tl-grain"></div>
+    </div>
+
+    <div id="tl-label" class="clip tl-label" data-start="0" data-duration="6.4" data-track-index="1">Capital Humano &middot; Selección</div>
+
+    <div id="tl-pair" class="clip tl-pair" data-start="0" data-duration="6.4" data-track-index="2">
+      <div class="tl-big" id="tl-big1">
+        <div class="tl-num"><span id="tl-n1">0</span><span class="tl-unit">h</span></div>
+        <div class="tl-cap">Primer shortlist</div>
+      </div>
+      <div class="tl-big" id="tl-big2">
+        <div class="tl-num"><span id="tl-n2">0</span><span class="tl-unit">d</span></div>
+        <div class="tl-cap">Informe de mercado</div>
+      </div>
+    </div>
+
+    <div id="tl-rail" class="clip tl-rail" data-start="0" data-duration="6.4" data-track-index="3"></div>
+    <div id="tl-railfill" class="clip tl-railfill" data-start="0" data-duration="6.4" data-track-index="4"></div>
+    <div id="tl-stops" class="clip tl-stops" data-start="0" data-duration="6.4" data-track-index="5"></div>
+
+    <div id="tl-close" class="clip tl-close" data-start="0" data-duration="6.4" data-track-index="6">
+      <div>
+        <span class="tl-ctitle">Tasa de cierre</span>
+        <span class="tl-cval" id="tl-cval">0%</span>
+      </div>
+      <div class="tl-track"><div class="tl-fill" id="tl-fill"></div></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="05-talento"]');
+      var STOPS = [
+        ["H+0", "Kickoff"],
+        ["H+12", "Estrategia"],
+        ["H+24", "Outreach"],
+        ["H+48", "Screening"],
+        ["H+72", "Shortlist"],
+      ];
+      var wrap = root.querySelector("#tl-stops");
+      var stops = [];
+      for (var i = 0; i < STOPS.length; i++) {
+        var st = document.createElement("div");
+        st.className = "tl-stop";
+        st.style.left = 130 + i * (1660 / 4) - 160 + "px";
+        var tm = document.createElement("div");
+        tm.className = "tl-time";
+        tm.textContent = STOPS[i][0];
+        var dot = document.createElement("div");
+        dot.className = "tl-dot";
+        var nm = document.createElement("div");
+        nm.className = "tl-step";
+        nm.textContent = STOPS[i][1];
+        st.appendChild(tm); st.appendChild(dot); st.appendChild(nm);
+        wrap.appendChild(st);
+        stops.push(st);
+      }
+
+      var n1 = root.querySelector("#tl-n1"), n2 = root.querySelector("#tl-n2");
+      var cval = root.querySelector("#tl-cval");
+      var fill = root.querySelector("#tl-fill");
+      var railfill = root.querySelector("#tl-railfill");
+
+      var tl = gsap.timeline({ paused: true });
+      tl.fromTo(root.querySelector("#tl-glow"), { x: -80 }, { x: 70, duration: 6.1, ease: "none" }, 0);
+      tl.fromTo(root.querySelector("#tl-label"), { autoAlpha: 0, x: -28 }, { autoAlpha: 1, x: 0, duration: 0.44, ease: "power3.out" }, 0.04);
+
+      // The two commitments the site puts its name to: 72 hours and 7 days.
+      var c1 = { v: 0 }, c2 = { v: 0 };
+      tl.fromTo(root.querySelector("#tl-big1"), { autoAlpha: 0, y: 46 }, { autoAlpha: 1, y: 0, duration: 0.52, ease: "power3.out" }, 0.2);
+      tl.to(c1, { v: 72, duration: 0.72, ease: "power2.out", onUpdate: function () { n1.textContent = String(Math.round(c1.v)); } }, 0.24);
+      tl.fromTo(root.querySelector("#tl-big2"), { autoAlpha: 0, y: 46 }, { autoAlpha: 1, y: 0, duration: 0.52, ease: "power3.out" }, 0.86);
+      tl.to(c2, { v: 7, duration: 0.6, ease: "power2.out", onUpdate: function () { n2.textContent = String(Math.round(c2.v)); } }, 0.9);
+
+      // The rail runs left to right and each stop lands as the fill reaches it —
+      // the process performed, not diagrammed.
+      tl.fromTo(root.querySelector("#tl-rail"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3, ease: "power2.out" }, 1.6);
+      tl.fromTo(railfill, { scaleX: 0 }, { scaleX: 1, duration: 1.9, ease: "power1.inOut" }, 1.72);
+      for (var s = 0; s < stops.length; s++) {
+        tl.fromTo(
+          stops[s],
+          { autoAlpha: 0, y: 18, scale: 0.86 },
+          { autoAlpha: 1, y: 0, scale: 1, duration: 0.34, ease: "power3.out" },
+          1.76 + s * 0.44
+        );
+      }
+
+      // The close rate fills on the site's own teal→yellow gradient.
+      var c3 = { v: 0 };
+      tl.fromTo(root.querySelector("#tl-close"), { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.44, ease: "power3.out" }, 4.24);
+      tl.fromTo(fill, { scaleX: 0 }, { scaleX: 0.87, duration: 1.1, ease: "power2.out" }, 4.4);
+      tl.to(c3, { v: 87, duration: 1.1, ease: "power2.out", onUpdate: function () { cval.textContent = Math.round(c3.v) + "%"; } }, 4.4);
+
+      window.__timelines["05-talento"] = tl;
+    })();
+  </script>
+</template>

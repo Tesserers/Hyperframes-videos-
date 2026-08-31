@@ -1,0 +1,77 @@
+<template>
+  <style>
+    @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-200.woff2") format("woff2"); font-weight: 200; font-style: normal; font-display: block; }
+    @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute; inset: 0; overflow: hidden;
+      --navy: #202031; --teal: #587579; --beige: #f0e8de; --yellow: #fbe0a0;
+    }
+    .in-ground { position: absolute; inset: 0; background: var(--navy); }
+    .in-grain {
+      position: absolute; inset: 0; opacity: 0.045; background-size: 200px;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    }
+    .in-block { position: absolute; left: 0; top: 318px; width: 1920px; text-align: center; }
+    .in-l {
+      display: block; font-family: "Raleway", sans-serif; line-height: 1.04; letter-spacing: 0.005em;
+    }
+    .in-a { font-weight: 800; font-size: 154px; color: var(--beige); }
+    .in-b { font-weight: 200; font-size: 108px; color: var(--yellow); margin-top: 74px; }
+    .in-w { display: inline-block; }
+    .in-rule {
+      position: absolute; left: 660px; top: 516px; width: 600px; height: 3px;
+      background: var(--teal); transform-origin: center;
+    }
+  </style>
+
+  <div id="root" data-composition-id="04-informes" data-width="1920" data-height="1080" data-duration="3.5">
+    <div id="in-ground" class="clip in-ground" data-start="0" data-duration="3.5" data-track-index="0">
+      <div class="in-grain"></div>
+    </div>
+    <div id="in-rule" class="clip in-rule" data-start="0" data-duration="3.5" data-track-index="1"></div>
+    <div id="in-block" class="clip in-block" data-start="0" data-duration="3.5" data-track-index="2">
+      <span class="in-l in-a" id="in-a"></span>
+      <span class="in-l in-b" id="in-b"></span>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="04-informes"]');
+      function words(el, text) {
+        var out = [], parts = text.split(" ");
+        for (var i = 0; i < parts.length; i++) {
+          var s = document.createElement("span");
+          s.className = "in-w";
+          s.textContent = parts[i];
+          el.appendChild(s);
+          if (i < parts.length - 1) el.appendChild(document.createTextNode(" "));
+          out.push(s);
+        }
+        return out;
+      }
+      var wa = words(root.querySelector("#in-a"), "No vendemos informes.");
+      var wb = words(root.querySelector("#in-b"), "Nos sentamos en tu mesa.");
+      var block = root.querySelector("#in-block");
+      var rule = root.querySelector("#in-rule");
+
+      var tl = gsap.timeline({ paused: true });
+
+      // Arrives mid-flight, continuing the injector's zoom-through forward on Z:
+      // same scale-velocity sign, never from rest.
+      tl.fromTo(
+        block,
+        { scale: 1.14, filter: "blur(10px)", autoAlpha: 0.25 },
+        { scale: 1, filter: "blur(0px)", autoAlpha: 1, duration: 0.44, ease: "expo.out" },
+        0
+      );
+      tl.fromTo(wa, { autoAlpha: 0, y: 44 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: "power3.out", stagger: 0.07 }, 0.06);
+      tl.fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.out" }, 0.34);
+      // The turn: the denial, then what they do instead.
+      tl.fromTo(wb, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.42, ease: "power3.out", stagger: 0.06 }, 1.12);
+
+      window.__timelines["04-informes"] = tl;
+    })();
+  </script>
+</template>

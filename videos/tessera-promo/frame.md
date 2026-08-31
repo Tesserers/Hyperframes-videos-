@@ -11,7 +11,7 @@ unit: the frame — 1920×1080 primary; 9:16 and 1:1 documented
 principle: atoms are sacred · composition is free · numbers come from the script
 
 colors:
-  paper: "#F0EBDE"
+  paper: "#0a1a1c"
   paper-2: "#E6E0CE"
   ink: "#1F2BE0"
   ink-soft: "#5560E5"

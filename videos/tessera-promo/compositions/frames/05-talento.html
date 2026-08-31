@@ -74,6 +74,9 @@
       height: 8px; width: 1660px; border-radius: 4px; transform-origin: left center;
       background: linear-gradient(90deg, var(--teal) 0%, var(--yellow) 100%);
     }
+    .msk { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.16em; margin-bottom: -0.16em; }
+    .msk > span { display: inline-block; }
+    .tl-cam { position: absolute; inset: 0; }
   </style>
 
   <div id="root" data-composition-id="05-talento" data-width="1920" data-height="1080" data-duration="6.4">
@@ -81,6 +84,8 @@
       <div class="tl-glow" id="tl-glow"></div>
       <div class="tl-grain"></div>
     </div>
+
+    <div id="tl-cam" class="clip tl-cam" data-start="0" data-duration="6.4" data-track-index="7"></div>
 
     <div id="tl-label" class="clip tl-label" data-start="0" data-duration="6.4" data-track-index="1">Capital Humano &middot; Selección</div>
 
@@ -143,14 +148,32 @@
       var railfill = root.querySelector("#tl-railfill");
 
       var tl = gsap.timeline({ paused: true });
-      tl.fromTo(root.querySelector("#tl-glow"), { x: -80 }, { x: 70, duration: 6.1, ease: "none" }, 0);
-      tl.fromTo(root.querySelector("#tl-label"), { autoAlpha: 0, x: -28 }, { autoAlpha: 1, x: 0, duration: 0.44, ease: "power3.out" }, 0.04);
+      tl.fromTo(root.querySelector("#tl-glow"), { x: 90 }, { x: -80, duration: 6.3, ease: "none" }, 0);
+
+      // Camera with intent, motivated by the beat: it opens CLOSE on the two
+      // commitments and pulls back to reveal the whole process as the rail fills.
+      var cam = [root.querySelector("#tl-pair"), root.querySelector("#tl-rail"),
+                 root.querySelector("#tl-railfill"), root.querySelector("#tl-stops"),
+                 root.querySelector("#tl-close")];
+      tl.fromTo(cam, { scale: 1.16, x: 150, y: 70 }, { scale: 1, x: 0, y: 0, duration: 4.1, ease: "power2.out" }, 0);
+
+      var labelEl = root.querySelector("#tl-label");
+      var lt = labelEl.textContent; labelEl.textContent = "";
+      var lw = [], lp = lt.split(" ");
+      for (var li = 0; li < lp.length; li++) {
+        var lwrap = document.createElement("span"); lwrap.className = "msk";
+        var lsp = document.createElement("span"); lsp.textContent = lp[li];
+        lwrap.appendChild(lsp); labelEl.appendChild(lwrap);
+        if (li < lp.length - 1) labelEl.appendChild(document.createTextNode(" "));
+        lw.push(lsp);
+      }
+      tl.fromTo(lw, { yPercent: 118 }, { yPercent: 0, duration: 0.62, ease: "expo.out", stagger: 0.03 }, 0.04);
 
       // The two commitments the site puts its name to: 72 hours and 7 days.
       var c1 = { v: 0 }, c2 = { v: 0 };
-      tl.fromTo(root.querySelector("#tl-big1"), { autoAlpha: 0, y: 46 }, { autoAlpha: 1, y: 0, duration: 0.52, ease: "power3.out" }, 0.2);
+      tl.fromTo(root.querySelector("#tl-big1"), { autoAlpha: 0, yPercent: 26 }, { autoAlpha: 1, yPercent: 0, duration: 0.7, ease: "expo.out" }, 0.2);
       tl.to(c1, { v: 72, duration: 0.72, ease: "power2.out", onUpdate: function () { n1.textContent = String(Math.round(c1.v)); } }, 0.24);
-      tl.fromTo(root.querySelector("#tl-big2"), { autoAlpha: 0, y: 46 }, { autoAlpha: 1, y: 0, duration: 0.52, ease: "power3.out" }, 0.86);
+      tl.fromTo(root.querySelector("#tl-big2"), { autoAlpha: 0, yPercent: 26 }, { autoAlpha: 1, yPercent: 0, duration: 0.7, ease: "expo.out" }, 0.8);
       tl.to(c2, { v: 7, duration: 0.6, ease: "power2.out", onUpdate: function () { n2.textContent = String(Math.round(c2.v)); } }, 0.9);
 
       // The rail runs left to right and each stop lands as the fill reaches it —
@@ -161,14 +184,14 @@
         tl.fromTo(
           stops[s],
           { autoAlpha: 0, y: 18, scale: 0.86 },
-          { autoAlpha: 1, y: 0, scale: 1, duration: 0.34, ease: "power3.out" },
+          { autoAlpha: 1, y: 0, scale: 1, duration: 0.36, ease: "expo.out" },
           1.76 + s * 0.44
         );
       }
 
       // The close rate fills on the site's own teal→yellow gradient.
       var c3 = { v: 0 };
-      tl.fromTo(root.querySelector("#tl-close"), { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.44, ease: "power3.out" }, 4.24);
+      tl.fromTo(root.querySelector("#tl-close"), { autoAlpha: 0, yPercent: 40 }, { autoAlpha: 1, yPercent: 0, duration: 0.6, ease: "expo.out" }, 4.2);
       tl.fromTo(fill, { scaleX: 0 }, { scaleX: 0.87, duration: 1.1, ease: "power2.out" }, 4.4);
       tl.to(c3, { v: 87, duration: 1.1, ease: "power2.out", onUpdate: function () { cval.textContent = Math.round(c3.v) + "%"; } }, 4.4);
 

@@ -26,8 +26,8 @@
       letter-spacing: 0.28em; text-transform: uppercase; color: var(--teal-lt);
     }
     .fz-heading {
-      position: absolute; left: 130px; top: 214px; width: 620px;
-      font-family: "Raleway", sans-serif; font-weight: 200; font-size: 118px; line-height: 0.98;
+      position: absolute; left: 96px; top: 196px; width: 700px;
+      font-family: "Raleway", sans-serif; font-weight: 200; font-size: 152px; line-height: 0.98;
       color: var(--beige); letter-spacing: 0.01em;
     }
     .fz-heading b { font-weight: 800; display: block; color: var(--yellow); }
@@ -60,6 +60,8 @@
       font-family: "Raleway", sans-serif; font-weight: 600; font-size: 23px;
       letter-spacing: 0.06em; color: rgba(240,232,222,0.72);
     }
+    .msk { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.16em; margin-bottom: -0.16em; }
+    .msk > span { display: inline-block; }
   </style>
 
   <div id="root" data-composition-id="03-finanzas" data-width="1920" data-height="1080" data-duration="6.6">
@@ -78,6 +80,19 @@
 
   <script>
     (function () {
+      function maskWords(el, text) {
+        var inners = [], parts = text.split(" ");
+        for (var i = 0; i < parts.length; i++) {
+          var w = document.createElement("span"); w.className = "msk";
+          var s = document.createElement("span");
+          if (parts[i].charAt(0) === "*") { var em = document.createElement("em"); em.textContent = parts[i].slice(1); s.appendChild(em); }
+          else s.textContent = parts[i];
+          w.appendChild(s); el.appendChild(w);
+          if (i < parts.length - 1) el.appendChild(document.createTextNode(" "));
+          inners.push(s);
+        }
+        return inners;
+      }
       var root = document.querySelector('[data-composition-id="03-finanzas"]');
       var SERVICES = [
         ["01", "M&A"],
@@ -117,20 +132,25 @@
 
       var tl = gsap.timeline({ paused: true });
 
-      tl.fromTo(root.querySelector("#fz-label"), { autoAlpha: 0, x: -28 }, { autoAlpha: 1, x: 0, duration: 0.46, ease: "power3.out" }, 0.04);
-      tl.fromTo(root.querySelector("#fz-heading"), { autoAlpha: 0, x: -40 }, { autoAlpha: 1, x: 0, duration: 0.62, ease: "power3.out" }, 0.12);
+      var slot = root.querySelector("#fz-slot");
+      var labelEl = root.querySelector("#fz-label");
+      var lt = labelEl.textContent; labelEl.textContent = "";
+      tl.fromTo(maskWords(labelEl, lt), { yPercent: 118 }, { yPercent: 0, duration: 0.66, ease: "expo.out", stagger: 0.03 }, 0.04);
+      // The slot is pushed into, not presented: the camera closes on it as the roll runs.
+      tl.fromTo(slot, { scale: 1.1, x: 70 }, { scale: 1, x: 0, duration: 3.6, ease: "power2.out" }, 0);
+      tl.fromTo(root.querySelector("#fz-heading"), { autoAlpha: 0, x: -70, scale: 1.06 }, { autoAlpha: 1, x: 0, scale: 1, duration: 0.9, ease: "expo.out" }, 0.1);
       tl.fromTo(root.querySelector("#fz-slotrule"), { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.out" }, 0.3);
       tl.fromTo(root.querySelector("#fz-glow"), { x: 90 }, { x: -70, duration: 5.9, ease: "none" }, 0);
 
       // The roll: each service enters from below as the previous leaves upward —
       // one continuous upward vector, seven cuts, accelerating into the landing.
       var t = 0.34;
-      var GAP = [0.5, 0.46, 0.42, 0.4, 0.38, 0.36];
+      var GAP = [0.44, 0.4, 0.36, 0.32, 0.29, 0.26];
       for (var k = 0; k < items.length; k++) {
-        var dur = k === items.length - 1 ? 0.42 : 0.3;
+        var dur = k === items.length - 1 ? 0.44 : 0.24;
         tl.fromTo(items[k], { autoAlpha: 0, y: 150 }, { autoAlpha: 1, y: 0, duration: dur, ease: "power3.out" }, t);
         if (k < items.length - 1) {
-          tl.to(items[k], { autoAlpha: 0, y: -140, duration: 0.28, ease: "power3.in" }, t + GAP[k] - 0.06);
+          tl.to(items[k], { autoAlpha: 0, y: -150, duration: 0.22, ease: "power3.in" }, t + GAP[k] - 0.05);
           t += GAP[k];
         }
       }
@@ -139,7 +159,7 @@
       tl.fromTo(
         chips,
         { autoAlpha: 0, y: 20 },
-        { autoAlpha: 1, y: 0, duration: 0.36, ease: "power3.out", stagger: 0.055 },
+        { autoAlpha: 1, y: 0, duration: 0.34, ease: "expo.out", stagger: 0.042 },
         t + 0.42
       );
 

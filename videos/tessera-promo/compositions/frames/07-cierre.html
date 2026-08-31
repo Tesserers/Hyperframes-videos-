@@ -19,14 +19,13 @@
     }
 
     .ci-wordmark {
-      position: absolute; left: 0; top: 386px; width: 1920px; text-align: center;
-      font-family: "Ailerons", sans-serif; font-weight: 400; font-size: 168px; line-height: 1;
+      position: absolute; left: 0; top: 372px; width: 1920px; text-align: center;
+      font-family: "Ailerons", sans-serif; font-weight: 400; font-size: 186px; line-height: 1;
       text-transform: uppercase; letter-spacing: 0.06em; color: var(--beige);
     }
     .ci-ch { display: inline-block; }
-    .ci-hair { position: absolute; left: 760px; top: 606px; width: 400px; height: 1px; background: var(--teal); transform-origin: center; }
     .ci-tag {
-      position: absolute; left: 0; top: 650px; width: 1920px; text-align: center;
+      position: absolute; left: 0; top: 656px; width: 1920px; text-align: center;
       font-family: "Raleway", sans-serif; font-weight: 200; font-size: 50px; color: rgba(240,232,222,0.86);
       letter-spacing: 0.02em;
     }
@@ -36,6 +35,11 @@
       letter-spacing: 0.24em; text-transform: uppercase; color: var(--yellow);
     }
     .ci-fade { position: absolute; inset: 0; background: var(--deep); }
+    .msk { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.16em; margin-bottom: -0.16em; }
+    .msk > span { display: inline-block; }
+    /* A shaped scrim, not a flat veil: it darkens only where the type sits, so the
+       corners keep the client's footage and the brand teal still passes contrast. */
+    .ci-scrim { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 70% 54% at 50% 50%, rgba(10,26,28,0.86) 0%, rgba(10,26,28,0.52) 60%, rgba(10,26,28,0) 84%); }
   </style>
 
   <div id="root" data-composition-id="07-cierre" data-width="1920" data-height="1080" data-duration="4.7">
@@ -49,8 +53,9 @@
     </div>
 
     <div id="ci-lockup" class="clip ci-lockup" data-start="0" data-duration="4.7" data-track-index="3">
+      <div class="ci-scrim"></div>
+      <div class="ci-scrim"></div>
       <div class="ci-wordmark" id="ci-wordmark"></div>
-      <div class="ci-hair" id="ci-hair"></div>
       <div class="ci-tag" id="ci-tag">Better decisions, together.</div>
       <div class="ci-domain" id="ci-domain">tesseraservices.com</div>
     </div>
@@ -66,27 +71,37 @@
       var TXT = "Tessera";
       for (var i = 0; i < TXT.length; i++) {
         var ch = document.createElement("span");
-        ch.className = "ci-ch";
-        ch.textContent = TXT[i];
+        ch.className = "ci-ch msk";
+        var inner = document.createElement("span");
+        inner.textContent = TXT[i];
+        ch.appendChild(inner);
         wordmark.appendChild(ch);
         chars.push(ch);
       }
 
+      var lockup = root.querySelector("#ci-lockup");
       var tl = gsap.timeline({ paused: true });
 
       // The logotype resolves once and then holds — this frame has to survive
       // being paused on as a still, so nothing here keeps moving.
       for (var k = 0; k < chars.length; k++) {
-        tl.fromTo(
-          chars[k],
-          { autoAlpha: 0, y: 40 },
-          { autoAlpha: 1, y: 0, duration: 0.66, ease: "power3.out" },
-          0.05 + k * 0.045
-        );
+        tl.fromTo(chars[k].firstChild, { yPercent: 118 }, { yPercent: 0, duration: 0.95, ease: "expo.out" }, 0.05 + k * 0.05);
       }
-      tl.fromTo(root.querySelector("#ci-hair"), { scaleX: 0 }, { scaleX: 1, duration: 0.66, ease: "power3.out" }, 0.5);
-      tl.fromTo(root.querySelector("#ci-tag"), { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: 0.54, ease: "power3.out" }, 0.66);
-      tl.fromTo(root.querySelector("#ci-domain"), { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out" }, 1.2);
+      // The lockup settles out of a slow pull — matching the plate, which is
+      // pulling back too, so picture and type share one camera.
+      tl.fromTo(lockup, { scale: 1.07 }, { scale: 1, duration: 2.6, ease: "power2.out" }, 0);
+      
+      var tagEl = root.querySelector("#ci-tag"); var tagTxt = tagEl.textContent; tagEl.textContent = "";
+      var tagInner = [], tp = tagTxt.split(" ");
+      for (var ti = 0; ti < tp.length; ti++) {
+        var tw = document.createElement("span"); tw.className = "msk";
+        var ts = document.createElement("span"); ts.textContent = tp[ti];
+        tw.appendChild(ts); tagEl.appendChild(tw);
+        if (ti < tp.length - 1) tagEl.appendChild(document.createTextNode(" "));
+        tagInner.push(ts);
+      }
+      tl.fromTo(tagInner, { yPercent: 118 }, { yPercent: 0, duration: 0.8, ease: "expo.out", stagger: 0.05 }, 0.72);
+      tl.fromTo(root.querySelector("#ci-domain"), { autoAlpha: 0, yPercent: 60 }, { autoAlpha: 1, yPercent: 0, duration: 0.62, ease: "expo.out" }, 1.3);
 
       // The film's only exit.
       tl.set(root.querySelector("#ci-fade"), { autoAlpha: 0 }, 4.0);

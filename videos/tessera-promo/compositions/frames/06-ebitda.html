@@ -28,6 +28,7 @@
     }
     .msk { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.16em; margin-bottom: -0.16em; }
     .msk > span { display: inline-block; }
+    .msk-caps { padding-bottom: 0.02em; margin-bottom: -0.02em; }
   </style>
 
   <div id="root" data-composition-id="06-ebitda" data-width="1920" data-height="1080" data-duration="3">
@@ -63,7 +64,7 @@
       var aInner = (function () {
         var out = [], parts = aTxt.split(" ");
         for (var i = 0; i < parts.length; i++) {
-          var w = document.createElement("span"); w.className = "msk";
+          var w = document.createElement("span"); w.className = "msk"; w.setAttribute("data-layout-allow-overlap", "");
           var sp = document.createElement("span"); sp.textContent = parts[i];
           w.appendChild(sp); aEl.appendChild(w);
           if (i < parts.length - 1) aEl.appendChild(document.createTextNode(" "));

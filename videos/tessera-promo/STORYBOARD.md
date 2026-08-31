@@ -56,7 +56,7 @@ en la segunda mitad).
 - type: branding
 - blueprint: logo-assemble-lockup (Adapt)
 - scene: El logotipo se asienta sobre el vídeo de la web y da paso al titular real del hero
-- duration: 8s
+- duration: 7s
 - transition_in: cut
 - status: animated
 - sfx: whoosh-cinematic
@@ -100,7 +100,7 @@ un equipo que se sienta en tu mesa." Los números se ganan la frase.
 - type: feature_showcase
 - blueprint: fixed-anchor-cycle (Adapt)
 - scene: Los siete servicios pasan por una ranura y al aterrizar se despliegan como catálogo
-- duration: 6.2s
+- duration: 6.4s
 - transition_in: push-slide LEFT
 - status: animated
 - sfx: click-soft
@@ -109,31 +109,41 @@ un equipo que se sienta en tu mesa." Los números se ganan la frase.
 - roles: ranura = cutout · titular = supporting · glow = background
 - src: compositions/frames/03-finanzas.html
 
-Siete servicios en seis segundos sin que parezca una lista. El ancla fija a la izquierda
-("De principio **a fin.**", su propio titular de sección); a la derecha una ranura por la que
-los siete **ruedan hacia arriba**, cada uno entrando por abajo mientras el anterior sale por
-arriba — un único vector ascendente, siete cortes, **acelerando** (0,50 s → 0,36 s entre
-cortes). El séptimo se queda, y entonces los siete se rellenan debajo como píldoras: la
-amplitud dicha una vez, después de haberla recorrido.
+Rehecho: la primera versión era un carrusel vertical con numeración "01 / 07", y el cliente lo
+rechazó por las dos cosas — la numeración es maquetación web, no cine, y el rodillo hacia abajo
+está demasiado visto.
 
-## Frame 4 — No vendemos informes
+Ahora es una **secuencia de títulos**. Cada servicio tiene su propio encuadre: tamaño, peso,
+color y alineación distintos, compuestos para su propia palabra — "M&A" enorme a 300px porque
+es corto, "Consultoría estratégica" pequeño y arriba a la izquierda porque es largo. Ninguno
+comparte posición con otro, así que ninguno se lee como el siguiente elemento de una lista.
+
+Los cortes **alternan vector**: los títulos impares llegan en Z, creciendo a través del cuadro;
+los pares entran de latigazo en X, y desde lados opuestos. Los dos lados de cada corte se mueven
+en la misma dirección a velocidad casada con desenfoque de pico de 10px — el saliente nunca se
+posa antes de que entre el siguiente. Y los tiempos **aceleran**: 0,86 s el primero, 0,50 s el
+sexto. El séptimo se queda y sigue cerrándose sobre el espectador.
+
+## Frame 4 — Somos tu partner
 
 - type: benefit_highlight
 - blueprint: kinetic-type-beats (Reproduce)
-- scene: La frase que fija la posición, a sangre y encima del espectador
-- duration: 3s
+- scene: Tres tiempos: la negación, lo que hacen en su lugar, y la palabra para ello
+- duration: 5.6s
 - transition_in: zoom-through
 - status: animated
 - sfx: impact-bass-1
 - asset_candidates: none
 - focal: la frase
 - roles: tipografía = cutout
-- src: compositions/frames/04-informes.html
+- src: compositions/frames/04-partner.html
 
-Tres segundos, una frase, su frase. El plano entra **en pleno vuelo** continuando el
-zoom-through que estampa el inyector — misma dirección de escala, nunca desde el reposo. "No
-vendemos informes." y, tras la regla teal, el giro: "Nos sentamos en tu mesa." Es el plano más
-corto y el más ruidoso; va justo antes de la parte densa para que la densidad se agradezca.
+El plano entra **en pleno vuelo** continuando el zoom-through que estampa el inyector — misma
+dirección de escala, nunca desde el reposo. Tres tiempos, sin ninguna regla ni subrayado: la
+negación ("No vendemos informes."), lo que hacen en su lugar ("Nos sentamos en tu mesa.", suya
+literal) y **el remate que pidió el cliente: "Somos tu partner."** en amarillo. El bloque entero
+se eleva al llegar el tercer tiempo, así que el remate cae sobre un cuadro en movimiento y no
+sobre uno aparcado.
 
 ## Frame 5 — Capital humano
 

@@ -3,7 +3,6 @@
     @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-200.woff2") format("woff2"); font-weight: 200; font-style: normal; font-display: block; }
     @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
     @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
-    @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: block; }
 
     #root {
       position: absolute; inset: 0; overflow: hidden;
@@ -12,156 +11,119 @@
     }
     .fz-ground { position: absolute; inset: 0; background: var(--deep); }
     .fz-glow {
-      position: absolute; right: -220px; top: 120px; width: 1200px; height: 1000px;
-      background: radial-gradient(circle, rgba(88,117,121,0.26) 0%, transparent 68%);
+      position: absolute; right: -240px; top: 60px; width: 1300px; height: 1100px;
+      background: radial-gradient(circle, rgba(88,117,121,0.24) 0%, transparent 68%);
     }
     .fz-grain {
       position: absolute; inset: 0; opacity: 0.04; background-size: 200px;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
     }
 
+    .msk { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.16em; margin-bottom: -0.16em; }
+    .msk > span { display: inline-block; }
+    .msk-caps { padding-bottom: 0.02em; margin-bottom: -0.02em; }
+
     .fz-label {
-      position: absolute; left: 130px; top: 150px;
+      position: absolute; left: 128px; top: 132px;
       font-family: "Raleway", sans-serif; font-weight: 600; font-size: 24px;
       letter-spacing: 0.28em; text-transform: uppercase; color: var(--teal-lt);
     }
-    .fz-heading {
-      position: absolute; left: 96px; top: 196px; width: 700px;
-      font-family: "Raleway", sans-serif; font-weight: 200; font-size: 152px; line-height: 0.98;
-      color: var(--beige); letter-spacing: 0.01em;
-    }
-    .fz-heading b { font-weight: 800; display: block; color: var(--yellow); }
 
-    /* The roll: one slot, seven services, each cut to the next on the beat. */
-    .fz-slot {
-      position: absolute; left: 830px; top: 300px; width: 990px; height: 240px; overflow: hidden;
+    /* A title sequence, not a list: every service gets its own frame — its own
+       size, its own alignment, its own entrance. No numbering, no carousel. */
+    .fz-card { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    .fz-t {
+      position: absolute; font-family: "Raleway", sans-serif; color: var(--beige);
+      line-height: 0.98; letter-spacing: -0.01em;
     }
-    .fz-item {
-      position: absolute; left: 0; top: 0; width: 990px;
-    }
-    .fz-num {
-      font-family: "Manrope", sans-serif; font-weight: 700; font-size: 30px;
-      letter-spacing: 0.1em; color: var(--teal-lt); display: block; margin-bottom: 20px;
-    }
-    .fz-name {
-      font-family: "Raleway", sans-serif; font-weight: 800; font-size: 92px; line-height: 1.02;
-      color: var(--beige); letter-spacing: -0.005em;
-    }
-    .fz-slotrule {
-      position: absolute; left: 830px; top: 576px; width: 990px; height: 2px;
-      background: var(--teal); transform-origin: left center;
-    }
-
-    /* The seven collapse into a ledger as the roll lands — breadth, stated once. */
-    .fz-all { position: absolute; left: 830px; top: 620px; width: 990px; }
-    .fz-chip {
-      display: inline-block; margin: 0 10px 12px 0; padding: 9px 20px;
-      border: 1px solid rgba(240,232,222,0.26); border-radius: 999px;
-      font-family: "Raleway", sans-serif; font-weight: 600; font-size: 23px;
-      letter-spacing: 0.06em; color: rgba(240,232,222,0.72);
-    }
-    .msk { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.16em; margin-bottom: -0.16em; }
-    .msk > span { display: inline-block; }
   </style>
 
-  <div id="root" data-composition-id="03-finanzas" data-width="1920" data-height="1080" data-duration="6.6">
-    <div id="fz-ground" class="clip fz-ground" data-start="0" data-duration="6.6" data-track-index="0">
+  <div id="root" data-composition-id="03-finanzas" data-width="1920" data-height="1080" data-duration="6.8">
+    <div id="fz-ground" class="clip fz-ground" data-start="0" data-duration="6.8" data-track-index="0">
       <div class="fz-glow" id="fz-glow"></div>
       <div class="fz-grain"></div>
     </div>
 
-    <div id="fz-label" class="clip fz-label" data-start="0" data-duration="6.6" data-track-index="1">Servicios &middot; Finanzas</div>
-    <div id="fz-heading" class="clip fz-heading" data-start="0" data-duration="6.6" data-track-index="2">De principio<b>a fin.</b></div>
-
-    <div id="fz-slot" class="clip fz-slot" data-layout-allow-overlap data-start="0" data-duration="6.6" data-track-index="3"></div>
-    <div id="fz-slotrule" class="clip fz-slotrule" data-start="0" data-duration="6.6" data-track-index="4"></div>
-    <div id="fz-all" class="clip fz-all" data-start="0" data-duration="6.6" data-track-index="5"></div>
+    <div id="fz-label" class="clip fz-label" data-start="0" data-duration="6.8" data-track-index="1">Servicios &middot; Finanzas</div>
+    <div id="fz-deck" class="clip fz-card" data-layout-allow-overlap data-start="0" data-duration="6.8" data-track-index="2"></div>
   </div>
 
   <script>
     (function () {
-      function maskWords(el, text) {
-        var inners = [], parts = text.split(" ");
-        for (var i = 0; i < parts.length; i++) {
-          var w = document.createElement("span"); w.className = "msk";
-          var s = document.createElement("span");
-          if (parts[i].charAt(0) === "*") { var em = document.createElement("em"); em.textContent = parts[i].slice(1); s.appendChild(em); }
-          else s.textContent = parts[i];
-          w.appendChild(s); el.appendChild(w);
-          if (i < parts.length - 1) el.appendChild(document.createTextNode(" "));
-          inners.push(s);
-        }
-        return inners;
-      }
       var root = document.querySelector('[data-composition-id="03-finanzas"]');
-      var SERVICES = [
-        ["01", "M&A"],
-        ["02", "CFO Part-Time"],
-        ["03", "Reestructuración"],
-        ["04", "Business Plan"],
-        ["05", "Financiación"],
-        ["06", "Consultoría estratégica"],
-        ["07", "Implementación de ERP"],
+
+      // size · weight · colour · placement — each one composed for its own word.
+      var TITLES = [
+        { t: "M&A",                     px: 300, w: 800, x: 128,  y: 380, align: "left",   color: "beige"  },
+        { t: "CFO Part-Time",           px: 168, w: 200, x: 1792, y: 236, align: "right",  color: "beige"  },
+        { t: "Reestructuración",        px: 152, w: 800, x: 128,  y: 700, align: "left",   color: "yellow" },
+        { t: "Business Plan",           px: 196, w: 200, x: 960,  y: 430, align: "center", color: "beige"  },
+        { t: "Financiación",            px: 232, w: 800, x: 1792, y: 640, align: "right",  color: "beige"  },
+        { t: "Consultoría estratégica", px: 128, w: 200, x: 128,  y: 300, align: "left",   color: "beige"  },
+        { t: "Implementación de ERP",   px: 132, w: 800, x: 960,  y: 452, align: "center", color: "yellow" },
       ];
-      var slot = root.querySelector("#fz-slot");
-      var items = [];
-      for (var i = 0; i < SERVICES.length; i++) {
-        var it = document.createElement("div");
-        it.className = "fz-item";
-        var n = document.createElement("span");
-        n.className = "fz-num";
-        n.textContent = SERVICES[i][0] + " / 07";
-        var nm = document.createElement("div");
-        nm.className = "fz-name";
-        nm.textContent = SERVICES[i][1];
-        it.appendChild(n);
-        it.appendChild(nm);
-        slot.appendChild(it);
-        items.push(it);
+
+      var deck = root.querySelector("#fz-deck");
+      var cards = [];
+      for (var i = 0; i < TITLES.length; i++) {
+        var d = TITLES[i];
+        var el = document.createElement("div");
+        el.className = "fz-t";
+        el.textContent = d.t;
+        el.style.fontSize = d.px + "px";
+        el.style.fontWeight = String(d.w);
+        el.style.top = d.y + "px";
+        el.style.color = d.color === "yellow" ? "var(--yellow)" : "var(--beige)";
+        if (d.align === "left") { el.style.left = d.x + "px"; el.style.textAlign = "left"; }
+        else if (d.align === "right") { el.style.right = 1920 - d.x + "px"; el.style.textAlign = "right"; }
+        else { el.style.left = "0px"; el.style.width = "1920px"; el.style.textAlign = "center"; }
+        deck.appendChild(el);
+        cards.push(el);
       }
 
-      var all = root.querySelector("#fz-all");
-      var chips = [];
-      for (var c = 0; c < SERVICES.length; c++) {
-        var chip = document.createElement("span");
-        chip.className = "fz-chip";
-        chip.textContent = SERVICES[c][1];
-        all.appendChild(chip);
-        chips.push(chip);
+      var labelEl = root.querySelector("#fz-label");
+      var lt = labelEl.textContent; labelEl.textContent = "";
+      var lw = [], lp = lt.split(" ");
+      for (var li = 0; li < lp.length; li++) {
+        var lwrap = document.createElement("span"); lwrap.className = "msk"; lwrap.setAttribute("data-layout-allow-overlap", "");
+        var lsp = document.createElement("span"); lsp.textContent = lp[li];
+        lwrap.appendChild(lsp); labelEl.appendChild(lwrap);
+        if (li < lp.length - 1) labelEl.appendChild(document.createTextNode(" "));
+        lw.push(lsp);
       }
 
       var tl = gsap.timeline({ paused: true });
+      tl.fromTo(lw, { yPercent: 118 }, { yPercent: 0, duration: 0.6, ease: "expo.out", stagger: 0.03 }, 0.02);
+      tl.fromTo(root.querySelector("#fz-glow"), { x: 120 }, { x: -110, duration: 6.4, ease: "none" }, 0);
 
-      var slot = root.querySelector("#fz-slot");
-      var labelEl = root.querySelector("#fz-label");
-      var lt = labelEl.textContent; labelEl.textContent = "";
-      tl.fromTo(maskWords(labelEl, lt), { yPercent: 118 }, { yPercent: 0, duration: 0.66, ease: "expo.out", stagger: 0.03 }, 0.04);
-      // The slot is pushed into, not presented: the camera closes on it as the roll runs.
-      tl.fromTo(slot, { scale: 1.1, x: 70 }, { scale: 1, x: 0, duration: 3.6, ease: "power2.out" }, 0);
-      tl.fromTo(root.querySelector("#fz-heading"), { autoAlpha: 0, x: -70, scale: 1.06 }, { autoAlpha: 1, x: 0, scale: 1, duration: 0.9, ease: "expo.out" }, 0.1);
-      tl.fromTo(root.querySelector("#fz-slotrule"), { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.out" }, 0.3);
-      tl.fromTo(root.querySelector("#fz-glow"), { x: 90 }, { x: -70, duration: 5.9, ease: "none" }, 0);
-
-      // The roll: each service enters from below as the previous leaves upward —
-      // one continuous upward vector, seven cuts, accelerating into the landing.
-      var t = 0.34;
-      var GAP = [0.44, 0.4, 0.36, 0.32, 0.29, 0.26];
-      for (var k = 0; k < items.length; k++) {
-        var dur = k === items.length - 1 ? 0.44 : 0.24;
-        tl.fromTo(items[k], { autoAlpha: 0, y: 150 }, { autoAlpha: 1, y: 0, duration: dur, ease: "power3.out" }, t);
-        if (k < items.length - 1) {
-          tl.to(items[k], { autoAlpha: 0, y: -150, duration: 0.22, ease: "power3.in" }, t + GAP[k] - 0.05);
-          t += GAP[k];
+      // Alternating vectors so no two cuts feel the same: odd titles arrive on Z
+      // (growing THROUGH the frame), even titles whip in on X. Both sides of every
+      // cut move the same way at matched speed — the outgoing never settles first.
+      var HOLD = [0.86, 0.8, 0.74, 0.66, 0.58, 0.5];
+      var t = 0.22;
+      for (var k = 0; k < cards.length; k++) {
+        var last = k === cards.length - 1;
+        var zAxis = k % 2 === 0;
+        if (zAxis) {
+          tl.fromTo(cards[k], { autoAlpha: 0, scale: 0.66, filter: "blur(10px)" },
+                              { autoAlpha: 1, scale: 1, filter: "blur(0px)", duration: last ? 0.5 : 0.3, ease: "expo.out" }, t);
+        } else {
+          var dir = k % 4 === 1 ? 1 : -1;
+          tl.fromTo(cards[k], { autoAlpha: 0, x: 420 * dir, filter: "blur(10px)" },
+                              { autoAlpha: 1, x: 0, filter: "blur(0px)", duration: 0.3, ease: "expo.out" }, t);
+        }
+        if (!last) {
+          if (zAxis) {
+            tl.to(cards[k], { scale: 1.5, filter: "blur(10px)", autoAlpha: 0, duration: 0.2, ease: "power3.in" }, t + HOLD[k] - 0.2);
+          } else {
+            var dout = k % 4 === 1 ? -1 : 1;
+            tl.to(cards[k], { x: 420 * dout, filter: "blur(10px)", autoAlpha: 0, duration: 0.2, ease: "power3.in" }, t + HOLD[k] - 0.2);
+          }
+          t += HOLD[k];
         }
       }
-
-      // Landed. The whole catalogue fills in beneath the held seventh.
-      tl.fromTo(
-        chips,
-        { autoAlpha: 0, y: 20 },
-        { autoAlpha: 1, y: 0, duration: 0.34, ease: "expo.out", stagger: 0.042 },
-        t + 0.42
-      );
+      // The last title holds, still closing on the viewer — the frame never parks.
+      tl.to(cards[cards.length - 1], { scale: 1.05, duration: 2.2, ease: "power1.out" }, t + 0.5);
 
       window.__timelines["03-finanzas"] = tl;
     })();

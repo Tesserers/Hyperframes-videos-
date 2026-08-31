@@ -76,6 +76,7 @@
     }
     .msk { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.16em; margin-bottom: -0.16em; }
     .msk > span { display: inline-block; }
+    .msk-caps { padding-bottom: 0.02em; margin-bottom: -0.02em; }
     .tl-cam { position: absolute; inset: 0; }
   </style>
 
@@ -161,7 +162,7 @@
       var lt = labelEl.textContent; labelEl.textContent = "";
       var lw = [], lp = lt.split(" ");
       for (var li = 0; li < lp.length; li++) {
-        var lwrap = document.createElement("span"); lwrap.className = "msk";
+        var lwrap = document.createElement("span"); lwrap.className = "msk"; lwrap.setAttribute("data-layout-allow-overlap", "");
         var lsp = document.createElement("span"); lsp.textContent = lp[li];
         lwrap.appendChild(lsp); labelEl.appendChild(lwrap);
         if (li < lp.length - 1) labelEl.appendChild(document.createTextNode(" "));

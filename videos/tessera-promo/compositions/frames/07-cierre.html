@@ -25,18 +25,19 @@
     }
     .ci-ch { display: inline-block; }
     .ci-tag {
-      position: absolute; left: 0; top: 656px; width: 1920px; text-align: center;
+      position: absolute; left: 0; top: 668px; width: 1920px; text-align: center;
       font-family: "Raleway", sans-serif; font-weight: 200; font-size: 50px; color: rgba(240,232,222,0.86);
       letter-spacing: 0.02em;
     }
     .ci-domain {
-      position: absolute; left: 0; top: 762px; width: 1920px; text-align: center;
+      position: absolute; left: 0; top: 790px; width: 1920px; text-align: center;
       font-family: "Raleway", sans-serif; font-weight: 600; font-size: 27px;
       letter-spacing: 0.24em; text-transform: uppercase; color: var(--yellow);
     }
     .ci-fade { position: absolute; inset: 0; background: var(--deep); }
     .msk { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.16em; margin-bottom: -0.16em; }
     .msk > span { display: inline-block; }
+    .msk-caps { padding-bottom: 0.02em; margin-bottom: -0.02em; }
     /* A shaped scrim, not a flat veil: it darkens only where the type sits, so the
        corners keep the client's footage and the brand teal still passes contrast. */
     .ci-scrim { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 70% 54% at 50% 50%, rgba(10,26,28,0.86) 0%, rgba(10,26,28,0.52) 60%, rgba(10,26,28,0) 84%); }
@@ -71,7 +72,7 @@
       var TXT = "Tessera";
       for (var i = 0; i < TXT.length; i++) {
         var ch = document.createElement("span");
-        ch.className = "ci-ch msk";
+        ch.className = "ci-ch msk"; ch.setAttribute("data-layout-allow-overlap", "");
         var inner = document.createElement("span");
         inner.textContent = TXT[i];
         ch.appendChild(inner);
@@ -94,7 +95,7 @@
       var tagEl = root.querySelector("#ci-tag"); var tagTxt = tagEl.textContent; tagEl.textContent = "";
       var tagInner = [], tp = tagTxt.split(" ");
       for (var ti = 0; ti < tp.length; ti++) {
-        var tw = document.createElement("span"); tw.className = "msk";
+        var tw = document.createElement("span"); tw.className = "msk"; tw.setAttribute("data-layout-allow-overlap", "");
         var ts = document.createElement("span"); ts.textContent = tp[ti];
         tw.appendChild(ts); tagEl.appendChild(tw);
         if (ti < tp.length - 1) tagEl.appendChild(document.createTextNode(" "));

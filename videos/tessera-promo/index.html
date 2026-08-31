@@ -37,7 +37,7 @@
       id="root"
       data-composition-id="main"
       data-start="0"
-      data-duration="37.8"
+      data-duration="39.6"
       data-width="1920"
       data-height="1080"
     >
@@ -46,14 +46,14 @@
         class="clip"
         style="position:absolute;left:0px;top:0px;width:1920px;height:1080px;object-fit:cover"
         data-start="0"
-        data-duration="8.5"
+        data-duration="7.5"
         data-track-index="1001"
       ></video>
 
       <video id="plate-cierre" src="assets/media/herobg-close.webm" muted playsinline
         class="clip"
         style="position:absolute;left:0px;top:0px;width:1920px;height:1080px;object-fit:cover"
-        data-start="33.1"
+        data-start="34.9"
         data-duration="4.7"
         data-track-index="1001"
       ></video>
@@ -64,7 +64,7 @@
         data-composition-id="01-apertura"
         data-composition-src="compositions/frames/01-apertura.html"
         data-start="0"
-        data-duration="8.5"
+        data-duration="7.5"
         data-track-index="0"
       ></div>
 
@@ -73,7 +73,7 @@
         class="scene"
         data-composition-id="02-cifras"
         data-composition-src="compositions/frames/02-cifras.html"
-        data-start="8"
+        data-start="7"
         data-duration="7.5"
         data-track-index="1"
       ></div>
@@ -83,18 +83,18 @@
         class="scene"
         data-composition-id="03-finanzas"
         data-composition-src="compositions/frames/03-finanzas.html"
-        data-start="15"
-        data-duration="6.6"
+        data-start="14"
+        data-duration="6.8"
         data-track-index="0"
       ></div>
 
       <div
-        id="el-04-informes"
+        id="el-04-partner"
         class="scene"
-        data-composition-id="04-informes"
-        data-composition-src="compositions/frames/04-informes.html"
-        data-start="21.2"
-        data-duration="3.5"
+        data-composition-id="04-partner"
+        data-composition-src="compositions/frames/04-partner.html"
+        data-start="20.4"
+        data-duration="6.1"
         data-track-index="1"
       ></div>
 
@@ -103,7 +103,7 @@
         class="scene"
         data-composition-id="05-talento"
         data-composition-src="compositions/frames/05-talento.html"
-        data-start="24.2"
+        data-start="26"
         data-duration="6.4"
         data-track-index="0"
       ></div>
@@ -113,7 +113,7 @@
         class="scene"
         data-composition-id="06-ebitda"
         data-composition-src="compositions/frames/06-ebitda.html"
-        data-start="30.6"
+        data-start="32.4"
         data-duration="3"
         data-track-index="1"
       ></div>
@@ -123,7 +123,7 @@
         class="scene"
         data-composition-id="07-cierre"
         data-composition-src="compositions/frames/07-cierre.html"
-        data-start="33.1"
+        data-start="34.9"
         data-duration="4.7"
         data-track-index="0"
       ></div>
@@ -133,7 +133,7 @@
         id="el-bgm"
         src="assets/bgm/bed.wav"
         data-start="0"
-        data-duration="37.8"
+        data-duration="39.6"
         data-track-index="11"
         data-volume="1"
       ></audio>
@@ -150,7 +150,7 @@
       <audio
         id="el-sfx-1"
         src="assets/sfx/riser.mp3"
-        data-start="8"
+        data-start="7"
         data-duration="10.03"
         data-track-index="21"
         data-volume="0.35"
@@ -158,7 +158,7 @@
       <audio
         id="el-sfx-2"
         src="assets/sfx/pop.mp3"
-        data-start="8"
+        data-start="7"
         data-duration="0.72"
         data-track-index="22"
         data-volume="0.35"
@@ -166,7 +166,7 @@
       <audio
         id="el-sfx-3"
         src="assets/sfx/click-soft.mp3"
-        data-start="15"
+        data-start="14"
         data-duration="0.37"
         data-track-index="23"
         data-volume="0.35"
@@ -174,7 +174,7 @@
       <audio
         id="el-sfx-4"
         src="assets/sfx/impact-bass-1.mp3"
-        data-start="21.2"
+        data-start="20.4"
         data-duration="2.12"
         data-track-index="24"
         data-volume="0.35"
@@ -182,7 +182,7 @@
       <audio
         id="el-sfx-5"
         src="assets/sfx/pop.mp3"
-        data-start="24.2"
+        data-start="26"
         data-duration="0.72"
         data-track-index="25"
         data-volume="0.35"
@@ -190,7 +190,7 @@
       <audio
         id="el-sfx-6"
         src="assets/sfx/impact-bass-2.mp3"
-        data-start="30.6"
+        data-start="32.4"
         data-duration="2.59"
         data-track-index="26"
         data-volume="0.35"
@@ -198,7 +198,7 @@
       <audio
         id="el-sfx-7"
         src="assets/sfx/chime.mp3"
-        data-start="33.1"
+        data-start="34.9"
         data-duration="2.5"
         data-track-index="27"
         data-volume="0.35"
@@ -210,17 +210,17 @@
       window.__timelines["main"] = gsap.timeline({ paused: true });
       // ── frame transitions (injected by transitions.mjs) ──
       (function () { var tl = window.__timelines["main"];
-        tl.to("#el-01-apertura", { x: -1920, duration: 0.5, ease: "power3.inOut" }, 8);
-        tl.fromTo("#el-02-cifras", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, 8);
-        tl.to("#el-02-cifras", { x: -1920, duration: 0.5, ease: "power3.inOut" }, 15);
-        tl.fromTo("#el-03-finanzas", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, 15);
-        tl.to("#el-03-finanzas", { scale: 2.5, opacity: 0, filter: "blur(8px)", duration: 0.4, ease: "power3.in" }, 21.2);
-        tl.fromTo("#el-04-informes", { scale: 0.5, opacity: 0, filter: "blur(8px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.4, ease: "power3.out" }, 21.2);
-        tl.to("#el-04-informes", { x: -1920, duration: 0.5, ease: "power3.inOut" }, 24.2);
-        tl.fromTo("#el-05-talento", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, 24.2);
-        tl.to("#el-06-ebitda", { x: -1920, duration: 0.5, ease: "power3.inOut" }, 33.1);
-        tl.fromTo("#el-07-cierre", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, 33.1);
-        tl.to({}, { duration: 37.8 }, 0); // full-span anchor — main.duration() == composition total (Studio master duration)
+        tl.to("#el-01-apertura", { x: -1920, duration: 0.5, ease: "power3.inOut" }, 7);
+        tl.fromTo("#el-02-cifras", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, 7);
+        tl.to("#el-02-cifras", { x: -1920, duration: 0.5, ease: "power3.inOut" }, 14);
+        tl.fromTo("#el-03-finanzas", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, 14);
+        tl.to("#el-03-finanzas", { scale: 2.5, opacity: 0, filter: "blur(8px)", duration: 0.4, ease: "power3.in" }, 20.4);
+        tl.fromTo("#el-04-partner", { scale: 0.5, opacity: 0, filter: "blur(8px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.4, ease: "power3.out" }, 20.4);
+        tl.to("#el-04-partner", { x: -1920, duration: 0.5, ease: "power3.inOut" }, 26);
+        tl.fromTo("#el-05-talento", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, 26);
+        tl.to("#el-06-ebitda", { x: -1920, duration: 0.5, ease: "power3.inOut" }, 34.9);
+        tl.fromTo("#el-07-cierre", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, 34.9);
+        tl.to({}, { duration: 39.6 }, 0); // full-span anchor — main.duration() == composition total (Studio master duration)
       })();
     </script>
   </body>

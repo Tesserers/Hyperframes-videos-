@@ -1,0 +1,87 @@
+<template>
+  <style>
+    @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-200.woff2") format("woff2"); font-weight: 200; font-style: normal; font-display: block; }
+    @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute; inset: 0; overflow: hidden;
+      --navy: #202031; --teal: #587579; --beige: #f0e8de; --yellow: #fbe0a0;
+    }
+    .pt-ground { position: absolute; inset: 0; background: var(--navy); }
+    .pt-glow {
+      position: absolute; left: 300px; top: -160px; width: 1400px; height: 1100px;
+      background: radial-gradient(circle, rgba(88,117,121,0.26) 0%, transparent 66%);
+    }
+    .pt-grain {
+      position: absolute; inset: 0; opacity: 0.045; background-size: 200px;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    }
+
+    .msk { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.16em; margin-bottom: -0.16em; }
+    .msk > span { display: inline-block; }
+    .msk-caps { padding-bottom: 0.02em; margin-bottom: -0.02em; }
+
+    /* Three beats, stacked and left-aligned off the safe centre: a denial, what we
+       do instead, and the word for it. No rule anywhere — the type carries it. */
+    .pt-block { position: absolute; left: 128px; top: 250px; width: 1700px; }
+    .pt-l { display: block; font-family: "Raleway", sans-serif; letter-spacing: 0.005em; }
+    .pt-a { font-weight: 800; font-size: 156px; line-height: 1.02; color: var(--beige); }
+    .pt-b { font-weight: 200; font-size: 116px; line-height: 1.05; color: rgba(240,232,222,0.72); margin-top: 26px; }
+    .pt-c { font-weight: 800; font-size: 190px; line-height: 1.0; color: var(--yellow); margin-top: 44px; }
+  </style>
+
+  <div id="root" data-composition-id="04-partner" data-width="1920" data-height="1080" data-duration="6.1">
+    <div id="pt-ground" class="clip pt-ground" data-start="0" data-duration="6.1" data-track-index="0">
+      <div class="pt-glow" id="pt-glow"></div>
+      <div class="pt-grain"></div>
+    </div>
+
+    <div id="pt-block" class="clip pt-block" data-start="0" data-duration="6.1" data-track-index="1">
+      <span class="pt-l pt-a" id="pt-a"></span>
+      <span class="pt-l pt-b" id="pt-b"></span>
+      <span class="pt-l pt-c" id="pt-c"></span>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="04-partner"]');
+      function maskWords(el, text) {
+        var inners = [], parts = text.split(" ");
+        for (var i = 0; i < parts.length; i++) {
+          var w = document.createElement("span"); w.className = "msk"; w.setAttribute("data-layout-allow-overlap", "");
+          var s = document.createElement("span"); s.textContent = parts[i];
+          w.appendChild(s); el.appendChild(w);
+          if (i < parts.length - 1) el.appendChild(document.createTextNode(" "));
+          inners.push(s);
+        }
+        return inners;
+      }
+      var wa = maskWords(root.querySelector("#pt-a"), "No vendemos informes.");
+      var wb = maskWords(root.querySelector("#pt-b"), "Nos sentamos en tu mesa.");
+      var wc = maskWords(root.querySelector("#pt-c"), "Somos tu partner.");
+      var block = root.querySelector("#pt-block");
+
+      var tl = gsap.timeline({ paused: true });
+
+      // Arrives mid-flight, continuing the injector's zoom-through forward on Z —
+      // same scale-velocity sign, never from rest.
+      tl.fromTo(block, { scale: 1.12, filter: "blur(10px)", autoAlpha: 0.25 },
+                       { scale: 1, filter: "blur(0px)", autoAlpha: 1, duration: 0.46, ease: "expo.out" }, 0);
+      tl.fromTo(root.querySelector("#pt-glow"), { x: 110 }, { x: -90, duration: 5.6, ease: "none" }, 0);
+
+      // Beat 1 — the denial.
+      tl.fromTo(wa, { yPercent: 118 }, { yPercent: 0, duration: 0.66, ease: "expo.out", stagger: 0.055 }, 0.06);
+      // Beat 2 — what happens instead.
+      tl.fromTo(wb, { yPercent: 118 }, { yPercent: 0, duration: 0.66, ease: "expo.out", stagger: 0.05 }, 1.42);
+      // Beat 3 — the word for it. The whole block lifts as it lands, so the payoff
+      // arrives on a moving frame rather than a parked one.
+      tl.to(block, { y: -46, duration: 1.0, ease: "power3.inOut" }, 2.86);
+      tl.fromTo(wc, { yPercent: 118 }, { yPercent: 0, duration: 0.8, ease: "expo.out", stagger: 0.06 }, 3.0);
+      // and keeps closing through the hold.
+      tl.to(block, { scale: 1.035, duration: 2.4, ease: "power1.out" }, 3.2);
+
+      window.__timelines["04-partner"] = tl;
+    })();
+  </script>
+</template>

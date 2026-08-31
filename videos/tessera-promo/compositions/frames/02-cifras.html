@@ -57,6 +57,7 @@
     
     .msk { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.16em; margin-bottom: -0.16em; }
     .msk > span { display: inline-block; }
+    .msk-caps { padding-bottom: 0.02em; margin-bottom: -0.02em; }
   </style>
 
   <div id="root" data-composition-id="02-cifras" data-width="1920" data-height="1080" data-duration="7.5">
@@ -97,7 +98,7 @@
       function maskWords(el, text) {
         var inners = [], parts = text.split(" ");
         for (var i = 0; i < parts.length; i++) {
-          var w = document.createElement("span"); w.className = "msk";
+          var w = document.createElement("span"); w.className = "msk"; w.setAttribute("data-layout-allow-overlap", "");
           var s = document.createElement("span");
           if (parts[i].charAt(0) === "*") { var em = document.createElement("em"); em.textContent = parts[i].slice(1); s.appendChild(em); }
           else s.textContent = parts[i];

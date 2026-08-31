@@ -1,0 +1,167 @@
+<template>
+  <style>
+    @font-face { font-family: "Newsreader"; src: url("assets/fonts/Newsreader-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Hanken Grotesk"; src: url("assets/fonts/HankenGrotesk-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Hanken Grotesk"; src: url("assets/fonts/HankenGrotesk-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "DM Mono"; src: url("assets/fonts/DMMono-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute; inset: 0; container-type: size; overflow: hidden;
+      --paper: #f0ebde; --ink: #1f2be0; --grid: rgba(31, 43, 224, 0.1);
+    }
+    .prv-ground {
+      position: absolute; inset: 0;
+      background-color: var(--paper);
+      background-image: linear-gradient(to right, var(--grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+      background-size: 38.4px 38.4px;
+    }
+    .prv-rule { position: absolute; left: 77px; width: 1766px; height: 2px; background: var(--ink); }
+    .prv-rule-top { top: 61px; }
+    .prv-rule-bot { top: 1019px; }
+    .prv-chrome {
+      position: absolute; left: 77px; top: 79px;
+      font-family: "DM Mono", monospace; font-size: 22px; letter-spacing: 0.06em; color: var(--ink);
+    }
+
+    /* The count-up docks from centre stage into the chrome band — one gesture. */
+    .prv-count {
+      position: absolute; left: 0; top: 250px; width: 1920px; text-align: center;
+      font-family: "Newsreader", serif; font-weight: 400; line-height: 0.9;
+      letter-spacing: -0.015em; color: var(--ink);
+      font-size: 300px;
+    }
+    .prv-countlabel {
+      position: absolute; left: 0; top: 600px; width: 1920px; text-align: center;
+      font-family: "Hanken Grotesk", sans-serif; font-weight: 600; font-size: 34px;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink);
+    }
+    .prv-docked {
+      position: absolute; left: 77px; top: 128px;
+      font-family: "DM Mono", monospace; font-size: 32px; letter-spacing: 0.05em; color: var(--ink);
+    }
+    .prv-docked-2 { top: 180px; }
+
+    .prv-headline {
+      position: absolute; left: 0; top: 236px; width: 1920px; text-align: center;
+      font-family: "Newsreader", serif; font-weight: 400; font-size: 88px; line-height: 0.95;
+      letter-spacing: -0.005em; color: var(--ink);
+    }
+
+    .prv-mosaic { position: absolute; left: 577px; top: 350px; width: 766px; height: 506px; }
+    .prv-tile { position: absolute; width: 116px; height: 116px; background: var(--ink); }
+    .prv-tile.soft { opacity: 0.55; }
+    .prv-fill { position: absolute; width: 116px; height: 116px; background: var(--ink); }
+    .prv-hole { position: absolute; width: 116px; height: 116px; border: 5px solid var(--ink); }
+  </style>
+
+  <div id="root" data-composition-id="06-un-proveedor" data-width="1920" data-height="1080" data-duration="6.57">
+    <div id="prv-ground" class="clip prv-ground" data-start="0" data-duration="6.57" data-track-index="0"></div>
+
+    <div id="prv-furniture" class="clip prv-furniture" data-start="0" data-duration="6.57" data-track-index="1">
+      <div class="prv-rule prv-rule-top"></div>
+      <div class="prv-rule prv-rule-bot"></div>
+      <div class="prv-chrome">TESSERA &middot; MADRID</div>
+    </div>
+
+    <div id="prv-mosaic" class="clip prv-mosaic" data-start="0" data-duration="6.57" data-track-index="2"></div>
+
+    <div id="prv-stage" class="clip prv-stage" data-start="0" data-duration="6.57" data-track-index="3">
+      <div class="prv-count" id="prv-count">0</div>
+      <div class="prv-countlabel" id="prv-countlabel">Profesionales &middot; Madrid</div>
+      <div class="prv-docked" id="prv-docked-1">24 PROFESIONALES &middot; MADRID</div>
+      <div class="prv-docked prv-docked-2" id="prv-docked-2">LT IMPULSA &middot; GESTORÍA PROPIA</div>
+      <div class="prv-headline" id="prv-headline">Un solo proveedor.</div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="06-un-proveedor"]');
+      var TILE = 116, GAP = 14, COLS = 6, ROWS = 4;
+      var HOLE_A = 1 * COLS + 3, HOLE_B = 2 * COLS + 1;
+
+      var mosaic = root.querySelector(".prv-mosaic");
+      var tiles = [], fills = [];
+      for (var r = 0; r < ROWS; r++) {
+        for (var c = 0; c < COLS; c++) {
+          var i = r * COLS + c;
+          var x = c * (TILE + GAP), y = r * (TILE + GAP);
+          if (i === HOLE_A || i === HOLE_B) {
+            var hole = document.createElement("div");
+            hole.className = "prv-hole";
+            hole.style.left = x + "px"; hole.style.top = y + "px";
+            mosaic.appendChild(hole);
+            var fill = document.createElement("div");
+            fill.className = "prv-fill";
+            fill.style.left = x + "px"; fill.style.top = y + "px";
+            mosaic.appendChild(fill);
+            fills.push(fill);
+          } else {
+            var d = document.createElement("div");
+            d.className = "prv-tile" + ((r * 5 + c * 3) % 7 === 1 ? " soft" : "");
+            d.style.left = x + "px"; d.style.top = y + "px";
+            mosaic.appendChild(d);
+            tiles.push(d);
+          }
+        }
+      }
+
+      var count = root.querySelector("#prv-count");
+      var countLabel = root.querySelector("#prv-countlabel");
+      var docked1 = root.querySelector("#prv-docked-1");
+      var docked2 = root.querySelector("#prv-docked-2");
+      var headline = root.querySelector("#prv-headline");
+
+      var tl = gsap.timeline({ paused: true });
+      tl.set(mosaic, { autoAlpha: 0 }, 0);
+      tl.set([docked1, docked2, headline], { autoAlpha: 0 }, 0);
+      tl.set(fills, { autoAlpha: 0 }, 0);
+
+      // — Scene 1 (0.00–2.25): the only verified number in the film carries the
+      //   whole beat. Value-scaled counter: the type grows WITH the value. —
+      var counter = { v: 0 };
+      tl.fromTo(count, { autoAlpha: 0, scale: 0.86 }, { autoAlpha: 1, scale: 1, duration: 0.4, ease: "power3.out" }, 0.1);
+      tl.to(
+        counter,
+        {
+          v: 24,
+          duration: 1.5,
+          ease: "power2.out",
+          onUpdate: function () {
+            var n = Math.round(counter.v);
+            count.textContent = String(n);
+            count.style.fontSize = 168 + n * 5.5 + "px";
+          },
+        },
+        0.15
+      );
+      tl.fromTo(countLabel, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.44, ease: "power3.out" }, 1.05);
+
+      // — Scene 2 (2.25–3.35): the count DOCKS into the chrome band; the gestoría
+      //   line arrives as the same continuous gesture (card-morph-anchor). —
+      tl.to(count, { y: -300, scale: 0.14, autoAlpha: 0, duration: 0.6, ease: "power3.inOut" }, 2.25);
+      tl.to(countLabel, { y: -430, scale: 0.5, autoAlpha: 0, duration: 0.6, ease: "power3.inOut" }, 2.25);
+      tl.fromTo(docked1, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.36, ease: "power3.out" }, 2.68);
+      tl.fromTo(docked2, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: "power3.out" }, 2.9);
+      tl.fromTo(mosaic, { autoAlpha: 0, scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: 0.62, ease: "power3.out" }, 2.6);
+
+      // — Scene 3 (3.35–4.37): the payoff five shots in the making — the two holes
+      //   opened in frame 1 finally shut. No streak: these were never outside. —
+      tl.fromTo(headline, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out" }, 3.38);
+      tl.fromTo(
+        fills,
+        { autoAlpha: 0, scale: 0.5 },
+        { autoAlpha: 1, scale: 1, duration: 0.42, ease: "power3.out", stagger: 0.16 },
+        3.5
+      );
+      // The impact ripples outward through the field — cause, then reaction.
+      tl.fromTo(tiles, { y: 0 }, { y: -5, duration: 0.12, ease: "power2.out", stagger: 0.012 }, 3.62);
+      tl.to(tiles, { y: 0, duration: 0.5, ease: "power3.out", stagger: 0.012 }, 3.74);
+
+      // — Scene 4 (4.37–6.07): the field is whole for the first time. Let it read. —
+
+      window.__timelines["06-un-proveedor"] = tl;
+    })();
+  </script>
+</template>

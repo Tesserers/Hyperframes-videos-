@@ -1,0 +1,206 @@
+<template>
+  <style>
+    @font-face { font-family: "Newsreader"; src: url("assets/fonts/Newsreader-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Hanken Grotesk"; src: url("assets/fonts/HankenGrotesk-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Hanken Grotesk"; src: url("assets/fonts/HankenGrotesk-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "DM Mono"; src: url("assets/fonts/DMMono-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      container-type: size;
+      overflow: hidden;
+      --paper: #f0ebde;
+      --ink: #1f2be0;
+      --grid: rgba(31, 43, 224, 0.1);
+      --faint: rgba(31, 43, 224, 0.18);
+    }
+
+    /* Full-bleed ground rides on a clip layer, never on #root. */
+    .est-ground {
+      position: absolute;
+      inset: 0;
+      background-color: var(--paper);
+      background-image: linear-gradient(to right, var(--grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+      background-size: 38.4px 38.4px;
+      background-position: 0 0;
+    }
+    .est-rule {
+      position: absolute;
+      left: 77px;
+      width: 1766px;
+      height: 2px;
+      background: var(--ink);
+    }
+    .est-rule-top { top: 61px; }
+    .est-rule-bot { top: 1019px; }
+    .est-chrome {
+      position: absolute;
+      left: 77px;
+      top: 79px;
+      font-family: "DM Mono", monospace;
+      font-size: 22px;
+      letter-spacing: 0.06em;
+      color: var(--ink);
+    }
+
+    .est-lines {
+      position: absolute;
+      left: 77px;
+      top: 140px;
+      width: 1766px;
+      height: 190px;
+    }
+    .est-line {
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-family: "Newsreader", serif;
+      font-weight: 400;
+      font-size: 110px;
+      line-height: 1.05;
+      letter-spacing: -0.005em;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+    .est-word { display: inline-block; }
+
+    .est-mosaic {
+      position: absolute;
+      left: 577px;
+      top: 350px;
+      width: 766px;
+      height: 506px;
+    }
+    .est-tile {
+      position: absolute;
+      width: 116px;
+      height: 116px;
+      background: var(--ink);
+    }
+    .est-tile.soft { opacity: 0.55; }
+    .est-hole {
+      position: absolute;
+      width: 116px;
+      height: 116px;
+    }
+    .est-hole rect {
+      fill: none;
+      stroke: var(--ink);
+      stroke-width: 5;
+    }
+  </style>
+
+  <div id="root" data-composition-id="01-estructura" data-width="1920" data-height="1080" data-duration="4.88">
+    <div id="est-ground" class="clip est-ground" data-start="0" data-duration="4.88" data-track-index="0"></div>
+
+    <div id="est-furniture" class="clip est-furniture" data-start="0" data-duration="4.88" data-track-index="1">
+      <div class="est-rule est-rule-top"></div>
+      <div class="est-rule est-rule-bot"></div>
+      <div class="est-chrome">TESSERA &middot; MADRID</div>
+    </div>
+
+    <div id="est-mosaic" class="clip est-mosaic" data-start="0" data-duration="4.88" data-track-index="2"></div>
+
+    <div id="est-lines" class="clip est-lines" data-start="0" data-duration="4.88" data-track-index="3">
+      <div class="est-line" id="est-line-a"></div>
+      <div class="est-line" id="est-line-b"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="01-estructura"]');
+      var TILE = 116, GAP = 14, COLS = 6, ROWS = 4;
+      // The two holes: row 2 col 4 and row 3 col 2 (1-indexed) — the two services.
+      var HOLES = [1 * COLS + 3, 2 * COLS + 1];
+
+      var mosaic = root.querySelector(".est-mosaic");
+      var tiles = [];
+      var holeOutlines = [];
+      for (var r = 0; r < ROWS; r++) {
+        for (var c = 0; c < COLS; c++) {
+          var i = r * COLS + c;
+          var x = c * (TILE + GAP);
+          var y = r * (TILE + GAP);
+          if (HOLES.indexOf(i) !== -1) {
+            var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            svg.setAttribute("class", "est-hole");
+            svg.setAttribute("viewBox", "0 0 116 116");
+            svg.style.left = x + "px";
+            svg.style.top = y + "px";
+            var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            rect.setAttribute("x", "2.5");
+            rect.setAttribute("y", "2.5");
+            rect.setAttribute("width", "111");
+            rect.setAttribute("height", "111");
+            svg.appendChild(rect);
+            mosaic.appendChild(svg);
+            holeOutlines.push(rect);
+          } else {
+            var d = document.createElement("div");
+            // Emphasis by OPACITY, never a second hue (frame.md: ink-soft is
+            // editorial-subtitle only). Deterministic scatter, no neighbour of a hole.
+            d.className = "est-tile" + ((r * 5 + c * 3) % 7 === 1 ? " soft" : "");
+            d.style.left = x + "px";
+            d.style.top = y + "px";
+            mosaic.appendChild(d);
+            tiles.push(d);
+          }
+        }
+      }
+
+      function words(el, text) {
+        var out = [];
+        var parts = text.split(" ");
+        for (var i = 0; i < parts.length; i++) {
+          var span = document.createElement("span");
+          span.className = "est-word";
+          span.textContent = parts[i];
+          el.appendChild(span);
+          if (i < parts.length - 1) el.appendChild(document.createTextNode(" "));
+          out.push(span);
+        }
+        return out;
+      }
+      var lineA = root.querySelector("#est-line-a");
+      var lineB = root.querySelector("#est-line-b");
+      var wordsA = words(lineA, "Tu empresa ha crecido.");
+      var wordsB = words(lineB, "Tu estructura, no.");
+
+      var PERIM = 4 * 111;
+      var tl = gsap.timeline({ paused: true });
+
+      // — Scene 1 (0.00–1.38): the mosaic builds, the first beat lands with it —
+      tl.fromTo(
+        tiles,
+        { autoAlpha: 0, x: -34, scale: 0.86 },
+        { autoAlpha: 1, x: 0, scale: 1, duration: 0.46, ease: "power3.out", stagger: 0.018 },
+        0.05
+      );
+      tl.fromTo(
+        wordsA,
+        { autoAlpha: 0, y: 30 },
+        { autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.085 },
+        0.06
+      );
+      tl.set(lineB, { autoAlpha: 0 }, 0);
+      tl.set(holeOutlines, { autoAlpha: 0, strokeDasharray: PERIM, strokeDashoffset: PERIM }, 0);
+
+      // — Scene 2 (1.38–1.78): the cascade stops dead. Nothing moves. —
+
+      // — Scene 3 (1.78–2.88): hard cut to the second beat; the holes draw themselves —
+      tl.set(lineA, { autoAlpha: 0 }, 1.78);
+      tl.set(lineB, { autoAlpha: 1 }, 1.78);
+      tl.set(holeOutlines, { autoAlpha: 1 }, 1.8);
+      tl.to(holeOutlines, { strokeDashoffset: 0, duration: 0.58, ease: "power3.out", stagger: 0.07 }, 1.8);
+
+      // — Scene 4 (2.88–4.38): held read. Low-amplitude jitter only, finite. —
+      tl.to(mosaic, { y: 3, duration: 0.72, ease: "sine.inOut" }, 2.9);
+      tl.to(mosaic, { y: 0, duration: 0.78, ease: "sine.inOut" }, 3.62);
+
+      window.__timelines["01-estructura"] = tl;
+    })();
+  </script>
+</template>

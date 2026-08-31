@@ -1,0 +1,127 @@
+<template>
+  <style>
+    @font-face { font-family: "Newsreader"; src: url("assets/fonts/Newsreader-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Hanken Grotesk"; src: url("assets/fonts/HankenGrotesk-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Hanken Grotesk"; src: url("assets/fonts/HankenGrotesk-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "DM Mono"; src: url("assets/fonts/DMMono-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute; inset: 0; container-type: size; overflow: hidden;
+      --paper: #f0ebde; --ink: #1f2be0; --grid: rgba(31, 43, 224, 0.1);
+    }
+    .cap-ground {
+      position: absolute; inset: 0;
+      background-color: var(--paper);
+      background-image: linear-gradient(to right, var(--grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+      background-size: 38.4px 38.4px;
+    }
+    .cap-rule { position: absolute; left: 77px; width: 1766px; height: 2px; background: var(--ink); }
+    .cap-rule-top { top: 61px; }
+    .cap-rule-bot { top: 1019px; }
+    .cap-chrome {
+      position: absolute; left: 77px; top: 79px;
+      font-family: "DM Mono", monospace; font-size: 22px; letter-spacing: 0.06em; color: var(--ink);
+    }
+
+    .cap-zoom { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+
+    .cap-label {
+      position: absolute; left: 77px; top: 330px; width: 660px;
+      font-family: "Newsreader", serif; font-weight: 400; font-size: 131px; line-height: 1.0;
+      letter-spacing: -0.005em; color: var(--ink);
+    }
+    .cap-kicker {
+      position: absolute; left: 77px; top: 268px;
+      font-family: "Hanken Grotesk", sans-serif; font-weight: 600; font-size: 26px;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink); opacity: 0.62;
+    }
+
+    /* The parent tessera, opened — the three services live INSIDE its contour. */
+    .cap-contour {
+      position: absolute; left: 760px; top: 200px; width: 1083px; height: 670px;
+      border: 3px solid var(--ink);
+    }
+    .cap-row {
+      position: absolute; left: 820px; width: 963px; height: 150px;
+      border-bottom: 1px solid rgba(31, 43, 224, 0.18);
+    }
+    .cap-num {
+      position: absolute; left: 0; top: 22px;
+      font-family: "DM Mono", monospace; font-size: 32px; letter-spacing: 0.05em; color: var(--ink); opacity: 0.62;
+    }
+    .cap-name {
+      position: absolute; left: 88px; top: 0; width: 875px;
+      font-family: "Newsreader", serif; font-weight: 400; font-size: 54px; line-height: 1.15; color: var(--ink);
+    }
+  </style>
+
+  <div id="root" data-composition-id="05-capital-humano" data-width="1920" data-height="1080" data-duration="8.35">
+    <div id="cap-ground" class="clip cap-ground" data-start="0" data-duration="8.35" data-track-index="0"></div>
+
+    <div id="cap-furniture" class="clip cap-furniture" data-start="0" data-duration="8.35" data-track-index="1">
+      <div class="cap-rule cap-rule-top"></div>
+      <div class="cap-rule cap-rule-bot"></div>
+      <div class="cap-chrome">TESSERA &middot; MADRID</div>
+    </div>
+
+    <div id="cap-zoom" class="clip cap-zoom" data-start="0" data-duration="8.35" data-track-index="2">
+      <div class="cap-kicker">Área 02</div>
+      <div class="cap-label">Capital<br />humano</div>
+      <div class="cap-contour" id="cap-contour"></div>
+      <div class="cap-row" style="top: 260px">
+        <div class="cap-num">01</div>
+        <div class="cap-name">Headhunting de perfiles directivos</div>
+      </div>
+      <div class="cap-row" style="top: 465px">
+        <div class="cap-num">02</div>
+        <div class="cap-name">Directivos a tiempo parcial</div>
+      </div>
+      <div class="cap-row" style="top: 670px">
+        <div class="cap-num">03</div>
+        <div class="cap-name">RPO y procesos de selección</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="05-capital-humano"]');
+      var zoom = root.querySelector(".cap-zoom");
+      var label = root.querySelector(".cap-label");
+      var kicker = root.querySelector(".cap-kicker");
+      var contour = root.querySelector(".cap-contour");
+      var rows = root.querySelectorAll(".cap-row");
+      var tl = gsap.timeline({ paused: true });
+
+      // — Scene 1: the frame ARRIVES mid-flight, continuing the injector's
+      //   zoom-through forward on Z — same scale-velocity sign, never from rest. —
+      tl.fromTo(
+        zoom,
+        { scale: 1.085, filter: "blur(9px)", autoAlpha: 0.3 },
+        { scale: 1, filter: "blur(0px)", autoAlpha: 1, duration: 0.48, ease: "expo.out" },
+        0
+      );
+      tl.fromTo(kicker, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.42, ease: "power3.out" }, 0.16);
+      tl.fromTo(label, { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.52, ease: "power3.out" }, 0.1);
+      tl.fromTo(contour, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.34, ease: "power2.out" }, 0.2);
+
+      // — Scenes 2-4: one service per spoken cue, never all three at once. —
+      var cues = [0.95, 2.90, 4.60];
+      for (var i = 0; i < rows.length; i++) {
+        tl.fromTo(
+          rows[i],
+          { autoAlpha: 0, x: -38 },
+          { autoAlpha: 1, x: 0, duration: 0.52, ease: "power3.out" },
+          cues[i]
+        );
+      }
+
+      // — Final scene: held read, low-amplitude jitter only. —
+      tl.to(contour, { y: 3, duration: 0.6, ease: "sine.inOut" }, 6.60);
+      tl.to(contour, { y: 0, duration: 0.66, ease: "sine.inOut" }, 7.20);
+
+      window.__timelines["05-capital-humano"] = tl;
+    })();
+  </script>
+</template>

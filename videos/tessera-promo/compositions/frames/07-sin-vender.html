@@ -1,0 +1,132 @@
+<template>
+  <style>
+    @font-face { font-family: "Newsreader"; src: url("assets/fonts/Newsreader-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Hanken Grotesk"; src: url("assets/fonts/HankenGrotesk-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+    @font-face { font-family: "Hanken Grotesk"; src: url("assets/fonts/HankenGrotesk-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: block; }
+    @font-face { font-family: "DM Mono"; src: url("assets/fonts/DMMono-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: block; }
+
+    #root {
+      position: absolute; inset: 0; container-type: size; overflow: hidden;
+      --paper: #f0ebde; --ink: #1f2be0; --grid: rgba(31, 43, 224, 0.1);
+    }
+    .vnd-ground {
+      position: absolute; inset: 0;
+      background-color: var(--paper);
+      background-image: linear-gradient(to right, var(--grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+      background-size: 38.4px 38.4px;
+    }
+    .vnd-rule { position: absolute; left: 77px; width: 1766px; height: 2px; background: var(--ink); }
+    .vnd-rule-top { top: 61px; }
+    .vnd-rule-bot { top: 1019px; }
+    .vnd-chrome {
+      position: absolute; left: 77px; top: 79px;
+      font-family: "DM Mono", monospace; font-size: 22px; letter-spacing: 0.06em; color: var(--ink);
+    }
+
+    .vnd-mosaic { position: absolute; left: 577px; top: 350px; width: 766px; height: 506px; }
+    .vnd-tile { position: absolute; width: 116px; height: 116px; background: var(--ink); }
+    .vnd-tile.soft { opacity: 0.55; }
+
+    .vnd-block { position: absolute; left: 0; width: 1920px; text-align: center; }
+    .vnd-a { top: 262px; }
+    .vnd-b { top: 232px; }
+    .vnd-l {
+      font-family: "Newsreader", serif; font-weight: 400; color: var(--ink);
+      letter-spacing: -0.005em; display: block;
+    }
+    .vnd-a .vnd-l { font-size: 110px; line-height: 1.16; }
+    .vnd-b .vnd-l { font-size: 180px; line-height: 1.0; letter-spacing: -0.008em; }
+    .vnd-word { position: relative; display: inline-block; }
+    .vnd-strike {
+      position: absolute; left: -8px; top: 54%; width: calc(100% + 16px); height: 10px;
+      background: var(--ink); transform-origin: left center;
+    }
+  </style>
+
+  <div id="root" data-composition-id="07-sin-vender" data-width="1920" data-height="1080" data-duration="6.91">
+    <div id="vnd-ground" class="clip vnd-ground" data-start="0" data-duration="6.91" data-track-index="0"></div>
+
+    <div id="vnd-furniture" class="clip vnd-furniture" data-start="0" data-duration="6.91" data-track-index="1">
+      <div class="vnd-rule vnd-rule-top"></div>
+      <div class="vnd-rule vnd-rule-bot"></div>
+      <div class="vnd-chrome">TESSERA &middot; MADRID</div>
+    </div>
+
+    <div id="vnd-mosaic" class="clip vnd-mosaic" data-start="0" data-duration="6.91" data-track-index="2"></div>
+
+    <div id="vnd-a" class="clip vnd-block vnd-a" data-start="0" data-duration="6.91" data-track-index="3">
+      <span class="vnd-l" id="vnd-a1"></span>
+      <span class="vnd-l" id="vnd-a2"></span>
+    </div>
+
+    <div id="vnd-b" class="clip vnd-block vnd-b" data-start="0" data-duration="6.91" data-track-index="4">
+      <span class="vnd-l">Sin tener que <span class="vnd-word">vender<span class="vnd-strike" id="vnd-strike"></span></span></span>
+      <span class="vnd-l">tu empresa.</span>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="07-sin-vender"]');
+      var TILE = 116, GAP = 14, COLS = 6, ROWS = 4;
+      var mosaic = root.querySelector(".vnd-mosaic");
+      var tiles = [];
+      for (var r = 0; r < ROWS; r++) {
+        for (var c = 0; c < COLS; c++) {
+          var d = document.createElement("div");
+          d.className = "vnd-tile" + ((r * 5 + c * 3) % 7 === 1 ? " soft" : "");
+          d.style.left = c * (TILE + GAP) + "px";
+          d.style.top = r * (TILE + GAP) + "px";
+          mosaic.appendChild(d);
+          tiles.push(d);
+        }
+      }
+
+      function words(el, text) {
+        var out = [], parts = text.split(" ");
+        for (var i = 0; i < parts.length; i++) {
+          var s = document.createElement("span");
+          s.className = "vnd-word";
+          s.textContent = parts[i];
+          el.appendChild(s);
+          if (i < parts.length - 1) el.appendChild(document.createTextNode(" "));
+          out.push(s);
+        }
+        return out;
+      }
+      var a1 = root.querySelector("#vnd-a1"), a2 = root.querySelector("#vnd-a2");
+      var wordsA = words(a1, "Para que crezcas").concat(words(a2, "y te profesionalices."));
+      var blockA = root.querySelector("#vnd-a");
+      var blockB = root.querySelector("#vnd-b");
+      var strike = root.querySelector("#vnd-strike");
+
+      var tl = gsap.timeline({ paused: true });
+      tl.set(blockB, { autoAlpha: 0 }, 0);
+      tl.set(strike, { scaleX: 0 }, 0);
+
+      // — Scene 1 (0.00–2.37): the completed mosaic drops to background weight and
+      //   the line assembles word by word over it. —
+      tl.fromTo(mosaic, { opacity: 1 }, { opacity: 0.08, duration: 0.4, ease: "power2.out" }, 0);
+      tl.fromTo(
+        wordsA,
+        { autoAlpha: 0, y: 28 },
+        { autoAlpha: 1, y: 0, duration: 0.52, ease: "power3.out", stagger: 0.135 },
+        0.08
+      );
+
+      // — Scene 2 (2.37–2.79): total stillness. The comma before the punchline —
+      //   0.42s of real silence sits in the wav, so this is not an empty frame. —
+
+      // — Scene 3 (2.79–4.71): hard cut. "vender" is struck through on the same
+      //   frame — the word is not deleted, it is denied. —
+      tl.set(blockA, { autoAlpha: 0 }, 2.79);
+      tl.set(blockB, { autoAlpha: 1 }, 2.79);
+      tl.to(strike, { scaleX: 1, duration: 0.34, ease: "power3.out" }, 3.42);
+
+      // — Scene 4 (4.71–6.41): absolute stillness. Not even jitter. —
+
+      window.__timelines["07-sin-vender"] = tl;
+    })();
+  </script>
+</template>

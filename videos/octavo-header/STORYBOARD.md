@@ -149,42 +149,55 @@ exactamente lo que tiene que haber entre dos fotogramas consecutivos de un movim
 y no hay ninguna cuña en las esquinas. El navegador puede repetir el vídeo indefinidamente sin
 que se vea la juntura.
 
-## El velo de legibilidad
+---
 
-No estaba en el plan y se añadió tras medirlo. Montado el vídeo dentro de su hero real y
-ocultando el texto para leer el fondo que queda debajo, el percentil 5 de luminancia bajo cada
-bloque daba esto:
+# v2 — la versión que sustituye a la anterior
 
-| Texto | Su hero de hoy | Plano 3 sin corregir | Plano 4 sin corregir | Exige AA |
-|---|---|---|---|---|
-| `h1` 104 px basalto | 9,79:1 | 4,63:1 | 4,09:1 | 3:1 |
-| itálica 104 px almagre | 2,78:1 | **1,77:1** | **1,58:1** | 3:1 |
-| párrafo 21 px | 4,00:1 | **2,25:1** | **1,83:1** | 4,5:1 |
+La v1 se rechazó y con razón: **no era dinámica y no servía de cabecera**. El diagnóstico,
+sin excusas, es que me fui a la sobriedad del brandkit y encima metí un velo de legibilidad
+que apagó la mitad izquierda del cuadro. Cuatro planos de cuatro segundos con una cámara que
+recorría un 1,4 % por segundo son un pase de diapositivas, no una cabecera.
 
-Dos conclusiones distintas, y conviene no mezclarlas. La primera es suya y es anterior al
-vídeo: **su hero ya no llega a AA** ni en la itálica ni en el párrafo. La segunda sí era mía:
-los planos 3 y 4 llevan masa oscura —la copa del olivo, las colinas del atardecer— justo donde
-cae el texto, y hundían esas cifras muy por debajo de su propio punto de partida.
+## Qué cambia
 
-Lo que no funcionó, y por qué:
+| | v1 | v2 |
+|---|---|---|
+| Duración | 16 s | 14,4 s |
+| Planos | 4 · uno cada 4 s | **8 · uno cada 1,8 s** |
+| Recorrido de cámara | 1,04 → 1,11 en 4,9 s | **1,10 → 1,30 en 2,33 s** (unas seis veces más rápido) |
+| Dirección | todos hacia dentro | **alterna dentro / fuera** en cada plano |
+| Costura | un octógono que crece, 1,1 s | **abanico de ocho cuñas** (0,53 s) alternando con el octógono |
+| Velo | metido por defecto | **fuera por defecto**, solo en la variante `legible` |
 
-- **Reforzar su degradado.** Ni duplicándolo se llega: su gradiente ya ha caído al 7 % en
-  x=1267, y el bloque de texto termina en x=1014, así que justo donde hace falta no hay velo
-  que reforzar.
-- **Reencuadrar.** El plano 3 se salvaba subiendo la escala base a 1,16 y desplazando el
-  encuadre, pero con margen cero y con la imagen ya a 1,33× de ampliación. El plano 4 no se
-  salvaba de ninguna manera.
+## La idea nueva: la imagen entra en ocho partes
 
-Lo que sí funciona es **cambiar la forma del velo, no su fuerza**: plano hasta x=940 y cayendo
-a cero en x=1460, siguiendo al texto en vez de al borde del cuadro. Cada plano lleva el suyo,
-dentro de su propio octógono, con la intensidad mínima que necesita: 0 · 0,10 · 0,35 · 0,40.
-El plano 1 se queda en cero, es decir **exactamente como se ve su web hoy**. Y como la
-intensidad solo cambia en los cortes, donde la imagen cambia entera, no se percibe.
+El brandkit tiene tres recursos y el anillo de ocho es el que habla del reparto. En la v1 lo
+dejé fuera por no competir con la barra de cifras del hero. Era la decisión equivocada: no
+hacía falta **dibujarlo**, hacía falta **ejecutarlo**.
 
-Medido otra vez sobre el hero real: itálica de 2,81 a 2,91 y párrafo de 3,95 a 4,00 en los
-cuatro planos, contra 2,78 y 4,00 de su hero actual. El `h1` baja de 9,79 a 7,40 en el peor
-plano, que sigue siendo dos veces y media el umbral. El vídeo no empeora nada.
+Ahora la imagen entrante no se desliza ni se funde: **aterriza en ocho cuñas** que van cayendo
+alrededor del centro, dos fotogramas cada una. No es un barrido suavizado a propósito —el
+escalón es el mensaje—. Los ocho pasos ocupan 16 fotogramas exactos, por eso el compás dura
+54 fotogramas y la costura 16: así ninguna cuña cae en medio fotograma.
 
-La variante `aa` sube esos velos a 0,125 · 0,20 · 0,425 · 0,475 y deja los cuatro planos por
-encima de AA (itálica ≥ 3,12 · párrafo ≥ 4,51). Va aparte porque vela algo más la fotografía y
-esa es una decisión del cliente, no mía.
+Alterna con el octógono de la v1, que se mantiene porque sigue siendo la única figura que el
+brandkit autoriza sobre fotografía, pero ahora atraviesa el cuadro en medio segundo en vez de
+en 1,1 s.
+
+## El bucle, otra vez
+
+Misma técnica que la v1 —el plano 1 aparece dos veces y la copia de cierre aterriza en el
+último fotograma— y **el mismo tipo de fallo apareció otra vez, en otro sitio**: la octava
+cuña caía exactamente en t=14,400 s, que no se renderiza nunca, así que el último fotograma
+iba con siete octavos puestos y el bucle daba un salto (20,9 sobre 255 de diferencia media).
+El abanico arranca ahora dos fotogramas antes, con lo que el octavo aterriza dos fotogramas
+antes del límite. Medido después: **4,77 sobre 255**, frente a 68,4 de un cambio de plano
+normal, y sin rastro de cuñas en la imagen de diferencia. Es más alto que en la v1 (2,37)
+simplemente porque la cámara va seis veces más rápida y un fotograma de recorrido pesa más.
+
+## Lo que sigue pendiente y no depende de mí
+
+Son cuatro fotografías fijas a 1672×941. **Todo el movimiento tiene que salir de la cámara y
+de la geometría, porque dentro del encuadre no se mueve nada.** Con unos segundos de metraje
+real —el mar, alguien cruzando la puerta, el agua de la piscina— la cabecera cambia de
+categoría, y de paso desaparece la ampliación de 1,5× que obliga a hacer la fotografía actual.

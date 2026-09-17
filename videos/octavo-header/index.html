@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="es" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      /* Opaque ground in the site's own hero colour. Nothing should ever show
+         through — shot 1 covers the frame for the whole film — but a transparent
+         stage is how a white flash gets in at a seam. */
+      body { background: #f2f4f4; }
+      #root { position: relative; width: 100%; height: 100%; background: #f2f4f4; overflow: hidden; }
+
+      /* Three nested layers per shot, and the split is deliberate:
+         .shot carries HyperFrames timing and is never animated;
+         .oct carries the octagon clip-path, which is the brand's one sanctioned
+              way to put a shape on photography — it recorts, it never outlines;
+         .ph  carries the camera. Keeping the clip and the camera on separate
+              elements is what lets the aperture grow while the picture inside it
+              keeps travelling at its own speed. */
+      .shot { position: absolute; inset: 0; }
+      .oct  { position: absolute; inset: 0; }
+      .ph   { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+      .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      /* The legibility wash. It rides INSIDE .oct, so the aperture reveals each
+         shot already carrying its own wash and the two never separate.
+         Shape, not strength, is the point here: the site's own hero gradient has
+         decayed to 7% by x=1267, but the copy block ends at x=1014, so its right
+         half sits on almost nothing. This profile holds flat to x=940 and falls
+         away by x=1460 — it backs the text and leaves the rest of the frame
+         photographic. The stops trace a smoothstep so there is no visible band.
+         Per-shot strength is set inline; see the measurements in STORYBOARD.md. */
+      .wash {
+        position: absolute; inset: 0; pointer-events: none;
+        --k: 0;   /* set from data-k / data-k-aa before the first frame */
+        background: linear-gradient(90deg,
+          rgba(242,244,244,var(--k)) 0%,
+          rgba(242,244,244,var(--k)) 48.96%,
+          rgba(242,244,244,calc(var(--k) * 0.844)) 55.73%,
+          rgba(242,244,244,calc(var(--k) * 0.5)) 62.50%,
+          rgba(242,244,244,calc(var(--k) * 0.156)) 69.27%,
+          rgba(242,244,244,0) 76.04%);
+      }
+      .scrim {
+        position: absolute; inset: 0; display: none; pointer-events: none;
+        background: linear-gradient(90deg,
+          rgba(242,244,244,0.99) 0%, rgba(242,244,244,0.90) 20%, rgba(242,244,244,0.62) 34%,
+          rgba(242,244,244,0.28) 50%, rgba(242,244,244,0.07) 66%, rgba(242,244,244,0) 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="16" data-width="1920" data-height="1080"
+         data-composition-variables='{"scrim": false, "aa": false}'>
+
+      <!-- Shot 1, head instance. No clip-path: it is the film's floor. -->
+      <div id="s1a" class="clip shot" data-start="0" data-duration="16" data-track-index="0">
+        <div class="oct" id="o1a"><div class="ph" id="p1a"><img id="img1a" src="assets/photos/01-amanecer.jpg" alt="" /></div><div class="wash" data-k="0" data-k-aa="0.125"></div></div>
+      </div>
+
+      <div id="s2" class="clip shot" data-start="0" data-duration="16" data-track-index="1">
+        <div class="oct" id="o2"><div class="ph" id="p2"><img id="img2" src="assets/photos/02-desayuno.jpg" alt="" /></div><div class="wash" data-k="0.10" data-k-aa="0.20"></div></div>
+      </div>
+
+      <div id="s3" class="clip shot" data-start="0" data-duration="16" data-track-index="2">
+        <div class="oct" id="o3"><div class="ph" id="p3"><img id="img3" src="assets/photos/03-llegada.jpg" alt="" /></div><div class="wash" data-k="0.35" data-k-aa="0.425"></div></div>
+      </div>
+
+      <div id="s4" class="clip shot" data-start="0" data-duration="16" data-track-index="3">
+        <div class="oct" id="o4"><div class="ph" id="p4"><img id="img4" src="assets/photos/04-piscina.jpg" alt="" /></div><div class="wash" data-k="0.40" data-k-aa="0.475"></div></div>
+      </div>
+
+      <!-- Shot 1, closing instance. Its aperture lands exactly on t=16.000, which
+           is what makes the loop splice invisible. -->
+      <div id="s1b" class="clip shot" data-start="0" data-duration="16" data-track-index="4">
+        <div class="oct" id="o1b"><div class="ph" id="p1b"><img id="img1b" src="assets/photos/01-amanecer-cierre.jpg" alt="" /></div><div class="wash" data-k="0" data-k-aa="0.125"></div></div>
+      </div>
+
+      <!-- Optional. OFF by default, because the live hero already paints this exact
+           gradient as its own layer over the photo; baking it in as well would
+           stack two 99% veils and flatten the left half to plain grey. Switch it
+           on with --variables '{"scrim":true}' for anywhere that gradient is not
+           already present. Stops copied from the site's own overlay, unchanged. -->
+      <div id="scrim" class="scrim"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      (function () {
+        var W = 1920, H = 1080;
+        var BEAT = 4.0;      // one shot
+        var WIPE = 1.1;      // how long an aperture takes to pass the frame
+        var TRAVEL = BEAT + WIPE;  // a photo is on screen for its wipe plus its beat
+
+        // ---- The brand's single curve, cubic-bezier(.2,.8,.2,1), solved exactly.
+        // The brandkit prescribes it for interface entrances, and that is where it
+        // belongs: driving a full-frame aperture with it opens the octagon in two
+        // tenths of a second and the shape never reads. The aperture therefore
+        // grows at CONSTANT radius speed (see below), which also makes both sides
+        // of every seam travel at the same velocity. The curve is kept here for
+        // the titled variant, where it governs text entrances as intended.
+        function cubicBezierEase(x1, y1, x2, y2) {
+          function cx(t, a, b) { return 3 * a * t * (1 - t) * (1 - t) + 3 * b * t * t * (1 - t) + t * t * t; }
+          return function (p) {
+            if (p <= 0) return 0;
+            if (p >= 1) return 1;
+            var lo = 0, hi = 1, t = p, v;
+            for (var i = 0; i < 24; i++) {          // bisection: no derivatives, no stalls
+              t = (lo + hi) / 2;
+              v = cx(t, x1, x2);
+              if (v < p) lo = t; else hi = t;
+            }
+            return cx(t, y1, y2);
+          };
+        }
+        var BRAND_EASE = cubicBezierEase(0.2, 0.8, 0.2, 1);   // kept for the titled variant
+        // Linear radius: the octagon is legible at every size, and it leaves the
+        // frame at the same speed the camera is travelling.
+        var APERTURE_EASE = "none";
+
+        // ---- The octagon: flat top and bottom, 45-degree corners, exactly as the
+        // brandkit draws its photographic frame.
+        function octagon(cx, cy, R) {
+          var pts = [];
+          for (var k = 0; k < 8; k++) {
+            var a = (22.5 + k * 45) * Math.PI / 180;
+            pts.push((cx + R * Math.cos(a)).toFixed(2) + "px " + (cy + R * Math.sin(a)).toFixed(2) + "px");
+          }
+          return "polygon(" + pts.join(", ") + ")";
+        }
+        // Circumradius at which the octagon has swallowed the whole frame: its
+        // inradius (R*cos22.5) has to clear the farthest corner.
+        function coverRadius(cx, cy) {
+          var far = 0;
+          var corners = [[0, 0], [W, 0], [0, H], [W, H]];
+          for (var i = 0; i < corners.length; i++) {
+            var dx = corners[i][0] - cx, dy = corners[i][1] - cy;
+            far = Math.max(far, Math.sqrt(dx * dx + dy * dy));
+          }
+          // 2% geometric margin, then a further ~12% of overshoot. The overshoot
+          // matters: without it the octagon only finishes covering ON the beat
+          // boundary, so the LAST RENDERED frame of the loop (15.967s, one frame
+          // short of 16) still shows a sliver of the outgoing shot in the corners
+          // and the loop splice flickers. With it, coverage completes at ~89% of
+          // the wipe and the octagon simply keeps travelling, unseen.
+          return (far / Math.cos(22.5 * Math.PI / 180)) * 1.14;
+        }
+
+        // ---- The eight-ring, walked two eighths at a time so four shots close
+        // one full turn. The ring sits right of x=1000, clear of the hero copy
+        // block, so no aperture is ever born under the headline.
+        var RING_CX = 1340, RING_CY = 540, RING_R = 240;
+        function octant(step) {                       // step 1,3,5,7
+          var a = (step * 45 - 90) * Math.PI / 180;    // step 1 = upper right
+          return [RING_CX + RING_R * Math.cos(a), RING_CY + RING_R * Math.sin(a)];
+        }
+
+        // ---- The camera. Every shot pushes forward at the same constant speed,
+        // so both sides of every seam travel together and the wipe reads as a
+        // continuation rather than a cut. The drift carries the film's current
+        // left, the same direction in all four shots.
+        var SHOTS = [
+          { el: "#p1a", oct: "#o1a", step: 1, x1: -22, y1:  8 },   // amanecer
+          { el: "#p2",  oct: "#o2",  step: 3, x1: -22, y1: -6 },   // mesa puesta
+          { el: "#p3",  oct: "#o3",  step: 5, x1: -22, y1: 10 },   // llegada
+          { el: "#p4",  oct: "#o4",  step: 7, x1: -22, y1: -8 },   // piscina
+        ];
+        var S0 = 1.04, S1 = 1.11;
+
+        // The head instance of shot 1 must start exactly where the closing
+        // instance will be when its aperture lands on t=16. Deriving that
+        // fraction here, rather than typing the numbers, is what keeps the loop
+        // from drifting if a duration is ever changed.
+        var SPLICE = WIPE / TRAVEL;
+        function lerp(a, b, f) { return a + (b - a) * f; }
+
+        var tl = gsap.timeline({ paused: true });
+        var shot1 = SHOTS[0];
+
+        // Shot 1 head: picks the camera up mid-move and runs it to the end of its travel.
+        tl.fromTo(shot1.el,
+          { scale: lerp(S0, S1, SPLICE), x: lerp(0, shot1.x1, SPLICE), y: lerp(0, shot1.y1, SPLICE) },
+          { scale: S1, x: shot1.x1, y: shot1.y1, duration: TRAVEL - WIPE, ease: "none" },
+          0
+        );
+
+        // Shots 2-4: each aperture LANDS on its beat boundary, so the picture
+        // inside it is already travelling before it is fully revealed.
+        for (var i = 1; i < SHOTS.length; i++) {
+          var s = SHOTS[i];
+          var start = i * BEAT - WIPE;
+          var c = octant(s.step);
+          tl.fromTo(s.oct,
+            { clipPath: octagon(c[0], c[1], 0) },
+            { clipPath: octagon(c[0], c[1], coverRadius(c[0], c[1])), duration: WIPE, ease: APERTURE_EASE },
+            start
+          );
+          tl.fromTo(s.el,
+            { scale: S0, x: 0, y: 0 },
+            { scale: S1, x: s.x1, y: s.y1, duration: TRAVEL, ease: "none" },
+            start
+          );
+        }
+
+        // Shot 1 closing instance: same photo, same camera, arriving on the last
+        // frame in precisely the state the head instance holds on the first one.
+        var cEnd = octant(shot1.step);
+        var endStart = SHOTS.length * BEAT - WIPE;           // 15.1
+        // Note the target: the CLOSING octagon, #o1b. The head instance's own
+        // octagon (#o1a) is never clipped — it is the floor the film stands on.
+        tl.fromTo("#o1b",
+          { clipPath: octagon(cEnd[0], cEnd[1], 0) },
+          { clipPath: octagon(cEnd[0], cEnd[1], coverRadius(cEnd[0], cEnd[1])), duration: WIPE, ease: APERTURE_EASE },
+          endStart
+        );
+        tl.fromTo("#p1b",
+          { scale: S0, x: 0, y: 0 },
+          { scale: lerp(S0, S1, SPLICE), x: lerp(0, shot1.x1, SPLICE), y: lerp(0, shot1.y1, SPLICE), duration: WIPE, ease: "none" },
+          endStart
+        );
+
+        // Static, decided once before the first frame, so every frame renders the
+        // same way. Not animated and not a clip: it is either there or it is not.
+        try {
+          var vars = (window.__hyperframes && window.__hyperframes.getVariables)
+            ? window.__hyperframes.getVariables() : null;
+          if (vars && vars.scrim) document.getElementById("scrim").style.display = "block";
+          // Two tunings of the same wash. The default keeps the hero exactly as
+          // legible as it is today on the client's own photo; `aa` pushes every
+          // shot over WCAG AA, which their current static hero does not reach.
+          var aa = !!(vars && vars.aa);
+          var washes = document.querySelectorAll(".wash");
+          for (var w = 0; w < washes.length; w++) {
+            washes[w].style.setProperty("--k", aa ? washes[w].dataset.kAa : washes[w].dataset.k);
+          }
+        } catch (e) { /* no variables: plate stays clean at the default wash */ }
+
+        window.__timelines["main"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

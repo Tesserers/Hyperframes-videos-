@@ -1,5 +1,5 @@
 ---
-message: "Selección a tarifa plana: un precio cerrado por contratación, sin porcentajes y sin sorpresas."
+message: "Selección a tarifa plana: precio cerrado por contratación, sin porcentajes y sin sorpresas."
 mode: autonomous
 fps: 30
 bpm: 120
@@ -23,7 +23,7 @@ tiembla con el redoble.
 ## Frame 3 — La respuesta (9,75–18 s)
 status: built · src: index.html#s3a,#s3b
 9,75 los picos en amarillo sobre navy, en silencio. 10,0 (drop) se aplanan y cae «Plana.»;
-10,75 «Selección a tarifa plana.». 13,0 látigo a «Un precio cerrado por contratación.» con el
+10,75 «Selección a tarifa plana.». 13,0 látigo a «Precio cerrado por contratación.» con el
 plano de la tableta en un círculo; 15,0 «Sin sorpresas.» en píldora amarilla.
 
 ## Frame 4 — Beneficios (18–25 s)

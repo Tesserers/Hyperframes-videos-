@@ -2,7 +2,7 @@
 workflow: general-video
 flow: automation
 storyboard: no
-message: "Selección a tarifa plana: un precio cerrado por contratación, sin porcentajes y sin sorpresas."
+message: "Selección a tarifa plana: precio cerrado por contratación, sin porcentajes y sin sorpresas."
 destination: web
 aspect: 1920x1080
 language: es

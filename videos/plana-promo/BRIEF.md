@@ -51,8 +51,8 @@ Feedback del cliente sobre la v1. Cambios:
 - «Facturas que nadie espera.», en presente (antes «esperaba»).
 - Fuera cualquier rótulo de diapositiva: ni contador «01 / 05» ni cabeceras en las esquinas.
   Es un promo, no una presentación; no deben volver.
-- Música v4 en clave phonk-house: cencerro 808 con melodía, 808 saturado con deslizamientos,
-  charles de trap con redobles; medio tiempo hasta el 10 y cuatro por cuatro en el drop.
+- Música v5, bass house (la v4, phonk con cencerro pentatónico, sonaba «oriental» y se descartó):
+  bajo growl que cambia de vocal, bombo a negras, palmadas, charles en contratiempo, acordes de house.
 
 ## Assets
 

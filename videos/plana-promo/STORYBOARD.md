@@ -17,7 +17,7 @@ el texto sale en látigo a la izquierda mientras un barrido amarillo cubre el cu
 status: built · src: index.html#s2a,#s2b,#s2c
 Tres cortes secos. 5,0 «Porcentajes.» navy sobre amarillo con un «%» gigante detrás.
 6,5 «Letra pequeña.» blanco sobre navy; en el 7,25 se encoge a nota al pie y deja un asterisco.
-8,0 «Facturas que nadie esperaba.» navy sobre azul; la línea se dibuja con picos y el texto
+8,0 «Facturas que nadie espera.» navy sobre azul; la línea se dibuja con picos y el texto
 tiembla con el redoble.
 
 ## Frame 3 — La respuesta (9,75–18 s)

@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Banda sonora de Plana, v2, sintetizada aquí mismo (no hay forma de descargar
-música en este entorno). 120 BPM, compás de 2 s, progresión Am–F–C–G.
+"""Banda sonora de Plana, v3: phonk-house, sintetizada aquí mismo (no hay forma de
+descargar música en este entorno). 120 BPM, compás de 2 s, en La menor.
 
-Más pegada que la v1: bombo desde el primer fotograma, bajo house en contratiempo,
-un bajo «reese» que ondula en corcheas y un gancho de melodía en el drop, y tres
-efectos de DJ en las costuras — frenazo de cinta (4,75 y 24,5), tartamudeo de
-repetición (9,0–9,5) y un hueco de silencio antes del drop del 10.
+Lo que la hace «cool»: el cencerro 808 con melodía (la firma del phonk), un 808
+saturado que resbala entre notas, charles de trap con redobles a fusas y bombo
+a negras en el drop. La intro es a medio tiempo, con tensión; el drop del 10 abre
+a cuatro por cuatro. Se mantienen los efectos de DJ en las costuras: frenazo de
+cinta (4,62 y 24,25), tartamudeo (9,0–9,875) y hueco de silencio antes del drop.
 
     python3 scripts/make-music.py   ->  assets/bgm/plana-bed.wav (48 kHz, estéreo)
 """
@@ -157,27 +158,70 @@ def riser(n):
     return (out * 0.8 + sweep) * (t / d) ** 2
 
 
+# ---------------------------------------------------------------- instrumentos phonk
+def cowbell(midi, ln=0.32):
+    """Cencerro 808 afinado: dos cuadradas en proporción 1:1,48, pasa-banda y cola corta."""
+    n = int(ln * SR)
+    f1 = mtof(midi)
+    x = square(f1, n) * 0.6 + square(f1 * 1.48, n) * 0.4
+    x = bp(x, max(300, f1 * 0.8), min(SR * 0.45, f1 * 4.5), 2)
+    e = 0.65 * env_exp(n, 0.018) + 0.35 * env_exp(n, 0.16)
+    return np.tanh(x * e * 2.2) * 0.8
+
+
+def snare():
+    n = int(0.35 * SR)
+    tone = np.sin(2 * np.pi * 190 * t_of(n)) * env_exp(n, 0.05)
+    nz = bp(rng.standard_normal(n), 1200, 8000) * env_exp(n, 0.11)
+    return np.tanh((tone * 0.7 + nz * 0.9) * 1.8) * 0.8
+
+
+def bass808(notes, t0, total, drive=3.0):
+    """808 con deslizamiento: notes = [(t_rel, midi)], suena de t0 a t0+total."""
+    n = int(total * SR)
+    t = t_of(n)
+    f = np.zeros(n)
+    for i, (tr, m) in enumerate(notes):
+        a = int(tr * SR)
+        b = int(notes[i + 1][0] * SR) if i + 1 < len(notes) else n
+        f[a:b] = mtof(m)
+        # deslizamiento de 60 ms hacia la nota
+        if i > 0:
+            g = min(int(0.06 * SR), b - a)
+            f[a:a + g] = np.linspace(mtof(notes[i - 1][1]), mtof(m), g)
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    x = np.sin(ph)
+    env = np.ones(n)
+    for tr, _ in notes:  # golpe al inicio de cada nota
+        a = int(tr * SR)
+        k = min(n - a, int(0.25 * SR))
+        env[a:a + k] *= 1 + 0.6 * np.exp(-t_of(k) / 0.05)
+    x = np.tanh(x * env * drive) / np.tanh(drive)
+    x = x * adsr(n, 0.003, 0.05)
+    return x
+
+
+def roll_hats(buf, t0, t1, step, gain, rise=False):
+    t = t0
+    k = 0
+    while t < t1 - 1e-6:
+        g = gain * (0.55 + 0.45 * (k / max(1, (t1 - t0) / step)) if rise else 1)
+        place(buf, hat(), t, g)
+        t += step
+        k += 1
+
+
 # ---------------------------------------------------------------- partitura
-PROG = [  # (acorde, raíz del bajo)
-    ((57, 60, 64, 69), 45),   # Am
-    ((57, 60, 65, 69), 41),   # F
-    ((55, 60, 64, 67), 36),   # C
-    ((55, 59, 62, 67), 43),   # G
+ROOTS = [33, 29, 36, 31]            # A1 F1 C2 G1, un compás cada una
+RIFF = [                            # cencerro, semicorcheas; None = silencio
+    [81, None, None, 81, None, None, 84, None, 81, None, 79, None, 76, None, 79, None],
+    [81, None, None, 81, None, None, 84, None, 86, None, 84, None, 81, None, 79, None],
 ]
-HOOK = [  # corcheas por compás; None = silencio
-    [76, None, 76, 74, 72, None, 69, 72],
-    [72, None, 72, 69, 65, None, 69, 72],
-    [76, None, 76, 79, 76, None, 72, 74],
-    [74, None, 74, 71, 67, None, 71, 74],
-]
+S16 = BEAT / 4
 
 
-def chord_at(t):
-    return PROG[int(t // (4 * BEAT)) % 4]
-
-
-def bar_idx(t):
-    return int(t // (4 * BEAT)) % 4
+def bar_of(t):
+    return int(t // (4 * BEAT))
 
 
 def in_(t, *spans):
@@ -187,150 +231,153 @@ def in_(t, *spans):
 drums = np.zeros(N)
 kick_bus = np.zeros(N)
 bass = np.zeros(N)
-reese = np.zeros(N)
+bell = np.zeros(N)
 pad = np.zeros(N)
-stabs = np.zeros(N)
-lead = np.zeros(N)
 fx = np.zeros(N)
 kick_times = []
 
-GAPS = [(4.75, 5.0), (9.875, 10.0), (24.5, 25.0)]  # donde calla la base
+GAPS = [(4.62, 5.0), (9.875, 10.0), (24.25, 25.0)]
 
-beats = int(DUR / BEAT)
-for b in range(beats):
-    t = b * BEAT
-    if in_(t, *GAPS) or t >= 28.5:
-        continue
-    # bombo a negras todo el vídeo; en el cierre, a medio tiempo hasta el 28
-    if t < 25.0 or (t < 28.0 and b % 2 == 0):
-        kick_times.append((t, 1.0))
-    # palmada en 2 y 4
-    if b % 2 == 1 and (1.0 <= t < 9.0 or 10.0 <= t < 24.5):
-        place(drums, clap(), t, 0.6)
-    if 25.0 <= t < 28.0 and b % 4 == 3:
-        place(drums, clap(), t, 0.55)
-    # charles: abierto en el contratiempo, cerrado en semicorcheas
-    for s in range(4):
-        ts = t + s * BEAT / 4
-        if in_(ts, *GAPS) or ts >= 28.5:
-            continue
-        if s == 2:
-            place(drums, hat(open_=ts >= 5.0), ts, 0.30)
-        elif ts >= 5.0 and not (25.0 <= ts < 28.0):
-            place(drums, hat(), ts, 0.17 if s % 2 else 0.24)
-    # rim en la última semicorchea de cada tiempo impar en el drop: da empuje
-    if 10.0 <= t < 24.5 and b % 2 == 0:
-        n = int(0.06 * SR)
-        rim = bp(rng.standard_normal(n), 1800, 3200) * env_exp(n, 0.012)
-        place(drums, rim, t + 3 * BEAT / 4, 0.5)
+# ---- 0–4,62 · gancho: un 808 por palabra, subiendo; el «20%» cae a plomo
+hook = [(0.0, 45), (0.5, 45), (1.0, 48), (1.5, 50), (2.0, 52)]
+for t, m in hook:
+    place(kick_bus, kick(), t, 0.9)
+    kick_times.append((t, 0.9))
+    place(bass, bass808([(0, m - 12)], 0, 0.45), t, 0.8)
+place(kick_bus, kick(big=True), 2.5, 1.0)
+kick_times.append((2.5, 1.0))
+place(bass, bass808([(0, 33), (0.5, 33), (0.9, 21)], 0, 1.4, 3.5), 2.5, 0.9)   # cae al 3,4
+place(fx, boom(), 2.5, 0.5)
+place(drums, snare(), 3.0, 0.8)          # el tajo
+place(drums, clap(), 3.0, 0.5)
+place(fx, crash(), 3.0, 0.3)
+place(kick_bus, kick(), 3.9, 0.9)
+kick_times.append((3.9, 0.9))
+place(bass, bass808([(0, 33), (0.35, 36), (0.5, 33)], 0, 0.72), 3.9, 0.85)
+# charles corcheas desde el principio, redoble a fusas antes del 20 %
+roll_hats(drums, 0.0, 2.25, BEAT / 2, 0.22)
+roll_hats(drums, 2.25, 2.5, BEAT / 8, 0.2, rise=True)
+roll_hats(drums, 2.5, 4.62, BEAT / 4, 0.2)
+# cencerro solo a partir del tajo: presenta el riff
+for i in range(int((4.62 - 3.0) / S16)):
+    t = 3.0 + i * S16
+    m = RIFF[0][i % 16]
+    if m is not None:
+        place(bell, cowbell(m), t, 0.55)
 
-for t, g in kick_times:
-    place(kick_bus, kick(), t, g)
-
-# golpes grandes en los cambios de escena
-for t in (0.0, 5.0, 10.0, 25.0, 28.0):
+# ---- 5–9,875 · medio tiempo con tensión: bombo trap, caja en el 3, riff completo
+for bar in range(2, 5):
+    t0 = bar * 4 * BEAT
+    for step, g in [(0, 1.0), (6, 0.8), (9, 0.85), (14, 0.7)]:   # bombo trap
+        t = t0 + step * S16
+        if in_(t, (5.0, 9.0)):
+            place(kick_bus, kick(), t, g)
+            kick_times.append((t, g))
+    for bt in (2,):                                              # caja en el 3
+        t = t0 + bt * BEAT
+        if in_(t, (5.0, 9.0)):
+            place(drums, snare(), t, 0.85)
+            place(drums, clap(), t, 0.45)
+    # 808 con deslizamientos siguiendo el riff
+    root = ROOTS[bar % 4]
+    notes = [(0, root), (6 * S16, root), (9 * S16, root + 3), (12 * S16, root + 7), (14 * S16, root)]
+    x = bass808(notes, 0, 4 * BEAT, 3.2)
+    if t0 + 4 * BEAT > 9.0:
+        x[int((9.0 - t0) * SR):] = 0
+    place(bass, x, t0, 0.85)
+for i in range(int((9.0 - 5.0) / S16)):
+    t = 5.0 + i * S16
+    m = RIFF[bar_of(t) % 2][i % 16]
+    if m is not None:
+        place(bell, cowbell(m), t, 0.6)
+roll_hats(drums, 5.0, 6.5, BEAT / 4, 0.2)
+roll_hats(drums, 6.5, 6.75, BEAT / 12, 0.18, rise=True)          # tresillo de fusas
+roll_hats(drums, 6.75, 8.0, BEAT / 4, 0.2)
+roll_hats(drums, 8.0, 8.5, BEAT / 8, 0.18)
+roll_hats(drums, 8.5, 9.0, BEAT / 4, 0.2)
+place(fx, riser(int(0.9 * SR)), 8.97, 0.5)
+for t in (5.0,):
     place(kick_bus, kick(big=True), t, 1.0)
-    place(fx, boom(), t, 0.6 if t in (10.0, 25.0) else 0.4)
-    place(fx, crash(), t, 0.5)
-for t in (13.0, 18.0, 20.5, 23.0):
-    place(fx, crash(), t, 0.35)
+    place(fx, crash(), t, 0.4)
+    place(fx, boom(), t, 0.4)
+# golpe de la palabra en 6,5 y el zoom de 7,5
+place(drums, snare(), 7.5, 0.7)
+place(fx, crash(), 7.5, 0.3)
 
-# subidas
-place(fx, riser(int(1.0 * SR)), 8.9, 0.55)
-place(fx, riser(int(1.5 * SR)), 23.0, 0.35)
-
-# --- bajo house en contratiempo (fuera del drop)
-for b8 in range(int(DUR / (BEAT / 2))):
-    t = b8 * BEAT / 2
-    if b8 % 2 == 0 or in_(t, *GAPS) or in_(t, (10.0, 24.5)) or t >= 28.5:
+# ---- 10–24,25 · drop phonk-house: bombo a negras, 808 saturado, cencerro arriba
+for b in range(20, 49):
+    t = b * BEAT
+    if in_(t, *GAPS):
         continue
-    _, root = chord_at(t)
-    m = root + 12
-    n = int(BEAT / 2 * SR * 0.9)
-    s = saw(mtof(m), n) * 0.7 + np.sin(2 * np.pi * mtof(m - 12) * t_of(n)) * 0.6
-    s = np.tanh(lp(s, 380 + 900 * min(1.0, t / 5.0)) * 2.2) * adsr(n, 0.003, 0.04)
-    place(bass, s, t, 0.8)
-
-# --- reese: dos sierras desafinadas, filtro que ondula a corcheas (drop 10–24,5)
+    kick_times.append((t, 1.0))
+    place(kick_bus, kick(), t, 1.0)
+    if b % 2 == 1:
+        place(drums, clap(), t, 0.55)
+        place(drums, snare(), t, 0.5)
 for bar in range(5, 13):
-    t = bar * 4 * BEAT
-    _, root = chord_at(t)
-    n = int(4 * BEAT * SR)
-    f = mtof(root)
-    x = saw(f * 2 ** (-0.18 / 12), n, 0.1) + saw(f * 2 ** (0.18 / 12), n, 0.6)
-    x = x * 0.5 + np.sin(2 * np.pi * f / 2 * t_of(n)) * 0.7
-    lfo = 0.5 - 0.5 * np.cos(2 * np.pi * 4.0 * t_of(n))  # 4 Hz = corcheas
-    out = np.zeros(n)
-    sos_z = None
-    blk = 128
-    for i in range(0, n, blk):
-        fc = 180 + 1500 * lfo[i]
-        sos = butter(2, fc, "low", fs=SR, output="sos")
-        if sos_z is None:
-            sos_z = sosfilt_zi(sos) * 0
-        out[i:i + blk], sos_z = sosfilt(sos, x[i:i + blk], zi=sos_z)
-    out = np.tanh(out * 2.6) * adsr(n, 0.004, 0.03)
-    if t + 4 * BEAT > 24.5:
-        out[int((24.5 - t) * SR):] = 0
-    place(reese, out, t, 0.62)
-
-# --- colchón: supersierra por compás
-for bar in range(int(DUR / (4 * BEAT))):
-    t = bar * 4 * BEAT
-    notes, _ = chord_at(t)
-    n = int(4 * BEAT * SR)
-    s = sum(supersaw(m, n) for m in notes) / len(notes)
-    place(pad, s * adsr(n, 0.02, 0.08), t)
-
-
-def pad_cut(t):
-    if t < 10.0:
-        return 900 + 1200 * (t / 10.0)
-    if t < 25.0:
-        return 3800
-    return max(700, 3800 - 900 * (t - 25.0))
-
-
-pad = lp_sweep(pad, pad_cut)
-
-# --- stabs: cada palabra que entra es un golpe de acorde
-STAB_T = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 5.0, 5.75, 6.5, 7.25, 8.0, 8.5,
-          10.0, 13.0, 15.0, 18.0, 19.0, 20.5, 23.0, 25.0, 25.5, 28.0]
-for ts in STAB_T:
-    notes, _ = chord_at(ts)
-    ln = 0.7 if ts in (10.0, 25.0, 28.0) else 0.2
-    n = int(ln * SR)
-    s = sum(supersaw(m + 12, n, 3, 0.12) for m in notes) / len(notes)
-    s = lp(s, 6000) * env_exp(n, ln * 0.4) * adsr(n, 0.002, 0.02)
-    place(stabs, s, ts, 0.6)
-
-# --- gancho de melodía en el drop y, filtrado, en el cierre
-for b8 in range(int(DUR / (BEAT / 2))):
-    t = b8 * BEAT / 2
-    if not (in_(t, (10.0, 24.5), (25.0, 28.0))):
-        continue
-    m = HOOK[bar_idx(t)][b8 % 8]
+    t0 = bar * 4 * BEAT
+    root = ROOTS[bar % 4]
+    # contratiempos con octava y un deslizamiento al final del compás
+    notes = []
+    for q8 in range(8):
+        m = root + (12 if q8 in (3, 7) else 0)
+        notes.append((q8 * BEAT / 2 + BEAT / 4, m))
+    notes.insert(0, (0, root))
+    x = bass808(notes, 0, 4 * BEAT, 4.0)
+    if t0 + 4 * BEAT > 24.25:
+        x[int((24.25 - t0) * SR):] = 0
+    place(bass, x, t0, 0.75)
+for i in range(int((24.25 - 10.0) / S16)):
+    t = 10.0 + i * S16
+    m = RIFF[bar_of(t) % 2][i % 16]
     if m is None:
         continue
-    n = int(0.24 * SR)
-    x = saw(mtof(m), n) * 0.6 + square(mtof(m + 12), n) * 0.25
-    x = lp(x, 4200 if t < 25.0 else 1800) * env_exp(n, 0.11) * adsr(n, 0.002, 0.03)
-    place(lead, x, t, 0.34 if t < 25.0 else 0.22)
-# eco a 3/16 para el gancho
-d = int(3 * BEAT / 4 * SR)
-echo = np.zeros(N)
-echo[d:] = lead[:-d] * 0.38
-echo[2 * d:] += lead[:-2 * d] * 0.16
-lead_wet = lead + lp(echo, 3000)
+    oct_ = 12 if in_(t, (18.0, 24.25)) and (i // 16) % 2 == 1 else 0
+    place(bell, cowbell(m + oct_), t, 0.62)
+for t0 in np.arange(10.0, 24.25, 4 * BEAT):
+    roll_hats(drums, t0, t0 + 3 * BEAT, BEAT / 4, 0.2)
+    roll_hats(drums, t0 + 3 * BEAT, t0 + 3.5 * BEAT, BEAT / 8, 0.17, rise=True)
+    roll_hats(drums, t0 + 3.5 * BEAT, t0 + 4 * BEAT, BEAT / 12, 0.15, rise=True)
+    place(drums, hat(open_=True), t0 + 1.5 * BEAT, 0.25)
+for t in (10.0, 13.0, 18.0, 20.5, 23.0):
+    place(fx, crash(), t, 0.45 if t == 10.0 else 0.3)
+place(kick_bus, kick(big=True), 10.0, 1.0)
+place(fx, boom(), 10.0, 0.7)
+place(fx, riser(int(1.2 * SR)), 23.05, 0.35)
+
+# ---- 25–30 · cierre: golpe, riff filtrado a medio tiempo, golpe final en el 28
+for t in (25.0, 28.0):
+    place(kick_bus, kick(big=True), t, 1.0)
+    kick_times.append((t, 1.0))
+    place(fx, boom(), t, 0.6)
+    place(fx, crash(), t, 0.45)
+    place(bass, bass808([(0, 33), (1.2, 33)], 0, 1.6 if t == 25.0 else 1.9, 3.5), t, 0.85)
+for t in (26.0, 27.0):
+    place(kick_bus, kick(), t, 0.8)
+    kick_times.append((t, 0.8))
+    place(drums, snare(), t + BEAT, 0.6)
+roll_hats(drums, 25.0, 28.0, BEAT / 4, 0.16)
+for i in range(int((28.0 - 25.0) / S16)):
+    t = 25.0 + i * S16
+    m = RIFF[0][i % 16]
+    if m is not None:
+        place(bell, lp(cowbell(m), 2200), t, 0.5)
+
+# ---- colchón oscuro de fondo, casi subliminal
+PADCH = [(57, 60, 64), (53, 57, 60), (55, 60, 64), (55, 59, 62)]
+for bar in range(15):
+    t = bar * 4 * BEAT
+    n = int(4 * BEAT * SR)
+    s = sum(supersaw(m - 12, n, 3, 0.1) for m in PADCH[bar % 4]) / 3
+    place(pad, lp(s, 900) * adsr(n, 0.05, 0.1), t)
 
 # ---------------------------------------------------------------- mezcla
 duck = np.ones(N)
-for t, g in kick_times + [(x, 1.0) for x in (0.0, 5.0, 10.0, 25.0, 28.0)]:
+for t, g in kick_times:
     i = int(t * SR)
-    n = int(0.34 * SR)
+    n = int(0.3 * SR)
     j = min(N, i + n)
-    curve = 1 - 0.72 * g * np.exp(-t_of(j - i) / 0.1)
-    duck[i:j] = np.minimum(duck[i:j], curve)
+    duck[i:j] = np.minimum(duck[i:j], 1 - 0.6 * g * np.exp(-t_of(j - i) / 0.09))
 
 
 def reverb_ir(seconds, seed):
@@ -339,26 +386,30 @@ def reverb_ir(seconds, seed):
     return r.standard_normal(n) * np.exp(-t_of(n) / (seconds / 5)) * 0.03
 
 
-def stereo_reverb(x, seconds=1.4):
+def stereo_reverb(x, seconds=1.2):
     return (fftconvolve(x, reverb_ir(seconds, 1))[:N], fftconvolve(x, reverb_ir(seconds, 2))[:N])
 
 
-melodic = pad * 0.26 + bass + reese + stabs * 0.9 + lead_wet
-melodic = hp(melodic, 32) * duck
-send = hp(pad * 0.3 + stabs + lead * 0.8 + drums * 0.2, 280)
-rv_l, rv_r = stereo_reverb(send)
-dly = int(0.012 * SR)
-widesrc = (pad * 0.26 + lead_wet * 0.6) * duck
-wide = np.concatenate([np.zeros(dly), widesrc[:-dly]])
+# eco a corchea con puntillo en el cencerro: el «rebote» típico del phonk
+d = int(3 * BEAT / 4 * SR)
+bell_e = bell.copy()
+bell_e[d:] += bell[:-d] * 0.32
+bell_e[2 * d:] += bell[:-2 * d] * 0.12
 
-L = melodic + kick_bus + drums + fx + rv_l * 0.8 + wide * 0.3
-R = melodic + kick_bus + drums + fx + rv_r * 0.8 - wide * 0.3 + widesrc * 0.3
+bass_bus = hp(bass, 28) * duck
+bass_bus = np.tanh(bass_bus * 1.6) / np.tanh(1.6)
+send = hp(bell_e * 0.8 + drums * 0.15 + pad * 0.2, 300)
+rv_l, rv_r = stereo_reverb(send)
+dl = int(0.009 * SR)
+bell_w = np.concatenate([np.zeros(dl), bell_e[:-dl]])
+
+L = kick_bus + bass_bus + drums + fx + pad * 0.14 * duck + bell_e * 0.85 + bell_w * 0.15 + rv_l * 0.7
+R = kick_bus + bass_bus + drums + fx + pad * 0.14 * duck + bell_e * 0.55 + bell_w * 0.45 + rv_r * 0.7
 mix = np.stack([L, R], axis=1)
 
 
 # ---------------------------------------------------------------- efectos de DJ
 def tape_stop(x, t0, dur):
-    """La cinta se frena: la velocidad cae de 1 a 0 en `dur` segundos."""
     i0, n = int(t0 * SR), int(dur * SR)
     seg = x[i0:i0 + int(dur * SR * 1.05)].copy()
     rate = (1 - np.linspace(0, 1, n)) ** 1.6
@@ -366,14 +417,13 @@ def tape_stop(x, t0, dur):
     out = np.stack([np.interp(pos, np.arange(len(seg)), seg[:, c]) for c in range(2)], axis=1)
     out *= np.linspace(1, 0.2, n)[:, None]
     x[i0:i0 + n] = out
+    x[i0 + n:i0 + n + int(0.02 * SR)] *= 0
 
 
 def stutter(x, t0, t1):
-    """Repite el primer trozo del tramo en golpes cada vez más cortos."""
     i = int(t0 * SR)
-    grid = [(BEAT / 2, 2), (BEAT / 4, 2), (BEAT / 8, 4)]
     src = x[i:i + int(BEAT / 2 * SR)].copy()
-    for ln, reps in grid:
+    for ln, reps in [(BEAT / 2, 2), (BEAT / 4, 2), (BEAT / 8, 4)]:
         n = int(ln * SR)
         piece = src[:n] * np.linspace(1, 0.85, n)[:, None]
         for _ in range(reps):
@@ -387,15 +437,14 @@ stutter(mix, 9.0, 9.875)
 mix[int(9.875 * SR):int(10.0 * SR)] *= 0.0
 tape_stop(mix, 4.62, 0.38)
 tape_stop(mix, 24.25, 0.5)
+mix[int(24.75 * SR):int(25.0 * SR)] *= 0.0
 
-# final: se apaga del 29,0 al 30,0
 fade = np.ones(N)
 i0 = int(29.0 * SR)
 fade[i0:] = np.linspace(1, 0, N - i0) ** 1.5
 mix *= fade[:, None]
 mix[: int(0.004 * SR)] *= np.linspace(0, 1, int(0.004 * SR))[:, None]
 
-# master: saturación suave + loudness a -14 LUFS + techo a -1 dB
 mix = mix / np.percentile(np.abs(mix), 99.9) * 0.85
 mix = np.tanh(mix * 1.3) / np.tanh(1.3)
 meter = pyln.Meter(SR)

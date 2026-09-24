@@ -22,7 +22,7 @@ Tipografía grande y bold, cortes secos al ritmo de la música, mucho aire y for
 
 La idea que ata el vídeo es la **línea plana** de la propia marca (la barra amarilla del
 logotipo y el subrayado con un pico de *be smart, be plana*): el tachado del 20 % es esa línea;
-en «Facturas que nadie esperaba» la línea se dispara en picos; en el 10 s se aplana y aparece
+en «Facturas que nadie espera» la línea se dispara en picos; en el 10 s se aplana y aparece
 «Plana.»; en el cierre vuelve como el subrayado del claim, con su pico de firma.
 
 ## Versión 2 — «más rompedor, más joven, más cool»
@@ -32,9 +32,9 @@ Feedback del cliente sobre la v1. Cambios:
 - Tipografía a sangre (hasta 820 px), una palabra por golpe en el gancho, en minúsculas como
   su propio «be smart, be plana» (una sola regla CSS, `.lc`, para volver a mayúscula inicial).
 - Ironía visual: el 20 % se tacha a machete y se cae; «letra pequeña» sale diminuta y la
-  cámara se mete dentro; «facturas que nadie esperaba» tartamudea con la música.
+  cámara se mete dentro; «facturas que nadie espera» tartamudea con la música.
 - Destellos de color de dos fotogramas y sacudida de cámara en cada golpe; cintas de texto
-  cruzadas tras «plana.»; pegatina «sin sorpresas.»; HUD editorial en las esquinas.
+  cruzadas tras «plana.»; pegatina «sin sorpresas.».
 - Metraje en duotono de marca (navy/azul, navy/blanco, navy/amarillo).
 - Música v2 con más pegada: bajo reese, gancho de melodía, frenazos de cinta y tartamudeo.
 
@@ -45,6 +45,14 @@ Feedback del cliente sobre la v1. Cambios:
   de letra); aparecen enteras y opacas en su fotograma con un golpe de zoom. Fuera las líneas
   de velocidad y el desenfoque de entrada; la línea de «facturas» aparece plana y entera y los
   picos saltan a corcheas.
+
+## Versión 4 — texto y música
+
+- «Facturas que nadie espera.», en presente (antes «esperaba»).
+- Fuera cualquier rótulo de diapositiva: ni contador «01 / 05» ni cabeceras en las esquinas.
+  Es un promo, no una presentación; no deben volver.
+- Música v4 en clave phonk-house: cencerro 808 con melodía, 808 saturado con deslizamientos,
+  charles de trap con redobles; medio tiempo hasta el 10 y cuatro por cuatro en el drop.
 
 ## Assets
 

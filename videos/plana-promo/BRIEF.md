@@ -63,7 +63,16 @@ Feedback del cliente sobre la v1. Cambios:
 - Corte del tema: desde 3:36,774. Su drop (3:46,149) cae en «plana.» (9,375 s); su parón
   previo coincide con el tartamudeo de «facturas». `scripts/make-bgm-fya.py` rehace la pista.
 - Dura 30,0 s: 28,125 s de montaje + un compás final a 128 BPM.
-- Se conserva la versión anterior con música propia (bass house) en `renders/plana-promo.mp4`.
+
+
+## Versión 7 — publicable para LinkedIn
+
+- Misma pieza y mismo montaje a 128 BPM, con una pista **original** de electro house en el
+  espíritu de la versión interna (bajo sucio con bitcrush, palmada gorda, parón y drop en
+  «plana.»), sin tomar nada de «Fix Your Accent». `scripts/make-music-electro.py`.
+- `index.html` apunta por defecto a esta pista (`assets/bgm/plana-electro.wav`). Para
+  rehacer la versión interna basta con apuntar el `<audio id="bgm">` a
+  `assets/bgm/plana-fix-your-accent.wav`.
 
 ## Assets
 

@@ -22,16 +22,15 @@
       html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--navy); }
       #root {
         position: relative; width: 1920px; height: 1080px; overflow: hidden;
-        background: var(--navy);
-        font-family: "Hanken", sans-serif; color: var(--white);
+        background: var(--navy); font-family: "Hanken", sans-serif; color: var(--white);
       }
+      #cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
 
       .scene { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
       .navy { background: var(--navy); color: var(--white); }
       .yellow { background: var(--yellow); color: var(--navy); }
       .blue { background: var(--blue); color: var(--navy); }
 
-      /* Retícula de marca: la de las piezas de Plana, 120 px y línea de 2 px. */
       .grid {
         position: absolute; left: -240px; top: -240px; width: 2400px; height: 1560px;
         background-image:
@@ -41,157 +40,158 @@
       }
       .grid.soft {
         background-image:
-          linear-gradient(to right, rgba(16, 36, 58, 0.13) 0 2px, transparent 2px),
-          linear-gradient(to bottom, rgba(16, 36, 58, 0.13) 0 2px, transparent 2px);
+          linear-gradient(to right, rgba(16, 36, 58, 0.14) 0 2px, transparent 2px),
+          linear-gradient(to bottom, rgba(16, 36, 58, 0.14) 0 2px, transparent 2px);
       }
 
-      .h { font-weight: 800; letter-spacing: -0.045em; line-height: 0.96; }
-      .ln { display: block; overflow: hidden; padding: 0.1em 0.06em 0.14em 0; margin: -0.1em 0 -0.14em 0; white-space: nowrap; }
+      /* Voz de marca en minúsculas, como «be smart, be plana». Para volver a
+         mayúscula inicial basta con quitar esta regla. */
+      .lc { text-transform: lowercase; }
+      .h { font-weight: 900; letter-spacing: -0.06em; line-height: 0.86; }
+      .ln { display: block; overflow: hidden; padding: 0.1em 0.08em 0.16em 0; margin: -0.1em 0 -0.16em 0; white-space: nowrap; }
       .w, .ch { display: inline-block; }
-      .block { position: absolute; left: 140px; }
+      .abs { position: absolute; }
 
-      .tag {
-        position: absolute; left: 140px; top: 110px; font-weight: 700; font-size: 28px;
-        letter-spacing: 0.02em;
-      }
-      .url-rail {
-        position: absolute; right: 140px; bottom: 96px; font-weight: 700; font-size: 26px;
-        color: var(--blue); letter-spacing: 0.01em;
-      }
+      /* HUD editorial en las esquinas */
+      .hud { position: absolute; font-weight: 700; font-size: 26px; letter-spacing: 0.02em; color: var(--white); }
+      #hud-tl { left: 64px; top: 52px; }
+      #hud-tr { right: 64px; top: 52px; }
+      #hud-bl { left: 64px; bottom: 52px; width: 200px; height: 32px; }
+      #hud-bl span { position: absolute; left: 0; bottom: 0; white-space: nowrap; }
+      #flash { position: absolute; inset: 0; background: var(--yellow); }
 
-      /* Escena 1 */
-      #s1-copy { top: 0; height: 1080px; display: flex; flex-direction: column; justify-content: center; font-size: 150px; width: 1640px; }
-      #pct { position: relative; color: var(--white); }
-      #strike {
-        position: absolute; left: -6%; top: 50%; width: 112%; height: 0.14em; margin-top: -0.07em;
-        background: var(--yellow); border-radius: 0.07em; transform-origin: 0% 50%;
-      }
-      #wipe1 { position: absolute; inset: 0; background: var(--yellow); transform-origin: 0% 50%; }
+      /* 1 */
+      .big-word { position: absolute; left: 140px; top: 0; height: 1080px; display: flex; align-items: center; font-size: 380px; white-space: nowrap; }
+      #w-20 { left: 0; width: 1920px; justify-content: center; font-size: 820px; letter-spacing: -0.07em; }
+      #slash { position: absolute; left: 10px; top: 480px; width: 1900px; height: 110px; background: var(--yellow); border-radius: 55px; transform-origin: 0% 50%; }
+      #w-sueldo { font-size: 320px; align-items: flex-start; padding-top: 250px; }
 
-      /* Escena 2 */
-      .mid { top: 0; height: 1080px; display: flex; flex-direction: column; justify-content: center; }
-      #ghost-pct {
-        position: absolute; right: -60px; top: 50%; margin-top: -560px; font-weight: 800;
-        font-size: 1100px; line-height: 1; color: var(--navy); opacity: 0.14; letter-spacing: -0.05em;
-      }
-      #s2b-copy { font-size: 250px; transform-origin: 0% 100%; }
-      #asterisk {
-        position: absolute; left: 1180px; top: 150px; width: 640px; height: 640px;
-        font-weight: 800; font-size: 900px; line-height: 1; color: var(--yellow); text-align: center;
-      }
-      #fine-star { color: var(--yellow); }
-      #s2c-copy { top: 150px; font-size: 176px; }
+      /* 2a */
+      .pct-row { position: absolute; left: -400px; font-weight: 900; font-size: 300px; line-height: 1; white-space: nowrap; letter-spacing: 0.1em; opacity: 0.13; }
+      #w-porc { font-size: 290px; }
+      /* 2b */
+      #tiny-wrap { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: flex; align-items: center; justify-content: center; }
+      #tiny { font-size: 330px; white-space: nowrap; }
+      #asterisk { position: absolute; left: 660px; top: 190px; width: 600px; height: 700px; text-align: center; font-weight: 900; font-size: 1000px; line-height: 1; color: var(--yellow); }
+      /* 2c */
+      #s2c-copy { left: 140px; top: 110px; font-size: 236px; }
       #spikes { position: absolute; left: 0; top: 0; }
 
-      /* Escena 3 */
+      /* 3a */
       #zig { position: absolute; left: 0; top: 0; }
-      #s3a-word { top: 250px; font-size: 330px; letter-spacing: -0.055em; }
-      #s3a-sub { top: 688px; font-size: 100px; color: var(--blue); }
-      #s3b-copy { top: 0; height: 1080px; display: flex; flex-direction: column; justify-content: center; font-size: 104px; }
-      .pill {
-        display: inline-block; background: var(--yellow); color: var(--navy);
-        padding: 0.02em 0.28em 0.08em 0.24em; border-radius: 0.6em; margin-top: 0.34em;
-      }
-      .ln.pill-ln { padding-top: 0.44em; margin-top: -0.2em; }
+      #w-plana { left: 90px; top: 150px; font-size: 600px; letter-spacing: -0.07em; }
+      .tape { position: absolute; left: -400px; width: 2720px; height: 116px; display: flex; align-items: center; overflow: hidden; }
+      .tape .run { font-weight: 900; font-size: 64px; letter-spacing: -0.02em; white-space: nowrap; color: var(--navy); }
+      #tapeA { top: 830px; background: var(--yellow); }
+      #tapeB { top: 890px; background: var(--blue); }
+      /* 3b */
+      #s3b-copy { left: 140px; top: 0; height: 1080px; display: flex; flex-direction: column; justify-content: center; font-size: 124px; }
+      #sticker { position: absolute; left: 150px; top: 700px; font-weight: 900; font-size: 124px; letter-spacing: -0.05em; background: var(--yellow); color: var(--navy); padding: 6px 44px 26px 36px; border-radius: 90px; white-space: nowrap; }
 
-      /* Paneles de imagen: formas planas que recortan el metraje */
-      .mask { position: absolute; overflow: hidden; }
-      .mask video { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; }
-      #m-tablet { left: 1130px; top: 190px; width: 700px; height: 700px; border-radius: 50%; }
-      #dot-blue { position: absolute; left: 1090px; top: 700px; width: 170px; height: 170px; border-radius: 50%; background: var(--blue); }
-      #m-oficina { left: 1240px; top: 140px; width: 540px; height: 800px; }
-      #notch-sq { position: absolute; left: 1240px; top: 140px; width: 150px; height: 150px; background: var(--yellow); }
-      #m-manos { left: 1110px; top: 190px; width: 700px; height: 700px; border-radius: 50%; }
+      /* paneles de metraje en duotono de marca */
+      .mask { position: absolute; overflow: hidden; isolation: isolate; }
+      .mask video { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.28) brightness(1.06); }
+      .mask .hi, .mask .lo { position: absolute; inset: 0; }
+      .mask .hi { mix-blend-mode: multiply; }
+      .mask .lo { mix-blend-mode: lighten; }
+      #m-tablet { left: 1200px; top: 230px; width: 620px; height: 620px; border-radius: 50%; }
+      #m-oficina { left: 1300px; top: 160px; width: 500px; height: 760px; }
+      #notch-sq { position: absolute; left: 1300px; top: 160px; width: 140px; height: 140px; background: var(--yellow); }
+      #m-manos { left: 1180px; top: 230px; width: 620px; height: 620px; border-radius: 50%; }
       #m-amarillo {
-        left: 1280px; top: 140px; width: 520px; height: 940px;
-        -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 78%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 14%);
+        left: 1280px; top: 120px; width: 540px; height: 960px;
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 80%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 12%);
         -webkit-mask-composite: source-in; mask-composite: intersect;
       }
 
-      #s4a-copy, #s4b-copy { top: 0; height: 1080px; display: flex; flex-direction: column; justify-content: center; }
-      #s4a-copy { font-size: 180px; }
-      #s4b-copy { font-size: 230px; }
-      #s4c-copy { top: 300px; font-size: 118px; }
-      .speed { position: absolute; height: 12px; border-radius: 6px; background: var(--navy); }
-      #flat4 { position: absolute; left: 140px; top: 680px; }
+      /* 4 */
+      #s4a-copy { left: 140px; top: 0; height: 1080px; display: flex; flex-direction: column; justify-content: center; font-size: 206px; }
+      #s4b-copy { left: 140px; top: 0; height: 1080px; display: flex; flex-direction: column; justify-content: center; font-size: 300px; }
+      #s4c-copy { left: 140px; top: 280px; font-size: 146px; }
+      .speed { position: absolute; left: 0; height: 14px; border-radius: 7px; background: var(--navy); }
+      #flat4 { position: absolute; left: 140px; top: 690px; }
 
-      /* Escena 5 — el hueco del logo (x 660–1260, y 190–470) queda vacío a propósito */
-      #s5-claim { left: 0; width: 1920px; top: 540px; font-size: 128px; text-align: center; }
+      /* 5 — hueco del logo libre: x 660–1260, y 190–470 */
+      #s5-claim { left: 0; width: 1920px; top: 560px; font-size: 168px; text-align: center; }
       #s5-claim .ln { display: inline-block; vertical-align: top; }
       #s5-line { position: absolute; left: 0; top: 0; }
-      #s5-url { position: absolute; left: 0; width: 1920px; top: 800px; text-align: center; font-weight: 700; font-size: 50px; color: var(--blue); letter-spacing: 0.005em; }
+      #s5-url { position: absolute; left: 0; width: 1920px; top: 820px; text-align: center; font-weight: 800; font-size: 56px; color: var(--blue); letter-spacing: -0.01em; }
+      #ticker { position: absolute; left: 0; top: 990px; width: 1920px; height: 60px; overflow: hidden; }
+      #ticker .run { font-weight: 800; font-size: 32px; color: var(--blue); white-space: nowrap; letter-spacing: 0.01em; }
     </style>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="30"
          data-width="1920" data-height="1080">
+      <div id="cam">
 
-      <!-- 1 · GANCHO (0–5) -->
+      <!-- 1 · GANCHO (0–5): una palabra por golpe -->
       <div id="s1" class="clip scene navy" data-start="0" data-duration="5" data-track-index="1">
         <div class="grid" id="g1"></div>
-        <div id="s1-copy" class="block h">
-          <div class="ln"><span class="w">Contratar</span> <span class="w">no</span> <span class="w">debería</span></div>
-          <div class="ln"><span class="w">costarte</span> <span class="w">un</span> <span class="w" id="pct">20%<span id="strike"></span></span></div>
-          <div class="ln"><span class="w">del</span> <span class="w">sueldo.</span></div>
+        <div id="s1-cam" class="abs" style="inset: 0">
+          <div class="big-word h lc" id="w1-0"><div class="ln"><span class="w">Contratar</span></div></div>
+          <div class="big-word h lc" id="w1-1" style="font-size: 640px"><div class="ln"><span class="w">no</span></div></div>
+          <div class="big-word h lc" id="w1-2"><div class="ln"><span class="w">debería</span></div></div>
+          <div class="big-word h lc" id="w1-3"><div class="ln"><span class="w">costarte</span></div></div>
+          <div class="big-word h lc" id="w1-4" style="font-size: 640px"><div class="ln"><span class="w">un</span></div></div>
+          <div class="big-word h" id="w-20" data-layout-allow-overflow><span class="w" id="t20">20%</span></div>
+          <div id="slash"></div>
+          <div class="big-word h lc" id="w-sueldo"><div class="ln"><span class="w">del</span> <span class="w">sueldo.</span></div></div>
         </div>
-        <div class="url-rail" id="rail1">beplana.com</div>
-        <div id="wipe1"></div>
       </div>
 
-      <!-- 2 · EL PROBLEMA (5–9.75): tres cortes secos -->
+      <!-- 2 · EL PROBLEMA (5–9,875) -->
       <div id="s2a" class="clip scene yellow" data-start="5" data-duration="1.5" data-track-index="1">
-        <div id="ghost-pct" data-layout-allow-overlap>%</div>
-        <div class="block mid h" style="font-size: 250px"><div class="ln" id="w-porc">Porcentajes.</div></div>
+        <div class="pct-row" id="pr1" style="top: -40px" data-layout-allow-overlap>% % % % % % % % %</div>
+        <div class="pct-row" id="pr2" style="top: 250px" data-layout-allow-overlap>% % % % % % % % %</div>
+        <div class="pct-row" id="pr3" style="top: 540px" data-layout-allow-overlap>% % % % % % % % %</div>
+        <div class="pct-row" id="pr4" style="top: 830px" data-layout-allow-overlap>% % % % % % % % %</div>
+        <div class="big-word h lc" id="w-porc"><div class="ln" id="porc-ln">Porcentajes.</div></div>
       </div>
 
       <div id="s2b" class="clip scene navy" data-start="6.5" data-duration="1.5" data-track-index="1">
         <div class="grid" id="g2b"></div>
+        <div id="tiny-wrap"><div id="tiny" class="h lc" data-layout-allow-overflow>Letra pequeña.</div></div>
         <div id="asterisk">*</div>
-        <div class="block mid" style="pointer-events: none">
-          <div id="s2b-copy" class="h"><div class="ln"><span id="fine-star">*</span><span id="w-letra">Letra pequeña.</span></div></div>
-        </div>
       </div>
 
-      <div id="s2c" class="clip scene blue" data-start="8" data-duration="1.75" data-track-index="1">
+      <div id="s2c" class="clip scene blue" data-start="8" data-duration="1.875" data-track-index="1">
         <div class="grid soft" id="g2c"></div>
-        <div id="s2c-copy" class="block h">
+        <div id="s2c-copy" class="abs h lc">
           <div class="ln"><span class="w">Facturas</span> <span class="w">que</span></div>
           <div class="ln"><span class="w">nadie</span> <span class="w">esperaba.</span></div>
         </div>
         <svg id="spikes" width="1920" height="1080" viewBox="0 0 1920 1080">
-          <path id="spike-path" fill="none" stroke="#10243A" stroke-width="12" stroke-linejoin="round" stroke-linecap="round"
-                d="M0 880 L300 880 L340 760 L380 880 L700 880 L745 640 L790 880 L1080 880 L1130 700 L1180 880 L1420 880 L1480 520 L1540 880 L1920 880" />
+          <path id="spike-path" fill="none" stroke="#10243A" stroke-width="16" stroke-linejoin="round" stroke-linecap="round"
+                d="M0 930 L240 930 L290 780 L340 930 L560 930 L620 600 L680 930 L900 930 L960 700 L1020 930 L1250 930 L1330 480 L1410 930 L1600 930 L1650 760 L1700 930 L1920 930" />
         </svg>
       </div>
 
-      <!-- 3 · LA RESPUESTA (9.75–18) -->
-      <div id="s3a" class="clip scene navy" data-start="9.75" data-duration="3.25" data-track-index="1">
+      <!-- 3 · LA RESPUESTA (9,875–18) -->
+      <div id="s3a" class="clip scene navy" data-start="9.875" data-duration="3.125" data-track-index="1">
         <div class="grid" id="g3a"></div>
         <svg id="zig" width="1920" height="1080" viewBox="0 0 1920 1080">
-          <path id="zig-path" fill="none" stroke="#FFD75E" stroke-width="14" stroke-linejoin="round" stroke-linecap="round" d="M0 640 L1920 640" />
+          <path id="zig-path" fill="none" stroke="#FFD75E" stroke-width="18" stroke-linejoin="round" stroke-linecap="round" d="M0 700 L1920 700" />
         </svg>
-        <div id="s3a-word" class="block h"><div class="ln" id="w-plana">Plana.</div></div>
-        <div id="s3a-sub" class="block h">
-          <div class="ln"><span class="w">Selección</span> <span class="w">a</span> <span class="w">tarifa</span> <span class="w">plana.</span></div>
-        </div>
+        <div id="w-plana" class="abs h lc" data-layout-allow-overlap><div class="ln" id="plana-ln">Plana.</div></div>
+        <div class="tape" id="tapeA" data-layout-allow-overlap><div class="run lc" id="runA" data-layout-allow-overlap>Selección a tarifa plana · Selección a tarifa plana · Selección a tarifa plana · Selección a tarifa plana · Selección a tarifa plana ·</div></div>
+        <div class="tape" id="tapeB" data-layout-allow-overlap><div class="run lc" id="runB" data-layout-allow-overlap>Sin porcentajes · Sin letra pequeña · Sin sorpresas · Sin porcentajes · Sin letra pequeña · Sin sorpresas · Sin porcentajes ·</div></div>
       </div>
 
       <div id="s3b" class="clip scene navy" data-start="13" data-duration="5" data-track-index="1">
         <div class="grid" id="g3b"></div>
-        <div id="s3b-copy" class="block h">
+        <div id="s3b-copy" class="abs h lc">
           <div class="ln"><span class="w">Un</span> <span class="w">precio</span> <span class="w">cerrado</span></div>
           <div class="ln"><span class="w">por</span> <span class="w">contratación.</span></div>
-          <div class="ln pill-ln"><span class="pill" id="pill">Sin sorpresas.</span></div>
+          <div class="ln" style="height: 1.5em"></div>
         </div>
-        <div id="dot-blue"></div>
-        <div class="url-rail" id="rail3">beplana.com</div>
+        <div id="sticker" class="lc">Sin sorpresas.</div>
       </div>
 
-      <!-- 4 · BENEFICIOS (18–25): tres golpes -->
+      <!-- 4 · BENEFICIOS (18–24,75) -->
       <div id="s4a" class="clip scene navy" data-start="18" data-duration="2.5" data-track-index="1">
         <div class="grid" id="g4a"></div>
-        <div class="tag" style="color: var(--blue)" id="tag1">01 / 03</div>
-        <div id="s4a-copy" class="block h">
+        <div id="s4a-copy" class="abs h lc">
           <div class="ln"><span class="w">Talento</span></div>
           <div class="ln"><span class="w">que</span> <span class="w">encaja.</span></div>
         </div>
@@ -199,73 +199,86 @@
 
       <div id="s4b" class="clip scene blue" data-start="20.5" data-duration="2.5" data-track-index="1">
         <div class="grid soft" id="g4b"></div>
-        <div class="tag" style="color: var(--navy)" id="tag2">02 / 03</div>
-        <div class="speed" id="sp1" style="left: 0; top: 330px; width: 520px"></div>
-        <div class="speed" id="sp2" style="left: 0; top: 760px; width: 380px"></div>
-        <div class="speed" id="sp3" style="left: 0; top: 960px; width: 640px"></div>
-        <div id="s4b-copy" class="block h">
+        <div class="speed" id="sp1" style="top: 180px; width: 620px"></div>
+        <div class="speed" id="sp2" style="top: 900px; width: 420px"></div>
+        <div class="speed" id="sp3" style="top: 990px; width: 760px"></div>
+        <div id="s4b-copy" class="abs h lc">
           <div class="ln"><span class="w">Proceso</span></div>
           <div class="ln"><span class="w">ágil.</span></div>
         </div>
       </div>
 
-      <div id="s4c" class="clip scene yellow" data-start="23" data-duration="2" data-track-index="1">
-        <div class="tag" style="color: var(--navy)" id="tag3">03 / 03</div>
-        <div id="s4c-copy" class="block h">
-          <div class="ln"><span class="w">Precio</span> <span class="w">que</span> <span class="w">sabes</span></div>
-          <div class="ln"><span class="w">desde</span> <span class="w">el</span> <span class="w">día</span> <span class="w">uno.</span></div>
+      <div id="s4c" class="clip scene yellow" data-start="23" data-duration="1.75" data-track-index="1">
+        <div id="s4c-in" class="abs" style="inset: 0">
+          <div id="s4c-copy" class="abs h lc">
+            <div class="ln"><span class="w">Precio</span> <span class="w">que</span> <span class="w">sabes</span></div>
+            <div class="ln"><span class="w">desde</span> <span class="w">el</span> <span class="w">día</span> <span class="w">uno.</span></div>
+          </div>
+          <svg id="flat4" width="1060" height="140" viewBox="0 0 1060 140">
+            <path id="flat4-path" fill="none" stroke="#10243A" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" d="M0 100 L1060 100" />
+          </svg>
         </div>
-        <svg id="flat4" width="1100" height="120" viewBox="0 0 1100 120">
-          <path id="flat4-path" fill="none" stroke="#10243A" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M0 90 L1100 90" />
-        </svg>
       </div>
 
-      <!-- 5 · CIERRE (25–30) -->
-      <div id="s5" class="clip scene navy" data-start="25" data-duration="5" data-track-index="1">
+      <!-- 5 · CIERRE (24,75–30) -->
+      <div id="s5" class="clip scene navy" data-start="24.75" data-duration="5.25" data-track-index="1">
         <div class="grid" id="g5"></div>
-        <div id="s5-claim" class="block h">
+        <div id="s5-claim" class="abs h lc">
           <div class="ln"><span class="w">Be</span> <span class="w">smart.</span></div>
           <div class="ln"><span class="w">Be</span> <span class="w">Plana.</span></div>
         </div>
         <svg id="s5-line" width="1920" height="1080" viewBox="0 0 1920 1080">
-          <path id="s5-line-path" fill="none" stroke="#FFD75E" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" d="M330 716 L1590 716" />
+          <path id="s5-line-path" fill="none" stroke="#FFD75E" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M280 752 L1640 752" />
         </svg>
         <div id="s5-url">beplana.com</div>
+        <div id="ticker"><div class="run lc" id="runT">Sin porcentajes · Sin letra pequeña · Sin sorpresas · Sin porcentajes · Sin letra pequeña · Sin sorpresas · Sin porcentajes · Sin letra pequeña · Sin sorpresas ·</div></div>
       </div>
 
-      <!-- Metraje: fuera de las escenas temporizadas, cada vídeo lleva su propio tiempo -->
+      <!-- Metraje -->
       <div class="mask" id="m-tablet">
-        <video id="v-tablet" class="clip" src="assets/media/tablet-loop.mp4" muted playsinline
-               data-start="13" data-duration="5" data-track-index="3"></video>
+        <video id="v-tablet" class="clip" src="assets/media/tablet-loop.mp4" muted playsinline data-start="13" data-duration="5" data-track-index="3"></video>
+        <i class="hi" style="background: #4fb3e8"></i><i class="lo" style="background: #10243a"></i>
       </div>
       <div class="mask" id="m-oficina">
-        <video id="v-oficina" class="clip" src="assets/media/curly-oficina.mp4" muted playsinline
-               data-start="18" data-duration="2.5" data-track-index="3"></video>
+        <video id="v-oficina" class="clip" src="assets/media/curly-oficina.mp4" muted playsinline data-start="18" data-duration="2.5" data-track-index="3"></video>
+        <i class="hi" style="background: #4fb3e8"></i><i class="lo" style="background: #10243a"></i>
       </div>
       <div id="notch-sq"></div>
       <div class="mask" id="m-manos">
-        <video id="v-manos" class="clip" src="assets/media/manos.mp4" muted playsinline
-               data-start="20.5" data-duration="2.5" data-track-index="3"></video>
+        <video id="v-manos" class="clip" src="assets/media/manos.mp4" muted playsinline data-start="20.5" data-duration="2.5" data-track-index="3"></video>
+        <i class="hi" style="background: #f8fcff"></i><i class="lo" style="background: #10243a"></i>
       </div>
       <div class="mask" id="m-amarillo">
-        <video id="v-amarillo" class="clip" src="assets/media/curly-amarillo.mp4" muted playsinline
-               data-start="23" data-duration="2" data-track-index="3"></video>
+        <video id="v-amarillo" class="clip" src="assets/media/curly-amarillo.mp4" muted playsinline data-start="23" data-duration="1.75" data-track-index="3"></video>
+        <i class="hi" style="background: #ffd75e"></i><i class="lo" style="background: #10243a"></i>
       </div>
+
+      </div><!-- /cam -->
+
+      <!-- HUD -->
+      <div class="hud lc" id="hud-tl" data-layout-allow-overlap>Selección a tarifa plana</div>
+      <div class="hud" id="hud-tr" data-layout-allow-overlap>beplana.com</div>
+      <div class="hud" id="hud-bl" data-layout-allow-overlap>
+        <span id="n1">01 / 05</span><span id="n2">02 / 05</span><span id="n3" data-layout-allow-overlap>03 / 05</span><span id="n4">04 / 05</span>
+      </div>
+      <div id="flash"></div>
 
       <!-- Sonido -->
       <audio id="bgm" src="assets/bgm/plana-bed.wav" data-start="0" data-duration="30" data-track-index="10" data-volume="1"></audio>
-      <audio id="sfx-wipe" src="assets/sfx/whoosh-short.mp3" data-start="4.68" data-duration="0.57" data-track-index="11" data-volume="0.35"></audio>
-      <audio id="sfx-shrink" src="assets/sfx/pop.mp3" data-start="7.25" data-duration="0.7" data-track-index="12" data-volume="0.3"></audio>
+      <audio id="sfx-zoom" src="assets/sfx/whoosh-short.mp3" data-start="7.0" data-duration="0.57" data-track-index="11" data-volume="0.35"></audio>
       <audio id="sfx-whip1" src="assets/sfx/whoosh-short.mp3" data-start="12.72" data-duration="0.57" data-track-index="11" data-volume="0.3"></audio>
-      <audio id="sfx-pill" src="assets/sfx/pop.mp3" data-start="15" data-duration="0.7" data-track-index="12" data-volume="0.3"></audio>
+      <audio id="sfx-sticker" src="assets/sfx/pop.mp3" data-start="15" data-duration="0.7" data-track-index="12" data-volume="0.35"></audio>
       <audio id="sfx-whip2" src="assets/sfx/whoosh-short.mp3" data-start="17.72" data-duration="0.57" data-track-index="11" data-volume="0.3"></audio>
-      <audio id="sfx-notch" src="assets/sfx/click-soft.mp3" data-start="19" data-duration="0.37" data-track-index="12" data-volume="0.5"></audio>
+      <audio id="sfx-notch" src="assets/sfx/click-soft.mp3" data-start="19" data-duration="0.37" data-track-index="12" data-volume="0.55"></audio>
+      <audio id="sfx-agil" src="assets/sfx/whoosh-short.mp3" data-start="20.42" data-duration="0.57" data-track-index="11" data-volume="0.3"></audio>
     </div>
 
     <script>
       (function () {
-        var B = 0.5; // un tiempo a 120 BPM
+        var F = 1 / 30;
 
+        function $(id) { return document.getElementById(id); }
+        function q(sel) { return document.querySelectorAll(sel); }
         function splitChars(el) {
           var text = el.textContent;
           el.textContent = "";
@@ -277,10 +290,6 @@
           }
           return el.querySelectorAll(".ch");
         }
-        function q(sel) { return document.querySelectorAll(sel); }
-        function $(id) { return document.getElementById(id); }
-
-        // Trayectos en zigzag: se aplanan interpolando la altura de cada pico
         function zigPath(k, base, peaks) {
           var d = "M0 " + base;
           for (var i = 0; i < peaks.length; i++) {
@@ -289,160 +298,203 @@
           }
           return d + " L1920 " + base;
         }
-        var ZIG = [[340, 120, 40], [745, 240, 45], [1130, 180, 50], [1480, 360, 60]];
+        var ZIG = [[290, 150, 50], [620, 330, 60], [960, 230, 60], [1330, 450, 80], [1650, 170, 50]];
 
         function build() {
           var tl = gsap.timeline({ paused: true });
 
-          // ---- los paneles de metraje solo existen dentro de su ventana
-          [["#m-tablet", 13, 18], ["#m-oficina", 18, 20.5], ["#m-manos", 20.5, 23], ["#m-amarillo", 23, 25], ["#notch-sq", 18.5, 20.5]].forEach(function (m) {
-            tl.set(m[0], { autoAlpha: 0 }, 0);
-            tl.set(m[0], { autoAlpha: 1 }, m[1]);
-            tl.set(m[0], { autoAlpha: 0 }, m[2]);
+          // ---------- utilidades de montaje
+          function show(sel, t0, t1) {
+            tl.set(sel, { autoAlpha: 0 }, 0);
+            tl.set(sel, { autoAlpha: 1 }, t0);
+            if (t1 != null) tl.set(sel, { autoAlpha: 0 }, t1);
+          }
+          function flash(t, color) {
+            tl.set("#flash", { autoAlpha: 1, backgroundColor: color }, t);
+            tl.set("#flash", { autoAlpha: 0 }, t + 2 * F);
+          }
+          // sacudida de cámara que se amortigua (determinista)
+          function shake(t, amp) {
+            var pts = [[1, -0.6], [-0.8, 0.9], [0.6, -0.4], [-0.4, 0.5], [0.2, -0.2], [0, 0]];
+            for (var i = 0; i < pts.length; i++) {
+              tl.to("#cam", { x: pts[i][0] * amp, y: pts[i][1] * amp, duration: 0.035, ease: "none" }, t + i * 0.035);
+            }
+          }
+          function slam(sel, t, rot) {
+            tl.fromTo(sel, { scale: 1.35, rotation: rot || 0, yPercent: 8 },
+              { scale: 1, rotation: 0, yPercent: 0, duration: 0.16, ease: "power4.out", immediateRender: false }, t);
+          }
+
+          tl.set("#flash", { autoAlpha: 0 }, 0);
+          tl.set("#cam", { x: 0, y: 0 }, 0);
+
+          // ---------- rejillas: deriva continua hacia la izquierda
+          [["#g1", 0, 5], ["#g2b", 6.5, 1.5], ["#g2c", 8, 1.875], ["#g3a", 9.875, 3.125], ["#g3b", 13, 5],
+           ["#g4a", 18, 2.5], ["#g4b", 20.5, 2.5], ["#g5", 24.75, 5.25]].forEach(function (g) {
+            tl.fromTo(g[0], { x: 0 }, { x: -40 * g[2], ease: "none", duration: g[2] }, g[1]);
           });
 
-          // ---- rejillas que derivan: la cámara del vídeo siempre va hacia la izquierda
-          [["#g1", 0, 5], ["#g2b", 6.5, 1.5], ["#g2c", 8, 1.75], ["#g3a", 9.75, 3.25], ["#g3b", 13, 5],
-           ["#g4a", 18, 2.5], ["#g4b", 20.5, 2.5], ["#g5", 25, 5]].forEach(function (g) {
-            tl.fromTo(g[0], { x: 0 }, { x: -24 * g[2], ease: "none", duration: g[2] }, g[1]);
+          // ---------- paneles de metraje solo en su ventana
+          show("#m-tablet", 13, 18); show("#m-oficina", 18, 20.5); show("#notch-sq", 18.5, 20.5);
+          show("#m-manos", 20.5, 23); show("#m-amarillo", 23, 24.75);
+
+          // ---------- HUD: color según el fondo, número de escena, oculto en el cierre
+          var hudC = [[0, "#F8FCFF"], [5, "#10243A"], [5.5, "#F8FCFF"], [6, "#10243A"], [6.5, "#F8FCFF"], [8, "#10243A"],
+                      [9.875, "#F8FCFF"], [20.5, "#10243A"], [23, "#10243A"]];
+          hudC.forEach(function (c) { tl.set(["#hud-tl", "#hud-tr", "#hud-bl"], { color: c[1] }, c[0]); });
+          tl.set(["#hud-tl", "#hud-tr", "#hud-bl"], { autoAlpha: 1 }, 0);
+          tl.set(["#hud-tl", "#hud-tr", "#hud-bl"], { autoAlpha: 0 }, 24.75);
+          show("#n1", 0, 5); show("#n2", 5, 9.875); show("#n3", 9.875, 18); show("#n4", 18, 24.75);
+
+          // ================= 1 · GANCHO — una palabra por golpe
+          ["#w1-0", "#w1-1", "#w1-2", "#w1-3", "#w1-4"].forEach(function (id, i) {
+            var t = i * 0.5;
+            show(id, t, t + 0.5);
+            slam(id + " .w", t, i % 2 ? 4 : -4);
           });
+          // 20 %: gigante, tachado a machete y arrancado
+          show("#w-20", 2.5, 4.62);
+          tl.fromTo("#t20", { scale: 1.6, yPercent: 10, y: 0, rotation: 0 }, { scale: 1, yPercent: 0, duration: 0.22, ease: "power4.out" }, 2.5);
+          shake(2.5, 18);
+          show("#slash", 3.0, 5.0);
+          tl.fromTo("#slash", { scaleX: 0, rotation: -14, y: 0 }, { scaleX: 1, rotation: -14, y: 0, duration: 0.16, ease: "power4.out" }, 3.0);
+          shake(3.0, 12);
+          tl.to("#t20", { y: 1300, rotation: 32, duration: 0.55, ease: "power2.in" }, 3.5);
+          tl.to("#slash", { rotation: 0, y: 330, duration: 0.3, ease: "power3.inOut" }, 3.55);
+          show("#w-sueldo", 3.75, 5.0);
+          tl.fromTo(q("#w-sueldo .w"), { yPercent: 110 }, { yPercent: 0, duration: 0.3, ease: "power4.out", stagger: 0.12 }, 3.75);
+          // frenazo de cinta (4,62–5): todo se para y se hunde
+          tl.fromTo("#s1-cam", { scale: 1, rotation: 0, y: 0, filter: "blur(0px) brightness(1)" },
+            { scale: 0.9, rotation: -3, y: 40, filter: "blur(3px) brightness(0.6)", duration: 0.38, ease: "power2.in" }, 4.62);
 
-          // ================= 1 · GANCHO
-          var w1 = q("#s1-copy .w");
-          tl.fromTo(w1, { yPercent: 115 }, { yPercent: 0, duration: 0.42, ease: "power4.out", stagger: 0.25 }, 0.02);
-          tl.fromTo("#pct", { scale: 1 }, { scale: 1.12, duration: 0.12, ease: "power2.out", yoyo: true, repeat: 1, transformOrigin: "50% 60%" }, 1.25);
-          tl.fromTo("#strike", { scaleX: 0, rotation: -7 }, { scaleX: 1, rotation: -7, duration: 0.32, ease: "power4.out" }, 2.5);
-          tl.to("#pct", { color: "rgba(248,252,255,0.42)", duration: 0.2, ease: "power1.out" }, 2.62);
-          tl.fromTo("#s1-copy", { scale: 1 }, { scale: 1.035, duration: 2.2, ease: "sine.inOut", transformOrigin: "0% 50%" }, 2.55);
-          tl.fromTo("#rail1", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: "power2.out" }, 1.9);
-          // salida: el tachado se convierte en el barrido amarillo de la escena 2
-          tl.to("#s1-copy", { x: -260, filter: "blur(10px)", opacity: 0, duration: 0.25, ease: "power3.in" }, 4.75);
-          tl.fromTo("#wipe1", { scaleX: 0 }, { scaleX: 1, duration: 0.25, ease: "power3.in" }, 4.75);
-
-          // ================= 2a · Porcentajes.
-          var cP = splitChars($("w-porc"));
-          tl.fromTo(cP, { yPercent: 105 }, { yPercent: 0, duration: 0.3, ease: "power4.out", stagger: 0.025 }, 5.0);
-          tl.fromTo("#ghost-pct", { rotation: 8, scale: 1.3 }, { rotation: -6, scale: 1, duration: 1.5, ease: "power2.out" }, 5.0);
-          [5.5, 6.0].forEach(function (t) {
-            tl.fromTo("#ghost-pct", { opacity: 0.24 }, { opacity: 0.14, duration: 0.35, ease: "power2.out", immediateRender: false }, t);
+          // ================= 2a · porcentajes. (estroboscópico)
+          [["#pr1", -1], ["#pr2", 1], ["#pr3", -1], ["#pr4", 1]].forEach(function (r) {
+            tl.fromTo(r[0], { x: r[1] > 0 ? -300 : 0 }, { x: r[1] > 0 ? 0 : -300, duration: 1.5, ease: "none" }, 5.0);
           });
+          var cP = splitChars($("porc-ln"));
+          tl.fromTo(cP, { yPercent: 110 }, { yPercent: 0, duration: 0.24, ease: "power4.out", stagger: 0.02 }, 5.0);
+          tl.set("#s2a", { backgroundColor: "#FFD75E", color: "#10243A" }, 0);
+          tl.set("#s2a", { backgroundColor: "#10243A", color: "#F8FCFF" }, 5.5);
+          tl.set("#s2a", { backgroundColor: "#FFD75E", color: "#10243A" }, 6.0);
+          slam("#w-porc", 5.5, 0);
+          slam("#w-porc", 6.0, 0);
 
-          // ================= 2b · Letra pequeña. → se encoge a nota al pie
-          tl.fromTo("#w-letra", { yPercent: 105 }, { yPercent: 0, duration: 0.3, ease: "power4.out" }, 6.5);
-          tl.set("#fine-star", { display: "none" }, 6.5);
-          tl.set("#fine-star", { display: "inline" }, 7.25);
-          tl.fromTo("#s2b-copy", { scale: 1, y: 0 }, { scale: 0.11, y: 330, duration: 0.3, ease: "expo.inOut", immediateRender: false }, 7.12);
-          tl.fromTo("#asterisk", { scale: 0, rotation: -120 }, { scale: 1, rotation: 0, duration: 0.45, ease: "back.out(1.8)" }, 7.28);
-          tl.to("#asterisk", { rotation: 30, duration: 0.3, ease: "none" }, 7.73);
+          // ================= 2b · letra pequeña.: diminuta, y la cámara se mete dentro
+          tl.fromTo("#tiny", { scale: 0.085, autoAlpha: 1 }, { scale: 0.11, duration: 0.5, ease: "none" }, 6.5);
+          tl.to("#tiny", { scale: 7, duration: 0.5, ease: "expo.in" }, 7.0);
+          tl.set("#tiny", { autoAlpha: 0 }, 7.5);
+          flash(7.5, "#FFD75E");
+          show("#asterisk", 7.5, 8.0);
+          tl.fromTo("#asterisk", { scale: 0.2, rotation: -160 }, { scale: 1, rotation: 0, duration: 0.35, ease: "back.out(2)" }, 7.5);
+          tl.to("#asterisk", { rotation: 40, duration: 0.15, ease: "none" }, 7.85);
 
-          // ================= 2c · Facturas que nadie esperaba.
-          var w2c = q("#s2c-copy .w");
-          tl.fromTo(w2c, { yPercent: 110 }, { yPercent: 0, duration: 0.3, ease: "power4.out", stagger: 0.12 }, 8.0);
-          var sp = $("spike-path");
-          var spLen = sp.getTotalLength();
+          // ================= 2c · facturas que nadie esperaba. (y el tartamudeo)
+          tl.fromTo(q("#s2c-copy .w"), { yPercent: 110 }, { yPercent: 0, duration: 0.22, ease: "power4.out", stagger: 0.25 }, 8.0);
+          var sp = $("spike-path"), spLen = sp.getTotalLength();
           sp.style.strokeDasharray = spLen;
-          tl.fromTo(sp, { strokeDashoffset: spLen }, { strokeDashoffset: 0, duration: 1.4, ease: "none" }, 8.05);
-          // el redoble: cada golpe sacude el texto
-          [9.0, 9.25, 9.43, 9.56, 9.66].forEach(function (t, i) {
-            tl.fromTo("#s2c-copy", { x: (i % 2 ? -1 : 1) * (8 + i * 3) }, { x: 0, duration: 0.09, ease: "power1.out", immediateRender: false }, t);
+          tl.fromTo(sp, { strokeDashoffset: spLen }, { strokeDashoffset: 0, duration: 0.95, ease: "power1.in" }, 8.0);
+          tl.set("#s2c", { backgroundColor: "#4FB3E8", color: "#10243A" }, 0);
+          tl.set("#spike-path", { attr: { stroke: "#10243A" } }, 0);
+          [9.0, 9.25, 9.5, 9.625, 9.75, 9.8125].forEach(function (t, i) {
+            var inv = i % 2 === 0;
+            tl.set("#s2c", { backgroundColor: inv ? "#10243A" : "#4FB3E8", color: inv ? "#F8FCFF" : "#10243A" }, t);
+            tl.set("#spike-path", { attr: { stroke: inv ? "#FFD75E" : "#10243A" } }, t);
+            tl.fromTo("#s2c-copy", { scale: 1 + 0.05 * (i + 1), x: (i % 2 ? -1 : 1) * 14 },
+              { scale: 1, x: 0, duration: 0.1, ease: "power2.out", immediateRender: false }, t);
           });
 
-          // ================= 3a · el zigzag amarillo se aplana: Plana.
-          var zp = $("zig-path");
-          var zk = { k: 1 };
-          zp.setAttribute("d", zigPath(1, 640, ZIG));
+          // ================= 3a · el zigzag se aplana: plana.
+          var zp = $("zig-path"), zk = { k: 1 };
+          zp.setAttribute("d", zigPath(1, 700, ZIG));
           tl.fromTo(zk, { k: 1 }, {
-            k: 0, duration: 0.5, ease: "elastic.out(1.1, 0.45)",
-            onUpdate: function () { zp.setAttribute("d", zigPath(zk.k, 640, ZIG)); }
+            k: 0, duration: 0.55, ease: "elastic.out(1.2, 0.4)",
+            onUpdate: function () { zp.setAttribute("d", zigPath(zk.k, 700, ZIG)); }
           }, 10.0);
-          var cPl = splitChars($("w-plana"));
-          tl.fromTo(cPl, { yPercent: -110 }, { yPercent: 0, duration: 0.45, ease: "power4.out", stagger: 0.04 }, 10.02);
-          var w3a = q("#s3a-sub .w");
-          tl.fromTo(w3a, { yPercent: 110 }, { yPercent: 0, duration: 0.4, ease: "power4.out", stagger: 0.14 }, 10.75);
-          tl.fromTo("#s3a-word", { scale: 1 }, { scale: 1.04, duration: 2.2, ease: "sine.inOut", transformOrigin: "0% 100%" }, 10.5);
-          // salida en látigo hacia la izquierda
-          tl.to(["#s3a-word", "#s3a-sub"], { x: -320, filter: "blur(12px)", opacity: 0, duration: 0.25, ease: "power3.in", stagger: 0.03 }, 12.72);
-          tl.to("#zig", { x: -1920, duration: 0.28, ease: "power3.in" }, 12.72);
+          flash(10.0, "#FFD75E");
+          shake(10.0, 26);
+          var cPl = splitChars($("plana-ln"));
+          tl.fromTo(cPl, { yPercent: -170 }, { yPercent: 0, duration: 0.4, ease: "power4.out", stagger: 0.035 }, 10.03);
+          tl.fromTo("#w-plana", { scale: 1 }, { scale: 1.04, duration: 2.3, ease: "sine.inOut", transformOrigin: "0% 100%" }, 10.4);
+          tl.fromTo("#tapeA", { rotation: -5, xPercent: 100 }, { rotation: -5, xPercent: 0, duration: 0.35, ease: "power4.out" }, 10.75);
+          tl.fromTo("#tapeB", { rotation: 4, xPercent: -100 }, { rotation: 4, xPercent: 0, duration: 0.35, ease: "power4.out" }, 11.0);
+          tl.fromTo("#runA", { x: 0 }, { x: -900, duration: 2.25, ease: "none" }, 10.75);
+          tl.fromTo("#runB", { x: -900 }, { x: 0, duration: 2.0, ease: "none" }, 11.0);
+          tl.to(["#w-plana", "#zig", "#tapeA", "#tapeB"], { x: -420, filter: "blur(14px)", opacity: 0, duration: 0.25, ease: "power3.in", stagger: 0.02 }, 12.72);
 
-          // ================= 3b · Un precio cerrado por contratación. Sin sorpresas.
-          tl.fromTo("#s3b-copy", { x: 320, filter: "blur(12px)" }, { x: 0, filter: "blur(0px)", duration: 0.35, ease: "power3.out" }, 13.0);
-          var w3b = q("#s3b-copy .w");
-          tl.fromTo(w3b, { yPercent: 110 }, { yPercent: 0, duration: 0.4, ease: "power4.out", stagger: 0.14 }, 13.05);
-          tl.set("#pill", { autoAlpha: 0 }, 13.0);
-          tl.set("#pill", { autoAlpha: 1 }, 15.0);
-          tl.fromTo("#pill", { yPercent: 130, rotation: -4 }, { yPercent: 0, rotation: -2, duration: 0.45, ease: "back.out(2)" }, 15.0);
-          tl.to("#pill", { rotation: 0, duration: 0.6, ease: "sine.inOut" }, 15.5);
-          tl.fromTo("#m-tablet", { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(50% at 50% 50%)", duration: 0.5, ease: "power4.out" }, 13.05);
-          tl.fromTo("#v-tablet", { scale: 1.12 }, { scale: 1.0, duration: 5, ease: "none" }, 13.0);
-          tl.fromTo("#dot-blue", { scale: 0 }, { scale: 1, duration: 0.45, ease: "back.out(2.2)" }, 15.0);
-          tl.to("#dot-blue", { x: -26, y: 22, duration: 2.25, ease: "sine.inOut" }, 15.45);
-          tl.fromTo("#rail3", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, 13.4);
-          tl.fromTo("#s3b-copy", { x: 0 }, { x: -320, filter: "blur(12px)", opacity: 0, duration: 0.25, ease: "power3.in", immediateRender: false }, 17.75);
-          tl.fromTo("#dot-blue", { x: -26 }, { x: -346, opacity: 0, duration: 0.25, ease: "power3.in", immediateRender: false }, 17.75);
-          tl.to("#m-tablet", { x: -320, opacity: 0, duration: 0.25, ease: "power3.in" }, 17.75);
-
-          // ================= 4a · Talento que encaja. (la pieza cuadrada encaja en la muesca)
-          tl.fromTo("#tag1", { autoAlpha: 0, x: 40 }, { autoAlpha: 1, x: 0, duration: 0.3, ease: "power3.out" }, 18.0);
-          var w4a = q("#s4a-copy .w");
-          tl.fromTo(w4a, { yPercent: 110 }, { yPercent: 0, duration: 0.4, ease: "power4.out", stagger: 0.12 }, 18.0);
-          var notch = "polygon(150px 0px, 540px 0px, 540px 800px, 0px 800px, 0px 150px, 150px 150px)";
-          tl.set("#m-oficina", { clipPath: notch }, 17.99);
-          tl.fromTo("#m-oficina", { yPercent: 110 }, { yPercent: 0, duration: 0.45, ease: "power4.out" }, 18.0);
-          tl.fromTo("#notch-sq", { x: -900, y: -40, rotation: -90 }, { x: 0, y: 0, rotation: 0, duration: 0.5, ease: "back.out(1.4)" }, 18.5);
-          tl.fromTo("#m-oficina", { scale: 1 }, { scale: 1.015, duration: 0.08, yoyo: true, repeat: 1, ease: "power1.out", immediateRender: false }, 19.0);
-
-          // ================= 4b · Proceso ágil.
-          tl.fromTo("#tag2", { autoAlpha: 0, x: 40 }, { autoAlpha: 1, x: 0, duration: 0.3, ease: "power3.out" }, 20.5);
-          tl.fromTo("#s4b-copy", { x: 700, skewX: -14 }, { x: 0, skewX: 0, duration: 0.42, ease: "expo.out" }, 20.5);
-          [["#sp1", 20.5], ["#sp2", 20.58], ["#sp3", 20.66], ["#sp1", 21.5], ["#sp3", 21.58]].forEach(function (s) {
-            tl.fromTo(s[0], { x: 2000 }, { x: -700, duration: 0.42, ease: "power2.in", immediateRender: false }, s[1]);
+          // ================= 3b · un precio cerrado por contratación. + pegatina
+          tl.fromTo("#s3b-copy", { x: 420, filter: "blur(14px)" }, { x: 0, filter: "blur(0px)", duration: 0.3, ease: "power3.out" }, 13.0);
+          tl.fromTo(q("#s3b-copy .w"), { yPercent: 110 }, { yPercent: 0, duration: 0.3, ease: "power4.out", stagger: 0.25 }, 13.0);
+          tl.fromTo("#m-tablet", { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(50% at 50% 50%)", duration: 0.45, ease: "power4.out" }, 13.5);
+          tl.fromTo("#v-tablet", { scale: 1.15 }, { scale: 1.0, duration: 4.5, ease: "none" }, 13.5);
+          show("#sticker", 15.0, 18);
+          tl.fromTo("#sticker", { scale: 1.4, rotation: 14, transformOrigin: "0% 50%" }, { scale: 1, rotation: -6, duration: 0.3, ease: "back.out(2.4)" }, 15.0);
+          shake(15.0, 16);
+          [16.0, 17.0].forEach(function (t) {
+            tl.fromTo("#m-tablet", { scale: 1.06 }, { scale: 1, duration: 0.3, ease: "power2.out", immediateRender: false }, t);
           });
+          tl.fromTo(["#s3b-copy", "#sticker"], { x: 0 }, { x: -420, filter: "blur(14px)", opacity: 0, duration: 0.25, ease: "power3.in", immediateRender: false }, 17.75);
+          tl.to("#m-tablet", { x: -420, opacity: 0, duration: 0.25, ease: "power3.in" }, 17.75);
+
+          // ================= 4a · talento que encaja.
+          flash(18.0, "#4FB3E8");
+          tl.fromTo(q("#s4a-copy .w"), { yPercent: 110 }, { yPercent: 0, duration: 0.3, ease: "power4.out", stagger: 0.25 }, 18.0);
+          tl.set("#m-oficina", { clipPath: "polygon(140px 0px, 500px 0px, 500px 760px, 0px 760px, 0px 140px, 140px 140px)" }, 0);
+          tl.fromTo("#m-oficina", { yPercent: 120 }, { yPercent: 0, duration: 0.4, ease: "power4.out" }, 18.0);
+          tl.fromTo("#notch-sq", { x: -1300, y: -60, rotation: -180 }, { x: 0, y: 0, rotation: 0, duration: 0.5, ease: "back.out(1.3)" }, 18.5);
+          shake(19.0, 20);
+
+          // ================= 4b · proceso ágil.
+          tl.fromTo("#s4b-copy", { x: 900, skewX: -18 }, { x: 0, skewX: 0, duration: 0.36, ease: "expo.out" }, 20.5);
           tl.set(["#sp1", "#sp2", "#sp3"], { x: 2000 }, 0);
-          tl.fromTo("#m-manos", { clipPath: "circle(0% at 100% 50%)" }, { clipPath: "circle(50% at 50% 50%)", duration: 0.45, ease: "expo.out" }, 20.55);
-          tl.fromTo("#v-manos", { scale: 1.1, x: 30 }, { scale: 1.0, x: 0, duration: 2.5, ease: "none" }, 20.5);
+          [["#sp1", 20.5], ["#sp2", 20.56], ["#sp3", 20.62], ["#sp1", 21.5], ["#sp2", 21.56], ["#sp3", 22.5]].forEach(function (s) {
+            tl.fromTo(s[0], { x: 2000 }, { x: -800, duration: 0.36, ease: "power2.in", immediateRender: false }, s[1]);
+          });
+          [21.5, 22.5].forEach(function (t) {
+            tl.fromTo("#s4b-copy", { x: 40, skewX: -8 }, { x: 0, skewX: 0, duration: 0.2, ease: "power3.out", immediateRender: false }, t);
+          });
+          tl.fromTo("#m-manos", { clipPath: "circle(0% at 100% 50%)" }, { clipPath: "circle(50% at 50% 50%)", duration: 0.4, ease: "expo.out" }, 20.55);
+          tl.fromTo("#v-manos", { scale: 1.12, x: 40 }, { scale: 1, x: 0, duration: 2.5, ease: "none" }, 20.5);
 
-          // ================= 4c · Precio que sabes desde el día uno.
-          tl.fromTo("#tag3", { autoAlpha: 0, x: 40 }, { autoAlpha: 1, x: 0, duration: 0.3, ease: "power3.out" }, 23.0);
-          var w4c = q("#s4c-copy .w");
-          tl.fromTo(w4c, { yPercent: 110 }, { yPercent: 0, duration: 0.36, ease: "power4.out", stagger: 0.09 }, 23.0);
-          tl.fromTo("#m-amarillo", { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.45, ease: "power4.out" }, 23.05);
-          var fp = $("flat4-path");
-          var fk = { k: 1, p: 0 };
+          // ================= 4c · precio que sabes desde el día uno. (+ frenazo)
+          tl.fromTo(q("#s4c-copy .w"), { yPercent: 110 }, { yPercent: 0, duration: 0.26, ease: "power4.out", stagger: 0.125 }, 23.0);
+          tl.fromTo("#m-amarillo", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.4, ease: "power4.out" }, 23.0);
+          var fp = $("flat4-path"), fk = { k: 1, p: 0 };
           function flatD() {
-            var x = 1100 * fk.p;
-            // un solo pico, la «sorpresa», que se aplana en el 24,3
-            var peakX = 180, h = 70 * fk.k;
-            if (x <= peakX - 30) return "M0 90 L" + x + " 90";
-            return "M0 90 L" + (peakX - 30) + " 90 L" + peakX + " " + (90 - h) + " L" + (peakX + 30) + " 90 L" + Math.max(peakX + 30, x) + " 90";
+            var x = 1060 * fk.p, px = 190, h = 90 * fk.k;
+            if (x <= px - 34) return "M0 100 L" + x + " 100";
+            return "M0 100 L" + (px - 34) + " 100 L" + px + " " + (100 - h) + " L" + (px + 34) + " 100 L" + Math.max(px + 34, x) + " 100";
           }
-          fp.setAttribute("d", "M0 90 L0 90");
-          tl.fromTo(fk, { p: 0 }, { p: 1, duration: 0.8, ease: "power2.inOut", onUpdate: function () { fp.setAttribute("d", flatD()); } }, 23.5);
-          tl.fromTo(fk, { k: 1 }, { k: 0, duration: 0.45, ease: "elastic.out(1, 0.5)", immediateRender: false, onUpdate: function () { fp.setAttribute("d", flatD()); } }, 24.3);
+          fp.setAttribute("d", "M0 100 L0 100");
+          tl.fromTo(fk, { p: 0 }, { p: 1, duration: 0.5, ease: "power3.out", onUpdate: function () { fp.setAttribute("d", flatD()); } }, 23.4);
+          tl.fromTo(fk, { k: 1 }, { k: 0, duration: 0.4, ease: "elastic.out(1, 0.45)", immediateRender: false, onUpdate: function () { fp.setAttribute("d", flatD()); } }, 23.95);
+          tl.fromTo(["#s4c-in", "#m-amarillo"], { y: 0, rotation: 0, filter: "blur(0px) brightness(1)" },
+            { y: 60, rotation: 2.5, filter: "blur(3px) brightness(0.7)", duration: 0.5, ease: "power2.in", immediateRender: false }, 24.25);
 
-          // ================= 5 · Be smart. Be Plana. (hueco del logo libre arriba)
-          var w5 = q("#s5-claim .w");
-          tl.fromTo(w5, { yPercent: 110 }, { yPercent: 0, duration: 0.45, ease: "power4.out", stagger: 0.25 }, 25.05);
-          var lp5 = $("s5-line-path");
-          var k5 = { p: 0, b: 0 };
+          // ================= 5 · be smart. be plana.
+          flash(25.0, "#F8FCFF");
+          shake(25.0, 22);
+          tl.fromTo(q("#s5-claim .w"), { yPercent: 115 }, { yPercent: 0, duration: 0.24, ease: "power4.out", stagger: 0.25 }, 25.0);
+          var lp5 = $("s5-line-path"), k5 = { p: 0, b: 0 };
           function lineD() {
-            var x0 = 330, x1 = 330 + 1260 * k5.p;
-            var bx = 1400; // el pico de la firma de marca
-            var h = 38 * k5.b;
-            if (x1 < bx - 22) return "M" + x0 + " 716 L" + x1 + " 716";
-            return "M" + x0 + " 716 L" + (bx - 22) + " 716 L" + (bx - 8) + " " + (716 - h) + " L" + (bx + 6) + " " + (716 + h * 0.75) + " L" + (bx + 20) + " 716 L" + Math.max(bx + 20, x1) + " 716";
+            var x0 = 280, x1 = 280 + 1360 * k5.p, bx = 1440, h = 44 * k5.b;
+            if (x1 < bx - 24) return "M" + x0 + " 752 L" + x1 + " 752";
+            return "M" + x0 + " 752 L" + (bx - 24) + " 752 L" + (bx - 8) + " " + (752 - h) + " L" + (bx + 8) + " " + (752 + h * 0.75) + " L" + (bx + 24) + " 752 L" + Math.max(bx + 24, x1) + " 752";
           }
-          lp5.setAttribute("d", "M330 716 L330 716");
-          tl.fromTo(k5, { p: 0 }, { p: 1, duration: 0.8, ease: "power3.inOut", onUpdate: function () { lp5.setAttribute("d", lineD()); } }, 26.0);
-          tl.fromTo(k5, { b: 0 }, { b: 1, duration: 0.35, ease: "back.out(3)", immediateRender: false, onUpdate: function () { lp5.setAttribute("d", lineD()); } }, 26.75);
-          tl.fromTo("#s5-url", { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out" }, 28.0);
-          tl.fromTo("#s5-claim", { scale: 1 }, { scale: 1.02, duration: 4.5, ease: "sine.inOut", transformOrigin: "50% 50%" }, 25.5);
+          lp5.setAttribute("d", "M280 752 L280 752");
+          tl.fromTo(k5, { p: 0 }, { p: 1, duration: 0.6, ease: "power3.inOut", onUpdate: function () { lp5.setAttribute("d", lineD()); } }, 26.0);
+          tl.fromTo(k5, { b: 0 }, { b: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false, onUpdate: function () { lp5.setAttribute("d", lineD()); } }, 26.5);
+          tl.fromTo("#s5-url", { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.35, ease: "power4.out" }, 28.0);
+          shake(28.0, 10);
+          tl.fromTo("#ticker", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 }, 26.5);
+          tl.fromTo("#runT", { x: 0 }, { x: -700, duration: 3.5, ease: "none" }, 26.5);
+          tl.fromTo("#s5-claim", { scale: 1 }, { scale: 1.025, duration: 4.5, ease: "sine.inOut", transformOrigin: "50% 50%" }, 25.4);
 
           window.__timelines["main"] = tl;
           if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
         }
 
         if (document.fonts && document.fonts.load) {
-          document.fonts.load('800 100px "Hanken"').then(build, build);
+          document.fonts.load('900 100px "Hanken"').then(build, build);
         } else {
           build();
         }

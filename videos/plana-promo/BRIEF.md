@@ -25,6 +25,19 @@ logotipo y el subrayado con un pico de *be smart, be plana*): el tachado del 20 
 en «Facturas que nadie esperaba» la línea se dispara en picos; en el 10 s se aplana y aparece
 «Plana.»; en el cierre vuelve como el subrayado del claim, con su pico de firma.
 
+## Versión 2 — «más rompedor, más joven, más cool»
+
+Feedback del cliente sobre la v1. Cambios:
+
+- Tipografía a sangre (hasta 820 px), una palabra por golpe en el gancho, en minúsculas como
+  su propio «be smart, be plana» (una sola regla CSS, `.lc`, para volver a mayúscula inicial).
+- Ironía visual: el 20 % se tacha a machete y se cae; «letra pequeña» sale diminuta y la
+  cámara se mete dentro; «facturas que nadie esperaba» tartamudea con la música.
+- Destellos de color de dos fotogramas y sacudida de cámara en cada golpe; cintas de texto
+  cruzadas tras «plana.»; pegatina «sin sorpresas.»; HUD editorial en las esquinas.
+- Metraje en duotono de marca (navy/azul, navy/blanco, navy/amarillo).
+- Música v2 con más pegada: bajo reese, gancho de melodía, frenazos de cinta y tartamudeo.
+
 ## Assets
 
 - `assets/brand/borrador-referencia.mp4` — borrador de 10 s que aportó el cliente. De él salen

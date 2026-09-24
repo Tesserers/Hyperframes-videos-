@@ -54,6 +54,17 @@ Feedback del cliente sobre la v1. Cambios:
 - Música v5, bass house (la v4, phonk con cencerro pentatónico, sonaba «oriental» y se descartó):
   bajo growl que cambia de vocal, bombo a negras, palmadas, charles en contratiempo, acordes de house.
 
+## Versión 6 — «Fix Your Accent» (Fake Blood), uso interno
+
+- El cliente aporta el tema y pide su parte «más cool y movidita». Es **solo para uso
+  interno**: publicarlo exigiría licencia de sincronización.
+- El tema va a 128 BPM. El montaje sigue escrito en la rejilla de 120 y se reproduce ×16/15
+  (`TEMPO` en `index.html`), así que cada corte cae en un tiempo del tema sin tocar el audio.
+- Corte del tema: desde 3:36,774. Su drop (3:46,149) cae en «plana.» (9,375 s); su parón
+  previo coincide con el tartamudeo de «facturas». `scripts/make-bgm-fya.py` rehace la pista.
+- Dura 30,0 s: 28,125 s de montaje + un compás final a 128 BPM.
+- Se conserva la versión anterior con música propia (bass house) en `renders/plana-promo.mp4`.
+
 ## Assets
 
 - `assets/brand/borrador-referencia.mp4` — borrador de 10 s que aportó el cliente. De él salen

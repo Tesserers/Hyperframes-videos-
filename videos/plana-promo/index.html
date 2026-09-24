@@ -48,7 +48,7 @@
          mayúscula inicial basta con quitar esta regla. */
       .lc { text-transform: lowercase; }
       .h { font-weight: 900; letter-spacing: -0.06em; line-height: 0.86; }
-      .ln { display: block; overflow: hidden; padding: 0.1em 0.08em 0.16em 0; margin: -0.1em 0 -0.16em 0; white-space: nowrap; }
+      .ln { display: block; overflow: visible; white-space: nowrap; }
       .w, .ch { display: inline-block; }
       .abs { position: absolute; }
 
@@ -74,7 +74,7 @@
       #tiny { font-size: 330px; white-space: nowrap; }
       #asterisk { position: absolute; left: 660px; top: 190px; width: 600px; height: 700px; text-align: center; font-weight: 900; font-size: 1000px; line-height: 1; color: var(--yellow); }
       /* 2c */
-      #s2c-copy { left: 140px; top: 110px; font-size: 236px; }
+      #s2c-copy { left: 140px; top: 110px; font-size: 236px; line-height: 1.0; }
       #spikes { position: absolute; left: 0; top: 0; }
 
       /* 3a */
@@ -107,11 +107,14 @@
       /* 4 */
       #s4a-copy { left: 140px; top: 0; height: 1080px; display: flex; flex-direction: column; justify-content: center; font-size: 206px; }
       #s4b-copy { left: 140px; top: 0; height: 1080px; display: flex; flex-direction: column; justify-content: center; font-size: 300px; }
-      #s4c-copy { left: 140px; top: 280px; font-size: 146px; }
+      #s4c-copy { left: 140px; top: 270px; font-size: 146px; line-height: 1.0; }
       .speed { position: absolute; left: 0; height: 14px; border-radius: 7px; background: var(--navy); }
       #flat4 { position: absolute; left: 140px; top: 690px; }
 
       /* 5 — hueco del logo libre: x 660–1260, y 190–470 */
+      /* logo (símbolo del cliente, reconstruido en vector a partir de su PNG 600×600) */
+      #logo { position: absolute; left: 835px; top: 215px; width: 250px; height: 250px; border-radius: 50%; background: var(--blue); }
+      #logo-bar { position: absolute; left: 54.6px; top: 117.1px; width: 140.8px; height: 15.8px; border-radius: 7.9px; background: var(--yellow); }
       #s5-claim { left: 0; width: 1920px; top: 560px; font-size: 168px; text-align: center; }
       #s5-claim .ln { display: inline-block; vertical-align: top; }
       #s5-line { position: absolute; left: 0; top: 0; }
@@ -157,13 +160,12 @@
 
       <div id="s2c" class="clip scene blue" data-start="8" data-duration="1.875" data-track-index="1">
         <div class="grid soft" id="g2c"></div>
-        <div id="s2c-copy" class="abs h lc">
-          <div class="ln"><span class="w">Facturas</span> <span class="w">que</span></div>
-          <div class="ln"><span class="w">nadie</span> <span class="w">esperaba.</span></div>
+        <div id="s2c-copy" class="abs h lc" data-layout-allow-overlap>
+          <div class="ln"><span class="w" data-layout-allow-overlap>Facturas</span> <span class="w" data-layout-allow-overlap>que</span></div>
+          <div class="ln"><span class="w" data-layout-allow-overlap>nadie</span> <span class="w" data-layout-allow-overlap>esperaba.</span></div>
         </div>
         <svg id="spikes" width="1920" height="1080" viewBox="0 0 1920 1080">
-          <path id="spike-path" fill="none" stroke="#10243A" stroke-width="16" stroke-linejoin="round" stroke-linecap="round"
-                d="M0 930 L240 930 L290 780 L340 930 L560 930 L620 600 L680 930 L900 930 L960 700 L1020 930 L1250 930 L1330 480 L1410 930 L1600 930 L1650 760 L1700 930 L1920 930" />
+          <path id="spike-path" fill="none" stroke="#10243A" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" d="M0 930 L1920 930" />
         </svg>
       </div>
 
@@ -199,9 +201,6 @@
 
       <div id="s4b" class="clip scene blue" data-start="20.5" data-duration="2.5" data-track-index="1">
         <div class="grid soft" id="g4b"></div>
-        <div class="speed" id="sp1" style="top: 180px; width: 620px"></div>
-        <div class="speed" id="sp2" style="top: 900px; width: 420px"></div>
-        <div class="speed" id="sp3" style="top: 990px; width: 760px"></div>
         <div id="s4b-copy" class="abs h lc">
           <div class="ln"><span class="w">Proceso</span></div>
           <div class="ln"><span class="w">ágil.</span></div>
@@ -210,12 +209,12 @@
 
       <div id="s4c" class="clip scene yellow" data-start="23" data-duration="1.75" data-track-index="1">
         <div id="s4c-in" class="abs" style="inset: 0">
-          <div id="s4c-copy" class="abs h lc">
-            <div class="ln"><span class="w">Precio</span> <span class="w">que</span> <span class="w">sabes</span></div>
-            <div class="ln"><span class="w">desde</span> <span class="w">el</span> <span class="w">día</span> <span class="w">uno.</span></div>
+          <div id="s4c-copy" class="abs h lc" data-layout-allow-overlap>
+            <div class="ln"><span class="w" data-layout-allow-overlap>Precio</span> <span class="w" data-layout-allow-overlap>que</span> <span class="w" data-layout-allow-overlap>sabes</span></div>
+            <div class="ln"><span class="w" data-layout-allow-overlap>desde</span> <span class="w" data-layout-allow-overlap>el</span> <span class="w" data-layout-allow-overlap>día</span> <span class="w" data-layout-allow-overlap>uno.</span></div>
           </div>
           <svg id="flat4" width="1060" height="140" viewBox="0 0 1060 140">
-            <path id="flat4-path" fill="none" stroke="#10243A" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" d="M0 100 L1060 100" />
+            <path id="flat4-path" fill="none" stroke="#10243A" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" d="" />
           </svg>
         </div>
       </div>
@@ -223,12 +222,13 @@
       <!-- 5 · CIERRE (24,75–30) -->
       <div id="s5" class="clip scene navy" data-start="24.75" data-duration="5.25" data-track-index="1">
         <div class="grid" id="g5"></div>
+        <div id="logo"><div id="logo-bar"></div></div>
         <div id="s5-claim" class="abs h lc">
           <div class="ln"><span class="w">Be</span> <span class="w">smart.</span></div>
           <div class="ln"><span class="w">Be</span> <span class="w">Plana.</span></div>
         </div>
         <svg id="s5-line" width="1920" height="1080" viewBox="0 0 1920 1080">
-          <path id="s5-line-path" fill="none" stroke="#FFD75E" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M280 752 L1640 752" />
+          <path id="s5-line-path" fill="none" stroke="#FFD75E" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="" />
         </svg>
         <div id="s5-url">beplana.com</div>
         <div id="ticker"><div class="run lc" id="runT">Sin porcentajes · Sin letra pequeña · Sin sorpresas · Sin porcentajes · Sin letra pequeña · Sin sorpresas · Sin porcentajes · Sin letra pequeña · Sin sorpresas ·</div></div>
@@ -270,6 +270,7 @@
       <audio id="sfx-sticker" src="assets/sfx/pop.mp3" data-start="15" data-duration="0.7" data-track-index="12" data-volume="0.35"></audio>
       <audio id="sfx-whip2" src="assets/sfx/whoosh-short.mp3" data-start="17.72" data-duration="0.57" data-track-index="11" data-volume="0.3"></audio>
       <audio id="sfx-notch" src="assets/sfx/click-soft.mp3" data-start="19" data-duration="0.37" data-track-index="12" data-volume="0.55"></audio>
+      <audio id="sfx-guino" src="assets/sfx/guino.wav" data-start="28.72" data-duration="0.7" data-track-index="12" data-volume="0.9"></audio>
       <audio id="sfx-agil" src="assets/sfx/whoosh-short.mp3" data-start="20.42" data-duration="0.57" data-track-index="11" data-volume="0.3"></audio>
     </div>
 
@@ -320,6 +321,16 @@
               tl.to("#cam", { x: pts[i][0] * amp, y: pts[i][1] * amp, duration: 0.035, ease: "none" }, t + i * 0.035);
             }
           }
+          // entrada limpia: cada palabra aparece entera y opaca en su fotograma, solo con el golpe de zoom
+          function pop(targets, t, dur, stagger, s0) {
+            var els = typeof targets === "string" ? q(targets) : targets;
+            for (var i = 0; i < els.length; i++) {
+              var ti = t + i * stagger;
+              tl.set(els[i], { autoAlpha: 0 }, 0);
+              tl.set(els[i], { autoAlpha: 1 }, ti);
+              tl.fromTo(els[i], { scale: s0, transformOrigin: "0% 75%" }, { scale: 1, duration: dur, ease: "expo.out", immediateRender: false }, ti);
+            }
+          }
           function slam(sel, t, rot) {
             tl.fromTo(sel, { scale: 1.35, rotation: rot || 0, yPercent: 8 },
               { scale: 1, rotation: 0, yPercent: 0, duration: 0.16, ease: "power4.out", immediateRender: false }, t);
@@ -359,10 +370,10 @@
           show("#slash", 3.0, 5.0);
           tl.fromTo("#slash", { scaleX: 0, rotation: -14, y: 0 }, { scaleX: 1, rotation: -14, y: 0, duration: 0.16, ease: "power4.out" }, 3.0);
           shake(3.0, 12);
-          tl.to("#t20", { y: 1300, rotation: 32, duration: 0.55, ease: "power2.in" }, 3.5);
+          tl.to("#t20", { y: 1300, rotation: 32, duration: 0.35, ease: "power2.in" }, 3.5);
           tl.to("#slash", { rotation: 0, y: 330, duration: 0.3, ease: "power3.inOut" }, 3.55);
-          show("#w-sueldo", 3.75, 5.0);
-          tl.fromTo(q("#w-sueldo .w"), { yPercent: 110 }, { yPercent: 0, duration: 0.3, ease: "power4.out", stagger: 0.12 }, 3.75);
+          show("#w-sueldo", 3.9, 5.0);
+          pop(q("#w-sueldo .w"), 3.9, 0.3, 0.12, 1.3);
           // frenazo de cinta (4,62–5): todo se para y se hunde
           tl.fromTo("#s1-cam", { scale: 1, rotation: 0, y: 0, filter: "blur(0px) brightness(1)" },
             { scale: 0.9, rotation: -3, y: 40, filter: "blur(3px) brightness(0.6)", duration: 0.38, ease: "power2.in" }, 4.62);
@@ -372,7 +383,7 @@
             tl.fromTo(r[0], { x: r[1] > 0 ? -300 : 0 }, { x: r[1] > 0 ? 0 : -300, duration: 1.5, ease: "none" }, 5.0);
           });
           var cP = splitChars($("porc-ln"));
-          tl.fromTo(cP, { yPercent: 110 }, { yPercent: 0, duration: 0.24, ease: "power4.out", stagger: 0.02 }, 5.0);
+          pop(cP, 5.0, 0.24, 0.02, 1.3);
           tl.set("#s2a", { backgroundColor: "#FFD75E", color: "#10243A" }, 0);
           tl.set("#s2a", { backgroundColor: "#10243A", color: "#F8FCFF" }, 5.5);
           tl.set("#s2a", { backgroundColor: "#FFD75E", color: "#10243A" }, 6.0);
@@ -389,10 +400,26 @@
           tl.to("#asterisk", { rotation: 40, duration: 0.15, ease: "none" }, 7.85);
 
           // ================= 2c · facturas que nadie esperaba. (y el tartamudeo)
-          tl.fromTo(q("#s2c-copy .w"), { yPercent: 110 }, { yPercent: 0, duration: 0.22, ease: "power4.out", stagger: 0.25 }, 8.0);
-          var sp = $("spike-path"), spLen = sp.getTotalLength();
-          sp.style.strokeDasharray = spLen;
-          tl.fromTo(sp, { strokeDashoffset: spLen }, { strokeDashoffset: 0, duration: 0.95, ease: "power1.in" }, 8.0);
+          pop(q("#s2c-copy .w"), 8.0, 0.22, 0.25, 1.3);
+          var sp = $("spike-path");
+          var SPK = [[290, 150, 50], [620, 330, 60], [960, 230, 60], [1330, 450, 80], [1650, 170, 50]];
+          var sk = { a: 0, b: 0, c: 0, d: 0, e: 0 };
+          function spikeD() {
+            var ks = [sk.a, sk.b, sk.c, sk.d, sk.e], d = "M0 930";
+            for (var i = 0; i < SPK.length; i++) {
+              var p = SPK[i];
+              d += " L" + (p[0] - p[2]) + " 930 L" + p[0] + " " + (930 - p[1] * ks[i]) + " L" + (p[0] + p[2]) + " 930";
+            }
+            return d + " L1920 930";
+          }
+          sp.setAttribute("d", spikeD());
+          tl.fromTo(sk, { a: 0, b: 0, c: 0, d: 0, e: 0 }, { a: 0, duration: 0.25, ease: "none", onUpdate: function () { sp.setAttribute("d", spikeD()); } }, 8.0);
+          ["a", "b", "c", "d", "e"].forEach(function (key, i) {
+            var v = {}; v[key] = 1; v.duration = 0.2; v.ease = "back.out(2.5)"; v.immediateRender = false;
+            v.onUpdate = function () { sp.setAttribute("d", spikeD()); };
+            var f = {}; f[key] = 0;
+            tl.fromTo(sk, f, v, 8.25 + i * 0.125);
+          });
           tl.set("#s2c", { backgroundColor: "#4FB3E8", color: "#10243A" }, 0);
           tl.set("#spike-path", { attr: { stroke: "#10243A" } }, 0);
           [9.0, 9.25, 9.5, 9.625, 9.75, 9.8125].forEach(function (t, i) {
@@ -406,6 +433,8 @@
           // ================= 3a · el zigzag se aplana: plana.
           var zp = $("zig-path"), zk = { k: 1 };
           zp.setAttribute("d", zigPath(1, 700, ZIG));
+          // las «retenciones» fijan el trazo desde que empieza la escena, sea cual sea el orden de búsqueda
+          tl.fromTo(zk, { k: 1 }, { k: 1, duration: 0.125, ease: "none", onUpdate: function () { zp.setAttribute("d", zigPath(zk.k, 700, ZIG)); } }, 9.875);
           tl.fromTo(zk, { k: 1 }, {
             k: 0, duration: 0.55, ease: "elastic.out(1.2, 0.4)",
             onUpdate: function () { zp.setAttribute("d", zigPath(zk.k, 700, ZIG)); }
@@ -413,7 +442,7 @@
           flash(10.0, "#FFD75E");
           shake(10.0, 26);
           var cPl = splitChars($("plana-ln"));
-          tl.fromTo(cPl, { yPercent: -170 }, { yPercent: 0, duration: 0.4, ease: "power4.out", stagger: 0.035 }, 10.03);
+          pop(cPl, 10.03, 0.4, 0.035, 1.4);
           tl.fromTo("#w-plana", { scale: 1 }, { scale: 1.04, duration: 2.3, ease: "sine.inOut", transformOrigin: "0% 100%" }, 10.4);
           tl.fromTo("#tapeA", { rotation: -5, xPercent: 100 }, { rotation: -5, xPercent: 0, duration: 0.35, ease: "power4.out" }, 10.75);
           tl.fromTo("#tapeB", { rotation: 4, xPercent: -100 }, { rotation: 4, xPercent: 0, duration: 0.35, ease: "power4.out" }, 11.0);
@@ -422,8 +451,8 @@
           tl.to(["#w-plana", "#zig", "#tapeA", "#tapeB"], { x: -420, filter: "blur(14px)", opacity: 0, duration: 0.25, ease: "power3.in", stagger: 0.02 }, 12.72);
 
           // ================= 3b · un precio cerrado por contratación. + pegatina
-          tl.fromTo("#s3b-copy", { x: 420, filter: "blur(14px)" }, { x: 0, filter: "blur(0px)", duration: 0.3, ease: "power3.out" }, 13.0);
-          tl.fromTo(q("#s3b-copy .w"), { yPercent: 110 }, { yPercent: 0, duration: 0.3, ease: "power4.out", stagger: 0.25 }, 13.0);
+          tl.set("#s3b-copy", { x: 0, filter: "blur(0px)", opacity: 1 }, 13.0);
+          pop(q("#s3b-copy .w"), 13.0, 0.3, 0.25, 1.3);
           tl.fromTo("#m-tablet", { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(50% at 50% 50%)", duration: 0.45, ease: "power4.out" }, 13.5);
           tl.fromTo("#v-tablet", { scale: 1.15 }, { scale: 1.0, duration: 4.5, ease: "none" }, 13.5);
           show("#sticker", 15.0, 18);
@@ -437,7 +466,7 @@
 
           // ================= 4a · talento que encaja.
           flash(18.0, "#4FB3E8");
-          tl.fromTo(q("#s4a-copy .w"), { yPercent: 110 }, { yPercent: 0, duration: 0.3, ease: "power4.out", stagger: 0.25 }, 18.0);
+          pop(q("#s4a-copy .w"), 18.0, 0.3, 0.25, 1.3);
           tl.set("#m-oficina", { clipPath: "polygon(140px 0px, 500px 0px, 500px 760px, 0px 760px, 0px 140px, 140px 140px)" }, 0);
           tl.fromTo("#m-oficina", { yPercent: 120 }, { yPercent: 0, duration: 0.4, ease: "power4.out" }, 18.0);
           tl.fromTo("#notch-sq", { x: -1300, y: -60, rotation: -180 }, { x: 0, y: 0, rotation: 0, duration: 0.5, ease: "back.out(1.3)" }, 18.5);
@@ -445,10 +474,6 @@
 
           // ================= 4b · proceso ágil.
           tl.fromTo("#s4b-copy", { x: 900, skewX: -18 }, { x: 0, skewX: 0, duration: 0.36, ease: "expo.out" }, 20.5);
-          tl.set(["#sp1", "#sp2", "#sp3"], { x: 2000 }, 0);
-          [["#sp1", 20.5], ["#sp2", 20.56], ["#sp3", 20.62], ["#sp1", 21.5], ["#sp2", 21.56], ["#sp3", 22.5]].forEach(function (s) {
-            tl.fromTo(s[0], { x: 2000 }, { x: -800, duration: 0.36, ease: "power2.in", immediateRender: false }, s[1]);
-          });
           [21.5, 22.5].forEach(function (t) {
             tl.fromTo("#s4b-copy", { x: 40, skewX: -8 }, { x: 0, skewX: 0, duration: 0.2, ease: "power3.out", immediateRender: false }, t);
           });
@@ -456,15 +481,18 @@
           tl.fromTo("#v-manos", { scale: 1.12, x: 40 }, { scale: 1, x: 0, duration: 2.5, ease: "none" }, 20.5);
 
           // ================= 4c · precio que sabes desde el día uno. (+ frenazo)
-          tl.fromTo(q("#s4c-copy .w"), { yPercent: 110 }, { yPercent: 0, duration: 0.26, ease: "power4.out", stagger: 0.125 }, 23.0);
-          tl.fromTo("#m-amarillo", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.4, ease: "power4.out" }, 23.0);
+          pop(q("#s4c-copy .w"), 23.0, 0.26, 0.125, 1.3);
+          tl.fromTo("#m-amarillo", { scale: 1.08 }, { scale: 1, duration: 0.4, ease: "expo.out" }, 23.0);
           var fp = $("flat4-path"), fk = { k: 1, p: 0 };
           function flatD() {
             var x = 1060 * fk.p, px = 190, h = 90 * fk.k;
+            if (x < 1) return "";
             if (x <= px - 34) return "M0 100 L" + x + " 100";
             return "M0 100 L" + (px - 34) + " 100 L" + px + " " + (100 - h) + " L" + (px + 34) + " 100 L" + Math.max(px + 34, x) + " 100";
           }
-          fp.setAttribute("d", "M0 100 L0 100");
+          fp.setAttribute("d", "");
+          tl.fromTo(fk, { p: 0 }, { p: 0, duration: 0.4, ease: "none", onUpdate: function () { fp.setAttribute("d", flatD()); } }, 23.0);
+          tl.fromTo(fk, { k: 1 }, { k: 1, duration: 0.95, ease: "none", onUpdate: function () { fp.setAttribute("d", flatD()); } }, 23.0);
           tl.fromTo(fk, { p: 0 }, { p: 1, duration: 0.5, ease: "power3.out", onUpdate: function () { fp.setAttribute("d", flatD()); } }, 23.4);
           tl.fromTo(fk, { k: 1 }, { k: 0, duration: 0.4, ease: "elastic.out(1, 0.45)", immediateRender: false, onUpdate: function () { fp.setAttribute("d", flatD()); } }, 23.95);
           tl.fromTo(["#s4c-in", "#m-amarillo"], { y: 0, rotation: 0, filter: "blur(0px) brightness(1)" },
@@ -473,20 +501,30 @@
           // ================= 5 · be smart. be plana.
           flash(25.0, "#F8FCFF");
           shake(25.0, 22);
-          tl.fromTo(q("#s5-claim .w"), { yPercent: 115 }, { yPercent: 0, duration: 0.24, ease: "power4.out", stagger: 0.25 }, 25.0);
+          pop(q("#s5-claim .w"), 25.0, 0.24, 0.25, 1.3);
           var lp5 = $("s5-line-path"), k5 = { p: 0, b: 0 };
           function lineD() {
             var x0 = 280, x1 = 280 + 1360 * k5.p, bx = 1440, h = 44 * k5.b;
+            if (x1 - x0 < 1) return "";
             if (x1 < bx - 24) return "M" + x0 + " 752 L" + x1 + " 752";
             return "M" + x0 + " 752 L" + (bx - 24) + " 752 L" + (bx - 8) + " " + (752 - h) + " L" + (bx + 8) + " " + (752 + h * 0.75) + " L" + (bx + 24) + " 752 L" + Math.max(bx + 24, x1) + " 752";
           }
-          lp5.setAttribute("d", "M280 752 L280 752");
+          lp5.setAttribute("d", "");
+          tl.fromTo(k5, { p: 0 }, { p: 0, duration: 1.25, ease: "none", onUpdate: function () { lp5.setAttribute("d", lineD()); } }, 24.75);
+          tl.fromTo(k5, { b: 0 }, { b: 0, duration: 1.75, ease: "none", onUpdate: function () { lp5.setAttribute("d", lineD()); } }, 24.75);
           tl.fromTo(k5, { p: 0 }, { p: 1, duration: 0.6, ease: "power3.inOut", onUpdate: function () { lp5.setAttribute("d", lineD()); } }, 26.0);
           tl.fromTo(k5, { b: 0 }, { b: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false, onUpdate: function () { lp5.setAttribute("d", lineD()); } }, 26.5);
           tl.fromTo("#s5-url", { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.35, ease: "power4.out" }, 28.0);
           shake(28.0, 10);
           tl.fromTo("#ticker", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 }, 26.5);
           tl.fromTo("#runT", { x: 0 }, { x: -700, duration: 3.5, ease: "none" }, 26.5);
+          // logo: entra con el golpe del 25 y guiña al final (28,75)
+          tl.fromTo("#logo", { scale: 0, rotation: -120 }, { scale: 1, rotation: 0, duration: 0.45, ease: "back.out(1.9)" }, 25.0);
+          tl.fromTo("#logo-bar", { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power4.out" }, 25.3);
+          tl.to("#logo-bar", { scaleY: 0.3, scaleX: 0.78, rotation: -16, y: 5, duration: 0.08, ease: "power2.out" }, 28.75);
+          tl.to("#logo", { scaleX: 1.05, scaleY: 0.95, rotation: -5, duration: 0.08, ease: "power2.out" }, 28.75);
+          tl.to("#logo-bar", { scaleY: 1, scaleX: 1, rotation: 0, y: 0, duration: 0.45, ease: "elastic.out(1.2, 0.4)" }, 29.0);
+          tl.to("#logo", { scaleX: 1, scaleY: 1, rotation: 0, duration: 0.45, ease: "elastic.out(1.2, 0.4)" }, 29.0);
           tl.fromTo("#s5-claim", { scale: 1 }, { scale: 1.025, duration: 4.5, ease: "sine.inOut", transformOrigin: "50% 50%" }, 25.4);
 
           window.__timelines["main"] = tl;

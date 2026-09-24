@@ -38,6 +38,14 @@ Feedback del cliente sobre la v1. Cambios:
 - Metraje en duotono de marca (navy/azul, navy/blanco, navy/amarillo).
 - Música v2 con más pegada: bajo reese, gancho de melodía, frenazos de cinta y tartamudeo.
 
+## Versión 3 — logo, guiño y entradas limpias
+
+- Logo del cliente encima del claim en el cierre; guiña en el 28,75 s con sonido propio.
+- «Nada de restos antes del texto»: las palabras ya no suben por una máscara (asomaban trozos
+  de letra); aparecen enteras y opacas en su fotograma con un golpe de zoom. Fuera las líneas
+  de velocidad y el desenfoque de entrada; la línea de «facturas» aparece plana y entera y los
+  picos saltan a corcheas.
+
 ## Assets
 
 - `assets/brand/borrador-referencia.mp4` — borrador de 10 s que aportó el cliente. De él salen

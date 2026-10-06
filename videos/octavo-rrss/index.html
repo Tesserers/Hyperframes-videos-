@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="es" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/InstrumentSerif.woff2") format("woff2"); font-style: normal; }
+      @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/InstrumentSerif-Italic.woff2") format("woff2"); font-style: italic; }
+      @font-face { font-family: "Archivo"; src: url("assets/fonts/Archivo.woff2") format("woff2"); font-weight: 300 700; }
+
+      :root {
+        --yeso: #EEF0F1; --ceniza: #DCE0E2; --basalto: #15181C; --grafito: #2A2E33;
+        --almagre: #A8341F; --barro: #E0764F; --piedra: #5F6469;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #15181C; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #15181C; }
+
+      /* .shot = timing (never animated) · .rev = reveal in screen space · .ph = camera */
+      .shot { position: absolute; inset: 0; overflow: hidden; }
+      .rev  { position: absolute; inset: 0; }
+      .ph   { position: absolute; inset: 0; will-change: transform; transform-origin: 50% 45%; }
+      .ph img { position: absolute; top: 0; height: 1920px; width: 3413px; max-width: none; display: block; }
+
+      /* Legibility only: basalto, tinted, bottom half. Not a brand gradient. */
+      .scrim { position: absolute; inset: 0; pointer-events: none;
+        background: linear-gradient(180deg, rgba(21,24,28,0) 38%, rgba(21,24,28,.30) 58%, rgba(21,24,28,.72) 100%); }
+
+      .copy { position: absolute; left: 84px; right: 150px; bottom: 430px; color: var(--yeso); }
+      .label { font-family: "Archivo"; font-weight: 600; font-size: 28px; letter-spacing: .22em;
+               text-transform: uppercase; color: var(--yeso); opacity: .92; margin-bottom: 26px; }
+      .h { font-family: "Instrument Serif"; font-weight: 400; font-size: 138px; line-height: 1.08;
+           letter-spacing: -.015em; text-shadow: 0 2px 30px rgba(21,24,28,.35); }
+      .h em { font-style: italic; color: #F4B79C; }
+      .h.big { font-size: 300px; line-height: 1.02; }
+      .sub { font-family: "Archivo"; font-weight: 500; font-size: 38px; line-height: 1.3; margin-top: 26px;
+             text-shadow: 0 2px 20px rgba(21,24,28,.45); }
+      .line { display: block; }
+
+      /* Places card */
+      #places .label { position: absolute; left: 0; right: 0; top: 560px; text-align: center; color: var(--ceniza); }
+      #ring { position: absolute; left: 290px; top: 700px; width: 500px; height: 500px; }
+      .place { position: absolute; left: 0; right: 0; top: 1270px; text-align: center; font-family: "Instrument Serif";
+               font-size: 132px; color: var(--yeso); letter-spacing: -.015em; opacity: 0; }
+
+      /* End card */
+      #end .logo { position: absolute; left: 270px; top: 730px; width: 540px; }
+      #end .oct { position: absolute; left: 330px; top: 250px; width: 420px; height: 420px; overflow: hidden;
+                  clip-path: polygon(29.3% 0, 70.7% 0, 100% 29.3%, 100% 70.7%, 70.7% 100%, 29.3% 100%, 0 70.7%, 0 29.3%); }
+      #end .oct img { position: absolute; height: 420px; width: 747px; left: -300px; top: 0; }
+      #end .claim { position: absolute; left: 0; right: 0; top: 900px; text-align: center; font-family: "Instrument Serif";
+                    font-size: 92px; line-height: 1.12; color: var(--basalto); letter-spacing: -.015em; }
+      #end .claim em { color: var(--almagre); }
+      #end .facts { position: absolute; left: 0; right: 0; top: 1150px; text-align: center; font-family: "Archivo";
+                    font-weight: 500; font-size: 34px; color: var(--piedra); }
+      #end .cta { position: absolute; left: 290px; width: 500px; top: 1240px; height: 104px; border-radius: 52px;
+                  background: var(--basalto); color: var(--yeso); font-family: "Archivo"; font-weight: 600; font-size: 36px;
+                  display: flex; align-items: center; justify-content: center; gap: 18px; }
+      #end .cta i { width: 14px; height: 14px; background: var(--barro); display: block; font-style: normal;
+                    clip-path: polygon(30% 0, 70% 0, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0 70%, 0 30%); }
+      #end .url { position: absolute; left: 0; right: 0; top: 1385px; text-align: center; font-family: "Archivo";
+                  font-weight: 600; font-size: 40px; letter-spacing: .04em; color: var(--basalto); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="20"
+         data-width="1080" data-height="1920">
+      <div id="stage"></div>
+      <audio id="bgm" src="assets/bgm/bed.wav" data-start="0" data-duration="20"
+             data-track-index="30" data-volume="1"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      (function () {
+        var W = 1080, H = 1920, FPS = 30, IMG_W = 3413;
+        var P = "assets/photos/";
+        // 120 BPM: a bar is 2.0s, a beat 0.5s. Every cut lands on the grid of bed.wav.
+        var FAN = 16 / FPS;   // eight wedges, two frames each
+        var EASE = "cubic-bezier(.2,.8,.2,1)";
+        var BRAND_EASE = "power3.out"; // closest seekable match to the brandkit curve
+
+        // cx = horizontal focus inside the source photo (0..1). s0→s1 = camera.
+        var SHOTS = [
+          { t: 0,  d: 2, img: "04-piscina.jpg",  cx: .60, s0: 1.16, s1: 1.04, rev: "cut",
+            label: "Copropiedad por semanas", lines: ["Nadie necesita"] },
+          { t: 2,  d: 2, img: "01-amanecer.jpg", cx: .80, s0: 1.04, s1: 1.16, rev: "fan", from: -90,
+            lines: ["doce meses", "<em>de casa.</em>"] },
+          { t: 4,  d: 2, img: "02-desayuno.jpg", cx: .28, s0: 1.16, s1: 1.05, rev: "fan", from: 0,
+            lines: ["Tu octava parte", "de la casa", "<em>de tu vida.</em>"] },
+          { t: 6,  d: 2, img: "03-llegada.jpg",  cx: .74, s0: 1.05, s1: 1.17, rev: "fan", from: 90,
+            big: "6,5", sub: "semanas al año, con escritura ante notario." },
+          { t: 8,  d: 1, img: "04-piscina.jpg",  cx: .87, s0: 1.20, s1: 1.08, rev: "cut" },
+          { t: 9,  d: 1, img: "01-amanecer.jpg", cx: .20, s0: 1.08, s1: 1.20, rev: "cut" },
+          { t: 10, d: 2, img: "02-desayuno.jpg", cx: .83, s0: 1.18, s1: 1.05, rev: "fan", from: 180,
+            label: "Frente al mar, todo incluido", lines: ["523 €", "<em>la semana.</em>"] },
+          { t: 12, d: 2, img: "03-llegada.jpg",  cx: .44, s0: 1.05, s1: 1.17, rev: "fan", from: -45,
+            lines: ["Llegas con", "<em>la maleta.</em>"], sub: "Limpieza, mantenimiento y suministros: de eso nos ocupamos." }
+        ];
+        var PLACES = ["Costa Brava", "Altea", "Menorca", "Pirineo", "Madrid", "Cádiz", "Mallorca", "Asturias"];
+
+        var stage = document.getElementById("stage");
+        var tl = gsap.timeline({ paused: true });
+        var FANS = [];
+
+        function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+        function clip(id, start, dur, track) {
+          var s = el("div", "clip shot"); s.id = id;
+          s.setAttribute("data-start", start.toFixed(4));
+          s.setAttribute("data-duration", dur.toFixed(4));
+          s.setAttribute("data-track-index", String(track));
+          stage.appendChild(s); return s;
+        }
+        function fanMask(e, steps, from) {
+          if (steps >= 8) { e.style.maskImage = "none"; e.style.webkitMaskImage = "none"; e.style.opacity = "1"; return; }
+          if (steps <= 0) { e.style.opacity = "0"; return; }
+          e.style.opacity = "1";
+          var deg = steps * 45;
+          var g = "conic-gradient(from " + from + "deg at 50% 45%, #000 0deg " + deg + "deg, transparent " + deg + "deg 360deg)";
+          e.style.maskImage = g; e.style.webkitMaskImage = g;
+        }
+        // Text in: waterfall of lines, fade + rise (the brandkit's entry, at social tempo).
+        function textIn(nodes, at) {
+          tl.fromTo(nodes, { opacity: 0, y: 46 }, { opacity: 1, y: 0, duration: 0.55, ease: BRAND_EASE, stagger: 0.12 }, at);
+        }
+        function textOut(nodes, at) {
+          tl.to(nodes, { opacity: 0, y: -24, duration: 0.22, ease: "power2.in", stagger: 0.03 }, at);
+        }
+
+        // ---- Photo shots
+        SHOTS.forEach(function (s, i) {
+          var lead = s.rev === "fan" ? FAN : 0;
+          var start = s.t - lead;
+          var shot = clip("s" + i, start, s.d + lead, i);
+          var rev = el("div", "rev"); var ph = el("div", "ph"); var im = el("img");
+          im.src = P + s.img; im.alt = "";
+          var left = Math.max(0, Math.min(IMG_W - W, s.cx * IMG_W - W / 2));
+          im.style.left = (-left) + "px";
+          ph.appendChild(im); rev.appendChild(ph); rev.appendChild(el("div", "scrim")); shot.appendChild(rev);
+
+          // camera runs across the whole time the layer is visible, ease none so seams carry speed
+          tl.fromTo(ph, { scale: s.s0 }, { scale: s.s1, duration: s.d + lead, ease: "none" }, start);
+          if (s.rev === "fan") { FANS.push({ e: rev, at: start, from: s.from }); fanMask(rev, 0, s.from); }
+
+          if (s.lines || s.big) {
+            var copy = el("div", "copy"); var nodes = [];
+            if (s.label) { var lb = el("div", "label", s.label); copy.appendChild(lb); nodes.push(lb); }
+            if (s.big) { var bg = el("div", "h big", s.big); copy.appendChild(bg); nodes.push(bg); }
+            if (s.lines) {
+              var h = el("div", "h");
+              s.lines.forEach(function (l) { var sp = el("span", "line", l); h.appendChild(sp); nodes.push(sp); });
+              copy.appendChild(h);
+            }
+            if (s.sub) { var sb = el("div", "sub", s.sub); copy.appendChild(sb); nodes.push(sb); }
+            shot.appendChild(copy);
+            textIn(nodes, s.t + 0.08);
+            textOut(nodes, s.t + s.d - 0.3);
+          }
+        });
+
+        // ---- Places: basalto, the ring of eight, one segment in barro rotating per place.
+        var pl = clip("places", 14 - FAN, 2 + FAN, 20); pl.id = "places";
+        var plRev = el("div", "rev"); plRev.style.background = "#15181C"; pl.appendChild(plRev);
+        FANS.push({ e: plRev, at: 14 - FAN, from: 90 });
+        fanMask(plRev, 0, 90);
+        var plLabel = el("div", "label", "Ocho casas en ocho sitios"); plRev.appendChild(plLabel);
+        var NS = "http://www.w3.org/2000/svg";
+        var svg = document.createElementNS(NS, "svg"); svg.setAttribute("viewBox", "-250 -250 500 500"); svg.id = "ring";
+        var segs = [];
+        for (var k = 0; k < 8; k++) {
+          // annulus wedge with a 4° gap, starting at the top, clockwise
+          var a0 = (-90 + k * 45 + 2) * Math.PI / 180, a1 = (-90 + (k + 1) * 45 - 2) * Math.PI / 180;
+          var R = 230, r = 150;
+          var d = "M" + (R*Math.cos(a0)).toFixed(2) + " " + (R*Math.sin(a0)).toFixed(2) +
+                  " A" + R + " " + R + " 0 0 1 " + (R*Math.cos(a1)).toFixed(2) + " " + (R*Math.sin(a1)).toFixed(2) +
+                  " L" + (r*Math.cos(a1)).toFixed(2) + " " + (r*Math.sin(a1)).toFixed(2) +
+                  " A" + r + " " + r + " 0 0 0 " + (r*Math.cos(a0)).toFixed(2) + " " + (r*Math.sin(a0)).toFixed(2) + " Z";
+          var p = document.createElementNS(NS, "path"); p.setAttribute("d", d);
+          p.setAttribute("fill", "#EEF0F1"); p.setAttribute("fill-opacity", "0.24");
+          svg.appendChild(p); segs.push(p);
+        }
+        var frac = document.createElementNS(NS, "text");
+        frac.setAttribute("x", "0"); frac.setAttribute("y", "34"); frac.setAttribute("text-anchor", "middle");
+        frac.setAttribute("font-family", "Instrument Serif"); frac.setAttribute("font-size", "104"); frac.setAttribute("fill", "#EEF0F1");
+        frac.textContent = "1/8"; svg.appendChild(frac);
+        plRev.appendChild(svg);
+        tl.fromTo(svg, { rotation: -45, scale: 0.86 }, { rotation: 0, scale: 1, duration: 2, ease: "power2.out", transformOrigin: "50% 50%" }, 14 - FAN);
+        tl.fromTo(plLabel, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: BRAND_EASE }, 14.05);
+        var placeEls = PLACES.map(function (n) { var e = el("div", "place", n); plRev.appendChild(e); return e; });
+
+        // ---- End card: yeso. Logo, claim, CTA, URL.
+        var end = clip("end", 16 - FAN, 4 + FAN, 21); end.id = "end";
+        var enRev = el("div", "rev"); enRev.style.background = "#EEF0F1"; end.appendChild(enRev);
+        FANS.push({ e: enRev, at: 16 - FAN, from: -90 });
+        fanMask(enRev, 0, -90);
+        var oct = el("div", "oct"); var octImg = el("img"); octImg.src = P + "04-piscina.jpg"; octImg.alt = ""; oct.appendChild(octImg);
+        var logo = el("img", "logo"); logo.src = "brand/octavo-logo.svg"; logo.alt = "Octavo";
+        var claim = el("div", "claim", '<span class="line">Propiedad real,</span><span class="line"><em>en la medida justa.</em></span>');
+        var facts = el("div", "facts", "1/8 · 6,5 semanas · 8 titulares · 0 gestiones");
+        var cta = el("div", "cta", "<i></i>Ver las casas");
+        var url = el("div", "url", "mioctavo.com");
+        [oct, logo, claim, facts, cta, url].forEach(function (e) { enRev.appendChild(e); });
+        tl.fromTo(octImg, { scale: 1.18 }, { scale: 1.0, duration: 4, ease: "power2.out", transformOrigin: "60% 50%" }, 16 - FAN);
+        textIn([oct, logo].concat([].slice.call(claim.children)).concat([facts, cta, url]), 16.1);
+        tl.fromTo(cta, { scale: 1 }, { scale: 1.04, duration: 0.25, ease: "power2.out", yoyo: true, repeat: 1 }, 18.0);
+
+        // Everything that steps (fan wedges, the ring, the place names) is a pure
+        // function of tl.time(), so any frame can be seeked in any order.
+        tl.eventCallback("onUpdate", function () {
+          var t = tl.time(), step = FAN / 8;
+          for (var i = 0; i < FANS.length; i++) {
+            var n = Math.floor((t - FANS[i].at) / step + 1e-6);
+            fanMask(FANS[i].e, n < 0 ? 0 : (n > 8 ? 8 : n), FANS[i].from);
+          }
+          var q = Math.floor((t - 14) / 0.25 + 1e-6);   // one place per eighth note
+          var on = (t >= 14 && t < 16) ? Math.max(0, Math.min(7, q)) : -1;
+          for (var j = 0; j < 8; j++) {
+            placeEls[j].style.opacity = j === on ? "1" : "0";
+            segs[j].setAttribute("fill", j === on ? "#E0764F" : "#EEF0F1");
+            segs[j].setAttribute("fill-opacity", j === on ? "1" : "0.24");
+          }
+        });
+        // keep the timeline the full 20s even where nothing tweens
+        tl.set({}, {}, 20);
+
+        window.__timelines["main"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

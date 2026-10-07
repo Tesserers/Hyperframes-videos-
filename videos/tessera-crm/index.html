@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Ailerons"; src: url("assets/fonts/Ailerons.otf") format("opentype"); font-weight: 400; font-display: block; }
+      @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-200.woff2") format("woff2"); font-weight: 200; font-display: block; }
+      @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-400.woff2") format("woff2"); font-weight: 400; font-display: block; }
+      @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
+      @font-face { font-family: "Raleway"; src: url("assets/fonts/Raleway-800.woff2") format("woff2"); font-weight: 800; font-display: block; }
+      @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-700.woff2") format("woff2"); font-weight: 700; font-display: block; }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0a1a1c; }
+
+      #root {
+        position: relative; width: 1920px; height: 1080px; overflow: hidden;
+        background: #0a1a1c; font-family: "Raleway", sans-serif;
+        --deep: #0a1a1c; --navy: #202031; --teal: #587579; --teal-lt: #6e9195;
+        --beige: #f0e8de; --yellow: #fbe0a0; --gold: #c9a45c;
+        --cream: #f4eee6; --card: #fbf8f3; --ink: #202031; --muted: #6b6b78;
+        --green: #3f6b55; --rust: #a2513f;
+      }
+
+      /* ── film ground: deep teal-black, a soft brand glow, grain ── */
+      .ground { position: absolute; inset: 0; }
+      .glow { position: absolute; inset: 0;
+        background:
+          radial-gradient(ellipse 60% 55% at 78% 30%, rgba(88,117,121,0.30) 0%, rgba(88,117,121,0) 70%),
+          radial-gradient(ellipse 50% 45% at 12% 85%, rgba(251,224,160,0.10) 0%, rgba(251,224,160,0) 70%);
+      }
+      .grain { position: absolute; inset: 0; opacity: 0.05; background-size: 200px;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      }
+
+      .scene { position: absolute; inset: 0; }
+      .stage { position: absolute; inset: 0; }
+
+      /* masked word reveals */
+      .msk { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.14em; margin-bottom: -0.14em; }
+      .msk > span { display: inline-block; }
+
+      .eyebrow { font-family: "Raleway"; font-weight: 600; font-size: 20px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--teal-lt); }
+      .display { font-family: "Raleway"; font-weight: 200; color: var(--beige); line-height: 1.02; letter-spacing: -0.01em; }
+      .display em { font-style: normal; color: var(--yellow); }
+      .lede { font-family: "Raleway"; font-weight: 400; font-size: 30px; line-height: 1.45; color: rgba(240,232,222,0.78); }
+
+      /* ── S1 ── */
+      #s1-eyebrow { position: absolute; left: 0; width: 1920px; top: 352px; text-align: center; }
+      #s1-title { position: absolute; left: 0; width: 1920px; top: 410px; text-align: center; font-size: 168px; }
+      #s1-rule { position: absolute; left: 810px; top: 650px; width: 300px; height: 3px; background: var(--yellow); transform-origin: left center; }
+      #s1-sub { position: absolute; left: 0; width: 1920px; top: 690px; text-align: center; }
+
+      /* ── the CRM window (rebuilt mock, no real data) ── */
+      .win { position: absolute; border-radius: 18px; overflow: hidden; background: var(--cream);
+        box-shadow: 0 40px 90px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.06); }
+      .w-top { height: 74px; background: var(--navy); display: flex; align-items: center; padding: 0 44px; gap: 26px; }
+      .w-logo { font-family: "Ailerons"; font-size: 30px; letter-spacing: 0.42em; color: var(--beige); line-height: 1; }
+      .w-sub { font-family: "Raleway"; font-weight: 600; font-size: 13px; letter-spacing: 0.3em; color: var(--teal-lt); text-transform: uppercase; }
+      .w-sp { flex: 1; }
+      .w-pill { font-family: "Raleway"; font-weight: 800; font-size: 13px; letter-spacing: 0.22em; color: var(--yellow); border: 1.5px solid rgba(251,224,160,0.55); border-radius: 30px; padding: 8px 18px; }
+      .w-dot { width: 34px; height: 34px; border-radius: 50%; background: rgba(240,232,222,0.12); }
+      .w-nav { position: relative; height: 58px; background: var(--navy); border-top: 1px solid rgba(255,255,255,0.07); display: flex; align-items: center; padding: 0 44px; gap: 40px; }
+      .w-tab { font-family: "Raleway"; font-weight: 600; font-size: 15px; letter-spacing: 0.17em; text-transform: uppercase; color: rgba(240,232,222,0.62); white-space: nowrap; }
+      .w-tab.on { color: var(--beige); }
+      .w-ul { position: absolute; bottom: 0; height: 3px; background: var(--yellow); }
+      .w-body { position: relative; padding: 40px 44px; }
+      .w-eb { font-family: "Raleway"; font-weight: 600; font-size: 14px; letter-spacing: 0.3em; text-transform: uppercase; color: #4c6669; }
+      .w-h1 { font-family: "Raleway"; font-weight: 200; font-size: 62px; color: var(--ink); margin-top: 8px; line-height: 1.1; }
+      .grid { display: grid; gap: 22px; margin-top: 30px; }
+      .card { background: var(--card); border-radius: 14px; padding: 24px 26px; box-shadow: 0 10px 24px rgba(32,32,49,0.08); height: 132px; }
+      .card.dark { background: var(--navy); }
+      .c-lb { font-family: "Raleway"; font-weight: 600; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+      .card.dark .c-lb { color: var(--teal-lt); }
+      .bar { height: 30px; border-radius: 8px; margin-top: 22px; background: var(--ink); opacity: 0.86; transform-origin: left center; }
+      .bar.g { background: var(--green); } .bar.r { background: var(--rust); } .bar.y { background: var(--yellow); opacity: 1; }
+      .line { height: 12px; border-radius: 6px; background: rgba(32,32,49,0.14); transform-origin: left center; }
+
+      /* ── S2 ── */
+      #s2-copy { position: absolute; left: 120px; top: 300px; width: 560px; }
+      #s2-title { font-size: 92px; margin-top: 22px; }
+      #s2-lede { margin-top: 30px; width: 520px; }
+      #s2-win { left: 760px; top: 150px; width: 1500px; height: 880px; }
+
+      /* ── S3 ── */
+      #s3-title { position: absolute; left: 0; width: 1920px; top: 86px; text-align: center; font-size: 88px; }
+      #s3-win { left: 160px; top: 250px; width: 1600px; height: 900px; }
+      .pg { position: absolute; left: 44px; top: 40px; }
+
+      /* ── S4: pipeline board ── */
+      #s4-copy { position: absolute; left: 120px; top: 84px; width: 1300px; }
+      #s4-title { font-size: 92px; }
+      #s4-live { position: absolute; right: 120px; top: 120px; display: flex; align-items: center; gap: 14px; }
+      #s4-live .dot { width: 14px; height: 14px; border-radius: 50%; background: #7fbf95; box-shadow: 0 0 0 6px rgba(127,191,149,0.18); }
+      #s4-board { position: absolute; left: 120px; top: 300px; width: 1680px; height: 700px; border-radius: 18px; background: var(--cream); padding: 30px 28px; box-shadow: 0 40px 90px rgba(0,0,0,0.45); }
+      .cols { display: flex; gap: 14px; }
+      .col { width: 220px; height: 640px; border-radius: 12px; background: rgba(255,255,255,0.45); border: 1px solid rgba(32,32,49,0.07); padding: 18px 14px; }
+      .col-h { font-family: "Raleway"; font-weight: 600; font-size: 17px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-bottom: 14px; border-bottom: 1px solid rgba(32,32,49,0.12); margin-bottom: 14px; }
+      .col.win-col .col-h { color: var(--green); }
+      .k { position: relative; height: 128px; border-radius: 10px; background: var(--card); box-shadow: 0 6px 14px rgba(32,32,49,0.07); border-left: 4px solid var(--rust); padding: 18px 16px; margin-bottom: 12px; }
+      .k.t { border-left-color: var(--teal); } .k.g { border-left-color: var(--green); }
+      .k .line + .line { margin-top: 12px; }
+      .k .l1 { height: 15px; background: rgba(32,32,49,0.55); }
+      #s4-drag { position: absolute; left: 0; top: 0; width: 192px; z-index: 6; }
+      #s4-slot { position: absolute; left: 0; top: 0; border-radius: 10px; border: 2px dashed rgba(63,107,85,0.5); }
+      #s4-toast { position: absolute; right: 120px; top: 196px; z-index: 7; background: var(--navy); color: var(--beige); border-radius: 14px; padding: 18px 24px; display: flex; align-items: center; gap: 14px; box-shadow: 0 20px 40px rgba(0,0,0,0.35); font-family: "Raleway"; font-weight: 600; font-size: 21px; }
+      #s4-toast .dot { width: 12px; height: 12px; border-radius: 50%; background: #7fbf95; }
+      .cursor { position: absolute; left: 0; top: 0; width: 112px; height: 112px; z-index: 9; filter: drop-shadow(0 6px 8px rgba(0,0,0,0.35)); pointer-events: none; }
+
+      /* ── S5 ── */
+      #s5-copy { position: absolute; left: 120px; top: 270px; width: 900px; }
+      .s5-big { font-size: 134px; display: block; white-space: nowrap; }
+      #s5-lede { margin-top: 40px; width: 760px; }
+      #s5-list { position: absolute; left: 1080px; top: 250px; width: 720px; }
+      .feat { display: flex; align-items: center; gap: 28px; height: 160px; border-radius: 18px; padding: 0 34px; margin-bottom: 24px; background: rgba(240,232,222,0.06); border: 1px solid rgba(240,232,222,0.12); }
+      .feat .ic { width: 76px; height: 76px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center; background: rgba(251,224,160,0.12); }
+      .feat .ic svg { width: 38px; height: 38px; }
+      .feat .tx { font-family: "Raleway"; font-weight: 600; font-size: 32px; color: var(--beige); line-height: 1.2; }
+      .feat .tx small { display: block; font-weight: 400; font-size: 22px; color: rgba(240,232,222,0.68); margin-top: 6px; }
+
+      /* ── S6 ── */
+      #s6-lock { position: absolute; inset: 0; }
+      #s6-word { position: absolute; left: 0; top: 360px; width: 1920px; text-align: center; font-family: "Ailerons"; font-size: 190px; line-height: 1; letter-spacing: 0.06em; color: var(--beige); }
+      #s6-tag { position: absolute; left: 0; top: 664px; width: 1920px; text-align: center; font-family: "Raleway"; font-weight: 200; font-size: 54px; color: rgba(240,232,222,0.9); }
+      #s6-dom { position: absolute; left: 0; top: 790px; width: 1920px; text-align: center; font-family: "Raleway"; font-weight: 600; font-size: 27px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--yellow); }
+      #s6-sub { position: absolute; left: 0; top: 300px; width: 1920px; text-align: center; }
+      #fade { position: absolute; inset: 0; background: #0a1a1c; z-index: 50; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="33.4" data-width="1920" data-height="1080">
+      <div class="ground">
+        <div class="glow"></div>
+        <div class="grain"></div>
+      </div>
+
+      <!-- S1 · Todo bajo control -->
+      <div id="s1" class="scene clip" data-start="0" data-duration="4.325" data-track-index="1">
+        <div id="s1-stage" class="stage">
+          <div id="s1-eyebrow" class="eyebrow">Tessera · Human Capital · CRM</div>
+          <div id="s1-title" class="display" data-split>Todo bajo <em>control.</em></div>
+          <div id="s1-rule"></div>
+          <div id="s1-sub" class="lede">Nuestro CRM. Hecho en casa.</div>
+        </div>
+      </div>
+
+      <!-- S2 · Creado por nosotros -->
+      <div id="s2" class="scene clip" data-start="4.325" data-duration="5.625" data-track-index="2">
+        <div id="s2-stage" class="stage">
+          <div id="s2-copy">
+            <div id="s2-eb" class="eyebrow">Hecho en casa</div>
+            <div id="s2-title" class="display" data-split>Creado por <em>nosotros.</em></div>
+            <div id="s2-lede" class="lede">Diseñado a la medida de cómo trabajamos: clientes, vacantes y equipo en una misma herramienta.</div>
+          </div>
+          <div id="s2-win" class="win" data-win="dash"></div>
+        </div>
+      </div>
+
+      <!-- S3 · Todo en un solo sitio -->
+      <div id="s3" class="scene clip" data-start="9.95" data-duration="5.625" data-track-index="1">
+        <div id="s3-stage" class="stage">
+          <div id="s3-title" class="display" data-split>Todo en un <em>solo sitio.</em></div>
+          <div id="s3-win" class="win" data-win="tour"></div>
+        </div>
+      </div>
+
+      <!-- S4 · Al momento -->
+      <div id="s4" class="scene clip" data-start="15.575" data-duration="5.625" data-track-index="2">
+        <div id="s4-stage" class="stage">
+          <div id="s4-copy">
+            <div id="s4-title" class="display" data-split>Al <em>momento.</em></div>
+            <div id="s4-lede" class="lede">Cada cambio, visible para todo el equipo al instante.</div>
+          </div>
+          <div id="s4-live"><div class="dot"></div><div class="eyebrow" style="color: var(--beige)">En directo</div></div>
+          <div id="s4-board"><div class="cols" id="s4-cols"></div></div>
+          <div id="s4-slot"></div>
+          <div id="s4-drag" class="k g"><div class="line l1" style="width: 70%"></div><div class="line" style="width: 88%"></div><div class="line" style="width: 54%"></div></div>
+          <div id="s4-toast"><div class="dot"></div>Guardado. Ya lo ve todo el equipo.</div>
+          <svg id="s4-cursor" class="cursor" viewBox="0 0 24 24"><path d="M4 2 L4 20 L8.6 15.8 L11.6 22.4 L14.4 21.2 L11.5 14.8 L17.8 14.8 Z" fill="#1c1c1c" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" /></svg>
+        </div>
+      </div>
+
+      <!-- S5 · 100% interno -->
+      <div id="s5" class="scene clip" data-start="21.2" data-duration="5.625" data-track-index="1">
+        <div id="s5-stage" class="stage">
+          <div id="s5-copy">
+            <div class="display"><span class="s5-big" data-split>100% interno.</span><span class="s5-big" data-split><em>100% nuestro.</em></span></div>
+            <div id="s5-lede" class="lede">Lo controlamos nosotros, de principio a fin.</div>
+          </div>
+          <div id="s5-list">
+            <div class="feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fbe0a0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><div class="tx">Los datos, en casa<small>Nada sale de Tessera.</small></div></div>
+            <div class="feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fbe0a0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div><div class="tx">Accesos por rol<small>Cada uno ve lo que le toca.</small></div></div>
+            <div class="feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fbe0a0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></div><div class="tx">Evoluciona con nosotros<small>Lo cambiamos cuando lo necesitamos.</small></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- S6 · Cierre -->
+      <div id="s6" class="scene clip" data-start="26.825" data-duration="6.575" data-track-index="2">
+        <div id="s6-lock">
+          <div id="s6-word"></div>
+          <div id="s6-tag" data-split>Better decisions, together.</div>
+          <div id="s6-dom">tesseraservices.com</div>
+        </div>
+      </div>
+
+      <div id="fade"></div>
+
+      <!-- audio -->
+      <audio id="bgm" src="assets/bgm/bed.wav" data-start="0" data-duration="33.4" data-track-index="10" data-volume="0.9"></audio>
+      <audio id="sfx-1" src="assets/sfx/whoosh-short.mp3" data-start="4.05" data-duration="0.57" data-track-index="11" data-volume="0.4"></audio>
+      <audio id="sfx-2" src="assets/sfx/whoosh-short.mp3" data-start="9.68" data-duration="0.57" data-track-index="12" data-volume="0.4"></audio>
+      <audio id="sfx-3" src="assets/sfx/whoosh-short.mp3" data-start="15.3" data-duration="0.57" data-track-index="11" data-volume="0.4"></audio>
+      <audio id="sfx-4" src="assets/sfx/click-soft.mp3" data-start="17.15" data-duration="0.37" data-track-index="12" data-volume="0.6"></audio>
+      <audio id="sfx-5" src="assets/sfx/click-soft.mp3" data-start="18.2" data-duration="0.37" data-track-index="13" data-volume="0.6"></audio>
+      <audio id="sfx-6" src="assets/sfx/pop.mp3" data-start="18.3" data-duration="0.72" data-track-index="14" data-volume="0.45"></audio>
+      <audio id="sfx-7" src="assets/sfx/whoosh-short.mp3" data-start="20.93" data-duration="0.57" data-track-index="11" data-volume="0.4"></audio>
+      <audio id="sfx-8" src="assets/sfx/impact-bass-1.mp3" data-start="26.825" data-duration="2.12" data-track-index="12" data-volume="0.45"></audio>
+      <audio id="sfx-9" src="assets/sfx/chime.mp3" data-start="27.9" data-duration="2.54" data-track-index="13" data-volume="0.3"></audio>
+    </div>
+
+    <script>
+      (function () {
+        var root = document.getElementById("root");
+        var $ = function (s, c) { return (c || root).querySelector(s); };
+        var $$ = function (s, c) { return Array.prototype.slice.call((c || root).querySelectorAll(s)); };
+
+        /* ── split text into masked words (keeps <em> colour) ── */
+        function split(el) {
+          var out = [];
+          var nodes = Array.prototype.slice.call(el.childNodes);
+          el.innerHTML = "";
+          nodes.forEach(function (n) {
+            var isEm = n.nodeType === 1 && n.tagName === "EM";
+            var words = (n.textContent || "").split(" ");
+            words.forEach(function (w, i) {
+              if (w === "") { el.appendChild(document.createTextNode(" ")); return; }
+              var m = document.createElement("span"); m.className = "msk";
+              var s = document.createElement(isEm ? "em" : "span"); s.textContent = w;
+              s.style.display = "inline-block";
+              m.appendChild(s); el.appendChild(m); out.push(s);
+              if (i < words.length - 1) el.appendChild(document.createTextNode(" "));
+            });
+          });
+          return out;
+        }
+        var words = {};
+        $$("[data-split]").forEach(function (el, i) { el.id = el.id || "split-" + i; words[el.id] = split(el); });
+
+        /* ── CRM window builder — a faithful rebuild of the tool's chrome, values left as bars ── */
+        var TABS = ["Dashboard", "Semanal", "Agenda", "Mi espacio", "Comercial", "Cuentas", "Contactos", "Marketing", "Vacantes", "Cierres", "Mercado"];
+        function chrome(win, active) {
+          var h = '<div class="w-top"><div class="w-logo">TESSERA</div><div class="w-sub">Human Capital · CRM</div><div class="w-sp"></div><div class="w-pill">MAESTRO</div><div class="w-dot"></div></div><div class="w-nav">';
+          TABS.forEach(function (t, i) { h += '<div class="w-tab' + (i === active ? " on" : "") + '">' + t + "</div>"; });
+          h += '<div class="w-ul"></div></div><div class="w-body"></div>';
+          win.innerHTML = h;
+          return $(".w-body", win);
+        }
+        function kpiGrid(cols, specs) {
+          var h = '<div class="grid" style="grid-template-columns: repeat(' + cols + ', 1fr)">';
+          specs.forEach(function (s) { h += '<div class="card' + (s.dark ? " dark" : "") + '"><div class="c-lb">' + s.l + '</div><div class="bar ' + (s.c || "") + '" style="width:' + s.w + '%"></div></div>'; });
+          return h + "</div>";
+        }
+
+        // S2 · dashboard
+        var s2win = $("#s2-win");
+        chrome(s2win, 0).innerHTML =
+          '<div class="w-eb">Visión general</div><div class="w-h1">Dashboard</div>' +
+          kpiGrid(4, [
+            { l: "Vacantes abiertas", w: 46 }, { l: "Cubiertas", w: 38, c: "g" }, { l: "Canceladas", w: 30, c: "r" }, { l: "Tasa de cierre", w: 52 },
+            { l: "Oportunidades", w: 40 }, { l: "Honorarios cerrados", w: 70, c: "y", dark: true }, { l: "Headhunting", w: 62 }, { l: "Outsourcing", w: 66 },
+          ]) +
+          '<div class="card" style="height: 260px; margin-top: 22px"><div class="c-lb">Resumen semanal</div><div class="grid" style="grid-template-columns: repeat(6, 1fr); margin-top: 22px">' +
+          [60, 72, 48, 30, 64, 40].map(function (w) { return '<div style="height: 120px; border: 1px solid rgba(32,32,49,0.1); border-radius: 10px; padding: 18px"><div class="line" style="width: 70%"></div><div class="bar" style="width:' + w + '%; height: 24px; margin-top: 18px"></div></div>'; }).join("") +
+          "</div></div>";
+
+        // S3 · page tour — every page title stacked, toggled on the beat
+        var PAGES = [
+          { tab: 0, eb: "Visión general", h: "Dashboard" },
+          { tab: 1, eb: "Seguimiento", h: "Semanal" },
+          { tab: 2, eb: "Entrevistas, llamadas y recordatorios", h: "Agenda" },
+          { tab: 4, eb: "Actividad comercial", h: "Comercial" },
+          { tab: 5, eb: "Clientes", h: "Cuentas" },
+          { tab: 6, eb: "La lista de prospección", h: "Contactos" },
+          { tab: 8, eb: "Procesos vivos", h: "Vacantes" },
+          { tab: 9, eb: "Lo que cerramos", h: "Cierres" },
+        ];
+        var s3win = $("#s3-win");
+        var s3body = chrome(s3win, -1);
+        var pgHtml = "";
+        PAGES.forEach(function (p, i) { pgHtml += '<div class="pg" id="pg-' + i + '"><div class="w-eb">' + p.eb + '</div><div class="w-h1">' + p.h + "</div></div>"; });
+        s3body.innerHTML = '<div style="height: 120px; position: relative">' + pgHtml + "</div>" +
+          kpiGrid(4, [{ l: "", w: 50 }, { l: "", w: 50, c: "g" }, { l: "", w: 50 }, { l: "", w: 50, c: "r" }, { l: "", w: 50 }, { l: "", w: 50, c: "y", dark: true }, { l: "", w: 50 }, { l: "", w: 50 }]) +
+          '<div class="card" style="height: 220px; margin-top: 22px"><div class="line" style="width: 30%"></div><div class="line" style="width: 92%; margin-top: 26px"></div><div class="line" style="width: 84%; margin-top: 18px"></div><div class="line" style="width: 88%; margin-top: 18px"></div></div>';
+
+        // S4 · pipeline columns — real stage names, card content left abstract
+        var COLS = [
+          { n: "Lead", k: ["", "t", ""] }, { n: "Contactados", k: ["", "", "t"] }, { n: "Conversación iniciada", k: ["", "t"] },
+          { n: "Discovery / diagnóstico", k: ["t", ""] }, { n: "Follow-up", k: ["t"] }, { n: "Propuesta enviada", k: ["", "t"] }, { n: "Ganado", k: ["g"], win: true },
+        ];
+        var LW = [[72, 90, 50], [60, 84, 66], [80, 70, 44], [66, 92, 58]];
+        var ch = "";
+        COLS.forEach(function (c, ci) {
+          ch += '<div class="col' + (c.win ? " win-col" : "") + '"><div class="col-h">' + c.n + "</div>";
+          c.k.forEach(function (kk, ki) {
+            var lw = LW[(ci + ki) % LW.length];
+            ch += '<div class="k ' + kk + '"' + (ci === 5 && ki === 0 ? ' id="s4-src"' : "") + '><div class="line l1" style="width:' + lw[0] + '%"></div><div class="line" style="width:' + lw[1] + '%"></div><div class="line" style="width:' + lw[2] + '%"></div></div>';
+          });
+          ch += "</div>";
+        });
+        $("#s4-cols").innerHTML = ch;
+
+        // closing wordmark, one span per letter
+        var wm = $("#s6-word"), wmChars = [];
+        "TESSERA".split("").forEach(function (c) {
+          var m = document.createElement("span"); m.className = "msk";
+          var s = document.createElement("span"); s.textContent = c; m.appendChild(s); wm.appendChild(m); wmChars.push(s);
+        });
+
+        /* ── geometry for the drag in S4 (board coords → frame coords) ── */
+        // board at (120,300), padding 30/28; columns 220 wide, gap 14; header ≈ 46px; cards 128 + 12
+        var colX = function (i) { return 120 + 28 + i * (220 + 14) + 14; };
+        var cardY0 = 300 + 30 + 18 + 46 + 18;
+        var SRC = { x: colX(5), y: cardY0 };
+        var DST = { x: colX(6), y: cardY0 + 140 };
+
+        /* ── underline geometry for nav tabs ── */
+        function tabRect(win, idx) {
+          var tab = $$(".w-tab", win)[idx];
+          return { x: tab.offsetLeft, w: tab.offsetWidth };
+        }
+
+        function build() {
+          var tl = gsap.timeline({ paused: true });
+          var T2 = 4.325, T3 = 9.95, T4 = 15.575, T5 = 21.2, T6 = 26.825, END = 33.4;
+          var exitL = function (sel, t) { tl.to(sel, { x: -340, duration: 0.375, ease: "power4.in" }, t - 0.375); };
+
+          /* S1 — title holds the frame, then leaves on the current (left) */
+          tl.fromTo("#s1-eyebrow", { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.2);
+          tl.fromTo(words["s1-title"], { yPercent: 115 }, { yPercent: 0, duration: 0.9, ease: "expo.out", stagger: 0.13 }, 0.575);
+          tl.fromTo("#s1-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "expo.inOut" }, 1.6);
+          tl.fromTo("#s1-sub", { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out" }, 2.45);
+          exitL("#s1-stage", T2);
+
+          /* S2 — window and copy arrive mid-flight from the right */
+          var s2 = T2;
+          tl.fromTo("#s2-stage", { x: 340 }, { x: 0, duration: 0.6, ease: "power4.out" }, s2);
+          tl.fromTo("#s2-eb", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, s2 + 0.15);
+          tl.fromTo(words["s2-title"], { yPercent: 115 }, { yPercent: 0, duration: 0.85, ease: "expo.out", stagger: 0.1 }, s2 + 0.2);
+          tl.fromTo("#s2-lede", { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out" }, s2 + 1.0);
+          tl.fromTo($$(".card", s2win), { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.55, ease: "power3.out", stagger: 0.06 }, s2 + 0.45);
+          tl.fromTo($$(".bar", s2win), { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: "expo.out", stagger: 0.05 }, s2 + 0.9);
+          tl.fromTo($$(".line", s2win), { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "expo.out", stagger: 0.04 }, s2 + 1.3);
+          // a slow drift toward camera keeps the window performing while the copy reads
+          tl.fromTo("#s2-win", { scale: 1, transformOrigin: "0% 50%" }, { scale: 1.04, duration: 4.4, ease: "sine.inOut" }, s2 + 0.6);
+          // the numbers refresh live: bars re-settle on the downbeat
+          var s2bars = $$(".grid:first-of-type .bar", s2win);
+          tl.fromTo(s2bars, { scaleX: 1 }, { scaleX: function (i) { return [1.18, 0.86, 1.1, 0.92, 1.22, 1.08, 0.9, 1.14][i] || 1; }, duration: 0.7, ease: "expo.inOut", stagger: 0.03 }, 6.2);
+          tl.fromTo(s2bars, { scaleX: function (i) { return [1.18, 0.86, 1.1, 0.92, 1.22, 1.08, 0.9, 1.14][i] || 1; } }, { scaleX: 1, duration: 0.7, ease: "expo.inOut", stagger: 0.03, immediateRender: false }, 8.075);
+          exitL("#s2-stage", T3);
+
+          /* S3 — the nav tour: underline and page title change on every beat */
+          var s3 = T3;
+          tl.fromTo("#s3-stage", { x: 340 }, { x: 0, duration: 0.6, ease: "power4.out" }, s3);
+          tl.fromTo(words["s3-title"], { yPercent: 115 }, { yPercent: 0, duration: 0.85, ease: "expo.out", stagger: 0.1 }, s3 + 0.15);
+          var ul = $(".w-ul", s3win), tabs = $$(".w-tab", s3win);
+          var beat = 0.46875, t0 = s3 + 0.9;
+          var r0 = tabRect(s3win, PAGES[0].tab);
+          tl.set(ul, { x: r0.x, width: r0.w }, s3);
+          tl.set(tabs[PAGES[0].tab], { color: "#f0e8de" }, s3);
+          PAGES.forEach(function (p, i) { tl.set("#pg-" + i, { autoAlpha: i === 0 ? 1 : 0 }, s3); });
+          var cards3 = $$(".grid .bar", s3win);
+          tl.fromTo(cards3, { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "expo.out", stagger: 0.04 }, s3 + 0.4);
+          var widthsSeq = [[1, 1, 1, 1, 1, 1, 1, 1], [1.5, 0.6, 1.2, 0.8, 1.3, 1.6, 0.7, 1.1], [0.7, 1.4, 0.9, 1.5, 0.6, 1.2, 1.4, 0.8], [1.3, 1.1, 0.6, 1.2, 1.5, 0.9, 1.0, 1.6], [0.9, 0.7, 1.6, 0.6, 1.1, 1.5, 1.3, 0.7], [1.6, 1.2, 1.0, 1.4, 0.7, 1.1, 0.8, 1.3], [0.8, 1.5, 1.3, 0.9, 1.4, 0.7, 1.6, 1.0], [1.2, 0.9, 0.8, 1.6, 1.0, 1.4, 1.1, 0.6]];
+          for (var i = 1; i < PAGES.length; i++) {
+            var t = t0 + (i - 1) * beat;
+            var prev = PAGES[i - 1], cur = PAGES[i], r = tabRect(s3win, cur.tab);
+            tl.to(ul, { x: r.x, width: r.w, duration: 0.32, ease: "power3.inOut" }, t);
+            tl.set(tabs[prev.tab], { color: "rgba(240,232,222,0.62)" }, t + 0.12);
+            tl.set(tabs[cur.tab], { color: "#f0e8de" }, t + 0.12);
+            tl.fromTo("#pg-" + (i - 1), { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -22, duration: 0.16, ease: "power2.in", immediateRender: false }, t);
+            tl.fromTo("#pg-" + i, { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: 0.28, ease: "power3.out", immediateRender: false }, t + 0.14);
+            (function (prevW, curW, tt) {
+              tl.fromTo(cards3, { scaleX: function (k) { return prevW[k]; } }, { scaleX: function (k) { return curW[k]; }, duration: 0.36, ease: "power3.inOut", stagger: 0.012, immediateRender: false }, tt);
+            })(widthsSeq[i - 1], widthsSeq[i], t);
+          }
+          tl.fromTo("#s3-win", { y: 0 }, { y: -26, duration: 5, ease: "sine.inOut" }, s3 + 0.6);
+          exitL("#s3-stage", T4);
+
+          /* S4 — a deal moves to Won; the click causes the update everyone sees */
+          var s4 = T4;
+          tl.fromTo("#s4-stage", { x: 340 }, { x: 0, duration: 0.6, ease: "power4.out" }, s4);
+          tl.fromTo(words["s4-title"], { yPercent: 115 }, { yPercent: 0, duration: 0.85, ease: "expo.out", stagger: 0.1 }, s4 + 0.15);
+          tl.fromTo("#s4-lede", { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out" }, s4 + 0.6);
+          tl.fromTo("#s4-live", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, s4 + 0.5);
+          tl.fromTo("#s4-live .dot", { scale: 1 }, { scale: 1.35, duration: 0.47, ease: "sine.inOut", repeat: 9, yoyo: true }, s4 + 0.5);
+          tl.fromTo($$(".col", $("#s4-board")), { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.05 }, s4 + 0.3);
+          tl.fromTo($$(".k .line", $("#s4-board")), { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "expo.out", stagger: 0.012 }, s4 + 0.6);
+
+          var src = $("#s4-src"), drag = $("#s4-drag"), cur = $("#s4-cursor"), slot = $("#s4-slot");
+          var tipOff = { x: 112 * 0.167, y: 112 * 0.083 };
+          var grabX = SRC.x + 120, grabY = SRC.y + 60;
+          tl.set(drag, { x: SRC.x, y: SRC.y, autoAlpha: 0 }, s4);
+          tl.set(slot, { x: DST.x, y: DST.y, width: 192, height: 128, autoAlpha: 0 }, s4);
+          tl.set(cur, { x: grabX - tipOff.x + 260, y: 1120 }, s4);
+          tl.to(cur, { x: grabX - tipOff.x, y: grabY - tipOff.y, duration: 0.85, ease: "power3.out" }, 16.3);
+          // press — the card lifts out of its column
+          tl.to(cur, { scale: 0.84, duration: 0.1, ease: "power2.in", transformOrigin: "17% 8%" }, 17.15);
+          tl.set(src, { autoAlpha: 0 }, 17.15);
+          tl.set(drag, { autoAlpha: 1 }, 17.15);
+          tl.fromTo(drag, { scale: 1, rotation: 0, boxShadow: "0 6px 14px rgba(32,32,49,0.07)" }, { scale: 1.06, rotation: 3, boxShadow: "0 26px 40px rgba(32,32,49,0.28)", duration: 0.22, ease: "power2.out" }, 17.15);
+          tl.fromTo(slot, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2 }, 17.3);
+          // carry
+          tl.to(cur, { x: DST.x + 120 - tipOff.x, y: DST.y + 60 - tipOff.y, duration: 0.85, ease: "power3.inOut" }, 17.3);
+          tl.to(drag, { x: DST.x, y: DST.y, duration: 0.85, ease: "power3.inOut" }, 17.3);
+          // release — the drop is the update
+          tl.to(cur, { scale: 1, duration: 0.22, ease: "power2.out", transformOrigin: "17% 8%" }, 18.2);
+          tl.to(drag, { scale: 1, rotation: 0, boxShadow: "0 6px 14px rgba(32,32,49,0.07)", duration: 0.3, ease: "back.out(2)" }, 18.2);
+          tl.to(slot, { autoAlpha: 0, duration: 0.15 }, 18.2);
+          tl.fromTo(".win-col", { backgroundColor: "rgba(255,255,255,0.45)" }, { backgroundColor: "rgba(63,107,85,0.16)", duration: 0.25, ease: "power2.out" }, 18.2);
+          tl.to(".win-col", { backgroundColor: "rgba(255,255,255,0.45)", duration: 0.9, ease: "power2.inOut" }, 18.6);
+          tl.fromTo("#s4-toast", { autoAlpha: 0, y: -30 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "back.out(1.6)" }, 18.3);
+          // cursor drifts off — it doesn't own the rest of the beat
+          tl.to(cur, { x: 1980, y: 1150, duration: 0.7, ease: "power2.in" }, 19.3);
+          // exit upward: what comes next sits above the day-to-day
+          tl.to("#s4-stage", { y: -300, duration: 0.375, ease: "power4.in" }, T5 - 0.375);
+
+          /* S5 — internal, ours */
+          var s5 = T5;
+          tl.fromTo("#s5-stage", { y: 300 }, { y: 0, duration: 0.6, ease: "power4.out" }, s5);
+          var big = $$(".s5-big");
+          tl.fromTo(words[big[0].id], { yPercent: 115 }, { yPercent: 0, duration: 0.85, ease: "expo.out", stagger: 0.12 }, s5 + 0.15);
+          tl.fromTo(words[big[1].id], { yPercent: 115 }, { yPercent: 0, duration: 0.85, ease: "expo.out", stagger: 0.12 }, s5 + 0.6);
+          tl.fromTo("#s5-lede", { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out" }, s5 + 1.3);
+          tl.fromTo($$(".feat"), { autoAlpha: 0, x: 60 }, { autoAlpha: 1, x: 0, duration: 0.7, ease: "expo.out", stagger: 0.469 }, s5 + 1.0);
+          tl.fromTo($$(".feat .ic"), { scale: 0.6 }, { scale: 1, duration: 0.6, ease: "back.out(2.2)", stagger: 0.469 }, s5 + 1.1);
+          tl.fromTo("#s5-copy", { scale: 1, transformOrigin: "0% 50%" }, { scale: 1.03, duration: 4.6, ease: "sine.inOut" }, s5 + 0.5);
+          // exit pushes toward camera (Z forward, growing)
+          tl.to("#s5-stage", { scale: 1.25, autoAlpha: 0, duration: 0.375, ease: "power4.in", transformOrigin: "50% 50%" }, T6 - 0.375);
+
+          /* S6 — lockup lands, keeps growing into place (same Z sign) */
+          var s6 = T6;
+          tl.fromTo("#s6-lock", { scale: 0.9 }, { scale: 1, duration: 2.4, ease: "power3.out" }, s6);
+          tl.fromTo(wmChars, { yPercent: 118 }, { yPercent: 0, duration: 0.95, ease: "expo.out", stagger: 0.05 }, s6 + 0.05);
+          tl.fromTo(words["s6-tag"], { yPercent: 118 }, { yPercent: 0, duration: 0.85, ease: "expo.out", stagger: 0.06 }, s6 + 0.75);
+          tl.fromTo("#s6-dom", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: "expo.out" }, s6 + 1.4);
+          tl.fromTo("#fade", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6, ease: "power2.in" }, END - 0.65);
+
+          // start state of the black fade
+          tl.set("#fade", { autoAlpha: 0 }, 0);
+          window.__timelines["main"] = tl;
+        }
+
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(build); else build();
+      })();
+    </script>
+  </body>
+</html>

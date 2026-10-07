@@ -1,0 +1,4 @@
+# Intermediate CRF-16 masters. They are 20 MB each and rebuildable with
+# `npx hyperframes render`; only the web deliverables encoded from them are kept.
+renders/master*.mp4
+snapshots/

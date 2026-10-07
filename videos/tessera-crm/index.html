@@ -356,7 +356,7 @@
           // a slow drift toward camera keeps the window performing while the copy reads
           tl.fromTo("#s2-win", { scale: 1, transformOrigin: "0% 50%" }, { scale: 1.04, duration: 4.4, ease: "sine.inOut" }, s2 + 0.6);
           // the numbers refresh live: bars re-settle on the downbeat
-          var s2bars = $$(".grid:first-of-type .bar", s2win);
+          var s2bars = $$(".bar", $(".grid", s2win));
           tl.fromTo(s2bars, { scaleX: 1 }, { scaleX: function (i) { return [1.18, 0.86, 1.1, 0.92, 1.22, 1.08, 0.9, 1.14][i] || 1; }, duration: 0.7, ease: "expo.inOut", stagger: 0.03 }, 6.2);
           tl.fromTo(s2bars, { scaleX: function (i) { return [1.18, 0.86, 1.1, 0.92, 1.22, 1.08, 0.9, 1.14][i] || 1; } }, { scaleX: 1, duration: 0.7, ease: "expo.inOut", stagger: 0.03, immediateRender: false }, 8.075);
           exitL("#s2-stage", T3);

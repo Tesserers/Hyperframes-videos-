@@ -27,9 +27,9 @@
       .cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
       .abs { position: absolute; }
       .fill { position: absolute; inset: 0; }
-      .msk { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.12em; margin-bottom: -0.12em; }
+      .msk { display: inline-block; overflow: hidden; vertical-align: bottom; padding: 0.22em 0.03em 0.18em; margin: -0.22em -0.03em -0.18em; }
       .msk > span { display: inline-block; }
-      .big { font-weight: 900; letter-spacing: -0.055em; line-height: 0.92; }
+      .big { font-weight: 900; letter-spacing: -0.038em; line-height: 0.92; }
       .center { left: 0; width: 1920px; text-align: center; }
 
       .bg-navy { background: radial-gradient(120% 90% at 70% 10%, #2a2a44 0%, #202031 40%, #0f0a1e 100%); }
@@ -65,8 +65,8 @@
 
       /* 3 · menos papeles */
       #s3-row { top: 410px; font-size: 220px; white-space: nowrap; color: var(--navy); }
-      .slot { display: inline-block; position: relative; overflow: hidden; vertical-align: bottom; height: 1.06em; padding-bottom: 0.1em; text-align: left; }
-      .slot > span { position: absolute; left: 0; top: 0; white-space: nowrap; }
+      .slot { display: inline-block; position: relative; overflow: visible; vertical-align: bottom; height: 1.42em; margin-top: -0.16em; text-align: left; }
+      .slot > span { position: absolute; left: 0; top: 0.18em; white-space: nowrap; }
       #s3-w { width: 1040px; color: var(--blue); }
       #s3-p { width: 690px; }
       #s3-p > span { left: auto; right: 0; }
@@ -77,7 +77,8 @@
 
       /* 4 · áreas */
       #s4-num { left: 120px; top: 150px; width: 640px; height: 760px; font-size: 760px; color: var(--blue-2); text-align: center; }
-      #s4-num .slot { height: 1em; }
+      #s4-num .slot { height: 1.1em; }
+      #s4-num .slot > span { top: 0.04em; }
       #s4-lab { left: 760px; top: 250px; font-size: 150px; white-space: nowrap; }
       #s4-reel { left: 770px; top: 470px; width: 1100px; height: 420px; overflow: hidden; }
       .reel-it { position: absolute; left: 0; font-size: 96px; font-weight: 800; letter-spacing: -0.04em; line-height: 105px; white-space: nowrap; color: #fff; }
@@ -330,16 +331,16 @@
         function waterfall(el, at, o) {
           o = o || {};
           var w = words(el);
-          tl.fromTo(w, { yPercent: 110, x: o.x == null ? 90 : o.x }, { yPercent: 0, x: 0, duration: o.d || 0.55, ease: "power4.out", stagger: o.st || 0.06 }, at);
+          tl.fromTo(w, { yPercent: 160, x: o.x == null ? 90 : o.x }, { yPercent: 0, x: 0, duration: o.d || 0.55, ease: "power4.out", stagger: o.st || 0.06 }, at);
           return w;
         }
         // Rueda de palabras: cada hijo de .slot entra desde abajo y empuja al anterior
         function slotRoll(slot, times) {
           var kids = slot.children;
-          for (var i = 0; i < kids.length; i++) { kids[i].setAttribute("data-layout-allow-overlap", ""); tl.set(kids[i], { yPercent: i === 0 ? 0 : 140 }, 0); }
+          for (var i = 0; i < kids.length; i++) { kids[i].setAttribute("data-layout-allow-overlap", ""); tl.set(kids[i], { yPercent: i === 0 ? 0 : 45, opacity: i === 0 ? 1 : 0 }, 0); }
           times.forEach(function (t, i) {
-            tl.to(kids[i], { yPercent: -140, filter: "blur(6px)", duration: 0.32, ease: "power4.in" }, t - 0.16);
-            tl.fromTo(kids[i + 1], { yPercent: 140, filter: "blur(6px)" }, { yPercent: 0, filter: "blur(0px)", duration: 0.42, ease: "power4.out", immediateRender: false }, t);
+            tl.to(kids[i], { yPercent: -45, opacity: 0, filter: "blur(14px)", duration: 0.22, ease: "power3.in" }, t - 0.2);
+            tl.fromTo(kids[i + 1], { yPercent: 45, opacity: 0, filter: "blur(14px)" }, { yPercent: 0, opacity: 1, filter: "blur(0px)", duration: 0.42, ease: "power4.out", immediateRender: false }, t);
           });
         }
         // Pulso de bombo: el fondo late con la música en los tramos con ritmo
@@ -537,6 +538,8 @@
         tl.fromTo("#s8-logo", { clipPath: "inset(0% 100% 0% 0%)", scale: 1.18 }, { clipPath: "inset(0% 0% 0% 0%)", scale: 1, duration: 0.6, ease: "power4.out" }, 32.0);
         tl.fromTo(["#r1", "#r2", "#r3"], { scale: 0.2, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 1.2, ease: "power4.out", stagger: 0.08 }, 32.0);
         pulse(["#r1", "#r2", "#r3"], 33.5, 36, 0.04);
+        tl.set("#s8-tag", { autoAlpha: 0 }, 0);
+        tl.set("#s8-tag", { autoAlpha: 1 }, 32.55);
         waterfall($("#s8-tag"), 32.6, { x: 0, st: 0.05 });
         tl.fromTo("#s8-cta", { autoAlpha: 0, y: 40, scale: 0.85 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.45, ease: "back.out(1.6)" }, 33.5);
         tl.fromTo("#s8-mail", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, 34.0);

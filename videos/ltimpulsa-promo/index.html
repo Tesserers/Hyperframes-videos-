@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter-var-latin.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+        font-display: block;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0f0a1e; }
+
+      /* Paleta sacada de las presentaciones de LT Impulsa, sin inventar:
+         navy #202031 · fondo #0F0A1E · azul #2563EB / #3B82F6 / #60A5FA ·
+         claro #F4F6FC / #E8F0FF · gris de texto #54657E. Tipografía: Inter. */
+      #root {
+        --navy: #202031; --deep: #0f0a1e; --blue: #2563eb; --blue-2: #3b82f6;
+        --blue-3: #60a5fa; --paper: #f4f6fc; --ice: #e8f0ff; --slate: #54657e;
+        position: relative; width: 1920px; height: 1080px; overflow: hidden;
+        background: var(--deep); font-family: "Inter", sans-serif; color: #fff;
+      }
+      .scene { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      .abs { position: absolute; }
+      .msk { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.14em; margin-bottom: -0.14em; }
+      .msk > span { display: inline-block; }
+
+      /* Fondos (los de "Formas para presentaciones") */
+      .bg-navy { position: absolute; inset: 0; background: linear-gradient(135deg, #202031 0%, #0f0a1e 100%); }
+      .bg-dots-navy { position: absolute; inset: 0; opacity: 0.55;
+        background-image: radial-gradient(circle, rgba(201,211,227,0.22) 1.6px, transparent 2px); background-size: 48px 48px; }
+      .bg-halo { position: absolute; width: 1500px; height: 1500px; border-radius: 50%;
+        background: radial-gradient(circle, rgba(59,130,246,0.85) 0%, rgba(59,130,246,0.32) 32%, rgba(59,130,246,0) 68%); }
+      .bg-blue { position: absolute; inset: 0; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+      .bg-blue-lines { position: absolute; inset: 0; opacity: 0.12;
+        background-image: repeating-linear-gradient(-28deg, #ffffff 0 1px, transparent 1px 34px); }
+      .bg-paper { position: absolute; inset: 0; background: var(--paper); }
+      .bg-grid { position: absolute; inset: 0; opacity: 1;
+        background-image: linear-gradient(#dfe6f2 1px, transparent 1px), linear-gradient(90deg, #dfe6f2 1px, transparent 1px);
+        background-size: 96px 96px; }
+      .ring { position: absolute; border-radius: 50%; border: 1.5px solid rgba(96,165,250,0.28); }
+
+      .kicker { font-size: 20px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--blue-3); }
+      .kicker::before { content: ""; display: inline-block; width: 12px; height: 12px; background: var(--blue-2); margin-right: 16px; vertical-align: 1px; }
+      .h-xl { font-weight: 800; letter-spacing: -0.04em; line-height: 0.98; }
+
+      /* ── 1 · Ruido ─────────────────────────────────────────── */
+      .chip { position: absolute; padding: 22px 34px; border-radius: 18px; white-space: nowrap;
+        background: rgba(32,32,49,0.92); border: 1.5px solid rgba(201,211,227,0.28);
+        font-size: 38px; font-weight: 600; letter-spacing: -0.01em; color: #c9d3e3;
+        box-shadow: 0 24px 60px rgba(0,0,0,0.45); }
+      .chip b { color: #fff; font-weight: 700; }
+      .chip i { font-style: normal; display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: #f87171; margin-right: 16px; vertical-align: 4px; }
+      #s1-q { left: 0; top: 410px; width: 1920px; text-align: center; font-size: 104px; }
+      #s1-dim { position: absolute; inset: 0; background: rgba(15,10,30,0.78); }
+
+      /* ── 2 · Manifiesto ────────────────────────────────────── */
+      #s2-a, #s2-b { left: 150px; width: 1180px; font-size: 136px; }
+      #s2-a { top: 220px; color: #fff; }
+      #s2-b { top: 560px; color: var(--navy); }
+      #s2-k { left: 156px; top: 150px; color: #fff; }
+      #s2-k::before { background: #fff; }
+      #s2-arrow { left: 1460px; top: 760px; width: 300px; height: 160px; }
+
+      /* ── 3 · Menos papeles ─────────────────────────────────── */
+      #s3-k { left: 150px; top: 150px; color: var(--blue); }
+      #s3-lead { left: 150px; top: 210px; width: 1600px; font-size: 54px; font-weight: 700; letter-spacing: -0.02em; color: var(--navy); line-height: 1.15; }
+      #s3-lead em { font-style: normal; color: var(--blue); }
+      .s3-row { position: absolute; left: 150px; font-size: 168px; color: var(--navy); white-space: nowrap; }
+      .s3-row em { font-style: normal; color: var(--blue); }
+      #s3-r1 { top: 400px; } #s3-r2 { top: 580px; } #s3-r3 { top: 760px; }
+      #s3-rule { left: 150px; top: 370px; width: 1620px; height: 4px; background: var(--navy); transform-origin: left center; }
+
+      /* ── 4 · Cuatro áreas ──────────────────────────────────── */
+      #s4-k { left: 150px; top: 150px; }
+      #s4-t { left: 150px; top: 205px; width: 1650px; font-size: 104px; }
+      #s4-t em { font-style: normal; color: var(--blue-2); }
+      .s4-col { position: absolute; top: 500px; width: 380px; }
+      .s4-rule { height: 3px; background: rgba(201,211,227,0.35); transform-origin: left center; }
+      .s4-num { font-size: 132px; font-weight: 800; letter-spacing: -0.04em; color: var(--blue-2); margin-top: 26px; line-height: 1; }
+      .s4-name { font-size: 38px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.15; margin-top: 22px; color: #fff; }
+      .s4-desc { font-size: 23px; line-height: 1.45; color: #a9b6cb; margin-top: 16px; }
+
+      /* ── 5 · 100% online ───────────────────────────────────── */
+      #s5-k { left: 150px; top: 230px; color: #fff; }
+      #s5-k::before { background: #fff; }
+      #s5-t { left: 150px; top: 290px; width: 620px; font-size: 96px; color: #fff; }
+      #s5-big { left: 150px; top: 570px; width: 960px; font-size: 128px; color: var(--navy); white-space: nowrap; }
+      #s5-swap { display: inline-block; position: relative; width: 620px; overflow: hidden; vertical-align: bottom; height: 1.12em; padding-bottom: 0.14em; }
+      #s5-swap span { display: block; }
+      #s5-sub { left: 156px; top: 790px; width: 860px; font-size: 32px; font-weight: 500; line-height: 1.35; color: #e8f0ff; }
+      #s5-card { left: 1130px; top: 240px; width: 640px; height: 600px; background: #fff; border-radius: 28px;
+        box-shadow: 0 50px 120px rgba(15,10,30,0.45); color: var(--navy); padding: 46px 48px; }
+      .card-h { font-size: 20px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--slate); }
+      .card-t { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; margin-top: 12px; }
+      .card-live { position: absolute; right: 48px; top: 48px; font-size: 18px; font-weight: 700; color: #15803d; letter-spacing: 0.06em; }
+      .card-live::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #15803d; margin-right: 10px; vertical-align: 1px; }
+      .task { position: absolute; left: 48px; width: 544px; height: 84px; border-radius: 18px; background: var(--paper); }
+      .task-l { position: absolute; left: 26px; top: 16px; font-size: 25px; font-weight: 700; letter-spacing: -0.01em; }
+      .task-s { position: absolute; left: 26px; top: 49px; font-size: 18px; font-weight: 500; color: var(--slate); }
+      .task-bar { position: absolute; left: 0; bottom: 0; height: 5px; width: 544px; border-radius: 0 0 18px 18px; background: var(--blue-2); transform-origin: left center; }
+      .tick { position: absolute; right: 24px; top: 21px; width: 42px; height: 42px; border-radius: 50%; background: var(--blue); }
+      .tick svg { position: absolute; left: 9px; top: 9px; width: 24px; height: 24px; }
+      #s5-advisor { left: 48px; top: 492px; width: 544px; height: 72px; }
+      .av { position: absolute; top: 6px; width: 60px; height: 60px; border-radius: 50%; border: 3px solid #fff; background-size: cover; background-position: center 22%; filter: grayscale(1); }
+      #s5-adv-t { position: absolute; left: 172px; top: 8px; font-size: 24px; font-weight: 700; }
+      #s5-adv-s { position: absolute; left: 172px; top: 40px; font-size: 18px; font-weight: 500; color: var(--slate); }
+
+      /* ── 6 · Equipo ────────────────────────────────────────── */
+      #s6-k { left: 150px; top: 130px; color: var(--blue); }
+      #s6-t { left: 150px; top: 185px; width: 1650px; font-size: 96px; color: var(--navy); }
+      #s6-t em { font-style: normal; color: var(--blue); }
+      .p-card { position: absolute; top: 430px; width: 480px; }
+      .p-sq { position: absolute; left: 34px; top: -26px; width: 300px; height: 300px; background: var(--blue-2); }
+      .p-ph { position: absolute; left: 0; top: 0; width: 300px; height: 300px; background-size: cover; background-position: center 20%; filter: grayscale(1) contrast(1.05); }
+      .p-role { position: absolute; left: 0; top: 330px; font-size: 18px; font-weight: 800; letter-spacing: 0.3em; color: var(--blue); }
+      .p-name { position: absolute; left: 0; top: 362px; font-size: 44px; font-weight: 800; letter-spacing: -0.02em; color: var(--navy); white-space: nowrap; }
+      .p-bio { position: absolute; left: 0; top: 424px; width: 440px; font-size: 22px; line-height: 1.4; color: var(--slate); }
+
+      /* ── 7 · Confianza ─────────────────────────────────────── */
+      #s7-k { left: 150px; top: 200px; }
+      #s7-n { left: 132px; top: 250px; font-size: 330px; color: var(--blue-2); }
+      #s7-d { left: 150px; top: 600px; width: 660px; font-size: 40px; font-weight: 700; line-height: 1.2; letter-spacing: -0.015em; }
+      #s7-box { left: 150px; top: 790px; width: 660px; height: 130px; border-radius: 20px; background: var(--navy); border: 1.5px solid rgba(96,165,250,0.35); }
+      #s7-box b { position: absolute; left: 34px; top: 26px; font-size: 64px; font-weight: 800; color: var(--blue-3); letter-spacing: -0.03em; }
+      #s7-box span { position: absolute; left: 230px; top: 30px; width: 400px; font-size: 22px; line-height: 1.4; color: #c9d3e3; }
+      #s7-lk { left: 960px; top: 200px; }
+      #s7-logos { left: 960px; top: 290px; width: 820px; height: 394px; background: url("assets/brand/clientes-white.png") center / contain no-repeat; opacity: 0.92; }
+
+      /* ── 8 · Testimonio ────────────────────────────────────── */
+      .qbar { position: absolute; top: 200px; width: 84px; height: 320px; }
+      .qbar-in { position: absolute; inset: 0; background: var(--blue); transform: skewX(-14deg); }
+      #s8-k { left: 150px; top: 210px; }
+      #s8-q { left: 150px; top: 290px; width: 1300px; font-size: 92px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }
+      #s8-q em { font-style: normal; color: var(--blue-3); }
+      #s8-a { left: 150px; top: 820px; font-size: 28px; font-weight: 700; color: var(--blue-3); letter-spacing: 0.02em; }
+      #s8-a span { color: #a9b6cb; font-weight: 500; }
+
+      /* ── 9 · Cierre ────────────────────────────────────────── */
+      #s9-t { left: 0; top: 380px; width: 1920px; text-align: center; font-size: 190px; }
+      #s9-t em { font-style: normal; color: var(--blue-2); }
+      #s9-logo { left: 520px; top: 330px; width: 880px; height: 242px; background: url("assets/brand/logo-white.png") left top / 880px 242px no-repeat; }
+      #s9-tag { left: 0; top: 640px; width: 1920px; text-align: center; font-size: 44px; font-weight: 500; letter-spacing: -0.01em; color: #c9d3e3; }
+      #s9-tag em { font-style: normal; color: #fff; font-weight: 700; }
+      #s9-cta { left: 710px; top: 760px; width: 500px; height: 88px; border-radius: 44px; background: var(--blue); text-align: center;
+        font-size: 34px; font-weight: 700; line-height: 88px; color: #fff; letter-spacing: -0.01em; }
+      #s9-mail { left: 0; top: 880px; width: 1920px; text-align: center; font-size: 26px; font-weight: 500; color: #8b9ab3; letter-spacing: 0.04em; }
+
+      /* ── El impulso: el paralelogramo azul del logotipo, hecho barrido ── */
+      #slash { left: 0; top: 0; width: 1920px; height: 1080px; }
+      .slash-in { position: absolute; left: -1500px; top: -200px; width: 3000px; height: 1480px; transform: skewX(-24deg);
+        background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%); }
+      .slash-edge { position: absolute; left: -1600px; top: -200px; width: 40px; height: 1480px; transform: skewX(-24deg); background: #60a5fa; }
+      #flash { position: absolute; inset: 0; background: #fff; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="45" data-width="1920" data-height="1080">
+
+      <!-- 1 · Ruido: todo lo que una pyme no quiere tener en la cabeza -->
+      <div id="s1" class="scene clip" data-start="0" data-duration="5.65" data-track-index="0">
+        <div class="bg-navy"></div>
+        <div class="bg-dots-navy"></div>
+        <div id="s1-chips" data-layout-allow-overlap></div>
+        <div id="s1-dim"></div>
+        <div id="s1-q" data-layout-allow-overlap class="abs h-xl">¿Quién se encarga de <span style="color:#60a5fa">todo esto?</span></div>
+      </div>
+
+      <!-- 2 · Manifiesto, sobre el azul que deja el barrido -->
+      <div id="s2" class="scene clip" data-start="5.625" data-duration="5.19" data-track-index="1">
+        <div class="bg-blue"></div>
+        <div class="bg-blue-lines"></div>
+        <div id="s2-k" class="abs kicker">LT Impulsa · Gestoría 100% online</div>
+        <div id="s2-a" class="abs h-xl">Lo complejo, para nosotros.</div>
+        <div id="s2-b" class="abs h-xl">Lo importante, para ti.</div>
+        <svg id="s2-arrow" class="abs" viewBox="0 0 300 160"><path id="s2-arrow-p" d="M10 80 H270 M200 14 L274 80 L200 146" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <!-- 3 · Menos papeles. Cero sustos. Más claridad. -->
+      <div id="s3" class="scene clip" data-start="10.3125" data-duration="4.1" data-track-index="0">
+        <div class="bg-paper"></div>
+        <div class="bg-grid"></div>
+        <div id="s3-k" class="abs kicker">Lo que necesitas</div>
+        <div id="s3-lead" class="abs">Una gestoría que te quite trabajo, <em>no que te lo dé.</em></div>
+        <div id="s3-rule" class="abs"></div>
+        <div id="s3-r1" class="s3-row h-xl">Menos <em>papeles.</em></div>
+        <div id="s3-r2" class="s3-row h-xl">Cero <em>sustos.</em></div>
+        <div id="s3-r3" class="s3-row h-xl">Más <em>claridad.</em></div>
+      </div>
+
+      <!-- 4 · Cuatro áreas. Un solo equipo. -->
+      <div id="s4" class="scene clip" data-start="14.0625" data-duration="5.85" data-track-index="1">
+        <div class="bg-navy"></div>
+        <div class="bg-dots-navy"></div>
+        <div id="s4-k" class="abs kicker">Nuestra solución</div>
+        <div id="s4-t" class="abs h-xl">Cuatro áreas. <em>Un solo equipo.</em></div>
+        <div class="s4-col" style="left:150px"><div class="s4-rule"></div><div class="s4-num">01</div><div class="s4-name">Contabilidad y ERP Holded</div><div class="s4-desc">Tu contabilidad, al día y dentro de tu ERP.</div></div>
+        <div class="s4-col" style="left:570px"><div class="s4-rule"></div><div class="s4-num">02</div><div class="s4-name">Fiscalidad al día</div><div class="s4-desc">IVA, IS, retenciones y requerimientos de la AEAT.</div></div>
+        <div class="s4-col" style="left:990px"><div class="s4-rule"></div><div class="s4-num">03</div><div class="s4-name">Laboral sin sorpresas</div><div class="s4-desc">Nóminas, seguros sociales, altas, bajas y finiquitos.</div></div>
+        <div class="s4-col" style="left:1410px"><div class="s4-rule"></div><div class="s4-num">04</div><div class="s4-name">Área mercantil</div><div class="s4-desc">Libros, cuentas anuales y asesoramiento continuo.</div></div>
+      </div>
+
+      <!-- 5 · 100% online → 100% cercanos -->
+      <div id="s5" class="scene clip" data-start="19.6875" data-duration="6.15" data-track-index="0">
+        <div class="bg-blue"></div>
+        <div class="bg-blue-lines"></div>
+        <div id="s5-k" class="abs kicker">Cómo trabajamos</div>
+        <div id="s5-t" class="abs h-xl">Sin oficinas. Sin papeles.</div>
+        <div id="s5-big" class="abs h-xl">100%&nbsp;<span id="s5-swap"><span id="s5-w1">online.</span><span id="s5-w2" style="position:absolute;left:0;top:0;color:#fff">cercanos.</span></span></div>
+        <div id="s5-sub" class="abs">Todo centralizado en Holded y en tiempo real. Y un asesor que te responde.</div>
+        <div id="s5-card" class="abs">
+          <div class="card-h">Tu empresa</div>
+          <div class="card-t">Este mes, en orden.</div>
+          <div class="card-live">EN TIEMPO REAL</div>
+          <div class="task" id="t1" style="top:176px"><div class="task-l">IVA · modelo 303</div><div class="task-s">Presentado en plazo</div><div class="tick"><svg viewBox="0 0 24 24"><path d="M4 12.5 L9.5 18 L20 6.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="task-bar"></div></div>
+          <div class="task" id="t2" style="top:276px"><div class="task-l">Nóminas y seguros sociales</div><div class="task-s">Listas y enviadas</div><div class="tick"><svg viewBox="0 0 24 24"><path d="M4 12.5 L9.5 18 L20 6.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="task-bar"></div></div>
+          <div class="task" id="t3" style="top:376px"><div class="task-l">Conciliación bancaria</div><div class="task-s">Cuadrada al céntimo</div><div class="tick"><svg viewBox="0 0 24 24"><path d="M4 12.5 L9.5 18 L20 6.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="task-bar"></div></div>
+                    <div id="s5-advisor" class="abs">
+            <div class="av" style="left:0;background-image:url('assets/img/manuel-pina.jpg')"></div>
+            <div class="av" style="left:44px;background-image:url('assets/img/eduardo-serrano.jpg')"></div>
+            <div class="av" style="left:88px;background-image:url('assets/img/leire-roldan.jpg')"></div>
+            <div id="s5-adv-t">Tu equipo LT</div>
+            <div id="s5-adv-s">Te contesta hoy, no la semana que viene.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 · Las personas detrás de tus números -->
+      <div id="s6" class="scene clip" data-start="25.3125" data-duration="4.25" data-track-index="1">
+        <div class="bg-paper"></div>
+        <div class="bg-grid"></div>
+        <div id="s6-k" class="abs kicker">Nuestro equipo</div>
+        <div id="s6-t" class="abs h-xl">Las personas detrás <em>de tus números.</em></div>
+        <div class="p-card" id="p1" style="left:150px"><div class="p-sq"></div><div class="p-ph" style="background-image:url('assets/img/manuel-pina.jpg')"></div><div class="p-role">PARTNER</div><div class="p-name">Manuel Pina</div><div class="p-bio">10 años en Big4. Ex-CFO de grandes pymes.</div></div>
+        <div class="p-card" id="p2" style="left:720px"><div class="p-sq"></div><div class="p-ph" style="background-image:url('assets/img/eduardo-serrano.jpg')"></div><div class="p-role">PARTNER</div><div class="p-name">Eduardo Serrano</div><div class="p-bio">15 años como CFO de startups y fondos de VC.</div></div>
+        <div class="p-card" id="p3" style="left:1290px"><div class="p-sq"></div><div class="p-ph" style="background-image:url('assets/img/leire-roldan.jpg')"></div><div class="p-role">PARTNER</div><div class="p-name">Leire Roldán</div><div class="p-bio">12 años liderando equipos de RRHH.</div></div>
+      </div>
+
+      <!-- 7 · +15 años y quién confía en nosotros -->
+      <div id="s7" class="scene clip" data-start="29.0625" data-duration="5.2" data-track-index="0">
+        <div class="bg-navy"></div>
+        <div class="bg-dots-navy"></div>
+        <div id="s7-k" class="abs kicker">Referencias</div>
+        <div id="s7-n" class="abs h-xl">+<span id="s7-num">0</span></div>
+        <div id="s7-d" class="abs">años asesorando a pymes tecnológicas y empresas de alto crecimiento.</div>
+        <div id="s7-box" class="abs"><b>100%</b><span>del equipo, expertos en fiscal, laboral, contable y mercantil.</span></div>
+        <div id="s7-lk" class="abs kicker">Confían en nosotros</div>
+        <div id="s7-logos" class="abs"></div>
+      </div>
+
+      <!-- 8 · Testimonio -->
+      <div id="s8" class="scene clip" data-start="33.75" data-duration="3.75" data-track-index="1">
+        <div class="bg-navy"></div>
+        <div class="qbar" id="qb1" style="left:1560px"><div class="qbar-in"></div></div>
+        <div class="qbar" id="qb2" style="left:1690px"><div class="qbar-in"></div></div>
+        <div id="s8-k" class="abs kicker">Lo que dicen de nosotros</div>
+        <div id="s8-q" class="abs">“Son una extensión de mi empresa. <em>Mi departamento financiero.”</em></div>
+        <div id="s8-a" class="abs">CEO <span>· Conservas Huerta</span></div>
+      </div>
+
+      <!-- 9 · Cierre -->
+      <div id="s9" class="scene clip" data-start="37.5" data-duration="7.5" data-track-index="0">
+        <div class="bg-navy"></div>
+        <div class="bg-halo" id="s9-halo" style="left:210px;top:-560px"></div>
+        <div class="ring" id="r1" style="left:660px;top:240px;width:600px;height:600px"></div>
+        <div class="ring" id="r2" style="left:460px;top:40px;width:1000px;height:1000px"></div>
+        <div class="ring" id="r3" style="left:260px;top:-160px;width:1400px;height:1400px"></div>
+        <div id="s9-t" class="abs h-xl">Tu mejor <em>aliado.</em></div>
+        <div id="s9-logo" class="abs"></div>
+        <div id="s9-tag" class="abs">“Cuando <em>LT Impulsa</em>, las empresas avanzan.”</div>
+        <div id="s9-cta" class="abs">ltimpulsa.com</div>
+        <div id="s9-mail" class="abs">info@ltimpulsa.com</div>
+      </div>
+
+      <!-- Capa superior: el barrido azul y el destello -->
+      <div id="slash" data-layout-allow-overflow class="abs clip" data-start="0" data-duration="45" data-track-index="5">
+        <div class="slash-edge" id="slash-edge"></div>
+        <div class="slash-in" id="slash-in"></div>
+      </div>
+      <div id="flash" class="clip" data-start="37.4" data-duration="0.6" data-track-index="6"></div>
+
+      <!-- Música -->
+      <audio id="bgm" src="assets/bgm/bed.wav" data-start="0" data-duration="45" data-track-index="10" data-volume="0.9"></audio>
+      <!-- Efectos -->
+      <audio id="sfx-1" src="assets/sfx/riser.mp3" data-start="0.4" data-duration="5.2" data-track-index="20" data-volume="0.22"></audio>
+      <audio id="sfx-2" src="assets/sfx/whoosh-cinematic.mp3" data-start="5.2" data-duration="2.4" data-track-index="21" data-volume="0.4"></audio>
+      <audio id="sfx-3" src="assets/sfx/impact-bass-1.mp3" data-start="5.62" data-duration="2.1" data-track-index="22" data-volume="0.4"></audio>
+      <audio id="sfx-4" src="assets/sfx/whoosh-short.mp3" data-start="10.2" data-duration="0.57" data-track-index="23" data-volume="0.35"></audio>
+      <audio id="sfx-5" src="assets/sfx/whoosh-cinematic.mp3" data-start="13.75" data-duration="2.0" data-track-index="24" data-volume="0.3"></audio>
+      <audio id="sfx-6" src="assets/sfx/whoosh-short.mp3" data-start="19.55" data-duration="0.57" data-track-index="25" data-volume="0.35"></audio>
+      <audio id="sfx-7" src="assets/sfx/click-soft.mp3" data-start="21.6" data-duration="0.37" data-track-index="26" data-volume="0.4"></audio>
+      <audio id="sfx-8" src="assets/sfx/click-soft.mp3" data-start="22.07" data-duration="0.37" data-track-index="27" data-volume="0.4"></audio>
+      <audio id="sfx-9" src="assets/sfx/click-soft.mp3" data-start="22.54" data-duration="0.37" data-track-index="28" data-volume="0.4"></audio>
+      <audio id="sfx-10" src="assets/sfx/pop.mp3" data-start="23.9" data-duration="0.72" data-track-index="29" data-volume="0.4"></audio>
+      <audio id="sfx-11" src="assets/sfx/whoosh-short.mp3" data-start="25.2" data-duration="0.57" data-track-index="30" data-volume="0.35"></audio>
+      <audio id="sfx-12" src="assets/sfx/whoosh-cinematic.mp3" data-start="28.75" data-duration="2.0" data-track-index="31" data-volume="0.3"></audio>
+      <audio id="sfx-13" src="assets/sfx/whoosh-short.mp3" data-start="33.6" data-duration="0.57" data-track-index="32" data-volume="0.35"></audio>
+      <audio id="sfx-14" src="assets/sfx/impact-bass-2.mp3" data-start="37.5" data-duration="2.59" data-track-index="33" data-volume="0.45"></audio>
+      <audio id="sfx-15" src="assets/sfx/chime.mp3" data-start="39.4" data-duration="2.5" data-track-index="34" data-volume="0.35"></audio>
+    </div>
+
+    <script>
+      (function () {
+        var B = 0.46875; // un tiempo a 128 BPM; los cortes caen sobre la rejilla de la música
+        var tl = gsap.timeline({ paused: true });
+        var $ = function (s) { return document.querySelector(s); };
+        var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+
+        // Parte un texto en palabras enmascaradas (conserva <em>).
+        function words(el) {
+          var out = [];
+          var nodes = Array.prototype.slice.call(el.childNodes);
+          el.innerHTML = "";
+          nodes.forEach(function (n) {
+            var txt = n.textContent, wrapTag = n.nodeType === 1 ? n.tagName.toLowerCase() : null;
+            var holder = el;
+            if (wrapTag) { holder = document.createElement(wrapTag); if (n.getAttribute("style")) holder.setAttribute("style", n.getAttribute("style")); el.appendChild(holder); }
+            txt.split(/(\s+)/).forEach(function (w) {
+              if (!w) return;
+              if (/^\s+$/.test(w)) { holder.appendChild(document.createTextNode(" ")); return; }
+              var m = document.createElement("span"); m.className = "msk"; m.setAttribute("data-layout-allow-overlap", "");
+              var s = document.createElement("span"); s.textContent = w;
+              m.appendChild(s); holder.appendChild(m); out.push(s);
+            });
+          });
+          return out;
+        }
+        function rise(el, at, opts) {
+          opts = opts || {};
+          var w = words(el);
+          tl.fromTo(w, { yPercent: 115 }, { yPercent: 0, duration: opts.d || 0.6, ease: "expo.out", stagger: opts.st || 0.045 }, at);
+          return w;
+        }
+
+        // ── El barrido: x del centro del paralelogramo, de derecha a izquierda.
+        function sweep(at, dur) {
+          tl.fromTo("#slash", { x: 3900 }, { x: -2000, duration: dur, ease: "power3.inOut" }, at - dur / 2);
+        }
+        tl.set("#slash", { x: 3900 }, 0);
+
+        // ═════ 1 · Ruido (0 – 5.625)
+        var CHIPS = [
+          ["Modelo 303", 210, 170, -6], ["Nóminas", 1280, 120, 5], ["Requerimiento AEAT", 640, 300, -2],
+          ["Cuentas anuales", 1260, 760, -4], ["Finiquitos", 220, 760, 4], ["Retenciones", 1500, 430, -7],
+          ["Legalización de libros", 130, 470, 3], ["Seguros sociales", 760, 860, -3], ["Facturas", 900, 130, 7],
+          ["Plazos", 1560, 900, 2], ["Impuesto de Sociedades", 560, 600, -5], ["Conciliación", 1090, 470, 4]
+        ];
+        var chipBox = $("#s1-chips");
+        CHIPS.forEach(function (c, i) {
+          var d = document.createElement("div");
+          d.className = "chip"; d.id = "chip" + i; d.setAttribute("data-layout-allow-overlap", "");
+          d.style.left = c[1] + "px"; d.style.top = c[2] + "px";
+          d.innerHTML = "<i></i><b data-layout-allow-overlap>" + c[0] + "</b>";
+          chipBox.appendChild(d);
+          var from = i % 2 ? 1 : -1;
+          tl.fromTo(d, { autoAlpha: 0, scale: 1.6, rotation: c[3] * 3, x: from * 120, y: 40 },
+            { autoAlpha: 1, scale: 1, rotation: c[3], x: 0, y: 0, duration: 0.42, ease: "expo.out" }, 0.15 + i * (B / 2));
+          // deriva hacia la izquierda: la corriente del vídeo
+          tl.fromTo(d, { xPercent: 0 }, { xPercent: -30 - (i % 4) * 12, duration: 5.6 - i * (B / 2), ease: "none" }, 0.15 + i * (B / 2));
+        });
+        tl.fromTo("#s1-dim", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5, ease: "power2.out" }, 3.1);
+        rise($("#s1-q"), 3.28, { st: 0.06, d: 0.55 });
+        tl.fromTo("#s1-q", { scale: 1.08 }, { scale: 1, duration: 2.2, ease: "expo.out" }, 3.28);
+        // El impulso barre el ruido: el plano 2 aparece justo detrás del borde.
+        sweep(5.625, 0.9);
+        tl.to("#s1-chips", { x: -900, duration: 0.6, ease: "power3.in" }, 5.2);
+
+        // ═════ 2 · Manifiesto (5.625 – 10.3125)
+        var T2 = 5.625;
+        tl.fromTo("#s2-k", { autoAlpha: 0, x: 60 }, { autoAlpha: 1, x: 0, duration: 0.6, ease: "expo.out" }, T2 + 0.3);
+        rise($("#s2-a"), T2 + 0.35, { st: 0.07, d: 0.7 });
+        rise($("#s2-b"), T2 + 0.35 + 4 * B, { st: 0.07, d: 0.7 });
+        tl.fromTo("#s2-arrow-p", { strokeDasharray: 600, strokeDashoffset: 600 }, { strokeDashoffset: 0, duration: 0.8, ease: "power3.out" }, T2 + 6 * B);
+        tl.fromTo("#s2-arrow", { x: -80 }, { x: 40, duration: 2.6, ease: "power2.out" }, T2 + 6 * B);
+        // salida: empuje a la izquierda
+        var T3 = 10.3125;
+        tl.to("#s2", { x: -1920, duration: 0.5, ease: "power3.inOut" }, T3);
+
+        // ═════ 3 · Menos papeles (10.3125 – 14.0625)
+        tl.fromTo("#s3", { x: 1920 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, T3);
+        tl.fromTo("#s3-k", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, T3 + 0.35);
+        rise($("#s3-lead"), T3 + 0.4, { st: 0.035, d: 0.55 });
+        tl.fromTo("#s3-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.out" }, T3 + 0.5);
+        ["#s3-r1", "#s3-r2", "#s3-r3"].forEach(function (s, i) {
+          var w = words($(s));
+          tl.fromTo(w, { yPercent: 115 }, { yPercent: 0, duration: 0.5, ease: "expo.out", stagger: 0.06 }, T3 + 1.15 + i * 1.5 * B);
+        });
+        sweep(14.0625, 0.8);
+
+        // ═════ 4 · Cuatro áreas (14.0625 – 19.6875)
+        var T4 = 14.0625;
+        tl.fromTo("#s4-k", { autoAlpha: 0, x: 60 }, { autoAlpha: 1, x: 0, duration: 0.5, ease: "expo.out" }, T4 + 0.3);
+        rise($("#s4-t"), T4 + 0.35, { st: 0.06, d: 0.65 });
+        $$(".s4-col").forEach(function (c, i) {
+          var at = T4 + 1.6 + i * 2 * B;
+          tl.fromTo(c.querySelector(".s4-rule"), { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.out" }, at);
+          tl.fromTo(c.querySelector(".s4-num"), { autoAlpha: 0, y: 70 }, { autoAlpha: 1, y: 0, duration: 0.55, ease: "expo.out" }, at + 0.05);
+          tl.fromTo(c.querySelector(".s4-name"), { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.55, ease: "expo.out" }, at + 0.14);
+          tl.fromTo(c.querySelector(".s4-desc"), { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.55, ease: "expo.out" }, at + 0.22);
+        });
+        // Encendido final: los cuatro números a la vez, sobre el tiempo fuerte
+        tl.to(".s4-num", { color: "#ffffff", duration: 0.15, ease: "none", stagger: 0.05 }, T4 + 4.7);
+        tl.to(".s4-num", { color: "#3b82f6", duration: 0.4, ease: "power2.out", stagger: 0.05 }, T4 + 4.9);
+        // salida: zoom-through hacia cámara
+        var T5 = 19.6875;
+        tl.to("#s4", { scale: 2.6, opacity: 0, filter: "blur(18px)", duration: 0.42, ease: "power3.in" }, T5 - 0.2);
+
+        // ═════ 5 · 100% online → cercanos (19.6875 – 25.3125)
+        tl.fromTo("#s5", { scale: 0.55, opacity: 0, filter: "blur(18px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power3.out" }, T5 - 0.05);
+        tl.fromTo("#s5-k", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, T5 + 0.3);
+        rise($("#s5-t"), T5 + 0.3, { st: 0.07 });
+        tl.fromTo("#s5-big", { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "expo.out" }, T5 + 0.3 + 2 * B);
+        tl.fromTo("#s5-card", { autoAlpha: 0, x: 220, rotation: 4 }, { autoAlpha: 1, x: 0, rotation: 0, duration: 0.8, ease: "expo.out" }, T5 + 0.5);
+        ["#t1", "#t2", "#t3"].forEach(function (s, i) {
+          var at = T5 + 1.4 + i * B;
+          tl.fromTo(s, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: "expo.out" }, at - 0.25);
+          tl.fromTo(s + " .task-bar", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power2.inOut" }, at - 0.2);
+          tl.fromTo(s + " .tick", { scale: 0, rotation: -90 }, { scale: 1, rotation: 0, duration: 0.4, ease: "back.out(2.4)" }, at + 0.3);
+        });
+        tl.fromTo("#s5-advisor", { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "expo.out" }, T5 + 3.6);
+        tl.fromTo("#s5-sub", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "expo.out" }, T5 + 3.0);
+        // el giro: online → cercanos
+        tl.to("#s5-w1", { yPercent: -110, duration: 0.45, ease: "expo.inOut" }, T5 + 4.2);
+        tl.fromTo("#s5-w2", { yPercent: 110 }, { yPercent: 0, duration: 0.45, ease: "expo.inOut" }, T5 + 4.2);
+        var T6 = 25.3125;
+        tl.to("#s5", { x: -1920, duration: 0.5, ease: "power3.inOut" }, T6);
+
+        // ═════ 6 · Equipo (25.3125 – 29.0625)
+        tl.fromTo("#s6", { x: 1920 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, T6);
+        tl.fromTo("#s6-k", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, T6 + 0.35);
+        rise($("#s6-t"), T6 + 0.4, { st: 0.05 });
+        ["#p1", "#p2", "#p3"].forEach(function (s, i) {
+          var at = T6 + 0.9 + i * B;
+          tl.fromTo(s + " .p-ph", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "expo.out" }, at);
+          tl.fromTo(s + " .p-sq", { autoAlpha: 0, x: -34, y: 26 }, { autoAlpha: 1, x: 0, y: 0, duration: 0.6, ease: "expo.out" }, at + 0.2);
+          tl.fromTo([s + " .p-role", s + " .p-name", s + " .p-bio"], { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "expo.out", stagger: 0.06 }, at + 0.3);
+        });
+        sweep(29.0625, 0.8);
+
+        // ═════ 7 · Confianza (29.0625 – 33.75)
+        var T7 = 29.0625;
+        tl.fromTo("#s7-k", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, T7 + 0.3);
+        var cnt = { v: 0 };
+        tl.fromTo(cnt, { v: 0 }, { v: 15, duration: 1.3, ease: "power3.out",
+          onUpdate: function () { $("#s7-num").textContent = Math.round(cnt.v); } }, T7 + 0.3);
+        tl.fromTo("#s7-n", { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "expo.out" }, T7 + 0.3);
+        rise($("#s7-d"), T7 + 0.9, { st: 0.03 });
+        tl.fromTo("#s7-box", { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "expo.out" }, T7 + 1.6);
+        tl.fromTo("#s7-lk", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, T7 + 1.2);
+        tl.fromTo("#s7-logos", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.1, ease: "power3.inOut" }, T7 + 1.3);
+        tl.fromTo("#s7-logos", { x: 40 }, { x: -20, duration: 3.3, ease: "power1.out", immediateRender: false }, T7 + 1.3);
+        var T8 = 33.75;
+        tl.to("#s7", { x: -1920, duration: 0.5, ease: "power3.inOut" }, T8);
+
+        // ═════ 8 · Testimonio (33.75 – 37.5)
+        tl.fromTo("#s8", { x: 1920 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, T8);
+        tl.fromTo(["#qb1", "#qb2"], { yPercent: 60, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.7, ease: "expo.out", stagger: 0.08 }, T8 + 0.35);
+        tl.fromTo("#s8-k", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, T8 + 0.4);
+        rise($("#s8-q"), T8 + 0.45, { st: 0.07, d: 0.55 });
+        tl.fromTo("#s8-a", { autoAlpha: 0, x: -30 }, { autoAlpha: 1, x: 0, duration: 0.5, ease: "expo.out" }, T8 + 1.9);
+        tl.fromTo(["#qb1", "#qb2"], { x: 0 }, { x: -60, duration: 3.2, ease: "power1.out", immediateRender: false }, T8 + 0.35);
+
+        // ═════ 9 · Cierre (37.5 – 45)
+        var T9 = 37.5;
+        tl.fromTo("#flash", { opacity: 0.9 }, { opacity: 0, duration: 0.5, ease: "power2.out" }, T9 - 0.1);
+        tl.fromTo("#s9-halo", { scale: 0.6, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 2.4, ease: "expo.out" }, T9);
+        tl.fromTo(["#r1", "#r2", "#r3"], { scale: 0.3, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 1.8, ease: "expo.out", stagger: 0.12 }, T9);
+        rise($("#s9-t"), T9 + 0.05, { st: 0.09, d: 0.6 });
+        tl.fromTo("#s9-t", { scale: 1.12 }, { scale: 1, duration: 1.4, ease: "expo.out" }, T9);
+        // el titular se va hacia atrás y el logotipo llega con el impulso
+        var TL = T9 + 4 * B; // 39.375
+        tl.to("#s9-t", { scale: 0.7, autoAlpha: 0, filter: "blur(10px)", duration: 0.4, ease: "power3.in" }, TL - 0.35);
+        tl.fromTo("#s9-logo", { clipPath: "inset(0% 100% 0% 0%)", x: -40 }, { clipPath: "inset(0% 0% 0% 0%)", x: 0, duration: 0.9, ease: "expo.out" }, TL);
+        tl.fromTo("#s9-logo", { scale: 1.04 }, { scale: 1, duration: 3, ease: "power2.out", immediateRender: false }, TL);
+        rise($("#s9-tag"), TL + 0.7, { st: 0.05, d: 0.55 });
+        tl.fromTo("#s9-cta", { autoAlpha: 0, y: 30, scale: 0.92 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.6, ease: "expo.out" }, TL + 1.4);
+        tl.fromTo("#s9-mail", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, TL + 1.7);
+        tl.to(["#r1", "#r2", "#r3"], { scale: 1.12, duration: 5, ease: "power1.out", stagger: 0.1 }, T9 + 1.9);
+        tl.to("#s9", { opacity: 0, duration: 0.7, ease: "power2.in" }, 44.25);
+
+        tl.to({}, { duration: 45 }, 0);
+        window.__timelines["main"] = tl;
+      })();
+    </script>
+  </body>
+</html>

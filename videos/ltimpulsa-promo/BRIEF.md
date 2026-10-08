@@ -7,7 +7,7 @@ destination: web
 aspect: 1920x1080
 language: es
 audience: "Fundadores y gerentes de pymes y empresas en crecimiento en España"
-length: 45s
+length: 38.5s
 angle: "Del ruido administrativo a la calma: online sin perder la cercanía"
 style_preset: brand-native
 capture: client-supplied
@@ -25,9 +25,11 @@ cool y de confianza aunque sea 100% online, el mejor aliado de las empresas—, 
   sale de las tres presentaciones aportadas: propuesta fuerte, plantilla y "Formas para presentaciones".
 - `assets/brand/logo-white.png` — logotipo blanco de la propuesta.
 - `assets/brand/clientes-white.png` — rejilla de logos de clientes, invertida a blanco con alfa.
-- `assets/img/*.jpg` — fotos de los tres partners (Manuel Pina, Eduardo Serrano, Leire Roldán).
+- `assets/brand/clientes/*.png` — cada logo de cliente recortado por separado para la cinta en movimiento.
 - `assets/fonts/Inter-var-latin.woff2` — Inter variable (la tipografía de las presentaciones).
-- `assets/bgm/bed.wav` — la pista del vídeo de Tessera, desde 14,851 s (128 BPM), −17 LUFS.
+- `assets/bgm/lt-track.wav` — pista original sintetizada con `scripts/synth-music.py` (120 BPM,
+  La menor, Am–F–C–G), compuesta sobre el montaje: intro con un golpe por palabra, break con
+  silencio, drop a los 6 s, break a los 30 s y drop final con el logotipo a los 32 s.
 
 ## Customizations
 
@@ -42,3 +44,15 @@ cool y de confianza aunque sea 100% online, el mejor aliado de las empresas—, 
 - Todo el texto sale de las presentaciones. No se usa el precio (250 €) porque era de una propuesta
   concreta. La tarjeta "Este mes, en orden" es una ilustración genérica, no una captura de Holded.
 - Testimonio: "Son una extensión de mi empresa… mi departamento financiero." — CEO, Conservas Huerta.
+
+## Versión 2 (feedback de Eddy)
+
+- Fuera las fotos y los nombres de los partners: ahora es "Profesionales de verdad" con +15 años
+  y la experiencia en conjunto (Big4, CFOs de startups, fondos de VC, fiscal, laboral, contable,
+  mercantil).
+- Fuera la música de Tessera ("muy vista"): pista nueva hecha a medida para este corte.
+- "Se nota que lo ha hecho Claude": se quitan las etiquetas pequeñas tipo diapositiva y las
+  rejillas de columnas, y el vídeo pasa a tipografía cinética a pantalla completa, sincronizada a
+  la música. Golpes de palabra con estrobo al arrancar, el paralelogramo del logo que revienta en
+  el drop, ruedas de palabras, folios que salen volando, el 1→4→1 de "áreas/equipo", tarjeta en
+  3D con notificaciones y un chat del asesor, cinta de logos y grano de película encima.

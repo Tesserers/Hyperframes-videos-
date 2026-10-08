@@ -15,311 +15,308 @@
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0f0a1e; }
 
-      /* Paleta sacada de las presentaciones de LT Impulsa, sin inventar:
-         navy #202031 · fondo #0F0A1E · azul #2563EB / #3B82F6 / #60A5FA ·
-         claro #F4F6FC / #E8F0FF · gris de texto #54657E. Tipografía: Inter. */
+      /* Paleta de las presentaciones de LT Impulsa: navy #202031 · fondo #0F0A1E ·
+         azules #2563EB / #3B82F6 / #60A5FA · claro #F4F6FC · gris #54657E. Inter. */
       #root {
         --navy: #202031; --deep: #0f0a1e; --blue: #2563eb; --blue-2: #3b82f6;
-        --blue-3: #60a5fa; --paper: #f4f6fc; --ice: #e8f0ff; --slate: #54657e;
+        --blue-3: #60a5fa; --paper: #f4f6fc; --slate: #54657e; --red: #f05252;
         position: relative; width: 1920px; height: 1080px; overflow: hidden;
         background: var(--deep); font-family: "Inter", sans-serif; color: #fff;
       }
       .scene { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      .cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
       .abs { position: absolute; }
-      .msk { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.14em; margin-bottom: -0.14em; }
+      .fill { position: absolute; inset: 0; }
+      .msk { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.12em; margin-bottom: -0.12em; }
       .msk > span { display: inline-block; }
+      .big { font-weight: 900; letter-spacing: -0.055em; line-height: 0.92; }
+      .center { left: 0; width: 1920px; text-align: center; }
 
-      /* Fondos (los de "Formas para presentaciones") */
-      .bg-navy { position: absolute; inset: 0; background: linear-gradient(135deg, #202031 0%, #0f0a1e 100%); }
-      .bg-dots-navy { position: absolute; inset: 0; opacity: 0.55;
-        background-image: radial-gradient(circle, rgba(201,211,227,0.22) 1.6px, transparent 2px); background-size: 48px 48px; }
-      .bg-halo { position: absolute; width: 1500px; height: 1500px; border-radius: 50%;
-        background: radial-gradient(circle, rgba(59,130,246,0.85) 0%, rgba(59,130,246,0.32) 32%, rgba(59,130,246,0) 68%); }
-      .bg-blue { position: absolute; inset: 0; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
-      .bg-blue-lines { position: absolute; inset: 0; opacity: 0.12;
-        background-image: repeating-linear-gradient(-28deg, #ffffff 0 1px, transparent 1px 34px); }
-      .bg-paper { position: absolute; inset: 0; background: var(--paper); }
-      .bg-grid { position: absolute; inset: 0; opacity: 1;
-        background-image: linear-gradient(#dfe6f2 1px, transparent 1px), linear-gradient(90deg, #dfe6f2 1px, transparent 1px);
-        background-size: 96px 96px; }
-      .ring { position: absolute; border-radius: 50%; border: 1.5px solid rgba(96,165,250,0.28); }
+      .bg-navy { background: radial-gradient(120% 90% at 70% 10%, #2a2a44 0%, #202031 40%, #0f0a1e 100%); }
+      .bg-blue { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+      .bg-paper { background: var(--paper); }
+      .dots { position: absolute; left: -96px; top: -96px; width: 2208px; height: 1272px;
+        background-image: radial-gradient(circle, rgba(201,211,227,0.20) 1.8px, transparent 2.2px); background-size: 48px 48px; }
+      .dots-dark { background-image: radial-gradient(circle, rgba(32,32,49,0.16) 1.8px, transparent 2.2px); }
+      .lines { position: absolute; inset: 0; opacity: 0.14;
+        background-image: repeating-linear-gradient(-28deg, #fff 0 1px, transparent 1px 34px); }
+      .ring { position: absolute; border-radius: 50%; border: 2px solid rgba(96,165,250,0.30); }
+      .ring.w { border-color: rgba(255,255,255,0.22); }
+      .grain { position: absolute; left: -200px; top: -200px; width: 2320px; height: 1480px; opacity: 0.07; pointer-events: none; mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        background-size: 256px 256px; }
 
-      .kicker { font-size: 20px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--blue-3); }
-      .kicker::before { content: ""; display: inline-block; width: 12px; height: 12px; background: var(--blue-2); margin-right: 16px; vertical-align: 1px; }
-      .h-xl { font-weight: 800; letter-spacing: -0.04em; line-height: 0.98; }
+      /* 1 · ruido */
+      .slam { position: absolute; font-weight: 900; letter-spacing: -0.05em; line-height: 1; white-space: nowrap; color: #fff; }
+      .slam.inv { color: var(--navy); }
+      #s1-flash { background: #fff; }
+      #s1-badge { left: 1500px; top: 80px; height: 64px; padding: 0 28px 0 22px; border-radius: 32px; background: rgba(32,32,49,0.9);
+        border: 1.5px solid rgba(240,82,82,0.6); font-size: 28px; font-weight: 700; line-height: 61px; color: #fff; white-space: nowrap; }
+      #s1-badge i { display: inline-block; width: 16px; height: 16px; border-radius: 50%; background: var(--red); margin-right: 14px; vertical-align: 1px; }
+      #s1-ask { top: 470px; font-size: 92px; font-weight: 800; letter-spacing: -0.04em; color: #c9d3e3; }
+      #s1-para { left: 920px; top: 500px; width: 80px; height: 80px; }
+      .para { position: absolute; inset: 0; background: var(--blue-2); transform: skewX(-38deg); }
 
-      /* ── 1 · Ruido ─────────────────────────────────────────── */
-      .chip { position: absolute; padding: 22px 34px; border-radius: 18px; white-space: nowrap;
-        background: rgba(32,32,49,0.92); border: 1.5px solid rgba(201,211,227,0.28);
-        font-size: 38px; font-weight: 600; letter-spacing: -0.01em; color: #c9d3e3;
-        box-shadow: 0 24px 60px rgba(0,0,0,0.45); }
-      .chip b { color: #fff; font-weight: 700; }
-      .chip i { font-style: normal; display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: #f87171; margin-right: 16px; vertical-align: 4px; }
-      #s1-q { left: 0; top: 410px; width: 1920px; text-align: center; font-size: 104px; }
-      #s1-dim { position: absolute; inset: 0; background: rgba(15,10,30,0.78); }
+      /* 2 · manifiesto */
+      .s2-line { position: absolute; left: 140px; font-size: 230px; white-space: nowrap; }
+      #s2-a1 { top: 210px; } #s2-a2 { top: 430px; }
+      #s2-b1 { top: 330px; color: var(--navy); } #s2-b2 { top: 550px; color: var(--navy); }
+      #s2-arrow { left: 1420px; top: 800px; width: 360px; height: 150px; }
 
-      /* ── 2 · Manifiesto ────────────────────────────────────── */
-      #s2-a, #s2-b { left: 150px; width: 1180px; font-size: 136px; }
-      #s2-a { top: 220px; color: #fff; }
-      #s2-b { top: 560px; color: var(--navy); }
-      #s2-k { left: 156px; top: 150px; color: #fff; }
-      #s2-k::before { background: #fff; }
-      #s2-arrow { left: 1460px; top: 760px; width: 300px; height: 160px; }
+      /* 3 · menos papeles */
+      #s3-row { top: 410px; font-size: 220px; white-space: nowrap; color: var(--navy); }
+      .slot { display: inline-block; position: relative; overflow: hidden; vertical-align: bottom; height: 1.06em; padding-bottom: 0.1em; text-align: left; }
+      .slot > span { position: absolute; left: 0; top: 0; white-space: nowrap; }
+      #s3-w { width: 1040px; color: var(--blue); }
+      #s3-p { width: 690px; }
+      #s3-p > span { left: auto; right: 0; }
+      .sheet { position: absolute; width: 230px; height: 300px; background: #fff; border-radius: 10px; box-shadow: 0 30px 60px rgba(32,32,49,0.16); }
+      .sheet::before { content: ""; position: absolute; left: 28px; right: 28px; top: 40px; height: 160px;
+        background: repeating-linear-gradient(#e2e8f2 0 8px, transparent 8px 26px); }
+      .sheet::after { content: ""; position: absolute; left: 28px; width: 90px; top: 226px; height: 10px; background: #c9d3e3; border-radius: 5px; }
 
-      /* ── 3 · Menos papeles ─────────────────────────────────── */
-      #s3-k { left: 150px; top: 150px; color: var(--blue); }
-      #s3-lead { left: 150px; top: 210px; width: 1600px; font-size: 54px; font-weight: 700; letter-spacing: -0.02em; color: var(--navy); line-height: 1.15; }
-      #s3-lead em { font-style: normal; color: var(--blue); }
-      .s3-row { position: absolute; left: 150px; font-size: 168px; color: var(--navy); white-space: nowrap; }
-      .s3-row em { font-style: normal; color: var(--blue); }
-      #s3-r1 { top: 400px; } #s3-r2 { top: 580px; } #s3-r3 { top: 760px; }
-      #s3-rule { left: 150px; top: 370px; width: 1620px; height: 4px; background: var(--navy); transform-origin: left center; }
+      /* 4 · áreas */
+      #s4-num { left: 120px; top: 150px; width: 640px; height: 760px; font-size: 760px; color: var(--blue-2); text-align: center; }
+      #s4-num .slot { height: 1em; }
+      #s4-lab { left: 760px; top: 250px; font-size: 150px; white-space: nowrap; }
+      #s4-reel { left: 770px; top: 470px; width: 1100px; height: 420px; overflow: hidden; }
+      .reel-it { position: absolute; left: 0; font-size: 96px; font-weight: 800; letter-spacing: -0.04em; line-height: 105px; white-space: nowrap; color: #fff; }
+      .reel-it b { color: var(--blue-3); font-weight: 800; font-size: 40px; letter-spacing: 0; vertical-align: 46px; margin-right: 22px; }
 
-      /* ── 4 · Cuatro áreas ──────────────────────────────────── */
-      #s4-k { left: 150px; top: 150px; }
-      #s4-t { left: 150px; top: 205px; width: 1650px; font-size: 104px; }
-      #s4-t em { font-style: normal; color: var(--blue-2); }
-      .s4-col { position: absolute; top: 500px; width: 380px; }
-      .s4-rule { height: 3px; background: rgba(201,211,227,0.35); transform-origin: left center; }
-      .s4-num { font-size: 132px; font-weight: 800; letter-spacing: -0.04em; color: var(--blue-2); margin-top: 26px; line-height: 1; }
-      .s4-name { font-size: 38px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.15; margin-top: 22px; color: #fff; }
-      .s4-desc { font-size: 23px; line-height: 1.45; color: #a9b6cb; margin-top: 16px; }
+      /* 5 · online */
+      #s5-l1 { left: 130px; top: 230px; font-size: 80px; font-weight: 800; letter-spacing: -0.045em; }
+      #s5-big { left: 120px; top: 380px; width: 1000px; font-size: 190px; color: var(--navy); white-space: nowrap; }
+      #s5-swap { display: block; width: 1000px; margin-top: 4px; }
+      #s5-swap span:last-child { color: #fff; }
+      #s5-ui { left: 1150px; top: 150px; width: 640px; height: 800px; perspective: 1400px; }
+      #s5-card { position: absolute; left: 0; top: 0; width: 640px; height: 800px; border-radius: 32px; background: #fff; color: var(--navy);
+        box-shadow: 0 60px 140px rgba(15,10,30,0.5); padding: 44px; }
+      .c-h { font-size: 20px; font-weight: 700; letter-spacing: 0.22em; color: var(--slate); }
+      .c-t { font-size: 44px; font-weight: 800; letter-spacing: -0.03em; margin-top: 10px; }
+      .toast { position: absolute; left: 44px; width: 552px; height: 92px; border-radius: 20px; background: var(--paper); }
+      .toast .tk { position: absolute; left: 22px; top: 22px; width: 48px; height: 48px; border-radius: 50%; background: var(--blue); }
+      .toast .tk svg { position: absolute; left: 11px; top: 11px; width: 26px; height: 26px; }
+      .toast .tl { position: absolute; left: 90px; top: 16px; font-size: 26px; font-weight: 700; letter-spacing: -0.01em; }
+      .toast .ts { position: absolute; left: 90px; top: 52px; font-size: 19px; font-weight: 500; color: var(--slate); }
+      .toast .tt { position: absolute; right: 24px; top: 20px; font-size: 18px; font-weight: 600; color: #475569; }
+      #chat { position: absolute; left: 44px; top: 610px; width: 552px; }
+      #chat-av { position: absolute; left: 0; top: 18px; width: 64px; height: 64px; border-radius: 50%; background: var(--navy); color: #fff;
+        font-size: 24px; font-weight: 800; text-align: center; line-height: 64px; letter-spacing: -0.03em; }
+      #chat-av::after { content: ""; position: absolute; right: 0; bottom: 2px; width: 16px; height: 16px; border-radius: 50%; background: #22c55e; border: 3px solid #fff; }
+      #chat-b { position: absolute; left: 82px; top: 0; width: 470px; padding: 20px 24px; border-radius: 22px 22px 22px 6px; background: var(--blue); color: #fff;
+        font-size: 25px; font-weight: 600; line-height: 1.3; }
+      #chat-n { position: absolute; left: 84px; top: 120px; font-size: 17px; font-weight: 600; color: var(--slate); }
 
-      /* ── 5 · 100% online ───────────────────────────────────── */
-      #s5-k { left: 150px; top: 230px; color: #fff; }
-      #s5-k::before { background: #fff; }
-      #s5-t { left: 150px; top: 290px; width: 620px; font-size: 96px; color: #fff; }
-      #s5-big { left: 150px; top: 570px; width: 960px; font-size: 128px; color: var(--navy); white-space: nowrap; }
-      #s5-swap { display: inline-block; position: relative; width: 620px; overflow: hidden; vertical-align: bottom; height: 1.12em; padding-bottom: 0.14em; }
-      #s5-swap span { display: block; }
-      #s5-sub { left: 156px; top: 790px; width: 860px; font-size: 32px; font-weight: 500; line-height: 1.35; color: #e8f0ff; }
-      #s5-card { left: 1130px; top: 240px; width: 640px; height: 600px; background: #fff; border-radius: 28px;
-        box-shadow: 0 50px 120px rgba(15,10,30,0.45); color: var(--navy); padding: 46px 48px; }
-      .card-h { font-size: 20px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--slate); }
-      .card-t { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; margin-top: 12px; }
-      .card-live { position: absolute; right: 48px; top: 48px; font-size: 18px; font-weight: 700; color: #15803d; letter-spacing: 0.06em; }
-      .card-live::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #15803d; margin-right: 10px; vertical-align: 1px; }
-      .task { position: absolute; left: 48px; width: 544px; height: 84px; border-radius: 18px; background: var(--paper); }
-      .task-l { position: absolute; left: 26px; top: 16px; font-size: 25px; font-weight: 700; letter-spacing: -0.01em; }
-      .task-s { position: absolute; left: 26px; top: 49px; font-size: 18px; font-weight: 500; color: var(--slate); }
-      .task-bar { position: absolute; left: 0; bottom: 0; height: 5px; width: 544px; border-radius: 0 0 18px 18px; background: var(--blue-2); transform-origin: left center; }
-      .tick { position: absolute; right: 24px; top: 21px; width: 42px; height: 42px; border-radius: 50%; background: var(--blue); }
-      .tick svg { position: absolute; left: 9px; top: 9px; width: 24px; height: 24px; }
-      #s5-advisor { left: 48px; top: 492px; width: 544px; height: 72px; }
-      .av { position: absolute; top: 6px; width: 60px; height: 60px; border-radius: 50%; border: 3px solid #fff; background-size: cover; background-position: center 22%; filter: grayscale(1); }
-      #s5-adv-t { position: absolute; left: 172px; top: 8px; font-size: 24px; font-weight: 700; }
-      #s5-adv-s { position: absolute; left: 172px; top: 40px; font-size: 18px; font-weight: 500; color: var(--slate); }
-
-      /* ── 6 · Equipo ────────────────────────────────────────── */
-      #s6-k { left: 150px; top: 130px; color: var(--blue); }
-      #s6-t { left: 150px; top: 185px; width: 1650px; font-size: 96px; color: var(--navy); }
+      /* 6 · profesionales */
+      #s6-t { left: 140px; top: 120px; font-size: 128px; color: var(--navy); white-space: nowrap; }
       #s6-t em { font-style: normal; color: var(--blue); }
-      .p-card { position: absolute; top: 430px; width: 480px; }
-      .p-sq { position: absolute; left: 34px; top: -26px; width: 300px; height: 300px; background: var(--blue-2); }
-      .p-ph { position: absolute; left: 0; top: 0; width: 300px; height: 300px; background-size: cover; background-position: center 20%; filter: grayscale(1) contrast(1.05); }
-      .p-role { position: absolute; left: 0; top: 330px; font-size: 18px; font-weight: 800; letter-spacing: 0.3em; color: var(--blue); }
-      .p-name { position: absolute; left: 0; top: 362px; font-size: 44px; font-weight: 800; letter-spacing: -0.02em; color: var(--navy); white-space: nowrap; }
-      .p-bio { position: absolute; left: 0; top: 424px; width: 440px; font-size: 22px; line-height: 1.4; color: var(--slate); }
+      #s6-n { left: 128px; top: 330px; font-size: 400px; color: var(--blue); }
+      #s6-nd { left: 150px; top: 760px; width: 700px; font-size: 40px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; color: var(--navy); }
+      .pill { position: absolute; height: 92px; padding: 0 40px; border-radius: 46px; font-size: 40px; font-weight: 700; letter-spacing: -0.02em;
+        line-height: 92px; white-space: nowrap; background: var(--navy); color: #fff; }
+      .pill.b { background: var(--blue); }
+      .pill.o { background: transparent; border: 3px solid var(--navy); color: var(--navy); line-height: 86px; }
 
-      /* ── 7 · Confianza ─────────────────────────────────────── */
-      #s7-k { left: 150px; top: 200px; }
-      #s7-n { left: 132px; top: 250px; font-size: 330px; color: var(--blue-2); }
-      #s7-d { left: 150px; top: 600px; width: 660px; font-size: 40px; font-weight: 700; line-height: 1.2; letter-spacing: -0.015em; }
-      #s7-box { left: 150px; top: 790px; width: 660px; height: 130px; border-radius: 20px; background: var(--navy); border: 1.5px solid rgba(96,165,250,0.35); }
-      #s7-box b { position: absolute; left: 34px; top: 26px; font-size: 64px; font-weight: 800; color: var(--blue-3); letter-spacing: -0.03em; }
-      #s7-box span { position: absolute; left: 230px; top: 30px; width: 400px; font-size: 22px; line-height: 1.4; color: #c9d3e3; }
-      #s7-lk { left: 960px; top: 200px; }
-      #s7-logos { left: 960px; top: 290px; width: 820px; height: 394px; background: url("assets/brand/clientes-white.png") center / contain no-repeat; opacity: 0.92; }
+      /* 7 · confianza */
+      #s7-q1 { left: 140px; top: 150px; width: 1640px; font-size: 84px; font-weight: 800; letter-spacing: -0.045em; line-height: 1.02; color: #c9d3e3; }
+      #s7-q2 { left: 140px; top: 270px; width: 1640px; font-size: 150px; color: #fff; }
+      #s7-q2 em { font-style: normal; color: var(--blue-3); }
+      #s7-a { left: 146px; top: 600px; font-size: 30px; font-weight: 700; color: var(--blue-3); }
+      #s7-a span { color: #94a3b8; font-weight: 500; }
+      #s7-band { left: 0; top: 760px; width: 1920px; height: 200px; border-top: 1.5px solid rgba(201,211,227,0.16); border-bottom: 1.5px solid rgba(201,211,227,0.16); }
+      #s7-track { position: absolute; left: 0; top: 0; height: 200px; white-space: nowrap; }
+      .lg { display: inline-block; height: 200px; margin-right: 110px; vertical-align: top; background-position: center; background-repeat: no-repeat; background-size: contain; opacity: 0.85; }
 
-      /* ── 8 · Testimonio ────────────────────────────────────── */
-      .qbar { position: absolute; top: 200px; width: 84px; height: 320px; }
-      .qbar-in { position: absolute; inset: 0; background: var(--blue); transform: skewX(-14deg); }
-      #s8-k { left: 150px; top: 210px; }
-      #s8-q { left: 150px; top: 290px; width: 1300px; font-size: 92px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }
-      #s8-q em { font-style: normal; color: var(--blue-3); }
-      #s8-a { left: 150px; top: 820px; font-size: 28px; font-weight: 700; color: var(--blue-3); letter-spacing: 0.02em; }
-      #s8-a span { color: #a9b6cb; font-weight: 500; }
+      /* 8 · cierre */
+      #s8-t1 { top: 300px; font-size: 150px; color: #8b9ab3; }
+      #s8-t2 { top: 480px; font-size: 200px; }
+      #s8-t2 em { font-style: normal; color: var(--blue-2); }
+      #s8-burst { left: 900px; top: 470px; width: 120px; height: 120px; }
+      #s8-logo { left: 470px; top: 300px; width: 980px; height: 270px; background: url("assets/brand/logo-white.png") left top / 980px 270px no-repeat; }
+      #s8-acc { left: 547px; top: 491px; width: 112px; height: 56px; }
+      #s8-tag { top: 640px; font-size: 48px; font-weight: 500; letter-spacing: -0.015em; color: #c9d3e3; }
+      #s8-tag em { font-style: normal; font-weight: 800; color: #fff; }
+      #s8-cta { left: 690px; top: 770px; width: 540px; height: 96px; border-radius: 48px; background: var(--blue); text-align: center;
+        font-size: 38px; font-weight: 800; line-height: 96px; letter-spacing: -0.02em; }
+      #s8-mail { top: 896px; font-size: 26px; font-weight: 500; color: #8b9ab3; letter-spacing: 0.04em; }
 
-      /* ── 9 · Cierre ────────────────────────────────────────── */
-      #s9-t { left: 0; top: 380px; width: 1920px; text-align: center; font-size: 190px; }
-      #s9-t em { font-style: normal; color: var(--blue-2); }
-      #s9-logo { left: 520px; top: 330px; width: 880px; height: 242px; background: url("assets/brand/logo-white.png") left top / 880px 242px no-repeat; }
-      #s9-tag { left: 0; top: 640px; width: 1920px; text-align: center; font-size: 44px; font-weight: 500; letter-spacing: -0.01em; color: #c9d3e3; }
-      #s9-tag em { font-style: normal; color: #fff; font-weight: 700; }
-      #s9-cta { left: 710px; top: 760px; width: 500px; height: 88px; border-radius: 44px; background: var(--blue); text-align: center;
-        font-size: 34px; font-weight: 700; line-height: 88px; color: #fff; letter-spacing: -0.01em; }
-      #s9-mail { left: 0; top: 880px; width: 1920px; text-align: center; font-size: 26px; font-weight: 500; color: #8b9ab3; letter-spacing: 0.04em; }
-
-      /* ── El impulso: el paralelogramo azul del logotipo, hecho barrido ── */
+      /* capa superior */
       #slash { left: 0; top: 0; width: 1920px; height: 1080px; }
-      .slash-in { position: absolute; left: -1500px; top: -200px; width: 3000px; height: 1480px; transform: skewX(-24deg);
-        background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%); }
-      .slash-edge { position: absolute; left: -1600px; top: -200px; width: 40px; height: 1480px; transform: skewX(-24deg); background: #60a5fa; }
-      #flash { position: absolute; inset: 0; background: #fff; }
+      .slash-in { position: absolute; left: -1500px; top: -200px; width: 3000px; height: 1480px; transform: skewX(-24deg); background: linear-gradient(90deg, #2563eb, #3b82f6); }
+      .slash-edge { position: absolute; left: -1640px; top: -200px; width: 60px; height: 1480px; transform: skewX(-24deg); background: #60a5fa; }
+      #fx-flash { background: #fff; }
+      #fade { background: #000; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="45" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="38.5" data-width="1920" data-height="1080">
 
-      <!-- 1 · Ruido: todo lo que una pyme no quiere tener en la cabeza -->
-      <div id="s1" class="scene clip" data-start="0" data-duration="5.65" data-track-index="0">
-        <div class="bg-navy"></div>
-        <div class="bg-dots-navy"></div>
-        <div id="s1-chips" data-layout-allow-overlap></div>
-        <div id="s1-dim"></div>
-        <div id="s1-q" data-layout-allow-overlap class="abs h-xl">¿Quién se encarga de <span style="color:#60a5fa">todo esto?</span></div>
+      <!-- 1 · Ruido (0–6) -->
+      <div id="s1" class="scene clip" data-start="0" data-duration="6.2" data-track-index="0">
+        <div class="fill bg-navy"></div>
+        <div class="cam" id="s1-cam"><div class="dots" id="s1-dots"></div></div>
+        <div class="fill" id="s1-flash"></div>
+        <div id="s1-words" data-layout-allow-overlap></div>
+        <div id="s1-badge" class="abs"><i></i><span id="s1-count">1</span> avisos pendientes</div>
+        <div id="s1-ask" class="abs center" data-layout-allow-overlap>¿Te suena?</div>
+        <div id="s1-para" class="abs"><div class="para"></div></div>
       </div>
 
-      <!-- 2 · Manifiesto, sobre el azul que deja el barrido -->
-      <div id="s2" class="scene clip" data-start="5.625" data-duration="5.19" data-track-index="1">
-        <div class="bg-blue"></div>
-        <div class="bg-blue-lines"></div>
-        <div id="s2-k" class="abs kicker">LT Impulsa · Gestoría 100% online</div>
-        <div id="s2-a" class="abs h-xl">Lo complejo, para nosotros.</div>
-        <div id="s2-b" class="abs h-xl">Lo importante, para ti.</div>
-        <svg id="s2-arrow" class="abs" viewBox="0 0 300 160"><path id="s2-arrow-p" d="M10 80 H270 M200 14 L274 80 L200 146" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <!-- 2 · Manifiesto (6–10) -->
+      <div id="s2" class="scene clip" data-start="6" data-duration="4.3" data-track-index="1">
+        <div class="fill bg-blue"></div>
+        <div class="fill lines"></div>
+        <div class="ring w" id="s2-r1" style="left:1160px;top:-260px;width:1100px;height:1100px"></div>
+        <div class="ring w" id="s2-r2" style="left:1360px;top:-60px;width:700px;height:700px"></div>
+        <div class="cam" id="s2-cam">
+          <div id="s2-A">
+            <div data-layout-allow-overlap class="s2-line big" id="s2-a1">Lo complejo,</div>
+            <div data-layout-allow-overlap class="s2-line big" id="s2-a2">para nosotros.</div>
+          </div>
+          <div id="s2-B">
+            <div data-layout-allow-overlap class="s2-line big" id="s2-b1">Lo importante,</div>
+            <div data-layout-allow-overlap class="s2-line big" id="s2-b2">para ti.</div>
+          </div>
+          <svg id="s2-arrow" class="abs" viewBox="0 0 360 150"><path id="s2-arrow-p" d="M10 75 H330 M262 12 L334 75 L262 138" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
       </div>
 
-      <!-- 3 · Menos papeles. Cero sustos. Más claridad. -->
-      <div id="s3" class="scene clip" data-start="10.3125" data-duration="4.1" data-track-index="0">
-        <div class="bg-paper"></div>
-        <div class="bg-grid"></div>
-        <div id="s3-k" class="abs kicker">Lo que necesitas</div>
-        <div id="s3-lead" class="abs">Una gestoría que te quite trabajo, <em>no que te lo dé.</em></div>
-        <div id="s3-rule" class="abs"></div>
-        <div id="s3-r1" class="s3-row h-xl">Menos <em>papeles.</em></div>
-        <div id="s3-r2" class="s3-row h-xl">Cero <em>sustos.</em></div>
-        <div id="s3-r3" class="s3-row h-xl">Más <em>claridad.</em></div>
+      <!-- 3 · Menos papeles (10–14) -->
+      <div id="s3" class="scene clip" data-start="10" data-duration="4.2" data-track-index="0">
+        <div class="fill bg-paper"></div>
+        <div class="cam" id="s3-bgcam"><div class="dots dots-dark" id="s3-dots"></div></div>
+        <div id="s3-sheets"></div>
+        <div class="cam" id="s3-cam">
+          <div id="s3-row" class="abs center big" data-layout-allow-overlap><span class="slot" id="s3-p"><span>Menos</span><span>Cero</span><span>Más</span></span>&nbsp;<span class="slot" id="s3-w"><span>papeles.</span><span>sustos.</span><span>claridad.</span></span></div>
+        </div>
       </div>
 
-      <!-- 4 · Cuatro áreas. Un solo equipo. -->
-      <div id="s4" class="scene clip" data-start="14.0625" data-duration="5.85" data-track-index="1">
-        <div class="bg-navy"></div>
-        <div class="bg-dots-navy"></div>
-        <div id="s4-k" class="abs kicker">Nuestra solución</div>
-        <div id="s4-t" class="abs h-xl">Cuatro áreas. <em>Un solo equipo.</em></div>
-        <div class="s4-col" style="left:150px"><div class="s4-rule"></div><div class="s4-num">01</div><div class="s4-name">Contabilidad y ERP Holded</div><div class="s4-desc">Tu contabilidad, al día y dentro de tu ERP.</div></div>
-        <div class="s4-col" style="left:570px"><div class="s4-rule"></div><div class="s4-num">02</div><div class="s4-name">Fiscalidad al día</div><div class="s4-desc">IVA, IS, retenciones y requerimientos de la AEAT.</div></div>
-        <div class="s4-col" style="left:990px"><div class="s4-rule"></div><div class="s4-num">03</div><div class="s4-name">Laboral sin sorpresas</div><div class="s4-desc">Nóminas, seguros sociales, altas, bajas y finiquitos.</div></div>
-        <div class="s4-col" style="left:1410px"><div class="s4-rule"></div><div class="s4-num">04</div><div class="s4-name">Área mercantil</div><div class="s4-desc">Libros, cuentas anuales y asesoramiento continuo.</div></div>
-      </div>
-
-      <!-- 5 · 100% online → 100% cercanos -->
-      <div id="s5" class="scene clip" data-start="19.6875" data-duration="6.15" data-track-index="0">
-        <div class="bg-blue"></div>
-        <div class="bg-blue-lines"></div>
-        <div id="s5-k" class="abs kicker">Cómo trabajamos</div>
-        <div id="s5-t" class="abs h-xl">Sin oficinas. Sin papeles.</div>
-        <div id="s5-big" class="abs h-xl">100%&nbsp;<span id="s5-swap"><span id="s5-w1">online.</span><span id="s5-w2" style="position:absolute;left:0;top:0;color:#fff">cercanos.</span></span></div>
-        <div id="s5-sub" class="abs">Todo centralizado en Holded y en tiempo real. Y un asesor que te responde.</div>
-        <div id="s5-card" class="abs">
-          <div class="card-h">Tu empresa</div>
-          <div class="card-t">Este mes, en orden.</div>
-          <div class="card-live">EN TIEMPO REAL</div>
-          <div class="task" id="t1" style="top:176px"><div class="task-l">IVA · modelo 303</div><div class="task-s">Presentado en plazo</div><div class="tick"><svg viewBox="0 0 24 24"><path d="M4 12.5 L9.5 18 L20 6.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="task-bar"></div></div>
-          <div class="task" id="t2" style="top:276px"><div class="task-l">Nóminas y seguros sociales</div><div class="task-s">Listas y enviadas</div><div class="tick"><svg viewBox="0 0 24 24"><path d="M4 12.5 L9.5 18 L20 6.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="task-bar"></div></div>
-          <div class="task" id="t3" style="top:376px"><div class="task-l">Conciliación bancaria</div><div class="task-s">Cuadrada al céntimo</div><div class="tick"><svg viewBox="0 0 24 24"><path d="M4 12.5 L9.5 18 L20 6.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="task-bar"></div></div>
-                    <div id="s5-advisor" class="abs">
-            <div class="av" style="left:0;background-image:url('assets/img/manuel-pina.jpg')"></div>
-            <div class="av" style="left:44px;background-image:url('assets/img/eduardo-serrano.jpg')"></div>
-            <div class="av" style="left:88px;background-image:url('assets/img/leire-roldan.jpg')"></div>
-            <div id="s5-adv-t">Tu equipo LT</div>
-            <div id="s5-adv-s">Te contesta hoy, no la semana que viene.</div>
+      <!-- 4 · Cuatro áreas, un equipo (14–18) -->
+      <div id="s4" class="scene clip" data-start="14" data-duration="4.25" data-track-index="1">
+        <div class="fill bg-navy"></div>
+        <div class="ring" id="s4-r1" style="left:-120px;top:40px;width:1000px;height:1000px"></div>
+        <div class="ring" id="s4-r2" style="left:80px;top:240px;width:600px;height:600px"></div>
+        <div class="cam" id="s4-cam">
+          <div id="s4-num" class="abs big" data-layout-allow-overlap><span class="slot" style="width:640px"><span style="width:640px;text-align:center">1</span><span style="width:640px;text-align:center">2</span><span style="width:640px;text-align:center">3</span><span style="width:640px;text-align:center">4</span><span style="width:640px;text-align:center">1</span></span></div>
+          <div id="s4-lab" class="abs big" data-layout-allow-overlap><span class="slot" style="width:1100px"><span>áreas.</span><span>equipo.</span></span></div>
+          <div id="s4-reel" class="abs">
+            <div data-layout-allow-overlap class="reel-it" id="ri1" style="top:0"><b>01</b>Contabilidad y ERP</div>
+            <div data-layout-allow-overlap class="reel-it" id="ri2" style="top:105px"><b>02</b>Fiscalidad al día</div>
+            <div data-layout-allow-overlap class="reel-it" id="ri3" style="top:210px"><b>03</b>Laboral sin sustos</div>
+            <div data-layout-allow-overlap class="reel-it" id="ri4" style="top:315px"><b>04</b>Mercantil</div>
+            <div id="s4-one" data-layout-allow-overlap class="abs" style="left:0;top:150px;width:1100px;font-size:52px;font-weight:700;letter-spacing:-0.02em;line-height:1.2;color:#c9d3e3">Contable, fiscal, laboral y mercantil, coordinados por un mismo equipo.</div>
           </div>
         </div>
       </div>
 
-      <!-- 6 · Las personas detrás de tus números -->
-      <div id="s6" class="scene clip" data-start="25.3125" data-duration="4.25" data-track-index="1">
-        <div class="bg-paper"></div>
-        <div class="bg-grid"></div>
-        <div id="s6-k" class="abs kicker">Nuestro equipo</div>
-        <div id="s6-t" class="abs h-xl">Las personas detrás <em>de tus números.</em></div>
-        <div class="p-card" id="p1" style="left:150px"><div class="p-sq"></div><div class="p-ph" style="background-image:url('assets/img/manuel-pina.jpg')"></div><div class="p-role">PARTNER</div><div class="p-name">Manuel Pina</div><div class="p-bio">10 años en Big4. Ex-CFO de grandes pymes.</div></div>
-        <div class="p-card" id="p2" style="left:720px"><div class="p-sq"></div><div class="p-ph" style="background-image:url('assets/img/eduardo-serrano.jpg')"></div><div class="p-role">PARTNER</div><div class="p-name">Eduardo Serrano</div><div class="p-bio">15 años como CFO de startups y fondos de VC.</div></div>
-        <div class="p-card" id="p3" style="left:1290px"><div class="p-sq"></div><div class="p-ph" style="background-image:url('assets/img/leire-roldan.jpg')"></div><div class="p-role">PARTNER</div><div class="p-name">Leire Roldán</div><div class="p-bio">12 años liderando equipos de RRHH.</div></div>
+      <!-- 5 · 100% online → cercanos (18–22) -->
+      <div id="s5" class="scene clip" data-start="18" data-duration="4.3" data-track-index="0">
+        <div class="fill bg-blue"></div>
+        <div class="fill lines"></div>
+        <div class="cam" id="s5-cam">
+          <div id="s5-l1" class="abs">Sin oficinas. Sin papeles.</div>
+          <div id="s5-big" class="abs big" data-layout-allow-overlap>100%<span class="slot" id="s5-swap"><span>online.</span><span>cercanos.</span></span></div>
+          <div id="s5-ui" class="abs">
+            <div id="s5-card">
+              <div class="c-h">TU EMPRESA · OCTUBRE</div>
+              <div class="c-t">Todo en orden.</div>
+              <div class="toast" id="tt1" style="top:160px"><div class="tk"><svg viewBox="0 0 24 24"><path d="M4 12.5 L9.5 18 L20 6.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="tl">IVA · 3T</div><div class="ts">Presentado en plazo</div><div class="tt">ahora</div></div>
+              <div class="toast" id="tt2" style="top:264px"><div class="tk"><svg viewBox="0 0 24 24"><path d="M4 12.5 L9.5 18 L20 6.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="tl">Nóminas</div><div class="ts">Enviadas al equipo</div><div class="tt">ahora</div></div>
+              <div class="toast" id="tt3" style="top:368px"><div class="tk"><svg viewBox="0 0 24 24"><path d="M4 12.5 L9.5 18 L20 6.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="tl">Conciliación bancaria</div><div class="ts">Cuadrada al céntimo</div><div class="tt">ahora</div></div>
+              <div class="toast" id="tt4" style="top:472px"><div class="tk"><svg viewBox="0 0 24 24"><path d="M4 12.5 L9.5 18 L20 6.5" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="tl">Cierre del mes</div><div class="ts">Listo en Holded</div><div class="tt">ahora</div></div>
+              <div id="chat">
+                <div id="chat-av">LT</div>
+                <div id="chat-b">¿Lo revisamos juntos? Te llamo en 5 minutos.</div>
+                <div id="chat-n">Tu asesor · en línea</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- 7 · +15 años y quién confía en nosotros -->
-      <div id="s7" class="scene clip" data-start="29.0625" data-duration="5.2" data-track-index="0">
-        <div class="bg-navy"></div>
-        <div class="bg-dots-navy"></div>
-        <div id="s7-k" class="abs kicker">Referencias</div>
-        <div id="s7-n" class="abs h-xl">+<span id="s7-num">0</span></div>
-        <div id="s7-d" class="abs">años asesorando a pymes tecnológicas y empresas de alto crecimiento.</div>
-        <div id="s7-box" class="abs"><b>100%</b><span>del equipo, expertos en fiscal, laboral, contable y mercantil.</span></div>
-        <div id="s7-lk" class="abs kicker">Confían en nosotros</div>
-        <div id="s7-logos" class="abs"></div>
+      <!-- 6 · Profesionales (22–26) -->
+      <div id="s6" class="scene clip" data-start="22" data-duration="4" data-track-index="1">
+        <div class="fill bg-paper"></div>
+        <div class="cam" id="s6-bgcam"><div class="dots dots-dark" id="s6-dots"></div></div>
+        <div class="cam" id="s6-cam">
+          <div id="s6-t" class="abs big">Profesionales <em>de verdad.</em></div>
+          <div id="s6-n" class="abs big">+<span id="s6-num">0</span></div>
+          <div id="s6-nd" class="abs">años asesorando a pymes y empresas de alto crecimiento.</div>
+          <div class="pill" id="pl1" style="left:1000px;top:380px">Big4</div>
+          <div class="pill b" id="pl2" style="left:1230px;top:380px">CFOs de startups</div>
+          <div class="pill o" id="pl3" style="left:1000px;top:500px">Fondos de VC</div>
+          <div class="pill b" id="pl4" style="left:1385px;top:500px">Fiscal</div>
+          <div class="pill" id="pl5" style="left:1000px;top:620px">Laboral</div>
+          <div class="pill o" id="pl6" style="left:1265px;top:620px">Contable</div>
+          <div class="pill b" id="pl7" style="left:1000px;top:740px">Mercantil</div>
+          <div class="pill o" id="pl8" style="left:1305px;top:740px">100% expertos</div>
+        </div>
       </div>
 
-      <!-- 8 · Testimonio -->
-      <div id="s8" class="scene clip" data-start="33.75" data-duration="3.75" data-track-index="1">
-        <div class="bg-navy"></div>
-        <div class="qbar" id="qb1" style="left:1560px"><div class="qbar-in"></div></div>
-        <div class="qbar" id="qb2" style="left:1690px"><div class="qbar-in"></div></div>
-        <div id="s8-k" class="abs kicker">Lo que dicen de nosotros</div>
-        <div id="s8-q" class="abs">“Son una extensión de mi empresa. <em>Mi departamento financiero.”</em></div>
-        <div id="s8-a" class="abs">CEO <span>· Conservas Huerta</span></div>
+      <!-- 7 · Confianza (26–30) -->
+      <div id="s7" class="scene clip" data-start="26" data-duration="4" data-track-index="0">
+        <div class="fill bg-navy"></div>
+        <div class="cam" id="s7-cam">
+          <div id="s7-q1" class="abs" data-layout-allow-overlap>“Son una extensión de mi empresa.</div>
+          <div id="s7-q2" class="abs big" data-layout-allow-overlap><em>Mi departamento financiero.”</em></div>
+          <div id="s7-a" class="abs">CEO <span>· Conservas Huerta</span></div>
+        </div>
+        <div id="s7-band" class="abs"><div id="s7-track"></div></div>
       </div>
 
-      <!-- 9 · Cierre -->
-      <div id="s9" class="scene clip" data-start="37.5" data-duration="7.5" data-track-index="0">
-        <div class="bg-navy"></div>
-        <div class="bg-halo" id="s9-halo" style="left:210px;top:-560px"></div>
+      <!-- 8 · Cierre (30–38.5) -->
+      <div id="s8" class="scene clip" data-start="30" data-duration="8.5" data-track-index="1">
+        <div class="fill" style="background:#0b0816"></div>
+        <div class="fill bg-navy" id="s8-bg"></div>
         <div class="ring" id="r1" style="left:660px;top:240px;width:600px;height:600px"></div>
         <div class="ring" id="r2" style="left:460px;top:40px;width:1000px;height:1000px"></div>
         <div class="ring" id="r3" style="left:260px;top:-160px;width:1400px;height:1400px"></div>
-        <div id="s9-t" class="abs h-xl">Tu mejor <em>aliado.</em></div>
-        <div id="s9-logo" class="abs"></div>
-        <div id="s9-tag" class="abs">“Cuando <em>LT Impulsa</em>, las empresas avanzan.”</div>
-        <div id="s9-cta" class="abs">ltimpulsa.com</div>
-        <div id="s9-mail" class="abs">info@ltimpulsa.com</div>
+        <div id="s8-t1" class="abs center big" data-layout-allow-overlap>Tu gestoría.</div>
+        <div id="s8-t2" class="abs center big" data-layout-allow-overlap>Tu mejor <em>aliado.</em></div>
+        <div id="s8-burst" class="abs"><div class="para"></div></div>
+        <div id="s8-logo" class="abs"></div>
+        <div id="s8-tag" class="abs center">“Cuando <em>LT Impulsa</em>, las empresas avanzan.”</div>
+        <div id="s8-cta" class="abs">ltimpulsa.com</div>
+        <div id="s8-mail" class="abs center">info@ltimpulsa.com</div>
       </div>
 
-      <!-- Capa superior: el barrido azul y el destello -->
-      <div id="slash" data-layout-allow-overflow class="abs clip" data-start="0" data-duration="45" data-track-index="5">
-        <div class="slash-edge" id="slash-edge"></div>
-        <div class="slash-in" id="slash-in"></div>
+      <!-- capas superiores -->
+      <div id="slash" data-layout-allow-overflow class="abs clip" data-start="0" data-duration="38.5" data-track-index="5">
+        <div class="slash-edge"></div>
+        <div class="slash-in"></div>
       </div>
-      <div id="flash" class="clip" data-start="37.4" data-duration="0.6" data-track-index="6"></div>
+      <div id="fx" class="abs clip" data-start="0" data-duration="38.5" data-track-index="6" style="left:0;top:0;width:1920px;height:1080px">
+        <div class="fill" id="fx-flash"></div>
+        <div class="grain" id="grain"></div>
+        <div class="fill" id="fade"></div>
+      </div>
 
-      <!-- Música -->
-      <audio id="bgm" src="assets/bgm/bed.wav" data-start="0" data-duration="45" data-track-index="10" data-volume="0.9"></audio>
-      <!-- Efectos -->
-      <audio id="sfx-1" src="assets/sfx/riser.mp3" data-start="0.4" data-duration="5.2" data-track-index="20" data-volume="0.22"></audio>
-      <audio id="sfx-2" src="assets/sfx/whoosh-cinematic.mp3" data-start="5.2" data-duration="2.4" data-track-index="21" data-volume="0.4"></audio>
-      <audio id="sfx-3" src="assets/sfx/impact-bass-1.mp3" data-start="5.62" data-duration="2.1" data-track-index="22" data-volume="0.4"></audio>
-      <audio id="sfx-4" src="assets/sfx/whoosh-short.mp3" data-start="10.2" data-duration="0.57" data-track-index="23" data-volume="0.35"></audio>
-      <audio id="sfx-5" src="assets/sfx/whoosh-cinematic.mp3" data-start="13.75" data-duration="2.0" data-track-index="24" data-volume="0.3"></audio>
-      <audio id="sfx-6" src="assets/sfx/whoosh-short.mp3" data-start="19.55" data-duration="0.57" data-track-index="25" data-volume="0.35"></audio>
-      <audio id="sfx-7" src="assets/sfx/click-soft.mp3" data-start="21.6" data-duration="0.37" data-track-index="26" data-volume="0.4"></audio>
-      <audio id="sfx-8" src="assets/sfx/click-soft.mp3" data-start="22.07" data-duration="0.37" data-track-index="27" data-volume="0.4"></audio>
-      <audio id="sfx-9" src="assets/sfx/click-soft.mp3" data-start="22.54" data-duration="0.37" data-track-index="28" data-volume="0.4"></audio>
-      <audio id="sfx-10" src="assets/sfx/pop.mp3" data-start="23.9" data-duration="0.72" data-track-index="29" data-volume="0.4"></audio>
-      <audio id="sfx-11" src="assets/sfx/whoosh-short.mp3" data-start="25.2" data-duration="0.57" data-track-index="30" data-volume="0.35"></audio>
-      <audio id="sfx-12" src="assets/sfx/whoosh-cinematic.mp3" data-start="28.75" data-duration="2.0" data-track-index="31" data-volume="0.3"></audio>
-      <audio id="sfx-13" src="assets/sfx/whoosh-short.mp3" data-start="33.6" data-duration="0.57" data-track-index="32" data-volume="0.35"></audio>
-      <audio id="sfx-14" src="assets/sfx/impact-bass-2.mp3" data-start="37.5" data-duration="2.59" data-track-index="33" data-volume="0.45"></audio>
-      <audio id="sfx-15" src="assets/sfx/chime.mp3" data-start="39.4" data-duration="2.5" data-track-index="34" data-volume="0.35"></audio>
+      <audio id="music" src="assets/bgm/lt-track.wav" data-start="0" data-duration="38.5" data-track-index="10" data-volume="1"></audio>
+      <audio id="sfx-sw1" src="assets/sfx/whoosh-short.mp3" data-start="9.85" data-duration="0.57" data-track-index="20" data-volume="0.35"></audio>
+      <audio id="sfx-sw2" src="assets/sfx/whoosh-short.mp3" data-start="13.8" data-duration="0.57" data-track-index="21" data-volume="0.35"></audio>
+      <audio id="sfx-sw3" src="assets/sfx/whoosh-short.mp3" data-start="21.85" data-duration="0.57" data-track-index="22" data-volume="0.35"></audio>
+      <audio id="sfx-sw4" src="assets/sfx/whoosh-short.mp3" data-start="25.8" data-duration="0.57" data-track-index="23" data-volume="0.35"></audio>
+      <audio id="sfx-c1" src="assets/sfx/click-soft.mp3" data-start="18.5" data-duration="0.37" data-track-index="24" data-volume="0.45"></audio>
+      <audio id="sfx-c2" src="assets/sfx/click-soft.mp3" data-start="19.0" data-duration="0.37" data-track-index="25" data-volume="0.45"></audio>
+      <audio id="sfx-c3" src="assets/sfx/click-soft.mp3" data-start="19.5" data-duration="0.37" data-track-index="26" data-volume="0.45"></audio>
+      <audio id="sfx-c4" src="assets/sfx/click-soft.mp3" data-start="20.0" data-duration="0.37" data-track-index="27" data-volume="0.45"></audio>
+      <audio id="sfx-pop" src="assets/sfx/pop.mp3" data-start="20.5" data-duration="0.72" data-track-index="28" data-volume="0.4"></audio>
     </div>
 
     <script>
       (function () {
-        var B = 0.46875; // un tiempo a 128 BPM; los cortes caen sobre la rejilla de la música
+        var B = 0.5; // 120 BPM: la música se compuso para este montaje, un tiempo = 0,5 s
         var tl = gsap.timeline({ paused: true });
         var $ = function (s) { return document.querySelector(s); };
-        var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
 
-        // Parte un texto en palabras enmascaradas (conserva <em>).
         function words(el) {
           var out = [];
           var nodes = Array.prototype.slice.call(el.childNodes);
           el.innerHTML = "";
           nodes.forEach(function (n) {
-            var txt = n.textContent, wrapTag = n.nodeType === 1 ? n.tagName.toLowerCase() : null;
             var holder = el;
-            if (wrapTag) { holder = document.createElement(wrapTag); if (n.getAttribute("style")) holder.setAttribute("style", n.getAttribute("style")); el.appendChild(holder); }
-            txt.split(/(\s+)/).forEach(function (w) {
+            if (n.nodeType === 1) { holder = document.createElement(n.tagName.toLowerCase()); el.appendChild(holder); }
+            n.textContent.split(/(\s+)/).forEach(function (w) {
               if (!w) return;
               if (/^\s+$/.test(w)) { holder.appendChild(document.createTextNode(" ")); return; }
               var m = document.createElement("span"); m.className = "msk"; m.setAttribute("data-layout-allow-overlap", "");
@@ -329,160 +326,227 @@
           });
           return out;
         }
-        function rise(el, at, opts) {
-          opts = opts || {};
+        // Entrada en cascada que llega en movimiento desde la derecha (la corriente va a la izquierda)
+        function waterfall(el, at, o) {
+          o = o || {};
           var w = words(el);
-          tl.fromTo(w, { yPercent: 115 }, { yPercent: 0, duration: opts.d || 0.6, ease: "expo.out", stagger: opts.st || 0.045 }, at);
+          tl.fromTo(w, { yPercent: 110, x: o.x == null ? 90 : o.x }, { yPercent: 0, x: 0, duration: o.d || 0.55, ease: "power4.out", stagger: o.st || 0.06 }, at);
           return w;
         }
-
-        // ── El barrido: x del centro del paralelogramo, de derecha a izquierda.
-        function sweep(at, dur) {
-          tl.fromTo("#slash", { x: 3900 }, { x: -2000, duration: dur, ease: "power3.inOut" }, at - dur / 2);
+        // Rueda de palabras: cada hijo de .slot entra desde abajo y empuja al anterior
+        function slotRoll(slot, times) {
+          var kids = slot.children;
+          for (var i = 0; i < kids.length; i++) { kids[i].setAttribute("data-layout-allow-overlap", ""); tl.set(kids[i], { yPercent: i === 0 ? 0 : 140 }, 0); }
+          times.forEach(function (t, i) {
+            tl.to(kids[i], { yPercent: -140, filter: "blur(6px)", duration: 0.32, ease: "power4.in" }, t - 0.16);
+            tl.fromTo(kids[i + 1], { yPercent: 140, filter: "blur(6px)" }, { yPercent: 0, filter: "blur(0px)", duration: 0.42, ease: "power4.out", immediateRender: false }, t);
+          });
+        }
+        // Pulso de bombo: el fondo late con la música en los tramos con ritmo
+        function pulse(sel, from, to, amt) {
+          for (var t = from; t < to - 1e-6; t += B) {
+            tl.fromTo(sel, { scale: 1 + amt }, { scale: 1, duration: 0.42, ease: "power2.out", immediateRender: false }, t);
+          }
+        }
+        // Costura cut-the-curve: sale con power4.in hacia la izquierda, entra con power4.out desde la derecha
+        function ctc(outSel, inSel, T) {
+          tl.to(outSel, { x: -240, filter: "blur(10px)", opacity: 0, duration: 0.24, ease: "power4.in" }, T - 0.24);
+          tl.fromTo(inSel, { x: 240, filter: "blur(10px)", opacity: 0 }, { x: 0, filter: "blur(0px)", opacity: 1, duration: 0.34, ease: "power4.out" }, T);
+        }
+        function sweep(T, dur) {
+          tl.fromTo("#slash", { x: 3900 }, { x: -2000, duration: dur, ease: "power3.inOut", immediateRender: false }, T - dur / 2);
         }
         tl.set("#slash", { x: 3900 }, 0);
 
-        // ═════ 1 · Ruido (0 – 5.625)
-        var CHIPS = [
-          ["Modelo 303", 210, 170, -6], ["Nóminas", 1280, 120, 5], ["Requerimiento AEAT", 640, 300, -2],
-          ["Cuentas anuales", 1260, 760, -4], ["Finiquitos", 220, 760, 4], ["Retenciones", 1500, 430, -7],
-          ["Legalización de libros", 130, 470, 3], ["Seguros sociales", 760, 860, -3], ["Facturas", 900, 130, 7],
-          ["Plazos", 1560, 900, 2], ["Impuesto de Sociedades", 560, 600, -5], ["Conciliación", 1090, 470, 4]
+        // Grano de película, que salta de posición cada fotograma de 1/12 s
+        tl.fromTo("#grain", { x: 0, y: 0 }, { x: -170, y: -110, duration: 38.5, ease: "steps(462)" }, 0);
+        tl.set("#fx-flash", { opacity: 0 }, 0);
+        tl.set("#fade", { opacity: 0 }, 0);
+        function flash(t, a) { tl.fromTo("#fx-flash", { opacity: a || 0.85 }, { opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, t); }
+
+        // ═══ 1 · RUIDO — una palabra por golpe, cada vez más rápido (0–4)
+        var HITS = [0.1, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.25, 3.5, 3.75];
+        var W = [
+          ["IVA", 640, 300, 360, -4], ["NÓMINAS", 160, 470, 260, 3], ["MODELO 303", 260, 220, 230, -2],
+          ["PLAZOS", 520, 560, 300, 4], ["AEAT", 120, 180, 420, -3], ["FINIQUITOS", 240, 600, 240, 2],
+          ["FACTURAS", 330, 330, 260, -5], ["SUSTOS", 520, 380, 330, 3], ["PAPELES", 300, 400, 300, -2], ["¡MÁS PAPELES!", 200, 420, 190, 0]
         ];
-        var chipBox = $("#s1-chips");
-        CHIPS.forEach(function (c, i) {
+        var box = $("#s1-words");
+        tl.set("#s1-flash", { opacity: 0 }, 0);
+        tl.set("#s1-badge", { autoAlpha: 0 }, 0);
+        W.forEach(function (w, i) {
           var d = document.createElement("div");
-          d.className = "chip"; d.id = "chip" + i; d.setAttribute("data-layout-allow-overlap", "");
-          d.style.left = c[1] + "px"; d.style.top = c[2] + "px";
-          d.innerHTML = "<i></i><b data-layout-allow-overlap>" + c[0] + "</b>";
-          chipBox.appendChild(d);
-          var from = i % 2 ? 1 : -1;
-          tl.fromTo(d, { autoAlpha: 0, scale: 1.6, rotation: c[3] * 3, x: from * 120, y: 40 },
-            { autoAlpha: 1, scale: 1, rotation: c[3], x: 0, y: 0, duration: 0.42, ease: "expo.out" }, 0.15 + i * (B / 2));
-          // deriva hacia la izquierda: la corriente del vídeo
-          tl.fromTo(d, { xPercent: 0 }, { xPercent: -30 - (i % 4) * 12, duration: 5.6 - i * (B / 2), ease: "none" }, 0.15 + i * (B / 2));
+          d.className = "slam" + (i >= 6 && i % 2 === 0 ? " inv" : "");
+          d.setAttribute("data-layout-allow-overlap", "");
+          d.style.left = w[1] + "px"; d.style.top = w[2] + "px"; d.style.fontSize = w[3] + "px";
+          d.textContent = w[0];
+          box.appendChild(d);
+          var t = HITS[i], next = HITS[i + 1] || 4.0;
+          tl.set(d, { autoAlpha: 0 }, 0);
+          tl.fromTo(d, { autoAlpha: 1, scale: 1.45, rotation: w[4] * 2 }, { scale: 1, rotation: w[4], duration: 0.22, ease: "expo.out", immediateRender: false }, t);
+          tl.to(d, { x: -140, duration: next - t, ease: "none" }, t);
+          tl.set(d, { autoAlpha: 0 }, next);
+          if (i >= 6) {
+            // los últimos golpes invierten el fondo: estrobo
+            tl.set("#s1-flash", { opacity: i % 2 === 0 ? 1 : 0 }, t);
+          }
         });
-        tl.fromTo("#s1-dim", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5, ease: "power2.out" }, 3.1);
-        rise($("#s1-q"), 3.28, { st: 0.06, d: 0.55 });
-        tl.fromTo("#s1-q", { scale: 1.08 }, { scale: 1, duration: 2.2, ease: "expo.out" }, 3.28);
-        // El impulso barre el ruido: el plano 2 aparece justo detrás del borde.
-        sweep(5.625, 0.9);
-        tl.to("#s1-chips", { x: -900, duration: 0.6, ease: "power3.in" }, 5.2);
-
-        // ═════ 2 · Manifiesto (5.625 – 10.3125)
-        var T2 = 5.625;
-        tl.fromTo("#s2-k", { autoAlpha: 0, x: 60 }, { autoAlpha: 1, x: 0, duration: 0.6, ease: "expo.out" }, T2 + 0.3);
-        rise($("#s2-a"), T2 + 0.35, { st: 0.07, d: 0.7 });
-        rise($("#s2-b"), T2 + 0.35 + 4 * B, { st: 0.07, d: 0.7 });
-        tl.fromTo("#s2-arrow-p", { strokeDasharray: 600, strokeDashoffset: 600 }, { strokeDashoffset: 0, duration: 0.8, ease: "power3.out" }, T2 + 6 * B);
-        tl.fromTo("#s2-arrow", { x: -80 }, { x: 40, duration: 2.6, ease: "power2.out" }, T2 + 6 * B);
-        // salida: empuje a la izquierda
-        var T3 = 10.3125;
-        tl.to("#s2", { x: -1920, duration: 0.5, ease: "power3.inOut" }, T3);
-
-        // ═════ 3 · Menos papeles (10.3125 – 14.0625)
-        tl.fromTo("#s3", { x: 1920 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, T3);
-        tl.fromTo("#s3-k", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, T3 + 0.35);
-        rise($("#s3-lead"), T3 + 0.4, { st: 0.035, d: 0.55 });
-        tl.fromTo("#s3-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.out" }, T3 + 0.5);
-        ["#s3-r1", "#s3-r2", "#s3-r3"].forEach(function (s, i) {
-          var w = words($(s));
-          tl.fromTo(w, { yPercent: 115 }, { yPercent: 0, duration: 0.5, ease: "expo.out", stagger: 0.06 }, T3 + 1.15 + i * 1.5 * B);
+        tl.set("#s1-flash", { opacity: 0 }, 4.0);
+        var clk = { t: 0 };
+        tl.fromTo(clk, { t: 0 }, { t: 4, duration: 4, ease: "none", onUpdate: function () {
+          var n = 0; HITS.forEach(function (h, i) { if (clk.t >= h) n = i; });
+          $("#s1-count").textContent = String(Math.round(1 + n * n * 0.6));
+        } }, 0);
+        tl.fromTo("#s1-badge", { autoAlpha: 0, y: -30 }, { autoAlpha: 1, y: 0, duration: 0.3, ease: "back.out(1.6)", immediateRender: false }, 0.5);
+        HITS.slice(1).forEach(function (t) {
+          tl.fromTo("#s1-badge", { scale: 1.12 }, { scale: 1, duration: 0.2, ease: "power2.out", immediateRender: false }, t);
         });
-        sweep(14.0625, 0.8);
+        pulse("#s1-dots", 0, 4, 0.03);
+        tl.to("#s1-badge", { autoAlpha: 0, duration: 0.2 }, 4.0);
+        // Silencio: la pregunta, y el paralelogramo del logo aparece pequeño en el centro
+        tl.set("#s1-ask", { autoAlpha: 0 }, 0);
+        tl.set("#s1-ask", { autoAlpha: 1 }, 4.1);
+        waterfall($("#s1-ask"), 4.1, { x: 0, d: 0.5, st: 0.08 });
+        tl.to("#s1-ask", { autoAlpha: 0, scale: 0.92, duration: 0.3, ease: "power2.in" }, 5.2);
+        tl.fromTo("#s1-para", { scale: 0, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.2, ease: "back.out(1.7)" }, 5.4);
+        // 6.0 · DROP: el paralelogramo revienta hacia cámara y se convierte en el mundo azul
+        tl.to("#s1-para", { scale: 40, duration: 0.42, ease: "power4.in" }, 5.62);
 
-        // ═════ 4 · Cuatro áreas (14.0625 – 19.6875)
-        var T4 = 14.0625;
-        tl.fromTo("#s4-k", { autoAlpha: 0, x: 60 }, { autoAlpha: 1, x: 0, duration: 0.5, ease: "expo.out" }, T4 + 0.3);
-        rise($("#s4-t"), T4 + 0.35, { st: 0.06, d: 0.65 });
-        $$(".s4-col").forEach(function (c, i) {
-          var at = T4 + 1.6 + i * 2 * B;
-          tl.fromTo(c.querySelector(".s4-rule"), { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.out" }, at);
-          tl.fromTo(c.querySelector(".s4-num"), { autoAlpha: 0, y: 70 }, { autoAlpha: 1, y: 0, duration: 0.55, ease: "expo.out" }, at + 0.05);
-          tl.fromTo(c.querySelector(".s4-name"), { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.55, ease: "expo.out" }, at + 0.14);
-          tl.fromTo(c.querySelector(".s4-desc"), { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.55, ease: "expo.out" }, at + 0.22);
+        // ═══ 2 · MANIFIESTO (6–10)
+        tl.fromTo("#s2-cam", { scale: 1.25 }, { scale: 1, duration: 0.7, ease: "power4.out" }, 6.0);
+        flash(6.0, 0.55);
+        waterfall($("#s2-a1"), 6.02, { st: 0.07 });
+        waterfall($("#s2-a2"), 6.5, { st: 0.07 });
+        tl.to("#s2-A", { x: -240, filter: "blur(10px)", opacity: 0, duration: 0.24, ease: "power4.in" }, 7.76);
+        tl.set("#s2-B", { autoAlpha: 0 }, 0);
+        tl.set("#s2-B", { autoAlpha: 1 }, 7.99);
+        tl.set("#s2-A", { autoAlpha: 0 }, 8.0);
+        waterfall($("#s2-b1"), 8.0, { x: 240, st: 0.06 });
+        waterfall($("#s2-b2"), 8.5, { x: 240, st: 0.06 });
+        tl.fromTo("#s2-arrow-p", { strokeDasharray: 700, strokeDashoffset: 700 }, { strokeDashoffset: 0, duration: 0.45, ease: "power3.out" }, 9.0);
+        tl.fromTo("#s2-arrow", { x: -120 }, { x: 60, duration: 1.0, ease: "power2.out" }, 9.0);
+        pulse(["#s2-r1", "#s2-r2"], 6, 10, 0.05);
+        // costura → 3
+        tl.to("#s2-cam", { x: -240, filter: "blur(10px)", opacity: 0, duration: 0.24, ease: "power4.in" }, 9.76);
+
+        // ═══ 3 · MENOS PAPELES (10–14)
+        tl.fromTo("#s3-cam", { x: 240, filter: "blur(10px)", opacity: 0 }, { x: 0, filter: "blur(0px)", opacity: 1, duration: 0.34, ease: "power4.out" }, 10.0);
+        tl.fromTo("#s3-dots", { x: 0 }, { x: -96, duration: 4.2, ease: "none" }, 10.0);
+        slotRoll($("#s3-p"), [11.0, 12.0]);
+        slotRoll($("#s3-w"), [11.0, 12.0]);
+        // folios que cruzan y se van: menos papeles, cada vez menos
+        var sheetBox = $("#s3-sheets");
+        var SH = [[1500, 120, -8, 10.05], [1640, 640, 6, 10.2], [120, 700, -5, 10.35], [300, 60, 9, 10.5], [1200, 760, -3, 10.65], [700, 820, 4, 11.0], [1700, 330, -10, 11.2]];
+        SH.forEach(function (s, i) {
+          var d = document.createElement("div"); d.className = "sheet"; d.id = "sh" + i;
+          d.style.left = s[0] + "px"; d.style.top = s[1] + "px";
+          sheetBox.appendChild(d);
+          tl.fromTo(d, { x: 700, rotation: s[2] + 25, autoAlpha: 0 }, { x: 0, rotation: s[2], autoAlpha: 1, duration: 0.5, ease: "power4.out" }, s[3]);
+          tl.to(d, { x: -2400, rotation: s[2] - 30, duration: 0.7, ease: "power3.in" }, 11.0 + i * 0.12);
         });
-        // Encendido final: los cuatro números a la vez, sobre el tiempo fuerte
-        tl.to(".s4-num", { color: "#ffffff", duration: 0.15, ease: "none", stagger: 0.05 }, T4 + 4.7);
-        tl.to(".s4-num", { color: "#3b82f6", duration: 0.4, ease: "power2.out", stagger: 0.05 }, T4 + 4.9);
-        // salida: zoom-through hacia cámara
-        var T5 = 19.6875;
-        tl.to("#s4", { scale: 2.6, opacity: 0, filter: "blur(18px)", duration: 0.42, ease: "power3.in" }, T5 - 0.2);
+        tl.fromTo("#s3-row", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power3.out", immediateRender: false }, 12.0);
+        // costura → 4: barrido azul
+        sweep(14.0, 0.8);
 
-        // ═════ 5 · 100% online → cercanos (19.6875 – 25.3125)
-        tl.fromTo("#s5", { scale: 0.55, opacity: 0, filter: "blur(18px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power3.out" }, T5 - 0.05);
-        tl.fromTo("#s5-k", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, T5 + 0.3);
-        rise($("#s5-t"), T5 + 0.3, { st: 0.07 });
-        tl.fromTo("#s5-big", { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "expo.out" }, T5 + 0.3 + 2 * B);
-        tl.fromTo("#s5-card", { autoAlpha: 0, x: 220, rotation: 4 }, { autoAlpha: 1, x: 0, rotation: 0, duration: 0.8, ease: "expo.out" }, T5 + 0.5);
-        ["#t1", "#t2", "#t3"].forEach(function (s, i) {
-          var at = T5 + 1.4 + i * B;
-          tl.fromTo(s, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: "expo.out" }, at - 0.25);
-          tl.fromTo(s + " .task-bar", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power2.inOut" }, at - 0.2);
-          tl.fromTo(s + " .tick", { scale: 0, rotation: -90 }, { scale: 1, rotation: 0, duration: 0.4, ease: "back.out(2.4)" }, at + 0.3);
+        // ═══ 4 · CUATRO ÁREAS → UN EQUIPO (14–18)
+        tl.fromTo("#s4-cam", { x: 180 }, { x: 0, duration: 0.6, ease: "power4.out" }, 14.0);
+        var numSlot = $("#s4-num .slot");
+        slotRoll(numSlot, [14.5, 15.0, 15.5, 16.5]);
+        slotRoll($("#s4-lab .slot"), [16.5]);
+        tl.fromTo("#s4-lab", { autoAlpha: 0, x: 80 }, { autoAlpha: 1, x: 0, duration: 0.4, ease: "power4.out" }, 14.0);
+        ["#ri1", "#ri2", "#ri3", "#ri4"].forEach(function (s, i) {
+          tl.fromTo(s, { autoAlpha: 0, x: 260, filter: "blur(8px)" }, { autoAlpha: 1, x: 0, filter: "blur(0px)", duration: 0.4, ease: "power4.out" }, 14.0 + i * B);
         });
-        tl.fromTo("#s5-advisor", { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "expo.out" }, T5 + 3.6);
-        tl.fromTo("#s5-sub", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "expo.out" }, T5 + 3.0);
-        // el giro: online → cercanos
-        tl.to("#s5-w1", { yPercent: -110, duration: 0.45, ease: "expo.inOut" }, T5 + 4.2);
-        tl.fromTo("#s5-w2", { yPercent: 110 }, { yPercent: 0, duration: 0.45, ease: "expo.inOut" }, T5 + 4.2);
-        var T6 = 25.3125;
-        tl.to("#s5", { x: -1920, duration: 0.5, ease: "power3.inOut" }, T6);
+        // al pasar a "1 equipo", las cuatro áreas se juntan en una sola línea azul
+        tl.to(["#ri1", "#ri2", "#ri3", "#ri4"], { color: "#60a5fa", duration: 0.2, stagger: 0.05 }, 16.3);
+        tl.to(["#ri1", "#ri2", "#ri3", "#ri4"], { y: function (i) { return (1.5 - i) * 105; }, scale: 0.92, duration: 0.45, ease: "power4.inOut" }, 16.5);
+        tl.to(["#ri2", "#ri3", "#ri4"], { autoAlpha: 0, duration: 0.2 }, 16.8);
+        tl.to("#ri1", { autoAlpha: 0, duration: 0.2 }, 16.8);
+        waterfall($("#s4-one"), 16.85, { st: 0.04, x: 60 });
+        pulse(["#s4-r1", "#s4-r2"], 14, 18, 0.05);
+        // costura → 5: zoom hacia cámara
+        tl.to("#s4-cam", { scale: 2.4, opacity: 0, filter: "blur(18px)", duration: 0.32, ease: "power4.in" }, 17.68);
 
-        // ═════ 6 · Equipo (25.3125 – 29.0625)
-        tl.fromTo("#s6", { x: 1920 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, T6);
-        tl.fromTo("#s6-k", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, T6 + 0.35);
-        rise($("#s6-t"), T6 + 0.4, { st: 0.05 });
-        ["#p1", "#p2", "#p3"].forEach(function (s, i) {
-          var at = T6 + 0.9 + i * B;
-          tl.fromTo(s + " .p-ph", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "expo.out" }, at);
-          tl.fromTo(s + " .p-sq", { autoAlpha: 0, x: -34, y: 26 }, { autoAlpha: 1, x: 0, y: 0, duration: 0.6, ease: "expo.out" }, at + 0.2);
-          tl.fromTo([s + " .p-role", s + " .p-name", s + " .p-bio"], { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "expo.out", stagger: 0.06 }, at + 0.3);
+        // ═══ 5 · 100% ONLINE → CERCANOS (18–22)
+        tl.fromTo("#s5-cam", { scale: 0.62, opacity: 0, filter: "blur(18px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.45, ease: "power4.out" }, 18.0);
+        waterfall($("#s5-l1"), 18.05, { st: 0.05 });
+        tl.fromTo("#s5-big", { autoAlpha: 0, x: 120 }, { autoAlpha: 1, x: 0, duration: 0.5, ease: "power4.out" }, 18.3);
+        tl.fromTo("#s5-card", { rotationY: -28, rotationX: 6, x: 260, autoAlpha: 0 }, { rotationY: -8, rotationX: 2, x: 0, autoAlpha: 1, duration: 0.7, ease: "power4.out" }, 18.1);
+        tl.to("#s5-card", { rotationY: 0, rotationX: 0, duration: 3.2, ease: "power2.inOut" }, 18.8);
+        ["#tt1", "#tt2", "#tt3", "#tt4"].forEach(function (s, i) {
+          var t = 18.5 + i * B;
+          tl.fromTo(s, { autoAlpha: 0, x: 140, scale: 0.92 }, { autoAlpha: 1, x: 0, scale: 1, duration: 0.38, ease: "back.out(1.5)" }, t);
+          tl.fromTo(s + " .tk", { scale: 0, rotation: -120 }, { scale: 1, rotation: 0, duration: 0.35, ease: "back.out(2)" }, t + 0.12);
         });
-        sweep(29.0625, 0.8);
+        tl.fromTo("#chat-av", { scale: 0 }, { scale: 1, duration: 0.35, ease: "back.out(1.7)" }, 20.5);
+        tl.fromTo("#chat-b", { autoAlpha: 0, scale: 0.6, x: -30 }, { autoAlpha: 1, scale: 1, x: 0, duration: 0.4, ease: "back.out(1.5)", transformOrigin: "0% 100%" }, 20.58);
+        tl.fromTo("#chat-n", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 }, 20.8);
+        slotRoll($("#s5-swap"), [21.0]);
+        tl.fromTo("#s5-big", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power3.out", immediateRender: false, transformOrigin: "0% 50%" }, 21.0);
+        flash(21.0, 0.25);
+        // costura → 6
+        tl.to("#s5-cam", { x: -240, filter: "blur(10px)", opacity: 0, duration: 0.24, ease: "power4.in" }, 21.76);
 
-        // ═════ 7 · Confianza (29.0625 – 33.75)
-        var T7 = 29.0625;
-        tl.fromTo("#s7-k", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, T7 + 0.3);
+        // ═══ 6 · PROFESIONALES DE VERDAD (22–26)
+        tl.fromTo("#s6-cam", { x: 240, filter: "blur(10px)", opacity: 0 }, { x: 0, filter: "blur(0px)", opacity: 1, duration: 0.34, ease: "power4.out" }, 22.0);
+        tl.fromTo("#s6-dots", { x: 0 }, { x: -96, duration: 4.2, ease: "none" }, 22.0);
+        waterfall($("#s6-t"), 22.02, { st: 0.07 });
         var cnt = { v: 0 };
-        tl.fromTo(cnt, { v: 0 }, { v: 15, duration: 1.3, ease: "power3.out",
-          onUpdate: function () { $("#s7-num").textContent = Math.round(cnt.v); } }, T7 + 0.3);
-        tl.fromTo("#s7-n", { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "expo.out" }, T7 + 0.3);
-        rise($("#s7-d"), T7 + 0.9, { st: 0.03 });
-        tl.fromTo("#s7-box", { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "expo.out" }, T7 + 1.6);
-        tl.fromTo("#s7-lk", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, T7 + 1.2);
-        tl.fromTo("#s7-logos", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.1, ease: "power3.inOut" }, T7 + 1.3);
-        tl.fromTo("#s7-logos", { x: 40 }, { x: -20, duration: 3.3, ease: "power1.out", immediateRender: false }, T7 + 1.3);
-        var T8 = 33.75;
-        tl.to("#s7", { x: -1920, duration: 0.5, ease: "power3.inOut" }, T8);
+        tl.fromTo("#s6-n", { autoAlpha: 0, y: 80 }, { autoAlpha: 1, y: 0, duration: 0.45, ease: "power4.out" }, 22.5);
+        tl.fromTo(cnt, { v: 0 }, { v: 15, duration: 1.0, ease: "power3.out", onUpdate: function () { $("#s6-num").textContent = Math.round(cnt.v); } }, 22.5);
+        waterfall($("#s6-nd"), 23.0, { st: 0.03, x: 40 });
+        for (var p = 1; p <= 8; p++) {
+          tl.fromTo("#pl" + p, { autoAlpha: 0, scale: 0.4, y: 60 }, { autoAlpha: 1, scale: 1, y: 0, duration: 0.4, ease: "back.out(1.6)" }, 23.5 + (p - 1) * 0.25);
+        }
+        // costura → 7: barrido
+        sweep(26.0, 0.8);
 
-        // ═════ 8 · Testimonio (33.75 – 37.5)
-        tl.fromTo("#s8", { x: 1920 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, T8);
-        tl.fromTo(["#qb1", "#qb2"], { yPercent: 60, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.7, ease: "expo.out", stagger: 0.08 }, T8 + 0.35);
-        tl.fromTo("#s8-k", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, T8 + 0.4);
-        rise($("#s8-q"), T8 + 0.45, { st: 0.07, d: 0.55 });
-        tl.fromTo("#s8-a", { autoAlpha: 0, x: -30 }, { autoAlpha: 1, x: 0, duration: 0.5, ease: "expo.out" }, T8 + 1.9);
-        tl.fromTo(["#qb1", "#qb2"], { x: 0 }, { x: -60, duration: 3.2, ease: "power1.out", immediateRender: false }, T8 + 0.35);
+        // ═══ 7 · CONFIANZA (26–30)
+        var LOGOS = [["genetracer",430,93],["maser",476,148],["bestinver",468,120],["auren",347,152],["nextlane",417,56],["industrial-shields",464,98],["ziclotech",319,168],["harbiz",297,171],["agroptimum",384,79],["tba",231,207],["huertas",202,225]];
+        var track = $("#s7-track");
+        for (var r = 0; r < 2; r++) {
+          LOGOS.forEach(function (l) {
+            var d = document.createElement("span"); d.className = "lg";
+            var h = Math.min(110, l[2] * 0.9), w = l[1] * (h / l[2]);
+            d.style.width = Math.round(w) + "px";
+            d.style.backgroundImage = "url('assets/brand/clientes/" + l[0] + ".png')";
+            d.style.backgroundSize = Math.round(w) + "px " + Math.round(h) + "px";
+            track.appendChild(d);
+          });
+        }
+        tl.fromTo("#s7-track", { x: 400 }, { x: -2600, duration: 4.0, ease: "none" }, 26.0);
+        waterfall($("#s7-q1"), 26.3, { st: 0.05 });
+        waterfall($("#s7-q2"), 27.0, { st: 0.09, d: 0.6 });
+        tl.fromTo("#s7-q2", { scale: 1.08 }, { scale: 1, duration: 1.2, ease: "power3.out", transformOrigin: "0% 50%" }, 27.0);
+        tl.fromTo("#s7-a", { autoAlpha: 0, x: 60 }, { autoAlpha: 1, x: 0, duration: 0.4, ease: "power4.out" }, 28.0);
+        tl.fromTo("#s7-cam", { x: 0 }, { x: -60, duration: 4, ease: "none" }, 26.0);
 
-        // ═════ 9 · Cierre (37.5 – 45)
-        var T9 = 37.5;
-        tl.fromTo("#flash", { opacity: 0.9 }, { opacity: 0, duration: 0.5, ease: "power2.out" }, T9 - 0.1);
-        tl.fromTo("#s9-halo", { scale: 0.6, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 2.4, ease: "expo.out" }, T9);
-        tl.fromTo(["#r1", "#r2", "#r3"], { scale: 0.3, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 1.8, ease: "expo.out", stagger: 0.12 }, T9);
-        rise($("#s9-t"), T9 + 0.05, { st: 0.09, d: 0.6 });
-        tl.fromTo("#s9-t", { scale: 1.12 }, { scale: 1, duration: 1.4, ease: "expo.out" }, T9);
-        // el titular se va hacia atrás y el logotipo llega con el impulso
-        var TL = T9 + 4 * B; // 39.375
-        tl.to("#s9-t", { scale: 0.7, autoAlpha: 0, filter: "blur(10px)", duration: 0.4, ease: "power3.in" }, TL - 0.35);
-        tl.fromTo("#s9-logo", { clipPath: "inset(0% 100% 0% 0%)", x: -40 }, { clipPath: "inset(0% 0% 0% 0%)", x: 0, duration: 0.9, ease: "expo.out" }, TL);
-        tl.fromTo("#s9-logo", { scale: 1.04 }, { scale: 1, duration: 3, ease: "power2.out", immediateRender: false }, TL);
-        rise($("#s9-tag"), TL + 0.7, { st: 0.05, d: 0.55 });
-        tl.fromTo("#s9-cta", { autoAlpha: 0, y: 30, scale: 0.92 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.6, ease: "expo.out" }, TL + 1.4);
-        tl.fromTo("#s9-mail", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, TL + 1.7);
-        tl.to(["#r1", "#r2", "#r3"], { scale: 1.12, duration: 5, ease: "power1.out", stagger: 0.1 }, T9 + 1.9);
-        tl.to("#s9", { opacity: 0, duration: 0.7, ease: "power2.in" }, 44.25);
+        // ═══ 8 · CIERRE (30–38.5)
+        // Break: silencio relativo, dos frases al compás
+        tl.set("#s8-bg", { opacity: 0 }, 0);
+        waterfall($("#s8-t1"), 30.05, { x: 0, st: 0.1 });
+        waterfall($("#s8-t2"), 31.0, { x: 0, st: 0.12, d: 0.5 });
+        tl.fromTo("#s8-t2", { scale: 1.1 }, { scale: 1, duration: 0.9, ease: "power3.out" }, 31.0);
+        tl.fromTo("#s8-burst", { scale: 0, autoAlpha: 0 }, { scale: 0.6, autoAlpha: 1, duration: 0.1, ease: "back.out(2)" }, 31.6);
+        tl.to(["#s8-t1", "#s8-t2"], { scale: 0.86, opacity: 0, filter: "blur(10px)", duration: 0.3, ease: "power4.in" }, 31.7);
+        // 32 · DROP final: el paralelogramo vuela y se convierte en el acento del logotipo
+        tl.to("#s8-burst", { x: -369, y: -18, scale: 0.55, rotation: 0, duration: 0.3, ease: "power4.in" }, 31.7);
+        tl.set("#s8-burst", { autoAlpha: 0 }, 32.0);
+        tl.set("#s8-bg", { opacity: 1 }, 32.0);
+        flash(32.0, 0.9);
+        tl.fromTo("#s8-logo", { clipPath: "inset(0% 100% 0% 0%)", scale: 1.18 }, { clipPath: "inset(0% 0% 0% 0%)", scale: 1, duration: 0.6, ease: "power4.out" }, 32.0);
+        tl.fromTo(["#r1", "#r2", "#r3"], { scale: 0.2, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 1.2, ease: "power4.out", stagger: 0.08 }, 32.0);
+        pulse(["#r1", "#r2", "#r3"], 33.5, 36, 0.04);
+        waterfall($("#s8-tag"), 32.6, { x: 0, st: 0.05 });
+        tl.fromTo("#s8-cta", { autoAlpha: 0, y: 40, scale: 0.85 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.45, ease: "back.out(1.6)" }, 33.5);
+        tl.fromTo("#s8-mail", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, 34.0);
+        // 36 · último golpe
+        flash(36.0, 0.35);
+        tl.fromTo("#s8-logo", { scale: 1.06 }, { scale: 1, duration: 0.8, ease: "power3.out", immediateRender: false }, 36.0);
+        tl.fromTo("#s8-cta", { scale: 1.08 }, { scale: 1, duration: 0.6, ease: "power3.out", immediateRender: false }, 36.0);
+        tl.to("#fade", { opacity: 1, duration: 1.1, ease: "power2.in" }, 37.35);
 
-        tl.to({}, { duration: 45 }, 0);
+        tl.to({}, { duration: 38.5 }, 0);
         window.__timelines["main"] = tl;
       })();
     </script>

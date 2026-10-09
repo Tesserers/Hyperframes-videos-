@@ -69,3 +69,9 @@ cool y de confianza aunque sea 100% online, el mejor aliado de las empresas—, 
 - Letras: se eliminan las máscaras de recorte en las entradas de texto; ahora entran con
   desenfoque y fundido, sin ningún recorte posible durante la animación.
 - `scripts/synth-music.py` queda como referencia de la v2; ya no se usa.
+
+## Versión 5
+
+- Arranque más suave: sin estrobo ni fogonazos; las tareas aparecen con fundido y desenfoque,
+  se acumulan atenuadas y se apagan antes de "¿Te suena?". La música entra con un fundido de 2,6 s.
+  Del drop en adelante, igual.

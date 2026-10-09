@@ -7,7 +7,7 @@ destination: web
 aspect: 1920x1080
 language: es
 audience: "Fundadores y gerentes de pymes y empresas en crecimiento en España"
-length: 38.5s
+length: 40s
 angle: "Del ruido administrativo a la calma: online sin perder la cercanía"
 style_preset: brand-native
 capture: client-supplied
@@ -56,3 +56,16 @@ cool y de confianza aunque sea 100% online, el mejor aliado de las empresas—, 
   la música. Golpes de palabra con estrobo al arrancar, el paralelogramo del logo que revienta en
   el drop, ruedas de palabras, folios que salen volando, el 1→4→1 de "áreas/equipo", tarjeta en
   3D con notificaciones y un chat del asesor, cinta de logos y grano de película encima.
+
+## Versión 4 (feedback de Eddy)
+
+- Música: "Runway Groove", aportada por Eddy (`assets/bgm/runway-groove.mp3`). Se usa el tramo
+  2:03,41–2:43,40 (`runway-groove-cut.wav`), 128,6 BPM. Es el que mejor encaja con el montaje:
+  golpes fuertes durante las palabras del arranque, casi silencio para "¿Te suena?", drop en el
+  2:11,31 (vídeo 7,90 s) con el estallido azul, break de 2 compases en el 2:22,48 (19,07 s) para
+  "Sin oficinas. Sin papeles." y segundo drop en el 2:26,19 (22,78 s) justo en "100% cercanos".
+- El montaje se diseñó sobre una rejilla de 0,5 s; la tabla `MAP` del index lo recoloca sobre los
+  golpes reales de la canción (posiciones y duraciones). Los cortes caen en compás.
+- Letras: se eliminan las máscaras de recorte en las entradas de texto; ahora entran con
+  desenfoque y fundido, sin ningún recorte posible durante la animación.
+- `scripts/synth-music.py` queda como referencia de la v2; ya no se usa.

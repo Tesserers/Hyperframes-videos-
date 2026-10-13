@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="es">
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        #root { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; background: var(--bone); }
+        .bk-stage { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+        .bk-frame { position: absolute; left: 24px; top: 24px; width: 1032px; height: 1872px; border: 2px solid var(--choc); border-radius: 4px; }
+
+        .bk-kwrap { position: absolute; left: 60px; top: 292px; width: 960px; text-align: center; }
+        .bk-kicker { display: inline-block; font-family: var(--f-display); font-style: italic; font-weight: 300; font-size: 66px; line-height: 1.1; color: var(--caramel); }
+        .bk-title { position: absolute; left: 40px; top: 372px; width: 1000px; text-align: center; font-family: var(--f-display); font-weight: 900; font-size: 104px; line-height: 1.02; letter-spacing: -0.015em; color: var(--choc); white-space: nowrap; }
+        .bk-ch { display: inline-block; }
+        .bk-sp { display: inline-block; width: 0.24em; }
+
+        .bk-item { position: absolute; left: 240px; top: 640px; width: 600px; height: 600px; overflow: visible; }
+        .bk-item .ol { fill: none; stroke: #2A1B0E; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+        .bk-name { position: absolute; left: 40px; top: 1250px; width: 1000px; text-align: center; font-family: var(--f-display); font-weight: 900; font-size: 136px; line-height: 1.05; color: var(--choc); white-space: nowrap; }
+        .bk-sub { position: absolute; left: 60px; top: 1410px; width: 960px; text-align: center; font-family: var(--f-display); font-style: italic; font-weight: 300; font-size: 60px; line-height: 1.1; color: var(--caramel); }
+        .bk-nam { position: absolute; left: 800px; top: 900px; font-family: var(--f-mono); font-weight: 500; font-size: 40px; letter-spacing: 4px; color: var(--caramel); }
+
+        .bk-bean { position: absolute; width: 112px; height: 134px; }
+        .bk-bean svg { display: block; width: 112px; height: 134px; overflow: visible; }
+
+        .bk-mini { position: absolute; width: 300px; height: 300px; overflow: visible; }
+        .bk-mini .ol { fill: none; stroke: #2A1B0E; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
+        .bk-mlabel { position: absolute; width: 300px; text-align: center; font-family: var(--f-mono); font-weight: 500; font-size: 26px; letter-spacing: 4px; color: var(--caramel); }
+        .bk-qwrap { position: absolute; left: 60px; top: 1390px; width: 960px; text-align: center; }
+        .bk-q { display: inline-block; font-family: var(--f-display); font-style: italic; font-weight: 400; font-size: 82px; line-height: 1.1; color: var(--choc); }
+
+        .bk-erase { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+      </style>
+
+      <div id="root" data-composition-id="breakfast" data-width="1080" data-height="1920" data-duration="9.65">
+        <div id="bk-stage" class="bk-stage">
+          <div class="bk-frame"></div>
+
+          <div class="bk-kwrap"><span id="bk-kicker" class="bk-kicker">desayunos para</span></div>
+          <div id="bk-title" class="bk-title"></div>
+
+          <!-- 0 · café -->
+          <svg id="bk-i0" class="bk-item" viewBox="0 0 600 600" aria-hidden="true">
+            <g class="bk-fill">
+              <ellipse cx="300" cy="500" rx="250" ry="40" fill="#D4A668" />
+              <ellipse cx="300" cy="492" rx="170" ry="20" fill="#B8893E" opacity="0.5" />
+              <path d="M468 290 C 560 280, 562 410, 440 410" fill="none" stroke="#5C3A1E" stroke-width="28" stroke-linecap="round" />
+              <path d="M120 260 C 124 380, 180 470, 300 470 C 420 470, 476 380, 480 260 Z" fill="#5C3A1E" />
+              <ellipse cx="300" cy="260" rx="180" ry="30" fill="#3F2611" />
+              <path id="bk-heart0" d="M300 420 C 300 420, 258 392, 258 366 C 258 350, 272 340, 285 340 C 293 340, 298 345, 300 351 C 302 345, 307 340, 315 340 C 328 340, 342 350, 342 366 C 342 392, 300 420, 300 420 Z" fill="#C97A5C" />
+            </g>
+            <path id="bk-o0" class="ol" d="M120 260 C 124 380, 180 470, 300 470 C 420 470, 476 380, 480 260 C 480 222, 120 222, 120 260 C 120 298, 480 298, 480 260" />
+            <path class="ol bk-ol0" d="M50 500 C 50 450, 550 450, 550 500 C 550 550, 50 550, 50 500 Z" />
+            <path class="ol bk-ol0" d="M470 276 C 580 262, 584 428, 438 424" />
+            <path class="ol bk-steam" d="M230 210 C 205 180, 255 150, 230 120 C 205 90, 255 60, 230 30" stroke="#8B5E3C" />
+            <path class="ol bk-steam" d="M300 200 C 275 170, 325 140, 300 110 C 275 80, 325 50, 300 20" stroke="#8B5E3C" />
+            <path class="ol bk-steam" d="M370 210 C 345 180, 395 150, 370 120 C 345 90, 395 60, 370 30" stroke="#8B5E3C" />
+          </svg>
+
+          <!-- 1 · matcha -->
+          <svg id="bk-i1" class="bk-item" viewBox="0 0 600 600" aria-hidden="true">
+            <g class="bk-fill">
+              <rect x="220" y="500" width="160" height="34" rx="10" fill="#8B5E3C" />
+              <path d="M80 300 C 90 450, 190 520, 300 520 C 410 520, 510 450, 520 300 Z" fill="#D4A668" />
+              <path d="M96 380 C 200 410, 400 410, 504 380" fill="none" stroke="#B8893E" stroke-width="5" />
+              <ellipse cx="300" cy="300" rx="220" ry="40" fill="#9CB071" />
+              <path id="bk-heart1" d="M300 324 C 300 324, 252 308, 252 292 C 252 282, 266 276, 280 278 C 290 279, 297 284, 300 289 C 303 284, 310 279, 320 278 C 334 276, 348 282, 348 292 C 348 308, 300 324, 300 324 Z" fill="#F2E3C0" />
+              <circle class="bk-bub" cx="190" cy="296" r="9" fill="#F2E3C0" />
+              <circle class="bk-bub" cx="420" cy="300" r="7" fill="#F2E3C0" />
+              <circle class="bk-bub" cx="370" cy="286" r="6" fill="#F2E3C0" />
+            </g>
+            <path id="bk-o1" class="ol" d="M80 300 C 90 450, 190 520, 300 520 C 410 520, 510 450, 520 300 C 520 254, 80 254, 80 300 C 80 346, 520 346, 520 300" />
+            <g id="bk-whisk">
+              <rect x="430" y="40" width="38" height="150" rx="12" fill="#D4A668" stroke="#2A1B0E" stroke-width="6" transform="rotate(24 449 115)" />
+              <path class="ol" d="M398 192 C 390 230, 380 260, 372 290 M414 196 C 410 236, 404 266, 398 294 M430 202 C 430 240, 426 270, 424 296 M446 206 C 450 244, 452 272, 452 298" stroke="#8B5E3C" stroke-width="5" />
+            </g>
+            <path class="ol bk-ol1" d="M60 120 C 90 60, 170 50, 200 70 C 180 130, 110 150, 60 120 Z M70 118 C 110 100, 150 86, 196 72" stroke="#5C3A1E" />
+            <path class="bk-leaf" d="M60 120 C 90 60, 170 50, 200 70 C 180 130, 110 150, 60 120 Z" fill="#9CB071" opacity="0.9" />
+          </svg>
+
+          <!-- 2 · tostadas -->
+          <svg id="bk-i2" class="bk-item" viewBox="0 0 600 600" aria-hidden="true">
+            <g id="bk-toastB" transform="translate(300 150) rotate(10)">
+              <path class="bk-fill" d="M0 120 C 0 40, 60 0, 120 10 C 160 -10, 220 10, 230 60 C 260 80, 260 140, 230 160 L 230 330 C 230 345, 220 355, 205 355 L 25 355 C 10 355, 0 345, 0 330 Z" fill="#8B5E3C" />
+              <path class="bk-fill" d="M22 128 C 22 60, 70 26, 120 34 C 154 18, 200 34, 208 74 C 230 92, 232 136, 208 152 L 208 318 C 208 328, 202 334, 192 334 L 38 334 C 28 334, 22 328, 22 318 Z" fill="#D4A668" />
+              <path class="ol bk-ol2" d="M0 120 C 0 40, 60 0, 120 10 C 160 -10, 220 10, 230 60 C 260 80, 260 140, 230 160 L 230 330 C 230 345, 220 355, 205 355 L 25 355 C 10 355, 0 345, 0 330 Z" />
+            </g>
+            <g id="bk-toastA" transform="translate(70 170) rotate(-8)">
+              <path class="bk-fill" d="M0 120 C 0 40, 60 0, 120 10 C 160 -10, 220 10, 230 60 C 260 80, 260 140, 230 160 L 230 330 C 230 345, 220 355, 205 355 L 25 355 C 10 355, 0 345, 0 330 Z" fill="#8B5E3C" />
+              <path class="bk-fill" d="M22 128 C 22 60, 70 26, 120 34 C 154 18, 200 34, 208 74 C 230 92, 232 136, 208 152 L 208 318 C 208 328, 202 334, 192 334 L 38 334 C 28 334, 22 328, 22 318 Z" fill="#D4A668" />
+              <path id="bk-o2" class="ol" d="M0 120 C 0 40, 60 0, 120 10 C 160 -10, 220 10, 230 60 C 260 80, 260 140, 230 160 L 230 330 C 230 345, 220 355, 205 355 L 25 355 C 10 355, 0 345, 0 330 Z" />
+            </g>
+            <g id="bk-butter">
+              <rect x="150" y="300" width="110" height="74" rx="14" fill="#FFDE86" stroke="#2A1B0E" stroke-width="6" />
+              <path d="M166 318 L 200 318" stroke="#F2E3C0" stroke-width="8" stroke-linecap="round" />
+            </g>
+            <rect class="bk-crumb" x="120" y="540" width="14" height="12" rx="3" fill="#8B5E3C" />
+            <rect class="bk-crumb" x="300" y="560" width="12" height="10" rx="3" fill="#D4A668" />
+            <rect class="bk-crumb" x="460" y="548" width="16" height="12" rx="3" fill="#8B5E3C" />
+          </svg>
+
+          <!-- 3 · bollería -->
+          <svg id="bk-i3" class="bk-item" viewBox="0 0 600 600" aria-hidden="true">
+            <g id="bk-croissant">
+              <g class="bk-fill"><ellipse cx="62" cy="430" rx="34" ry="44" transform="rotate(-62 62 430)" fill="#D4A668" stroke="#2A1B0E" stroke-width="6" /><ellipse cx="538" cy="430" rx="34" ry="44" transform="rotate(62 538 430)" fill="#D4A668" stroke="#2A1B0E" stroke-width="6" /><ellipse cx="118" cy="380" rx="62" ry="76" transform="rotate(-50 118 380)" fill="#D4A668" stroke="#2A1B0E" stroke-width="6" /><ellipse cx="482" cy="380" rx="62" ry="76" transform="rotate(50 482 380)" fill="#D4A668" stroke="#2A1B0E" stroke-width="6" /><ellipse cx="196" cy="326" rx="78" ry="96" transform="rotate(-30 196 326)" fill="#D4A668" stroke="#2A1B0E" stroke-width="6" /><ellipse cx="404" cy="326" rx="78" ry="96" transform="rotate(30 404 326)" fill="#D4A668" stroke="#2A1B0E" stroke-width="6" /><ellipse cx="300" cy="290" rx="92" ry="118" transform="rotate(0 300 290)" fill="#D4A668" stroke="#2A1B0E" stroke-width="6" /><path d="M84 369 Q 118 399 152 369" transform="rotate(-50 118 380)" fill="none" stroke="#8B5E3C" stroke-width="5" stroke-linecap="round" /><path d="M448 369 Q 482 399 516 369" transform="rotate(50 482 380)" fill="none" stroke="#8B5E3C" stroke-width="5" stroke-linecap="round" /><path d="M153 312 Q 196 350 239 312" transform="rotate(-30 196 326)" fill="none" stroke="#8B5E3C" stroke-width="5" stroke-linecap="round" /><path d="M361 312 Q 404 350 447 312" transform="rotate(30 404 326)" fill="none" stroke="#8B5E3C" stroke-width="5" stroke-linecap="round" /><path d="M249 272 Q 300 320 351 272" transform="rotate(0 300 290)" fill="none" stroke="#8B5E3C" stroke-width="5" stroke-linecap="round" />
+                <path d="M262 214 C 280 196, 320 196, 338 214" fill="none" stroke="#FFDE86" stroke-width="10" stroke-linecap="round" />
+              </g>
+              
+              <ellipse id="bk-o3" class="ol" cx="300" cy="290" rx="92" ry="118" />
+              <g id="bk-bite">
+                <circle cx="560" cy="452" r="34" fill="#FAF4E6" />
+                <circle cx="538" cy="404" r="30" fill="#FAF4E6" />
+                <circle cx="574" cy="408" r="26" fill="#FAF4E6" />
+              </g>
+            </g>
+            <rect class="bk-crumb3" x="470" y="470" width="14" height="12" rx="3" fill="#D4A668" />
+            <rect class="bk-crumb3" x="520" y="480" width="10" height="9" rx="3" fill="#8B5E3C" />
+            <rect class="bk-crumb3" x="500" y="452" width="12" height="10" rx="3" fill="#D4A668" />
+          </svg>
+          <div id="bk-nam" class="bk-nam">ÑAM</div>
+
+          <div id="bk-n0" class="bk-name">café</div>
+          <div id="bk-n1" class="bk-name">matcha</div>
+          <div id="bk-n2" class="bk-name">tostadas</div>
+          <div id="bk-n3" class="bk-name">bollería</div>
+          <div id="bk-u0" class="bk-sub">recién hecho</div>
+          <div id="bk-u1" class="bk-sub">verde y suave</div>
+          <div id="bk-u2" class="bk-sub">bien crujientes</div>
+          <div id="bk-u3" class="bk-sub">para mojar</div>
+
+          <div id="bk-recap"></div>
+          <div class="bk-qwrap"><span id="bk-q" class="bk-q">¿cuál es el tuyo?</span></div>
+
+
+          <svg id="bk-erase" class="bk-erase" viewBox="0 0 1080 1920" aria-hidden="true">
+            <defs>
+              <filter id="bk-rough" x="-10%" y="-10%" width="120%" height="120%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="9" result="n" />
+                <feDisplacementMap in="SourceGraphic" in2="n" scale="30" xChannelSelector="R" yChannelSelector="G" />
+              </filter>
+            </defs>
+          </svg>
+          <div id="bk-b0" class="bk-bean" style="left:46px;top:1010px"><svg viewBox="0 0 112 134" aria-hidden="true"><ellipse cx="56" cy="67" rx="46" ry="60" fill="#8B5E3C" transform="rotate(-12 56 67)" /><path d="M58 10 C 48 26, 64 38, 54 50" fill="none" stroke="#5C3A1E" stroke-width="5" stroke-linecap="round" /><g class="bk-eyes"><ellipse cx="40" cy="74" rx="5.5" ry="6.5" fill="#2A1B0E" /><ellipse cx="70" cy="74" rx="5.5" ry="6.5" fill="#2A1B0E" /></g><ellipse cx="30" cy="88" rx="8" ry="4.5" fill="#C97A5C" /><ellipse cx="80" cy="88" rx="8" ry="4.5" fill="#C97A5C" /><path d="M48 86 Q 55 94 62 86" fill="none" stroke="#2A1B0E" stroke-width="3.5" stroke-linecap="round" /></svg></div>
+          <div id="bk-b1" class="bk-bean" style="left:922px;top:990px"><svg viewBox="0 0 112 134" aria-hidden="true"><ellipse cx="56" cy="67" rx="46" ry="60" fill="#8B5E3C" transform="rotate(10 56 67)" /><path d="M58 10 C 48 26, 64 38, 54 50" fill="none" stroke="#5C3A1E" stroke-width="5" stroke-linecap="round" /><g class="bk-eyes"><ellipse cx="40" cy="74" rx="5.5" ry="6.5" fill="#2A1B0E" /><ellipse cx="70" cy="74" rx="5.5" ry="6.5" fill="#2A1B0E" /></g><ellipse cx="30" cy="88" rx="8" ry="4.5" fill="#C97A5C" /><ellipse cx="80" cy="88" rx="8" ry="4.5" fill="#C97A5C" /><path d="M48 86 Q 55 94 62 86" fill="none" stroke="#2A1B0E" stroke-width="3.5" stroke-linecap="round" /></svg></div>
+        </div>
+      </div>
+
+      <script>
+        document.fonts.ready.then(() => {
+          const P = window.TinaPencil;
+          const $ = (id) => document.getElementById(id);
+          const stage = $("bk-stage");
+
+          // titular en letras sueltas para que salten
+          const TITLE = "todos los gustos";
+          $("bk-title").innerHTML = TITLE.split("").map((c) => (c === " " ? '<span class="bk-sp"></span>' : '<span class="bk-ch">' + c + "</span>")).join("");
+
+          // el resumen: copias en pequeño de los cuatro desayunos ya terminados
+          const SLOTS = [[150, 640], [630, 640], [150, 990], [630, 990]];
+          const NAMES = ["CAFÉ", "MATCHA", "TOSTADAS", "BOLLERÍA"];
+          SLOTS.forEach(([x, y], i) => {
+            const c = $("bk-i" + i).cloneNode(true);
+            c.querySelectorAll("[id]").forEach((n) => n.removeAttribute("id"));
+            c.querySelectorAll(".bk-bub, .bk-crumb, .bk-crumb3, .bk-steam").forEach((n) => n.remove());
+            c.setAttribute("id", "bk-m" + i);
+            c.setAttribute("class", "bk-mini");
+            c.setAttribute("style", "left:" + x + "px;top:" + y + "px");
+            $("bk-recap").appendChild(c);
+            const l = document.createElement("div");
+            l.className = "bk-mlabel";
+            l.id = "bk-ml" + i;
+            l.textContent = NAMES[i];
+            l.setAttribute("style", "left:" + x + "px;top:" + (y + 300) + "px");
+            $("bk-recap").appendChild(l);
+          });
+          // en la copia del cruasán no hay mordisco
+          $("bk-m3").querySelectorAll("circle").forEach((n) => n.remove());
+
+          // medidas antes de animar
+          const kb = P.box($("bk-kicker"), stage);
+          const qb = P.box($("bk-q"), stage);
+
+          const tip = P.make(stage, "bk-tip", "draw");
+          const rub = P.make(stage, "bk-rub", "erase");
+          const esvg = $("bk-erase");
+          const tl = gsap.timeline({ paused: true });
+
+          // todo lo que se dibuja más tarde empieza escondido
+          gsap.set(["#bk-i0", "#bk-i1", "#bk-i2", "#bk-i3", "#bk-nam", "#bk-n0", "#bk-n1", "#bk-n2", "#bk-n3", "#bk-u0", "#bk-u1", "#bk-u2", "#bk-u3"], { autoAlpha: 0 });
+          gsap.set(["#bk-m0", "#bk-m1", "#bk-m2", "#bk-m3", "#bk-ml0", "#bk-ml1", "#bk-ml2", "#bk-ml3"], { autoAlpha: 0 });
+
+          // cabecera: «desayunos para» a lápiz, «todos los gustos» salta
+          P.fly(tl, tip, [1250, 200], [kb.x, kb.y + kb.h * 0.7], 0.0, 0.15);
+          P.write(tl, $("bk-kicker"), { t: 0.15, dur: 0.5, pen: tip, box: kb });
+          P.fly(tl, tip, [kb.x + kb.w, kb.y + kb.h * 0.5], [1300, 300], 0.65, 0.2, true);
+          const rots = [-12, 9, -7, 11, -9, 8, -11, 10, -8, 12, -10, 9, -12, 8];
+          tl.fromTo("#bk-title .bk-ch", { autoAlpha: 0, y: 90, scale: 0.4, rotation: (i) => rots[i % rots.length] },
+            { autoAlpha: 1, y: 0, scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2.2)", stagger: 0.03 }, 0.7);
+
+          // los granitos llegan y botan a ritmo hasta el final
+          tl.fromTo(["#bk-b0", "#bk-b1"], { autoAlpha: 0, scale: 0.2 }, { autoAlpha: 1, scale: 1, duration: 0.4, ease: "back.out(2)", stagger: 0.1 }, 0.9);
+          for (let k = 0; k < 16; k++) {
+            const t = 1.25 + k * 0.5;
+            const b = k % 2 ? "#bk-b1" : "#bk-b0";
+            tl.to(b, { y: -50, scaleY: 1.06, scaleX: 0.95, rotation: k % 4 < 2 ? -8 : 8, duration: 0.2, ease: "power2.out", transformOrigin: "50% 100%" }, t);
+            tl.to(b, { y: 0, scaleY: 1, scaleX: 1, rotation: 0, duration: 0.2, ease: "power2.in" }, t + 0.2);
+          }
+          [2.1, 4.6, 7.1].forEach((t) => tl.to(".bk-eyes", { scaleY: 0.12, duration: 0.07, ease: "none", yoyo: true, repeat: 1, transformOrigin: "50% 74px" }, t));
+
+          // ---- los cuatro desayunos ------------------------------------------------
+          const ER = { x0: 60, y0: 600, x1: 1020, y1: 1500, w: 420 };
+          const erStart = P.zigzag(ER.x0, ER.y0, ER.x1, ER.y1, ER.w)[0];
+          for (let i = 0; i < 4; i++) {
+            const T = 1.25 + 1.5 * i;
+            const item = "#bk-i" + i;
+            const main = $("bk-o" + i);
+            // el contorno principal del tostado vive en un grupo girado: su lápiz
+            // sigue el trazo sin el giro, que es pequeño (8°)
+            const off = i === 2 ? { ox: 240 + 70, oy: 640 + 170 } : { ox: 240, oy: 640 };
+            const p0 = main.getPointAtLength(0);
+            tl.set(item, { autoAlpha: 1 }, T);
+            P.fly(tl, tip, [1250, 300], [off.ox + p0.x, off.oy + p0.y], T - 0.2, 0.2);
+            P.trace(tl, main, { t: T, dur: 0.45, pen: tip, ox: off.ox, oy: off.oy, s: 1, samples: 22 });
+            P.fly(tl, tip, [off.ox + p0.x, off.oy + p0.y], [1320, 420], T + 0.45, 0.2, true);
+            document.querySelectorAll(item + " .bk-ol" + i).forEach((p) => {
+              const L = p.getTotalLength();
+              tl.fromTo(p, { strokeDasharray: L + 1, strokeDashoffset: L + 1 }, { strokeDashoffset: 0, duration: 0.4, ease: "power1.inOut" }, T + 0.05);
+            });
+            tl.fromTo(item + " .bk-fill", { autoAlpha: 0, scale: 0.86, transformOrigin: "50% 50%" }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, T + 0.28);
+            tl.fromTo("#bk-n" + i, { autoAlpha: 0, y: 70, scale: 0.6 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.4, ease: "back.out(2)" }, T + 0.3);
+            tl.fromTo("#bk-u" + i, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.35, ease: "power3.out" }, T + 0.45);
+
+            // la goma lo borra todo de un plumazo
+            P.fly(tl, rub, [1250, 500], erStart, T + 0.97, 0.18);
+            P.scribble(tl, { svg: esvg, pen: rub, ...ER, color: "#FAF4E6", t: T + 1.15, dur: 0.3, filter: "bk-rough", hideAt: T + 1.46 });
+            P.fly(tl, rub, [1300, 1600], [1350, 2200], T + 1.45, 0.15, true);
+            tl.set([item, "#bk-n" + i, "#bk-u" + i], { autoAlpha: 0 }, T + 1.45);
+          }
+
+          // café: el vapor se dibuja y sube, la taza da dos saltitos
+          tl.fromTo("#bk-i0 .bk-steam", { strokeDasharray: 240, strokeDashoffset: 240, y: 0, autoAlpha: 1 }, { strokeDashoffset: 0, duration: 0.4, ease: "power1.out", stagger: 0.08 }, 1.6);
+          tl.to("#bk-i0 .bk-steam", { y: -60, autoAlpha: 0, duration: 0.45, ease: "power1.in", stagger: 0.06 }, 2.05);
+          [1.75, 2.25].forEach((t) => {
+            tl.to("#bk-i0", { y: -36, rotation: -4, duration: 0.16, ease: "power2.out" }, t);
+            tl.to("#bk-i0", { y: 0, rotation: 0, duration: 0.18, ease: "power2.in" }, t + 0.16);
+          });
+          tl.to("#bk-heart0", { scale: 1.25, duration: 0.12, ease: "power2.out", yoyo: true, repeat: 3, transformOrigin: "50% 50%" }, 1.85);
+
+          // matcha: el batidor bate, salen burbujas, late la espuma
+          tl.fromTo("#bk-whisk", { x: 0, rotation: 0 }, { x: 34, rotation: 8, duration: 0.06, ease: "sine.inOut", yoyo: true, repeat: 9, transformOrigin: "440px 120px" }, 3.25);
+          tl.fromTo("#bk-i1 .bk-bub", { y: 0, autoAlpha: 1, scale: 1 }, { y: -90, autoAlpha: 0, scale: 0.4, duration: 0.5, ease: "power1.out", stagger: 0.1 }, 3.3);
+          tl.to("#bk-heart1", { scale: 1.2, duration: 0.14, ease: "power2.out", yoyo: true, repeat: 1, transformOrigin: "50% 50%" }, 3.75);
+          tl.fromTo("#bk-i1 .bk-leaf", { scale: 0, rotation: -30, transformOrigin: "60px 120px" }, { scale: 1, rotation: 0, duration: 0.35, ease: "back.out(2)" }, 3.0);
+
+          // tostadas: saltan como de la tostadora, cae la mantequilla, migas
+          tl.to("#bk-toastA", { y: -90, rotation: -6, duration: 0.18, ease: "power2.out", yoyo: true, repeat: 1 }, 4.75);
+          tl.to("#bk-toastB", { y: -110, rotation: 6, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 }, 4.8);
+          tl.fromTo("#bk-butter", { y: -380, rotation: -30, autoAlpha: 1 }, { y: 0, rotation: 0, duration: 0.28, ease: "power2.in" }, 4.95);
+          tl.to("#bk-butter", { scaleY: 0.72, scaleX: 1.16, duration: 0.08, ease: "power1.out", yoyo: true, repeat: 1, transformOrigin: "205px 374px" }, 5.23);
+          tl.fromTo("#bk-i2 .bk-crumb", { x: 0, y: 0, rotation: 0, autoAlpha: 0 }, { x: (i) => [-60, 10, 70][i], y: (i) => [-90, -120, -80][i], rotation: 180, autoAlpha: 1, duration: 0.3, ease: "power2.out" }, 5.25);
+
+          // bollería: el cruasán se menea y… ¡ñam!
+          tl.fromTo("#bk-croissant", { rotation: 0 }, { rotation: -6, duration: 0.12, ease: "sine.inOut", yoyo: true, repeat: 3, transformOrigin: "300px 300px" }, 6.25);
+          tl.fromTo("#bk-bite", { scale: 0, transformOrigin: "555px 420px" }, { scale: 1, duration: 0.18, ease: "back.out(3)" }, 6.75);
+          tl.fromTo("#bk-i3 .bk-crumb3", { x: 0, y: 0, autoAlpha: 0, rotation: 0 }, { x: (i) => [30, 70, 60][i], y: (i) => [-60, -20, -100][i], rotation: 160, autoAlpha: 1, duration: 0.3, ease: "power2.out" }, 6.78);
+          tl.fromTo("#bk-nam", { autoAlpha: 0, scale: 0.3, rotation: -20 }, { autoAlpha: 1, scale: 1, rotation: 8, duration: 0.25, ease: "back.out(3)" }, 6.8);
+          tl.set("#bk-nam", { autoAlpha: 0 }, 7.7);
+
+          // ---- resumen: los cuatro a la vez ----------------------------------------
+          for (let i = 0; i < 4; i++) {
+            const t = 7.25 + i * 0.25;
+            tl.fromTo("#bk-m" + i, { autoAlpha: 0, scale: 0.2, rotation: i % 2 ? 20 : -20, transformOrigin: "50% 50%" }, { autoAlpha: 1, scale: 1, rotation: 0, duration: 0.35, ease: "back.out(2.4)" }, t);
+            tl.fromTo("#bk-ml" + i, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.3, ease: "power3.out" }, t + 0.1);
+            [8.25, 8.75].forEach((h, k) => {
+              tl.to("#bk-m" + i, { y: -40, rotation: (i + k) % 2 ? 6 : -6, duration: 0.14, ease: "power2.out" }, h + i * 0.06);
+              tl.to("#bk-m" + i, { y: 0, rotation: 0, duration: 0.16, ease: "power2.in" }, h + 0.14 + i * 0.06);
+            });
+          }
+          P.fly(tl, tip, [1250, 1700], [qb.x, qb.y + qb.h * 0.7], 7.4, 0.2);
+          P.write(tl, $("bk-q"), { t: 7.6, dur: 0.7, pen: tip, box: qb });
+          P.fly(tl, tip, [qb.x + qb.w, qb.y + qb.h * 0.5], [1320, 1900], 8.3, 0.2, true);
+
+          window.__timelines["breakfast"] = tl;
+        });
+      </script>
+    </template>
+  </body>
+</html>

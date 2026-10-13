@@ -18,6 +18,8 @@
   --terracotta: #C97A5C; /* mejillas, corazones */
   --butter: #FFDE86;     /* itálica destacada sobre chocolate */
   --ink: #2A1B0E;        /* tinta */
+  /* Única excepción a la paleta, pedida para el matcha: un verde suave. */
+  --matcha: #9CB071;
 
   --f-display: "Fraunces", serif;
   --f-body: "Inter", system-ui, sans-serif;

@@ -6,32 +6,51 @@
       <style>
         /* Sin fondo propio: debajo está el chocolate con vapor del index. */
         #root { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
+        .in-stage { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
         .in-frame { position: absolute; left: 24px; top: 24px; width: 1032px; height: 1872px; border: 2px solid var(--cream); border-radius: 4px; }
-        /* El aro dorado del logo, trazado a mano sobre el sitio exacto donde el
-           PNG dibuja el suyo (r = 0,492 del lado). Cuando el logo real entra, el
-           trazo se retira y queda el aro original. */
-        .in-ring { position: absolute; left: 240px; top: 600px; width: 600px; height: 600px; }
-        .in-ring circle { fill: none; stroke: var(--gold); stroke-width: 3; }
+        /* El aro dorado se repasa a lápiz justo encima del aro del PNG
+           (r = 0,492 del lado); cuando entra el logo real, el trazo se retira. */
+        .in-ring { position: absolute; left: 240px; top: 600px; width: 600px; height: 600px; overflow: visible; }
+        .in-ring path { fill: none; stroke: var(--gold); stroke-width: 4; stroke-linecap: round; }
         .in-logo { position: absolute; left: 240px; top: 600px; width: 600px; height: 600px; display: block; }
+        .in-star { position: absolute; width: 56px; height: 56px; left: 512px; top: 872px; }
       </style>
 
       <div id="root" data-composition-id="intro" data-width="1080" data-height="1920" data-duration="2.5">
-        <div id="in-frame" class="in-frame"></div>
-        <svg id="in-ring" class="in-ring" viewBox="0 0 600 600" aria-hidden="true">
-          <circle id="in-ring-c" cx="300" cy="300" r="295.3" transform="rotate(-90 300 300)" />
-        </svg>
-        <img id="in-logo" class="in-logo" src="assets/tina-logo-circle.png" alt="Tina café" />
+        <div id="in-stage" class="in-stage">
+          <div class="in-frame"></div>
+          <svg id="in-ring" class="in-ring" viewBox="0 0 600 600" aria-hidden="true">
+            <path id="in-ring-p" d="M300 4.7 A295.3 295.3 0 1 1 300 595.3 A295.3 295.3 0 1 1 300 4.7" />
+          </svg>
+          <svg class="in-star" id="in-s0" viewBox="0 0 56 56" aria-hidden="true"><path d="M28 2 C 30 20, 36 26, 54 28 C 36 30, 30 36, 28 54 C 26 36, 20 30, 2 28 C 20 26, 26 20, 28 2 Z" fill="#FFDE86" /></svg>
+          <svg class="in-star" id="in-s1" viewBox="0 0 56 56" aria-hidden="true"><path d="M28 2 C 30 20, 36 26, 54 28 C 36 30, 30 36, 28 54 C 26 36, 20 30, 2 28 C 20 26, 26 20, 28 2 Z" fill="#FFDE86" /></svg>
+          <svg class="in-star" id="in-s2" viewBox="0 0 56 56" aria-hidden="true"><path d="M28 2 C 30 20, 36 26, 54 28 C 36 30, 30 36, 28 54 C 26 36, 20 30, 2 28 C 20 26, 26 20, 28 2 Z" fill="#D4A668" /></svg>
+          <svg class="in-star" id="in-s3" viewBox="0 0 56 56" aria-hidden="true"><path d="M28 2 C 30 20, 36 26, 54 28 C 36 30, 30 36, 28 54 C 26 36, 20 30, 2 28 C 20 26, 26 20, 28 2 Z" fill="#FFDE86" /></svg>
+          <img id="in-logo" class="in-logo" src="assets/tina-logo-circle.png" alt="Tina café" />
+        </div>
       </div>
 
       <script>
+        const P = window.TinaPencil;
+        const stage = document.getElementById("in-stage");
+        const pen = P.make(stage, "in-pen", "draw");
         const tl = gsap.timeline({ paused: true });
-        const C = 2 * Math.PI * 295.3;
-        // 1 · el aro se dibuja
-        tl.fromTo("#in-ring-c", { strokeDasharray: C, strokeDashoffset: C }, { strokeDashoffset: 0, duration: 1.0, ease: "power2.inOut" }, 0.15);
-        // 2 · entra el logo real con su rebote (0,9 → 1,03 → 1)
-        tl.fromTo("#in-logo", { autoAlpha: 0, scale: 0.9 }, { autoAlpha: 1, scale: 1.03, duration: 0.42, ease: "power2.out" }, 0.95);
-        tl.to("#in-logo", { scale: 1, duration: 0.38, ease: "power2.inOut" }, 1.37);
-        tl.to("#in-ring", { autoAlpha: 0, duration: 0.2, ease: "none" }, 1.25);
+
+        // el lápiz entra, repasa el aro y se va
+        P.fly(tl, pen, [1250, -260], [540, 604.7], 0.0, 0.25);
+        P.trace(tl, document.getElementById("in-ring-p"), { t: 0.25, dur: 1.0, pen, ox: 240, oy: 600, s: 1, samples: 32 });
+        P.fly(tl, pen, [540, 604.7], [1300, -340], 1.25, 0.3, true);
+
+        // el logo real salta dentro del aro, en el tiempo 3 del compás
+        tl.fromTo("#in-logo", { autoAlpha: 0, scale: 0.55, rotation: -10 }, { autoAlpha: 1, scale: 1.08, rotation: 3, duration: 0.28, ease: "back.out(1.7)" }, 1.35);
+        tl.to("#in-logo", { scale: 1, rotation: 0, duration: 0.4, ease: "power2.inOut" }, 1.64);
+        tl.to("#in-ring", { autoAlpha: 0, duration: 0.15, ease: "none" }, 1.5);
+        // chispitas que salen despedidas
+        [[-330, -300, 1.1], [320, -330, 0.9], [-300, 330, 0.8], [340, 300, 1.2]].forEach(([dx, dy, s], i) => {
+          tl.fromTo("#in-s" + i, { x: 0, y: 0, scale: 0, rotation: 0, autoAlpha: 1 },
+            { x: dx, y: dy, scale: s, rotation: 90, duration: 0.55, ease: "power3.out" }, 1.45);
+          tl.to("#in-s" + i, { scale: 0, rotation: 180, duration: 0.3, ease: "power2.in" }, 2.0);
+        });
         window.__timelines["intro"] = tl;
       </script>
     </template>

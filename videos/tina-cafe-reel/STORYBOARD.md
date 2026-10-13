@@ -1,32 +1,27 @@
-# Tina Café — reel 1080×1920 · 19,6 s · 30 fps
+# Tina Café — reel 1080×1920 · 26,0 s · 30 fps · canción original a 120 BPM
 
-Corriente del vídeo: **hacia arriba**, como el vapor. Todas las salidas suben y todas las
-entradas llegan desde abajo ya en marcha.
+Transiciones: el lápiz colorea el cuadro con el fondo siguiente o lo borra con la goma
+(`compositions/pencil.html`). El corte cae al acabar el trazo.
 
-## Frame 1 — intro (0,0–2,5 s)
-src: compositions/intro.html · status: built
-Chocolate con vapor. El aro dorado se dibuja (1 s), entra el logo real con rebote 0,9 → 1,03 → 1.
+## Frame 1 — intro (0,0–2,5 s) · compositions/intro.html
+El lápiz repasa el aro dorado; el logo real salta dentro con chispitas (tiempo 3).
 
-## Frame 2 — hook (2,5–5,9 s)
-src: compositions/hook.html · status: built
-El mismo logo sube y se reduce. «tu rincón favorito» en itálica mantequilla, «Tina café» en
-Fraunces 900 letra a letra (30 ms), línea crema al 40 %, etiqueta «CAFETERÍA».
+## Frame 2 — hook (2,5–5,75 s) · compositions/hook.html
+El logo sube. «empieza el día en» escrito a lápiz, «Tina café» salta letra a letra, subrayado
+ondulado a lápiz, «CAFETERÍA», dos granitos asoman y saludan. 5,0 s: el lápiz colorea a hueso.
 
-## Frame 3 — character (5,2–9,4 s)
-src: compositions/character.html · status: built
-Barrido circular a hueso. Taza con hueco [ILUSTRACIÓN TINA], balanceo ±3°, cuatro granitos que
-saltan y parpadean. «café, bollitos y mimos» en itálica caramelo.
+## Frame 3 — breakfast (5,75–15,4 s) · compositions/breakfast.html
+«desayunos para / todos los gustos». Café (7,0), matcha (8,5), tostadas (10,0), bollería (11,5):
+cada uno se dibuja, hace su gracia y la goma lo borra. 13,0 s: los cuatro en pequeño y
+«¿cuál es el tuyo?». 15,0 s: goma a pantalla completa.
 
-## Frame 4 — promos (9,4–13,45 s)
-src: compositions/promos.html · status: built
-Tres tarjetas con marco que suben una tras otra: Hora Reposada (mar–vie 12–14 h), Hora Aperol
-(mar–vie 14–16 h), Hora del Recreo (estudiantes, pincho + bebida, 3,50 €).
+## Frame 4 — promos (15,4–19,75 s) · compositions/promos.html
+«para cada momento —». El lápiz dibuja el marco de cada tarjeta; la tercera se colorea a
+chocolate y el precio 3,50 € cae como un sello. 19,0 s: el lápiz colorea a chocolate.
 
-## Frame 5 — hours (12,8–17,0 s)
-src: compositions/hours.html · status: built
-Ola de chocolate. Copos lentos. «nuestro horario de / Invierno» y las tres franjas en cascada:
-entre semana 08:00–20:00 · sábado 10:00–22:00 · domingo 10:00–15:00.
+## Frame 5 — hours (19,75–23,4 s) · compositions/hours.html
+Nieve. «nuestro horario de» a lápiz, «Invierno» salta, tres franjas a ritmo. 23,0 s: goma.
 
-## Frame 6 — outro (17,0–19,6 s)
-src: compositions/outro.html · status: built
-Logo centrado, «te esperamos —», corazón terracota; fundido al plano de apertura para el bucle.
+## Frame 6 — outro (23,4–26,0 s) · compositions/outro.html
+El lápiz redibuja el aro, salta el logo, «te esperamos —» a lápiz, corazón; fundido al
+fotograma de apertura para el bucle.

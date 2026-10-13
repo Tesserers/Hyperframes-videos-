@@ -5,40 +5,83 @@
     <template>
       <style>
         #root { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
+        .hk-stage { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
         .hk-frame { position: absolute; left: 24px; top: 24px; width: 1032px; height: 1872px; border: 2px solid var(--cream); border-radius: 4px; }
-        /* Arranca en el mismo sitio y tamaño en que lo deja la apertura: es el
-           mismo objeto, que ahora sube para dejar sitio al titular. */
+        /* Arranca donde lo deja la apertura: es el mismo logo, que sube. */
         .hk-logo { position: absolute; left: 240px; top: 600px; width: 600px; height: 600px; display: block; }
-        .hk-text { position: absolute; left: 60px; top: 880px; width: 960px; text-align: center; }
-        .hk-kicker { display: block; font-family: var(--f-display); font-style: italic; font-weight: 300; font-size: 68px; line-height: 1.1; color: var(--butter); }
-        .hk-title { display: block; margin-top: 6px; font-family: var(--f-display); font-weight: 900; font-size: 168px; line-height: 1.02; letter-spacing: -0.01em; color: var(--cream); white-space: nowrap; }
+        .hk-kwrap { position: absolute; left: 60px; top: 880px; width: 960px; text-align: center; }
+        .hk-kicker { display: inline-block; font-family: var(--f-display); font-style: italic; font-weight: 300; font-size: 70px; line-height: 1.1; color: var(--butter); }
+        .hk-title { position: absolute; left: 60px; top: 962px; width: 960px; text-align: center; font-family: var(--f-display); font-weight: 900; font-size: 172px; line-height: 1.02; letter-spacing: -0.01em; color: var(--cream); white-space: nowrap; }
         .hk-ch { display: inline-block; }
         .hk-sp { display: inline-block; width: 0.26em; }
-        .hk-rule { display: block; width: 520px; height: 2px; margin: 44px auto 0; background: rgba(242, 227, 192, 0.4); }
-        .hk-label { display: block; margin-top: 34px; font-family: var(--f-mono); font-weight: 500; font-size: 26px; letter-spacing: 6px; color: rgba(242, 227, 192, 0.75); }
+        .hk-wave { position: absolute; left: 240px; top: 1150px; width: 600px; height: 40px; overflow: visible; }
+        .hk-wave path { fill: none; stroke: var(--butter); stroke-width: 6; stroke-linecap: round; }
+        .hk-label { position: absolute; left: 60px; top: 1226px; width: 960px; text-align: center; font-family: var(--f-mono); font-weight: 500; font-size: 26px; letter-spacing: 6px; color: rgba(242, 227, 192, 0.75); }
+        .hk-star { position: absolute; width: 50px; height: 50px; }
+        .hk-bean { position: absolute; width: 150px; height: 180px; }
+        .hk-bean svg { display: block; width: 150px; height: 180px; overflow: visible; }
       </style>
 
-      <div id="root" data-composition-id="hook" data-width="1080" data-height="1920" data-duration="3.4">
-        <div class="hk-frame"></div>
-        <img id="hk-logo" class="hk-logo" src="assets/tina-logo-circle.png" alt="Tina café" />
-        <div class="hk-text" data-layout-allow-occlusion>
-          <span id="hk-kicker" class="hk-kicker">tu rincón favorito</span>
-          <span id="hk-title" class="hk-title"><span class="hk-ch">T</span><span class="hk-ch">i</span><span class="hk-ch">n</span><span class="hk-ch">a</span><span class="hk-sp"></span><span class="hk-ch">c</span><span class="hk-ch">a</span><span class="hk-ch">f</span><span class="hk-ch">é</span></span>
-          <span id="hk-rule" class="hk-rule"></span>
-          <span id="hk-label" class="hk-label">CAFETERÍA</span>
+      <div id="root" data-composition-id="hook" data-width="1080" data-height="1920" data-duration="3.25">
+        <div id="hk-stage" class="hk-stage">
+          <div class="hk-frame"></div>
+          <img id="hk-logo" class="hk-logo" src="assets/tina-logo-circle.png" alt="Tina café" />
+          <div class="hk-kwrap"><span id="hk-kicker" class="hk-kicker">empieza el día en</span></div>
+          <div id="hk-title" class="hk-title" data-layout-allow-occlusion><span class="hk-ch">T</span><span class="hk-ch">i</span><span class="hk-ch">n</span><span class="hk-ch">a</span><span class="hk-sp"></span><span class="hk-ch">c</span><span class="hk-ch">a</span><span class="hk-ch">f</span><span class="hk-ch">é</span></div>
+          <svg class="hk-wave" viewBox="0 0 600 40" aria-hidden="true"><path id="hk-wave-p" d="M10 20 C 60 0, 110 40, 160 20 S 260 0, 310 20 S 410 40, 460 20 S 560 0, 590 20" /></svg>
+          <div id="hk-label" class="hk-label">CAFETERÍA</div>
+          <svg class="hk-star" id="hk-s0" style="left:112px;top:952px" viewBox="0 0 56 56" aria-hidden="true"><path d="M28 2 C 30 20, 36 26, 54 28 C 36 30, 30 36, 28 54 C 26 36, 20 30, 2 28 C 20 26, 26 20, 28 2 Z" fill="#FFDE86" /></svg>
+          <svg class="hk-star" id="hk-s1" style="left:928px;top:930px" viewBox="0 0 56 56" aria-hidden="true"><path d="M28 2 C 30 20, 36 26, 54 28 C 36 30, 30 36, 28 54 C 26 36, 20 30, 2 28 C 20 26, 26 20, 28 2 Z" fill="#D4A668" /></svg>
+          <svg class="hk-star" id="hk-s2" style="left:880px;top:1150px" viewBox="0 0 56 56" aria-hidden="true"><path d="M28 2 C 30 20, 36 26, 54 28 C 36 30, 30 36, 28 54 C 26 36, 20 30, 2 28 C 20 26, 26 20, 28 2 Z" fill="#FFDE86" /></svg>
+          <div id="hk-b0" class="hk-bean" style="left:90px;top:1420px"><svg viewBox="0 0 112 134" aria-hidden="true"><ellipse cx="56" cy="67" rx="46" ry="60" fill="#D4A668" transform="rotate(-12 56 67)" /><path d="M58 10 C 48 26, 64 38, 54 50" fill="none" stroke="#8B5E3C" stroke-width="5" stroke-linecap="round" /><ellipse cx="40" cy="74" rx="5.5" ry="6.5" fill="#2A1B0E" /><ellipse cx="70" cy="74" rx="5.5" ry="6.5" fill="#2A1B0E" /><ellipse cx="30" cy="88" rx="8" ry="4.5" fill="#C97A5C" /><ellipse cx="80" cy="88" rx="8" ry="4.5" fill="#C97A5C" /><path d="M48 86 Q 55 94 62 86" fill="none" stroke="#2A1B0E" stroke-width="3.5" stroke-linecap="round" /></svg></div>
+          <div id="hk-b1" class="hk-bean" style="left:840px;top:1400px"><svg viewBox="0 0 112 134" aria-hidden="true"><ellipse cx="56" cy="67" rx="46" ry="60" fill="#D4A668" transform="rotate(10 56 67)" /><path d="M58 10 C 48 26, 64 38, 54 50" fill="none" stroke="#8B5E3C" stroke-width="5" stroke-linecap="round" /><ellipse cx="40" cy="74" rx="5.5" ry="6.5" fill="#2A1B0E" /><ellipse cx="70" cy="74" rx="5.5" ry="6.5" fill="#2A1B0E" /><ellipse cx="30" cy="88" rx="8" ry="4.5" fill="#C97A5C" /><ellipse cx="80" cy="88" rx="8" ry="4.5" fill="#C97A5C" /><path d="M48 86 Q 55 94 62 86" fill="none" stroke="#2A1B0E" stroke-width="3.5" stroke-linecap="round" /></svg></div>
         </div>
       </div>
 
       <script>
-        const tl = gsap.timeline({ paused: true });
-        // el logo sube y se hace pequeño: 600 px → 360 px, centro en y = 560
-        tl.fromTo("#hk-logo", { y: 0, scale: 1 }, { y: -340, scale: 0.6, duration: 0.75, ease: "power3.inOut" }, 0);
-        tl.fromTo("#hk-kicker", { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.35);
-        // «Tina café» letra a letra, 30 ms entre letras
-        tl.fromTo("#hk-title .hk-ch", { autoAlpha: 0, y: 70, rotation: 4 }, { autoAlpha: 1, y: 0, rotation: 0, duration: 0.55, ease: "back.out(1.5)", stagger: 0.03 }, 0.55);
-        tl.fromTo("#hk-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.out" }, 1.05);
-        tl.fromTo("#hk-label", { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out" }, 1.2);
-        window.__timelines["hook"] = tl;
+        document.fonts.ready.then(() => {
+          const P = window.TinaPencil;
+          const stage = document.getElementById("hk-stage");
+          const kick = document.getElementById("hk-kicker");
+          const kb = P.box(kick, stage); // medido antes de animar nada
+          const pen = P.make(stage, "hk-pen", "draw");
+          const tl = gsap.timeline({ paused: true });
+
+          // el logo sube y se hace pequeño: 600 px → 360 px, centro en y = 560
+          tl.fromTo("#hk-logo", { y: 0, scale: 1, rotation: 0 }, { y: -340, scale: 0.6, rotation: -4, duration: 0.5, ease: "power3.inOut" }, 0);
+          tl.to("#hk-logo", { rotation: 0, duration: 0.35, ease: "back.out(2)" }, 0.5);
+
+          // «empieza el día en», escrito a lápiz
+          P.fly(tl, pen, [1250, 700], [kb.x, kb.y + kb.h * 0.7], 0.05, 0.2);
+          P.write(tl, kick, { t: 0.25, dur: 0.6, pen, box: kb });
+
+          // «Tina café» salta letra a letra, en el tiempo 4
+          const rots = [-14, 10, -8, 12, -10, 8, -12, 14];
+          tl.fromTo("#hk-title .hk-ch", { autoAlpha: 0, y: 110, scale: 0.4, rotation: (i) => rots[i] },
+            { autoAlpha: 1, y: 0, scale: 1, rotation: 0, duration: 0.5, ease: "back.out(2.2)", stagger: 0.04 }, 0.95);
+
+          // subrayado ondulado, también a lápiz; luego el lápiz se va
+          P.trace(tl, document.getElementById("hk-wave-p"), { t: 1.5, dur: 0.4, pen, ox: 240, oy: 1150, s: 1 });
+          P.fly(tl, pen, [830, 1170], [1350, 1500], 1.9, 0.25, true);
+          tl.fromTo("#hk-label", { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: "power3.out" }, 1.85);
+
+          // pulso con el tiempo fuerte y chispitas
+          tl.to("#hk-title", { scale: 1.05, duration: 0.12, ease: "power2.out", yoyo: true, repeat: 1 }, 2.0);
+          tl.to("#hk-title", { scale: 1.05, duration: 0.12, ease: "power2.out", yoyo: true, repeat: 1 }, 2.5);
+          ["#hk-s0", "#hk-s1", "#hk-s2"].forEach((s, i) => {
+            tl.fromTo(s, { scale: 0, rotation: -60 }, { scale: 1, rotation: 0, duration: 0.35, ease: "back.out(2)" }, 1.95 + i * 0.12);
+            tl.to(s, { scale: 0.6, rotation: 45, duration: 0.25, ease: "sine.inOut", yoyo: true, repeat: 1 }, 2.45 + i * 0.1);
+          });
+
+          // dos granitos asoman por abajo y saludan a ritmo
+          tl.fromTo(["#hk-b0", "#hk-b1"], { y: 360, rotation: 0 }, { y: 0, duration: 0.45, ease: "back.out(1.8)", stagger: 0.1 }, 1.25);
+          [1.75, 2.25, 2.75].forEach((t, k) => {
+            tl.to("#hk-b0", { rotation: k % 2 ? 10 : -10, y: -24, duration: 0.18, ease: "power2.out", yoyo: true, repeat: 1, transformOrigin: "50% 100%" }, t);
+            tl.to("#hk-b1", { rotation: k % 2 ? -10 : 10, y: -24, duration: 0.18, ease: "power2.out", yoyo: true, repeat: 1, transformOrigin: "50% 100%" }, t + 0.25);
+          });
+
+          window.__timelines["hook"] = tl;
+        });
       </script>
     </template>
   </body>

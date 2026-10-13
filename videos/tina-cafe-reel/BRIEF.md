@@ -2,17 +2,17 @@
 workflow: general-video
 flow: automation
 storyboard: no
-message: "Tina café, tu rincón favorito: café, bollitos y mimos, promos para cada momento y horario de invierno."
+message: "Empieza el día en Tina café: desayunos para todos los gustos (café, matcha, tostadas, bollería), promos y horario de invierno."
 destination: instagram-reels
 aspect: 1080x1920
 language: es-ES
 audience: "Clientela de barrio, estudiantes y quien busca un café acogedor"
-length: 19.6s
-angle: "Reel cute y editorial sobre la marca real de Tina Café: todo sube como el vapor de una taza"
+length: 26s
+angle: "Reel cute y editorial dibujado a lápiz: el lápiz pinta, escribe y borra cada escena"
 style_preset: brand-native
 capture: client-supplied
 narration: none
-audio: none
+audio: original-synth
 loop: exact
 ---
 
@@ -65,3 +65,28 @@ suelo común de chocolate y vapor).
   `div#ch-tina` por `<img class="ch-tina" src="assets/ilustraciones/tina-taza.png">` (PNG con
   transparencia, 300×390, con la parte de abajo pensada para quedar oculta tras la taza) y
   volver a renderizar.
+
+## Segunda versión (petición de Eddy)
+
+> ponme una canción cute sin copy - habla sobre los desayunos variados - matcha etc pon más
+> movimiento es aburrido y que el cambio de animaciones sea como dibujando y borrando a lápiz
+
+- **Canción original** sintetizada en `scripts/make-song.py` (ukelele Karplus-Strong,
+  glockenspiel, bajo, bombo, chasquido, shaker): 120 BPM, 13 compases = 26,0 s, lo mismo que
+  el vídeo. Sin muestras ni melodías ajenas, así que no hay derechos de terceros. Lleva además
+  el rasgueo del lápiz y de la goma en cada trazo del vídeo y un «pop» en cada aparición.
+  Normalizada a −16 LUFS (`assets/audio/tina-song.mp3`).
+- **El lápiz** (`assets/tina-pencil.js`): un lápiz amarillo de la paleta que colorea el cuadro
+  entero a zigzag al cambiar de fondo, borra con la goma cuando el fondo no cambia, escribe las
+  frases en itálica y repasa contornos (el aro del logo, los desayunos, los marcos de las
+  tarjetas, los subrayados).
+- **Escena nueva de desayunos** (`compositions/breakfast.html`), sustituye a la de la taza con
+  el hueco de Tina: café, matcha, tostadas y bollería, cada uno dibujado, con su gracia (vapor,
+  batidor, tostadas que saltan, mordisco) y borrado; cierra con «¿cuál es el tuyo?».
+- **Más movimiento**: letras que saltan, granitos que botan a ritmo, chispitas, latidos y saltos
+  sincronizados con los tiempos fuertes de la canción.
+- **Excepción a la paleta**: un verde matcha `#9CB071` en `brand.css`, solo para el matcha.
+- **Copy y carta, a confirmar**: los cuatro desayunos y sus coletillas («recién hecho», «verde
+  y suave», «bien crujientes», «para mojar») son míos; el matcha lo pidió Eddy, el resto es
+  genérico. Ajustar a la carta real.
+- La escena del hueco `[ILUSTRACIÓN TINA]` ya no está; Tina puede volver cuando haya ilustración.

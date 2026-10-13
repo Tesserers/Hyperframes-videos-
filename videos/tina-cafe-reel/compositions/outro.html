@@ -6,33 +6,66 @@
       <style>
         /* Sin fondo propio: el chocolate y el vapor del index, como en la apertura. */
         #root { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
+        .ou-stage { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
         .ou-frame { position: absolute; left: 24px; top: 24px; width: 1032px; height: 1872px; border: 2px solid var(--cream); border-radius: 4px; }
+        .ou-ring { position: absolute; left: 270px; top: 540px; width: 540px; height: 540px; overflow: visible; }
+        .ou-ring path { fill: none; stroke: var(--gold); stroke-width: 4; stroke-linecap: round; }
         .ou-logo { position: absolute; left: 270px; top: 540px; width: 540px; height: 540px; display: block; }
-        .ou-text { position: absolute; left: 60px; top: 1150px; width: 960px; text-align: center; }
-        .ou-line { display: block; font-family: var(--f-display); font-style: italic; font-weight: 300; font-size: 88px; line-height: 1.1; color: var(--cream); }
-        .ou-heart { display: block; width: 44px; height: 40px; margin: 34px auto 0; }
+        .ou-twrap { position: absolute; left: 60px; top: 1150px; width: 960px; text-align: center; }
+        .ou-line { display: inline-block; font-family: var(--f-display); font-style: italic; font-weight: 300; font-size: 88px; line-height: 1.1; color: var(--cream); }
+        .ou-heart { position: absolute; left: 518px; top: 1290px; width: 44px; height: 40px; }
+        .ou-star { position: absolute; width: 56px; height: 56px; left: 512px; top: 782px; }
       </style>
 
       <div id="root" data-composition-id="outro" data-width="1080" data-height="1920" data-duration="2.6">
-        <div class="ou-frame"></div>
-        <img id="ou-logo" class="ou-logo" src="assets/tina-logo-circle.png" alt="Tina café" />
-        <div id="ou-text" class="ou-text">
-          <span id="ou-line" class="ou-line">te esperamos —</span>
-          <svg id="ou-heart" class="ou-heart" viewBox="0 0 44 40" aria-hidden="true"><path d="M22 38 C 22 38, 2 25, 2 12 C 2 5, 8 1, 13 1 C 17 1, 20 4, 22 7 C 24 4, 27 1, 31 1 C 36 1, 42 5, 42 12 C 42 25, 22 38, 22 38 Z" fill="#C97A5C" /></svg>
+        <div id="ou-stage" class="ou-stage">
+          <div class="ou-frame"></div>
+          <svg id="ou-ring" class="ou-ring" viewBox="0 0 540 540" aria-hidden="true">
+            <path id="ou-ring-p" d="M270 4.3 A265.7 265.7 0 1 1 270 535.7 A265.7 265.7 0 1 1 270 4.3" />
+          </svg>
+          <svg class="ou-star" id="ou-s0" viewBox="0 0 56 56" aria-hidden="true"><path d="M28 2 C 30 20, 36 26, 54 28 C 36 30, 30 36, 28 54 C 26 36, 20 30, 2 28 C 20 26, 26 20, 28 2 Z" fill="#FFDE86" /></svg>
+          <svg class="ou-star" id="ou-s1" viewBox="0 0 56 56" aria-hidden="true"><path d="M28 2 C 30 20, 36 26, 54 28 C 36 30, 30 36, 28 54 C 26 36, 20 30, 2 28 C 20 26, 26 20, 28 2 Z" fill="#D4A668" /></svg>
+          <svg class="ou-star" id="ou-s2" viewBox="0 0 56 56" aria-hidden="true"><path d="M28 2 C 30 20, 36 26, 54 28 C 36 30, 30 36, 28 54 C 26 36, 20 30, 2 28 C 20 26, 26 20, 28 2 Z" fill="#FFDE86" /></svg>
+          <svg class="ou-star" id="ou-s3" viewBox="0 0 56 56" aria-hidden="true"><path d="M28 2 C 30 20, 36 26, 54 28 C 36 30, 30 36, 28 54 C 26 36, 20 30, 2 28 C 20 26, 26 20, 28 2 Z" fill="#D4A668" /></svg>
+          <img id="ou-logo" class="ou-logo" src="assets/tina-logo-circle.png" alt="Tina café" />
+          <div id="ou-text">
+            <div class="ou-twrap"><span id="ou-line" class="ou-line">te esperamos —</span></div>
+            <svg id="ou-heart" class="ou-heart" viewBox="0 0 44 40" aria-hidden="true"><path d="M22 38 C 22 38, 2 25, 2 12 C 2 5, 8 1, 13 1 C 17 1, 20 4, 22 7 C 24 4, 27 1, 31 1 C 36 1, 42 5, 42 12 C 42 25, 22 38, 22 38 Z" fill="#C97A5C" /></svg>
+          </div>
         </div>
       </div>
 
       <script>
-        const tl = gsap.timeline({ paused: true });
-        // el logo llega subiendo, en marcha, con el mismo rebote de la apertura
-        tl.fromTo("#ou-logo", { autoAlpha: 0, y: 220, scale: 0.9 }, { autoAlpha: 1, y: 0, scale: 1.03, duration: 0.6, ease: "power4.out" }, 0);
-        tl.to("#ou-logo", { scale: 1, duration: 0.4, ease: "power2.inOut" }, 0.6);
-        tl.fromTo("#ou-line", { autoAlpha: 0, y: 50 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.3);
-        tl.fromTo("#ou-heart", { scale: 0 }, { scale: 1, duration: 0.45, ease: "back.out(1.7)" }, 0.7);
-        // fundido al fotograma de apertura: solo chocolate, marco y vapor
-        tl.to("#ou-logo", { autoAlpha: 0, scale: 0.92, duration: 0.7, ease: "power2.in" }, 1.85);
-        tl.to("#ou-text", { autoAlpha: 0, y: -30, duration: 0.6, ease: "power2.in" }, 1.8);
-        window.__timelines["outro"] = tl;
+        document.fonts.ready.then(() => {
+          const P = window.TinaPencil;
+          const $ = (id) => document.getElementById(id);
+          const stage = $("ou-stage");
+          const lb = P.box($("ou-line"), stage);
+          const tip = P.make(stage, "ou-tip", "draw");
+          const tl = gsap.timeline({ paused: true });
+
+          // el lápiz vuelve a dibujar el aro, como en la apertura
+          P.fly(tl, tip, [1250, -200], [540, 544.3], 0.0, 0.1);
+          P.trace(tl, $("ou-ring-p"), { t: 0.1, dur: 0.55, pen: tip, ox: 270, oy: 540, s: 1, samples: 28 });
+          tl.fromTo("#ou-logo", { autoAlpha: 0, scale: 0.55, rotation: -10 }, { autoAlpha: 1, scale: 1.08, rotation: 3, duration: 0.25, ease: "back.out(1.7)" }, 0.6);
+          tl.to("#ou-logo", { scale: 1, rotation: 0, duration: 0.35, ease: "power2.inOut" }, 0.85);
+          tl.to("#ou-ring", { autoAlpha: 0, duration: 0.12, ease: "none" }, 0.72);
+          [[-300, -270, 1.1], [290, -300, 0.9], [-280, 300, 0.8], [310, 280, 1.2]].forEach(([dx, dy, s], i) => {
+            tl.fromTo("#ou-s" + i, { x: 0, y: 0, scale: 0, rotation: 0 }, { x: dx, y: dy, scale: s, rotation: 90, duration: 0.5, ease: "power3.out" }, 0.68);
+            tl.to("#ou-s" + i, { scale: 0, rotation: 180, duration: 0.3, ease: "power2.in" }, 1.2);
+          });
+
+          // «te esperamos —» a lápiz, el corazón late a ritmo
+          P.write(tl, $("ou-line"), { t: 0.72, dur: 0.5, pen: tip, box: lb });
+          P.fly(tl, tip, [lb.x + lb.w, lb.y + lb.h * 0.5], [1340, 1500], 1.22, 0.2, true);
+          tl.fromTo("#ou-heart", { scale: 0 }, { scale: 1, duration: 0.3, ease: "back.out(2)" }, 1.25);
+          tl.to("#ou-heart", { scale: 1.3, duration: 0.12, ease: "power2.out", yoyo: true, repeat: 1 }, 1.6);
+
+          // fundido al fotograma de apertura: solo chocolate, marco y vapor
+          tl.to("#ou-logo", { autoAlpha: 0, scale: 0.92, duration: 0.5, ease: "power2.in" }, 2.05);
+          tl.to("#ou-text", { autoAlpha: 0, y: -30, duration: 0.45, ease: "power2.in" }, 2.05);
+          window.__timelines["outro"] = tl;
+        });
       </script>
     </template>
   </body>

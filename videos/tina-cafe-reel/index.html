@@ -6,20 +6,20 @@
     <title>Tina Café — reel</title>
     <link rel="stylesheet" href="brand.css" />
     <script src="assets/vendor/gsap.min.js"></script>
+    <script src="assets/tina-pencil.js"></script>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1080px; height: 1920px; overflow: hidden; background: #5C3A1E; }
       #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--choc); }
       .scene { position: absolute; inset: 0; width: 100%; height: 100%; }
-
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="19.6" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="26" data-width="1080" data-height="1920">
 
       <div id="el-base" class="scene" style="z-index:0"
         data-composition-id="base" data-composition-src="compositions/base.html"
-        data-start="0" data-duration="19.6" data-track-index="0" data-width="1080" data-height="1920"></div>
+        data-start="0" data-duration="26" data-track-index="0" data-width="1080" data-height="1920"></div>
 
       <div id="el-intro" class="scene" style="z-index:1"
         data-composition-id="intro" data-composition-src="compositions/intro.html"
@@ -27,23 +27,31 @@
 
       <div id="el-hook" class="scene" style="z-index:2"
         data-composition-id="hook" data-composition-src="compositions/hook.html"
-        data-start="2.5" data-duration="3.4" data-track-index="2" data-width="1080" data-height="1920"></div>
+        data-start="2.5" data-duration="3.25" data-track-index="2" data-width="1080" data-height="1920"></div>
 
-      <div id="el-character" class="scene" style="z-index:3"
-        data-composition-id="character" data-composition-src="compositions/character.html"
-        data-start="5.2" data-duration="4.2" data-track-index="3" data-width="1080" data-height="1920"></div>
+      <div id="el-breakfast" class="scene" style="z-index:3"
+        data-composition-id="breakfast" data-composition-src="compositions/breakfast.html"
+        data-start="5.75" data-duration="9.65" data-track-index="3" data-width="1080" data-height="1920"></div>
 
       <div id="el-promos" class="scene" style="z-index:4"
         data-composition-id="promos" data-composition-src="compositions/promos.html"
-        data-start="9.4" data-duration="4.05" data-track-index="4" data-width="1080" data-height="1920"></div>
+        data-start="15.4" data-duration="4.35" data-track-index="4" data-width="1080" data-height="1920"></div>
 
       <div id="el-hours" class="scene" style="z-index:5"
         data-composition-id="hours" data-composition-src="compositions/hours.html"
-        data-start="12.8" data-duration="4.2" data-track-index="5" data-width="1080" data-height="1920"></div>
+        data-start="19.75" data-duration="3.65" data-track-index="5" data-width="1080" data-height="1920"></div>
 
       <div id="el-outro" class="scene" style="z-index:6"
         data-composition-id="outro" data-composition-src="compositions/outro.html"
-        data-start="17" data-duration="2.6" data-track-index="6" data-width="1080" data-height="1920"></div>
+        data-start="23.4" data-duration="2.6" data-track-index="6" data-width="1080" data-height="1920"></div>
+
+      <!-- Las transiciones a lápiz, por encima de todo -->
+      <div id="el-pencil" class="scene" style="z-index:10"
+        data-composition-id="pencil" data-composition-src="compositions/pencil.html"
+        data-start="0" data-duration="26" data-track-index="7" data-width="1080" data-height="1920"></div>
+
+      <!-- Canción original, sintetizada en scripts/make-song.py: dura lo mismo que el vídeo -->
+      <audio id="bgm" src="assets/audio/tina-song.mp3" data-start="0" data-duration="26" data-track-index="8" data-volume="1"></audio>
     </div>
 
     <script>

@@ -23,16 +23,17 @@
         .bk-bean { position: absolute; width: 112px; height: 134px; }
         .bk-bean svg { display: block; width: 112px; height: 134px; overflow: visible; }
 
-        .bk-mini { position: absolute; width: 300px; height: 300px; overflow: visible; }
+        .bk-mini { position: absolute; width: 240px; height: 240px; overflow: visible; }
         .bk-mini .ol { fill: none; stroke: #2A1B0E; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
-        .bk-mlabel { position: absolute; width: 300px; text-align: center; font-family: var(--f-mono); font-weight: 500; font-size: 26px; letter-spacing: 4px; color: var(--caramel); }
+        .bk-mlabel { position: absolute; width: 240px; text-align: center; font-family: var(--f-mono); font-weight: 500; font-size: 26px; letter-spacing: 4px; color: var(--caramel); }
         .bk-qwrap { position: absolute; left: 60px; top: 1390px; width: 960px; text-align: center; }
         .bk-q { display: inline-block; font-family: var(--f-display); font-style: italic; font-weight: 400; font-size: 82px; line-height: 1.1; color: var(--choc); }
 
+        .bk-tag { position: absolute; left: 60px; top: 1500px; width: 960px; text-align: center; font-family: var(--f-mono); font-weight: 500; font-size: 30px; letter-spacing: 5px; color: var(--caramel); }
         .bk-erase { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
       </style>
 
-      <div id="root" data-composition-id="breakfast" data-width="1080" data-height="1920" data-duration="9.65">
+      <div id="root" data-composition-id="breakfast" data-width="1080" data-height="1920" data-duration="13.65">
         <div id="bk-stage" class="bk-stage">
           <div class="bk-frame"></div>
 
@@ -117,16 +118,54 @@
             <rect class="bk-crumb3" x="520" y="480" width="10" height="9" rx="3" fill="#8B5E3C" />
             <rect class="bk-crumb3" x="500" y="452" width="12" height="10" rx="3" fill="#D4A668" />
           </svg>
+          <!-- 4 · bocadillos -->
+          <svg id="bk-i4" class="bk-item" viewBox="0 0 600 600" aria-hidden="true">
+            <ellipse class="bk-fill" cx="300" cy="470" rx="270" ry="34" fill="#D4A668" opacity="0.45" />
+            <path class="bk-fill" d="M50 340 C 50 400, 100 430, 160 430 L 440 430 C 500 430, 550 400, 550 340 Z" fill="#D4A668" stroke="#2A1B0E" stroke-width="6" stroke-linejoin="round" />
+            <g id="bk-filling">
+              <path class="bk-fill" d="M48 344 C 80 316, 110 366, 150 338 C 190 312, 220 366, 260 338 C 300 312, 330 366, 370 338 C 410 312, 440 366, 480 338 C 510 318, 540 352, 554 340 L 554 330 L 48 330 Z" fill="#9CB071" stroke="#2A1B0E" stroke-width="5" stroke-linejoin="round" />
+              <path class="bk-fill" d="M60 330 C 100 352, 140 312, 190 334 C 240 354, 280 314, 330 334 C 380 354, 420 314, 470 334 C 500 346, 530 330, 545 322 L 545 306 L 60 306 Z" fill="#C97A5C" stroke="#2A1B0E" stroke-width="5" stroke-linejoin="round" />
+              <path class="bk-fill" d="M110 300 L 150 352 L 190 300 Z M290 300 L 330 356 L 370 300 Z M440 300 L 476 348 L 510 300 Z" fill="#FFDE86" stroke="#2A1B0E" stroke-width="4" stroke-linejoin="round" />
+            </g>
+            <g id="bk-topbun">
+              <path class="bk-fill" d="M40 300 C 40 196, 140 166, 300 166 C 460 166, 560 196, 560 300 C 560 318, 540 326, 520 326 L 80 326 C 60 326, 40 318, 40 300 Z" fill="#D4A668" />
+              <path class="bk-fill" d="M150 214 L 196 248 M250 196 L 296 230 M350 196 L 396 230 M440 210 L 482 244" stroke="#8B5E3C" stroke-width="8" stroke-linecap="round" />
+              <path id="bk-o4" class="ol" d="M40 300 C 40 196, 140 166, 300 166 C 460 166, 560 196, 560 300 C 560 318, 540 326, 520 326 L 80 326 C 60 326, 40 318, 40 300 Z" />
+            </g>
+          </svg>
+
+          <!-- 5 · pinchos -->
+          <svg id="bk-i5" class="bk-item" viewBox="0 0 600 600" aria-hidden="true">
+            <ellipse class="bk-fill" cx="300" cy="480" rx="260" ry="50" fill="#F2E3C0" stroke="#2A1B0E" stroke-width="6" />
+            <g id="bk-pincho">
+              <rect class="bk-fill" x="130" y="380" width="340" height="80" rx="22" fill="#D4A668" stroke="#2A1B0E" stroke-width="6" />
+              <path class="bk-fill" d="M150 384 L 300 222 C 312 210, 330 210, 342 222 L 452 384 Z" fill="#FFDE86" />
+              <path class="bk-fill" d="M196 330 C 230 340, 250 300, 290 310 M320 286 C 350 296, 370 330, 410 336" fill="none" stroke="#D4A668" stroke-width="7" stroke-linecap="round" />
+              <path id="bk-o5" class="ol" d="M150 384 L 300 222 C 312 210, 330 210, 342 222 L 452 384 Z" />
+            </g>
+            <g id="bk-stick">
+              <path d="M330 120 L 314 330" stroke="#8B5E3C" stroke-width="8" stroke-linecap="round" />
+              <path d="M330 122 L 392 136 L 334 160 Z" fill="#C97A5C" stroke="#2A1B0E" stroke-width="4" stroke-linejoin="round" />
+            </g>
+          </svg>
           <div id="bk-nam" class="bk-nam">ÑAM</div>
 
           <div id="bk-n0" class="bk-name">café</div>
           <div id="bk-n1" class="bk-name">matcha</div>
           <div id="bk-n2" class="bk-name">tostadas</div>
           <div id="bk-n3" class="bk-name">bollería</div>
-          <div id="bk-u0" class="bk-sub">recién hecho</div>
-          <div id="bk-u1" class="bk-sub">verde y suave</div>
+          <div id="bk-u0" class="bk-sub">de todos los tipos</div>
+          <div id="bk-u1" class="bk-sub">de varios sabores</div>
           <div id="bk-u2" class="bk-sub">bien crujientes</div>
           <div id="bk-u3" class="bk-sub">para mojar</div>
+          <div id="bk-n4" class="bk-name">bocadillos</div>
+          <div id="bk-n5" class="bk-name">pinchos</div>
+          <div id="bk-u4" class="bk-sub">para coger fuerzas</div>
+          <div id="bk-u5" class="bk-sub">para picar algo</div>
+          <div id="bk-t0" class="bk-tag">SOLO</div>
+          <div id="bk-t1" class="bk-tag">CON LECHE</div>
+          <div id="bk-t2" class="bk-tag">CORTADO</div>
+          <div id="bk-t3" class="bk-tag">CAPUCHINO</div>
 
           <div id="bk-recap"></div>
           <div class="bk-qwrap"><span id="bk-q" class="bk-q">¿cuál es el tuyo?</span></div>
@@ -155,9 +194,9 @@
           const TITLE = "todos los gustos";
           $("bk-title").innerHTML = TITLE.split("").map((c) => (c === " " ? '<span class="bk-sp"></span>' : '<span class="bk-ch">' + c + "</span>")).join("");
 
-          // el resumen: copias en pequeño de los cuatro desayunos ya terminados
-          const SLOTS = [[150, 640], [630, 640], [150, 990], [630, 990]];
-          const NAMES = ["CAFÉ", "MATCHA", "TOSTADAS", "BOLLERÍA"];
+          // el resumen: copias en pequeño de los seis desayunos ya terminados
+          const SLOTS = [[80, 640], [420, 640], [760, 640], [80, 960], [420, 960], [760, 960]];
+          const NAMES = ["CAFÉ", "MATCHA", "TOSTADAS", "BOLLERÍA", "BOCADILLOS", "PINCHOS"];
           SLOTS.forEach(([x, y], i) => {
             const c = $("bk-i" + i).cloneNode(true);
             c.querySelectorAll("[id]").forEach((n) => n.removeAttribute("id"));
@@ -170,7 +209,7 @@
             l.className = "bk-mlabel";
             l.id = "bk-ml" + i;
             l.textContent = NAMES[i];
-            l.setAttribute("style", "left:" + x + "px;top:" + (y + 300) + "px");
+            l.setAttribute("style", "left:" + x + "px;top:" + (y + 248) + "px");
             $("bk-recap").appendChild(l);
           });
           // en la copia del cruasán no hay mordisco
@@ -186,8 +225,8 @@
           const tl = gsap.timeline({ paused: true });
 
           // todo lo que se dibuja más tarde empieza escondido
-          gsap.set(["#bk-i0", "#bk-i1", "#bk-i2", "#bk-i3", "#bk-nam", "#bk-n0", "#bk-n1", "#bk-n2", "#bk-n3", "#bk-u0", "#bk-u1", "#bk-u2", "#bk-u3"], { autoAlpha: 0 });
-          gsap.set(["#bk-m0", "#bk-m1", "#bk-m2", "#bk-m3", "#bk-ml0", "#bk-ml1", "#bk-ml2", "#bk-ml3"], { autoAlpha: 0 });
+          gsap.set(["#bk-i0", "#bk-i1", "#bk-i2", "#bk-i3", "#bk-i4", "#bk-i5", "#bk-nam", "#bk-n0", "#bk-n1", "#bk-n2", "#bk-n3", "#bk-n4", "#bk-n5", "#bk-u0", "#bk-u1", "#bk-u2", "#bk-u3", "#bk-u4", "#bk-u5", "#bk-t0", "#bk-t1", "#bk-t2", "#bk-t3"], { autoAlpha: 0 });
+          gsap.set(["#bk-m0", "#bk-m1", "#bk-m2", "#bk-m3", "#bk-m4", "#bk-m5", "#bk-ml0", "#bk-ml1", "#bk-ml2", "#bk-ml3", "#bk-ml4", "#bk-ml5"], { autoAlpha: 0 });
 
           // cabecera: «desayunos para» a lápiz, «todos los gustos» salta
           P.fly(tl, tip, [1250, 200], [kb.x, kb.y + kb.h * 0.7], 0.0, 0.15);
@@ -199,18 +238,20 @@
 
           // los granitos llegan y botan a ritmo hasta el final
           tl.fromTo(["#bk-b0", "#bk-b1"], { autoAlpha: 0, scale: 0.2 }, { autoAlpha: 1, scale: 1, duration: 0.4, ease: "back.out(2)", stagger: 0.1 }, 0.9);
-          for (let k = 0; k < 16; k++) {
+          for (let k = 0; k < 24; k++) {
             const t = 1.25 + k * 0.5;
-            const b = k % 2 ? "#bk-b1" : "#bk-b0";
+            const b = k % 2 ? "#bk-b1 svg" : "#bk-b0 svg";
             tl.to(b, { y: -50, scaleY: 1.06, scaleX: 0.95, rotation: k % 4 < 2 ? -8 : 8, duration: 0.2, ease: "power2.out", transformOrigin: "50% 100%" }, t);
             tl.to(b, { y: 0, scaleY: 1, scaleX: 1, rotation: 0, duration: 0.2, ease: "power2.in" }, t + 0.2);
           }
-          [2.1, 4.6, 7.1].forEach((t) => tl.to(".bk-eyes", { scaleY: 0.12, duration: 0.07, ease: "none", yoyo: true, repeat: 1, transformOrigin: "50% 74px" }, t));
+          [2.1, 4.6, 7.1, 9.6, 12.1].forEach((t) => tl.to(".bk-eyes", { scaleY: 0.12, duration: 0.07, ease: "none", yoyo: true, repeat: 1, transformOrigin: "50% 74px" }, t));
 
-          // ---- los cuatro desayunos ------------------------------------------------
+          tl.to(["#bk-b0", "#bk-b1"], { y: 360, duration: 0.4, ease: "power3.inOut" }, 10.05);
+
+          // ---- los seis desayunos ------------------------------------------------
           const ER = { x0: 60, y0: 600, x1: 1020, y1: 1500, w: 420 };
           const erStart = P.zigzag(ER.x0, ER.y0, ER.x1, ER.y1, ER.w)[0];
-          for (let i = 0; i < 4; i++) {
+          for (let i = 0; i < 6; i++) {
             const T = 1.25 + 1.5 * i;
             const item = "#bk-i" + i;
             const main = $("bk-o" + i);
@@ -264,21 +305,38 @@
           tl.fromTo("#bk-bite", { scale: 0, transformOrigin: "555px 420px" }, { scale: 1, duration: 0.18, ease: "back.out(3)" }, 6.75);
           tl.fromTo("#bk-i3 .bk-crumb3", { x: 0, y: 0, autoAlpha: 0, rotation: 0 }, { x: (i) => [30, 70, 60][i], y: (i) => [-60, -20, -100][i], rotation: 160, autoAlpha: 1, duration: 0.3, ease: "power2.out" }, 6.78);
           tl.fromTo("#bk-nam", { autoAlpha: 0, scale: 0.3, rotation: -20 }, { autoAlpha: 1, scale: 1, rotation: 8, duration: 0.25, ease: "back.out(3)" }, 6.8);
-          tl.set("#bk-nam", { autoAlpha: 0 }, 7.7);
+          tl.set("#bk-nam", { autoAlpha: 0 }, 7.15);
 
-          // ---- resumen: los cuatro a la vez ----------------------------------------
-          for (let i = 0; i < 4; i++) {
-            const t = 7.25 + i * 0.25;
+          // café: van pasando los tipos
+          ["#bk-t0", "#bk-t1", "#bk-t2", "#bk-t3"].forEach((t, k) => {
+            tl.fromTo(t, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.12, ease: "power2.out" }, 1.75 + k * 0.17);
+            tl.set(t, { autoAlpha: 0 }, k < 3 ? 1.75 + (k + 1) * 0.17 : 2.4);
+          });
+
+          // bocadillos: el pan de arriba salta y aterriza, el relleno se aplasta
+          tl.to("#bk-topbun", { y: -120, rotation: -5, duration: 0.18, ease: "power2.out", transformOrigin: "300px 320px" }, 7.75);
+          tl.to("#bk-topbun", { y: 0, rotation: 0, duration: 0.16, ease: "power2.in" }, 7.93);
+          tl.to("#bk-filling", { scaleY: 0.8, duration: 0.07, ease: "power1.out", yoyo: true, repeat: 1, transformOrigin: "300px 360px" }, 8.09);
+          tl.to("#bk-i4", { rotation: 3, duration: 0.1, ease: "sine.inOut", yoyo: true, repeat: 3, transformOrigin: "50% 80%" }, 8.25);
+
+          // pinchos: el palillo se clava desde arriba y el pincho rebota
+          tl.fromTo("#bk-stick", { y: -170, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.2, ease: "power3.in" }, 9.25);
+          tl.to("#bk-pincho", { scaleY: 0.9, scaleX: 1.05, duration: 0.07, ease: "power1.out", yoyo: true, repeat: 1, transformOrigin: "300px 460px" }, 9.45);
+          tl.to("#bk-i5", { y: -30, duration: 0.14, ease: "power2.out", yoyo: true, repeat: 1 }, 9.75);
+
+          // ---- resumen: los seis a la vez ------------------------------------------
+          for (let i = 0; i < 6; i++) {
+            const t = 10.25 + i * 0.18;
             tl.fromTo("#bk-m" + i, { autoAlpha: 0, scale: 0.2, rotation: i % 2 ? 20 : -20, transformOrigin: "50% 50%" }, { autoAlpha: 1, scale: 1, rotation: 0, duration: 0.35, ease: "back.out(2.4)" }, t);
             tl.fromTo("#bk-ml" + i, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.3, ease: "power3.out" }, t + 0.1);
-            [8.25, 8.75].forEach((h, k) => {
+            [11.25, 11.75, 12.25].forEach((h, k) => {
               tl.to("#bk-m" + i, { y: -40, rotation: (i + k) % 2 ? 6 : -6, duration: 0.14, ease: "power2.out" }, h + i * 0.06);
               tl.to("#bk-m" + i, { y: 0, rotation: 0, duration: 0.16, ease: "power2.in" }, h + 0.14 + i * 0.06);
             });
           }
-          P.fly(tl, tip, [1250, 1700], [qb.x, qb.y + qb.h * 0.7], 7.4, 0.2);
-          P.write(tl, $("bk-q"), { t: 7.6, dur: 0.7, pen: tip, box: qb });
-          P.fly(tl, tip, [qb.x + qb.w, qb.y + qb.h * 0.5], [1320, 1900], 8.3, 0.2, true);
+          P.fly(tl, tip, [1250, 1700], [qb.x, qb.y + qb.h * 0.7], 10.45, 0.2);
+          P.write(tl, $("bk-q"), { t: 10.65, dur: 0.7, pen: tip, box: qb });
+          P.fly(tl, tip, [qb.x + qb.w, qb.y + qb.h * 0.5], [1320, 1900], 11.35, 0.2, true);
 
           window.__timelines["breakfast"] = tl;
         });

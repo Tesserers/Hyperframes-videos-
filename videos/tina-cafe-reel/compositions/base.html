@@ -11,7 +11,7 @@
         .bs-steam path { fill: none; stroke: var(--cream); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 70 30; }
       </style>
 
-      <div id="root" data-composition-id="base" data-width="1080" data-height="1920" data-duration="26">
+      <div id="root" data-composition-id="base" data-width="1080" data-height="1920" data-duration="30">
         <svg class="bs-steam" viewBox="0 0 1080 1920" aria-hidden="true">
           <g id="bs-steam" opacity="0.14">
             <path d="M380 1500 C 420 1400, 340 1300, 380 1200 C 420 1100, 340 1000, 380 900 C 420 800, 340 700, 380 600 C 420 500, 340 400, 380 300" />
@@ -23,12 +23,12 @@
 
       <script>
         const tl = gsap.timeline({ paused: true });
-        // El vapor sube sin parar: cinco ciclos exactos en 26 s, así el patrón
+        // El vapor sube sin parar: cinco ciclos exactos en 30 s, así el patrón
         // del último fotograma es el del primero.
-        tl.fromTo("#bs-steam path", { strokeDashoffset: 0 }, { strokeDashoffset: -300, duration: 26 / 5, ease: "none", repeat: 4 }, 0);
+        tl.fromTo("#bs-steam path", { strokeDashoffset: 0 }, { strokeDashoffset: -300, duration: 30 / 5, ease: "none", repeat: 4 }, 0);
         // Las escenas claras lo tapan; al volver al chocolate del cierre reaparece.
         tl.set("#bs-steam", { opacity: 0 }, 5.75);
-        tl.to("#bs-steam", { opacity: 0.14, duration: 0.8, ease: "power2.out" }, 23.4);
+        tl.to("#bs-steam", { opacity: 0.14, duration: 0.8, ease: "power2.out" }, 27.4);
         window.__timelines["base"] = tl;
       </script>
     </template>

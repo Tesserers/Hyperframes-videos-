@@ -2,12 +2,12 @@
 workflow: general-video
 flow: automation
 storyboard: no
-message: "Empieza el día en Tina café: desayunos para todos los gustos (café, matcha, tostadas, bollería), promos y horario de invierno."
+message: "Empieza el día en Tina café: desayunos para todos los gustos (café de todos los tipos, matcha de varios sabores, tostadas, bollería, bocadillos y pinchos), promos y horario de invierno."
 destination: instagram-reels
 aspect: 1080x1920
 language: es-ES
 audience: "Clientela de barrio, estudiantes y quien busca un café acogedor"
-length: 26s
+length: 30s
 angle: "Reel cute y editorial dibujado a lápiz: el lápiz pinta, escribe y borra cada escena"
 style_preset: brand-native
 capture: client-supplied
@@ -90,3 +90,19 @@ suelo común de chocolate y vapor).
   y suave», «bien crujientes», «para mojar») son míos; el matcha lo pidió Eddy, el resto es
   genérico. Ajustar a la carta real.
 - La escena del hueco `[ILUSTRACIÓN TINA]` ya no está; Tina puede volver cuando haya ilustración.
+
+## Tercera versión (petición de Eddy)
+
+> quita el guion del final a la derecha y centra te esperamos - añade en la comida bocadillos y
+> pinchos y añade en lo de matcha que tienes de diferentes sabores y cafés de diferentes tipos
+> no solo café y que no se vea el lapiz que sea como escrito pero sin que se vea el lapiz
+
+- «te esperamos», sin guion, centrado.
+- Dos desayunos más: **bocadillos** («para coger fuerzas») y **pinchos** («para picar algo»).
+  El resumen pasa a una rejilla de 3×2.
+- Café: «de todos los tipos», y van pasando SOLO · CON LECHE · CORTADO · CAPUCHINO (tipos
+  genéricos, a confirmar con la carta). Matcha: «de varios sabores» (sin nombrarlos, porque no
+  los sabemos).
+- **El lápiz ya no se ve**: los trazos, el coloreado, la goma y la escritura siguen igual, pero
+  sin el lápiz. Está en `SHOW_PENCIL` de `assets/tina-pencil.js` por si vuelve.
+- El vídeo y la canción pasan a 30,0 s (15 compases a 120 BPM).

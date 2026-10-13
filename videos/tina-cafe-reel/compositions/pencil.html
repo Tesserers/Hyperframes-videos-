@@ -13,7 +13,7 @@
         .pc-svg { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
       </style>
 
-      <div id="root" data-composition-id="pencil" data-width="1080" data-height="1920" data-duration="26">
+      <div id="root" data-composition-id="pencil" data-width="1080" data-height="1920" data-duration="30">
         <svg id="pc-svg" class="pc-svg" viewBox="0 0 1080 1920" aria-hidden="true">
           <defs>
             <filter id="pc-rough" x="-10%" y="-10%" width="120%" height="120%">
@@ -35,9 +35,9 @@
         // [inicio, duración, color, lápiz]  — el corte cae justo al acabar el trazo
         const SEAMS = [
           [5.0, 0.75, "#FAF4E6", tip],  // gancho → desayunos: colorea a hueso
-          [15.0, 0.4, "#FAF4E6", rub],  // desayunos → promos: goma
-          [19.0, 0.75, "#5C3A1E", tip], // promos → horario: colorea a chocolate
-          [23.0, 0.4, "#5C3A1E", rub],  // horario → cierre: goma
+          [19.0, 0.4, "#FAF4E6", rub],  // desayunos → promos: goma
+          [23.0, 0.75, "#5C3A1E", tip], // promos → horario: colorea a chocolate
+          [27.0, 0.4, "#5C3A1E", rub],  // horario → cierre: goma
         ];
         SEAMS.forEach(([t, d, color, pen], i) => {
           P.fly(tl, pen, [1250, -260], [-120, -40], t - 0.22, 0.22);

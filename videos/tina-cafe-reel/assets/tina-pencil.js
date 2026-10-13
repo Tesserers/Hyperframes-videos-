@@ -21,6 +21,10 @@
     '<rect x="250" y="-23" width="26" height="46" fill="#B8893E" stroke="#2A1B0E" stroke-width="3"/>' +
     '<path d="M276 -23 L306 -23 Q320 -23 320 -9 L320 9 Q320 23 306 23 L276 23 Z" fill="#C97A5C" stroke="#2A1B0E" stroke-width="3"/>';
 
+  // El lápiz existe (guía los trazos) pero no se ve: el texto y los dibujos
+  // aparecen como escritos por una mano invisible. Pon true para mostrarlo.
+  const SHOW_PENCIL = false;
+
   function make(parent, id, mode) {
     const svg = document.createElementNS(NS, "svg");
     svg.setAttribute("id", id);
@@ -33,6 +37,7 @@
     svg.innerHTML =
       '<g transform="' + tf + '"><g transform="translate(6 10)" opacity="0.18">' + BODY.replace(/fill="#[0-9A-F]+"/g, 'fill="#2A1B0E"') +
       '</g>' + BODY + "</g>";
+    if (!SHOW_PENCIL) svg.style.display = "none";
     parent.appendChild(svg);
     return svg;
   }

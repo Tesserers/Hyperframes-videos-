@@ -190,7 +190,7 @@ ITEMS = [7.0 + 1.5 * i for i in range(6)]  # café, matcha, tostadas, bollería,
 PENCIL = [(0.25, 1.0, False), (2.75, 0.6, False), (4.0, 0.4, False), (5.0, 0.75, False), (5.9, 0.5, False)]
 PENCIL += [(t, 0.45, False) for t in ITEMS] + [(t + 1.15, 0.3, True) for t in ITEMS]
 PENCIL += [(16.4, 0.7, False), (19.0, 0.4, True), (19.5, 0.45, False), (19.95, 0.32, False),
-           (20.4, 0.32, False), (20.85, 0.32, False), (21.3, 0.3, False), (23.0, 0.75, False),
+           (20.4, 0.32, False), (21.3, 0.3, False), (23.0, 0.75, False),
            (23.9, 0.5, False), (24.7, 0.3, False), (27.0, 0.4, True), (27.5, 0.55, False), (28.12, 0.5, False)]
 for t, d, er in PENCIL:
     add("fx", t, pencil(d, erase=er), 0.06)

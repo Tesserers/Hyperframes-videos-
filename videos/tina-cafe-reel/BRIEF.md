@@ -106,3 +106,10 @@ suelo común de chocolate y vapor).
 - **El lápiz ya no se ve**: los trazos, el coloreado, la goma y la escritura siguen igual, pero
   sin el lápiz. Está en `SHOW_PENCIL` de `assets/tina-pencil.js` por si vuelve.
 - El vídeo y la canción pasan a 30,0 s (15 compases a 120 BPM).
+
+## Cuarta versión
+
+> vale perfe quita la hora reposada y ya está
+
+- Fuera la tarjeta de Hora Reposada. Las promos quedan en Hora Aperol y Hora del Recreo
+  (3,50 €), recolocadas para que el bloque siga centrado.

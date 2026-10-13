@@ -16,7 +16,7 @@ bocadillos (13,0), pinchos (14,5): cada uno se dibuja, hace su gracia y la goma 
 16,0 s: los seis en pequeño y «¿cuál es el tuyo?». 19,0 s: goma a pantalla completa.
 
 ## Frame 4 — promos (19,4–23,75 s) · compositions/promos.html
-«para cada momento —». El lápiz dibuja el marco de cada tarjeta; la tercera se colorea a
+«para cada momento —». Dos tarjetas: Hora Aperol y Hora del Recreo. Se dibuja el marco de cada una; la segunda se colorea a
 chocolate y el precio 3,50 € cae como un sello. 23,0 s: colorea a chocolate.
 
 ## Frame 5 — hours (23,75–27,4 s) · compositions/hours.html

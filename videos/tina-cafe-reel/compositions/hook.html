@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        #root { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
+        .hk-frame { position: absolute; left: 24px; top: 24px; width: 1032px; height: 1872px; border: 2px solid var(--cream); border-radius: 4px; }
+        /* Arranca en el mismo sitio y tamaño en que lo deja la apertura: es el
+           mismo objeto, que ahora sube para dejar sitio al titular. */
+        .hk-logo { position: absolute; left: 240px; top: 600px; width: 600px; height: 600px; display: block; }
+        .hk-text { position: absolute; left: 60px; top: 880px; width: 960px; text-align: center; }
+        .hk-kicker { display: block; font-family: var(--f-display); font-style: italic; font-weight: 300; font-size: 68px; line-height: 1.1; color: var(--butter); }
+        .hk-title { display: block; margin-top: 6px; font-family: var(--f-display); font-weight: 900; font-size: 168px; line-height: 1.02; letter-spacing: -0.01em; color: var(--cream); white-space: nowrap; }
+        .hk-ch { display: inline-block; }
+        .hk-sp { display: inline-block; width: 0.26em; }
+        .hk-rule { display: block; width: 520px; height: 2px; margin: 44px auto 0; background: rgba(242, 227, 192, 0.4); }
+        .hk-label { display: block; margin-top: 34px; font-family: var(--f-mono); font-weight: 500; font-size: 26px; letter-spacing: 6px; color: rgba(242, 227, 192, 0.75); }
+      </style>
+
+      <div id="root" data-composition-id="hook" data-width="1080" data-height="1920" data-duration="3.4">
+        <div class="hk-frame"></div>
+        <img id="hk-logo" class="hk-logo" src="assets/tina-logo-circle.png" alt="Tina café" />
+        <div class="hk-text" data-layout-allow-occlusion>
+          <span id="hk-kicker" class="hk-kicker">tu rincón favorito</span>
+          <span id="hk-title" class="hk-title"><span class="hk-ch">T</span><span class="hk-ch">i</span><span class="hk-ch">n</span><span class="hk-ch">a</span><span class="hk-sp"></span><span class="hk-ch">c</span><span class="hk-ch">a</span><span class="hk-ch">f</span><span class="hk-ch">é</span></span>
+          <span id="hk-rule" class="hk-rule"></span>
+          <span id="hk-label" class="hk-label">CAFETERÍA</span>
+        </div>
+      </div>
+
+      <script>
+        const tl = gsap.timeline({ paused: true });
+        // el logo sube y se hace pequeño: 600 px → 360 px, centro en y = 560
+        tl.fromTo("#hk-logo", { y: 0, scale: 1 }, { y: -340, scale: 0.6, duration: 0.75, ease: "power3.inOut" }, 0);
+        tl.fromTo("#hk-kicker", { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.35);
+        // «Tina café» letra a letra, 30 ms entre letras
+        tl.fromTo("#hk-title .hk-ch", { autoAlpha: 0, y: 70, rotation: 4 }, { autoAlpha: 1, y: 0, rotation: 0, duration: 0.55, ease: "back.out(1.5)", stagger: 0.03 }, 0.55);
+        tl.fromTo("#hk-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.out" }, 1.05);
+        tl.fromTo("#hk-label", { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out" }, 1.2);
+        window.__timelines["hook"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

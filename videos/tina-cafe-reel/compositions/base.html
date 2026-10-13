@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        /* El suelo común: chocolate y vapor. Es lo que se ve en el primer y en el
+           último fotograma, y por eso el bucle cierra sin salto. */
+        #root { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; background: var(--choc); }
+        .bs-steam { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+        .bs-steam path { fill: none; stroke: var(--cream); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 70 30; }
+      </style>
+
+      <div id="root" data-composition-id="base" data-width="1080" data-height="1920" data-duration="19.6">
+        <svg class="bs-steam" viewBox="0 0 1080 1920" aria-hidden="true">
+          <g id="bs-steam" opacity="0.14">
+            <path d="M380 1500 C 420 1400, 340 1300, 380 1200 C 420 1100, 340 1000, 380 900 C 420 800, 340 700, 380 600 C 420 500, 340 400, 380 300" />
+            <path d="M540 1560 C 580 1460, 500 1360, 540 1260 C 580 1160, 500 1060, 540 960 C 580 860, 500 760, 540 660 C 580 560, 500 460, 540 360" />
+            <path d="M700 1500 C 740 1400, 660 1300, 700 1200 C 740 1100, 660 1000, 700 900 C 740 800, 660 700, 700 600 C 740 500, 660 400, 700 300" />
+          </g>
+        </svg>
+      </div>
+
+      <script>
+        const tl = gsap.timeline({ paused: true });
+        // El vapor sube sin parar: cinco ciclos exactos en 19,6 s, así el patrón
+        // del último fotograma es el del primero.
+        tl.fromTo("#bs-steam path", { strokeDashoffset: 0 }, { strokeDashoffset: -300, duration: 19.6 / 5, ease: "none", repeat: 4 }, 0);
+        // Las escenas claras lo tapan; al volver al chocolate del cierre reaparece.
+        tl.set("#bs-steam", { opacity: 0 }, 5.9);
+        tl.to("#bs-steam", { opacity: 0.14, duration: 0.8, ease: "power2.out" }, 17.0);
+        window.__timelines["base"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

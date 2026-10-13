@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        /* Sin fondo propio: el chocolate y el vapor del index, como en la apertura. */
+        #root { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
+        .ou-frame { position: absolute; left: 24px; top: 24px; width: 1032px; height: 1872px; border: 2px solid var(--cream); border-radius: 4px; }
+        .ou-logo { position: absolute; left: 270px; top: 540px; width: 540px; height: 540px; display: block; }
+        .ou-text { position: absolute; left: 60px; top: 1150px; width: 960px; text-align: center; }
+        .ou-line { display: block; font-family: var(--f-display); font-style: italic; font-weight: 300; font-size: 88px; line-height: 1.1; color: var(--cream); }
+        .ou-heart { display: block; width: 44px; height: 40px; margin: 34px auto 0; }
+      </style>
+
+      <div id="root" data-composition-id="outro" data-width="1080" data-height="1920" data-duration="2.6">
+        <div class="ou-frame"></div>
+        <img id="ou-logo" class="ou-logo" src="assets/tina-logo-circle.png" alt="Tina café" />
+        <div id="ou-text" class="ou-text">
+          <span id="ou-line" class="ou-line">te esperamos —</span>
+          <svg id="ou-heart" class="ou-heart" viewBox="0 0 44 40" aria-hidden="true"><path d="M22 38 C 22 38, 2 25, 2 12 C 2 5, 8 1, 13 1 C 17 1, 20 4, 22 7 C 24 4, 27 1, 31 1 C 36 1, 42 5, 42 12 C 42 25, 22 38, 22 38 Z" fill="#C97A5C" /></svg>
+        </div>
+      </div>
+
+      <script>
+        const tl = gsap.timeline({ paused: true });
+        // el logo llega subiendo, en marcha, con el mismo rebote de la apertura
+        tl.fromTo("#ou-logo", { autoAlpha: 0, y: 220, scale: 0.9 }, { autoAlpha: 1, y: 0, scale: 1.03, duration: 0.6, ease: "power4.out" }, 0);
+        tl.to("#ou-logo", { scale: 1, duration: 0.4, ease: "power2.inOut" }, 0.6);
+        tl.fromTo("#ou-line", { autoAlpha: 0, y: 50 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.3);
+        tl.fromTo("#ou-heart", { scale: 0 }, { scale: 1, duration: 0.45, ease: "back.out(1.7)" }, 0.7);
+        // fundido al fotograma de apertura: solo chocolate, marco y vapor
+        tl.to("#ou-logo", { autoAlpha: 0, scale: 0.92, duration: 0.7, ease: "power2.in" }, 1.85);
+        tl.to("#ou-text", { autoAlpha: 0, y: -30, duration: 0.6, ease: "power2.in" }, 1.8);
+        window.__timelines["outro"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

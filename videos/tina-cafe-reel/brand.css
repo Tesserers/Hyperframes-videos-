@@ -1,0 +1,29 @@
+/* Tina Café — marca. Equivale al brand.ts del encargo: la única fuente de
+   colores y tipografías del reel. Ninguna escena declara un color propio. */
+
+@font-face { font-family: "Fraunces"; src: url("assets/fonts/Fraunces.woff2") format("woff2"); font-weight: 300 900; font-style: normal; font-display: block; }
+@font-face { font-family: "Fraunces"; src: url("assets/fonts/Fraunces-Italic.woff2") format("woff2"); font-weight: 300 900; font-style: italic; font-display: block; }
+@font-face { font-family: "Inter"; src: url("assets/fonts/Inter.woff2") format("woff2"); font-weight: 400 500; font-style: normal; font-display: block; }
+@font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/JetBrainsMono.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: block; }
+
+:root {
+  /* Paleta cerrada: solo estos diez valores. */
+  --choc: #5C3A1E;       /* fondo principal */
+  --choc-deep: #3F2611;  /* fondo profundo / sombras */
+  --cream: #F2E3C0;      /* texto sobre chocolate */
+  --bone: #FAF4E6;       /* fondo claro */
+  --gold: #B8893E;       /* aros, líneas finas */
+  --caramel-lt: #D4A668; /* acento cálido */
+  --caramel: #8B5E3C;    /* texto secundario sobre claro */
+  --terracotta: #C97A5C; /* mejillas, corazones */
+  --butter: #FFDE86;     /* itálica destacada sobre chocolate */
+  --ink: #2A1B0E;        /* tinta */
+
+  --f-display: "Fraunces", serif;
+  --f-body: "Inter", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Zona segura de Instagram en 1080×1920: nada importante fuera de 250–1580. */
+  --safe-top: 250px;
+  --safe-bottom: 1580px;
+}

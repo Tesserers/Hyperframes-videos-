@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        #root { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
+        /* La ola: el chocolate sube desde abajo y tapa las promos. */
+        .hr-wave { position: absolute; left: 0; top: 0; width: 1080px; height: 2000px; background: var(--choc); }
+        .hr-wave svg { position: absolute; left: 0; top: -118px; width: 1080px; height: 120px; display: block; }
+        .hr-frame { position: absolute; left: 24px; top: 24px; width: 1032px; height: 1872px; border: 2px solid var(--cream); border-radius: 4px; }
+
+        .hr-snow { position: absolute; inset: 0; }
+        .hr-flake { position: absolute; opacity: 0.16; }
+        .hr-flake path { fill: none; stroke: var(--cream); stroke-width: 3; stroke-linecap: round; }
+
+        .hr-content { position: absolute; left: 60px; top: 450px; width: 960px; text-align: center; }
+        .hr-kicker { display: block; font-family: var(--f-display); font-style: italic; font-weight: 300; font-size: 72px; line-height: 1.1; color: var(--butter); }
+        .hr-title { display: block; margin-top: 4px; font-family: var(--f-display); font-weight: 900; font-size: 210px; line-height: 1.0; letter-spacing: -0.015em; color: var(--cream); }
+        .hr-rule { display: block; width: 560px; height: 2px; margin: 46px auto 50px; background: rgba(242, 227, 192, 0.4); }
+        .hr-row { display: block; margin-bottom: 44px; }
+        .hr-label { display: block; font-family: var(--f-mono); font-weight: 500; font-size: 26px; letter-spacing: 4px; color: rgba(242, 227, 192, 0.75); }
+        .hr-time { display: block; margin-top: 8px; font-family: var(--f-display); font-weight: 400; font-size: 84px; line-height: 1.05; color: var(--cream); font-variant-numeric: lining-nums tabular-nums; }
+      </style>
+
+      <div id="root" data-composition-id="hours" data-width="1080" data-height="1920" data-duration="4.2">
+        <div id="hr-wave" class="hr-wave" data-layout-allow-overflow>
+          <svg viewBox="0 0 1080 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 120 L0 60 C 135 0, 270 0, 405 60 C 540 120, 675 120, 810 60 C 945 0, 1080 0, 1080 40 L1080 120 Z" fill="#5C3A1E" /></svg>
+        </div>
+        <div id="hr-snow" class="hr-snow"></div>
+        <div id="hr-frame" class="hr-frame"></div>
+
+        <div id="hr-content" class="hr-content">
+          <span id="hr-kicker" class="hr-kicker">nuestro horario de</span>
+          <span id="hr-title" class="hr-title">Invierno</span>
+          <span id="hr-rule" class="hr-rule"></span>
+          <span id="hr-r1" class="hr-row"><span class="hr-label">ENTRE SEMANA</span><span class="hr-time">08:00 – 20:00</span></span>
+          <span id="hr-r2" class="hr-row"><span class="hr-label">SÁBADO</span><span class="hr-time">10:00 – 22:00</span></span>
+          <span id="hr-r3" class="hr-row"><span class="hr-label">DOMINGO</span><span class="hr-time">10:00 – 15:00</span></span>
+        </div>
+      </div>
+
+      <script>
+        // Copos con posiciones fijas (sin azar): x, y de salida, tamaño, giro.
+        const FLAKES = [
+          [96, 190, 46, 10], [262, 360, 34, -14], [470, 120, 40, 22], [690, 300, 52, -8], [930, 170, 38, 16],
+          [150, 760, 36, 4], [880, 640, 46, -20], [70, 1240, 50, 12], [960, 1180, 34, -6], [300, 1500, 40, 18],
+          [760, 1460, 48, -12], [520, 1680, 36, 8], [180, 1780, 44, -16], [900, 1760, 38, 20]
+        ];
+        const snow = document.getElementById("hr-snow");
+        FLAKES.forEach(([x, y, s], i) => {
+          const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          svg.setAttribute("viewBox", "0 0 40 40");
+          svg.setAttribute("class", "hr-flake");
+          svg.setAttribute("id", "hr-flake-" + i);
+          svg.setAttribute("style", `left:${x}px;top:${y}px;width:${s}px;height:${s}px`);
+          svg.innerHTML = '<path d="M20 3 L20 37 M5.3 11.5 L34.7 28.5 M5.3 28.5 L34.7 11.5 M15 6 L20 10 L25 6 M15 34 L20 30 L25 34" />';
+          snow.appendChild(svg);
+        });
+
+        const tl = gsap.timeline({ paused: true });
+        // la ola sube y cubre el cuadro
+        tl.fromTo("#hr-wave", { y: 2040 }, { y: 0, duration: 0.65, ease: "power3.inOut" }, 0);
+        tl.fromTo("#hr-frame", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3, ease: "none" }, 0.5);
+
+        // copos cayendo despacio
+        FLAKES.forEach(([x, y, s, r], i) => {
+          tl.fromTo("#hr-flake-" + i, { autoAlpha: 0 }, { autoAlpha: 0.16, duration: 0.6, ease: "none" }, 0.45 + (i % 5) * 0.06);
+          tl.fromTo("#hr-flake-" + i, { y: -40 }, { y: 200 + (i % 3) * 40, rotation: r * 4, duration: 3.75, ease: "none" }, 0.45);
+        });
+
+        // titular y franjas en cascada
+        tl.fromTo("#hr-kicker", { autoAlpha: 0, y: 160 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power4.out" }, 0.5);
+        tl.fromTo("#hr-title", { autoAlpha: 0, y: 200 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power4.out" }, 0.62);
+        tl.fromTo("#hr-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.55, ease: "power3.out" }, 0.9);
+        tl.fromTo(["#hr-r1", "#hr-r2", "#hr-r3"], { autoAlpha: 0, y: 70 }, { autoAlpha: 1, y: 0, duration: 0.55, ease: "power3.out", stagger: 0.2 }, 1.05);
+
+        // salida hacia arriba; el cierre recoge el movimiento
+        tl.to("#hr-content", { y: -260, autoAlpha: 0, duration: 0.4, ease: "power4.in" }, 3.8);
+        tl.to("#hr-snow", { autoAlpha: 0, duration: 0.4, ease: "power1.in" }, 3.8);
+        window.__timelines["hours"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

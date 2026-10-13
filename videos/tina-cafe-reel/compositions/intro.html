@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        /* Sin fondo propio: debajo está el chocolate con vapor del index. */
+        #root { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
+        .in-frame { position: absolute; left: 24px; top: 24px; width: 1032px; height: 1872px; border: 2px solid var(--cream); border-radius: 4px; }
+        /* El aro dorado del logo, trazado a mano sobre el sitio exacto donde el
+           PNG dibuja el suyo (r = 0,492 del lado). Cuando el logo real entra, el
+           trazo se retira y queda el aro original. */
+        .in-ring { position: absolute; left: 240px; top: 600px; width: 600px; height: 600px; }
+        .in-ring circle { fill: none; stroke: var(--gold); stroke-width: 3; }
+        .in-logo { position: absolute; left: 240px; top: 600px; width: 600px; height: 600px; display: block; }
+      </style>
+
+      <div id="root" data-composition-id="intro" data-width="1080" data-height="1920" data-duration="2.5">
+        <div id="in-frame" class="in-frame"></div>
+        <svg id="in-ring" class="in-ring" viewBox="0 0 600 600" aria-hidden="true">
+          <circle id="in-ring-c" cx="300" cy="300" r="295.3" transform="rotate(-90 300 300)" />
+        </svg>
+        <img id="in-logo" class="in-logo" src="assets/tina-logo-circle.png" alt="Tina café" />
+      </div>
+
+      <script>
+        const tl = gsap.timeline({ paused: true });
+        const C = 2 * Math.PI * 295.3;
+        // 1 · el aro se dibuja
+        tl.fromTo("#in-ring-c", { strokeDasharray: C, strokeDashoffset: C }, { strokeDashoffset: 0, duration: 1.0, ease: "power2.inOut" }, 0.15);
+        // 2 · entra el logo real con su rebote (0,9 → 1,03 → 1)
+        tl.fromTo("#in-logo", { autoAlpha: 0, scale: 0.9 }, { autoAlpha: 1, scale: 1.03, duration: 0.42, ease: "power2.out" }, 0.95);
+        tl.to("#in-logo", { scale: 1, duration: 0.38, ease: "power2.inOut" }, 1.37);
+        tl.to("#in-ring", { autoAlpha: 0, duration: 0.2, ease: "none" }, 1.25);
+        window.__timelines["intro"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        /* Entra como un barrido circular desde el centro, encima del gancho. */
+        #root { position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden; }
+        .ch-wipe { position: absolute; inset: 0; background: var(--bone); overflow: hidden; }
+        .ch-frame { position: absolute; left: 24px; top: 24px; width: 1032px; height: 1872px; border: 2px solid var(--choc); border-radius: 4px; }
+        .ch-stage { position: absolute; inset: 0; }
+
+        /* Granos de café a línea fina, decoración de fondo. */
+        .ch-deco { position: absolute; width: 90px; height: 120px; opacity: 0.16; }
+        .ch-deco ellipse, .ch-deco path { fill: none; stroke: var(--caramel); stroke-width: 3; }
+
+        /* La taza: fondo (plato y café) · hueco de Tina · frente de la taza. */
+        .ch-cup { position: absolute; left: 240px; top: 690px; width: 600px; height: 520px; }
+        .ch-cup svg { position: absolute; left: 0; top: 0; width: 600px; height: 520px; overflow: visible; }
+        /* [ILUSTRACIÓN TINA] — hueco reservado. Para sustituirlo, cambiar este
+           div por <img class="ch-tina" src="assets/ilustraciones/tina-taza.png">
+           con el mismo tamaño: la parte de abajo queda escondida tras la taza. */
+        .ch-tina { position: absolute; left: 150px; top: -150px; width: 300px; height: 390px; border: 3px dashed var(--caramel); border-radius: 150px 150px 24px 24px; background: rgba(212, 166, 104, 0.12); }
+        .ch-tina-label { position: absolute; left: 0; top: 104px; width: 300px; text-align: center; font-family: var(--f-mono); font-weight: 500; font-size: 22px; letter-spacing: 3px; line-height: 1.5; color: var(--caramel); }
+
+        .ch-bean { position: absolute; width: 112px; height: 134px; }
+        .ch-bean svg { display: block; width: 112px; height: 134px; overflow: visible; }
+
+        .ch-copy { position: absolute; left: 60px; top: 1330px; width: 960px; text-align: center; font-family: var(--f-display); font-style: italic; font-weight: 300; font-size: 80px; line-height: 1.1; color: var(--caramel); }
+        .ch-heart { display: block; width: 44px; height: 40px; margin: 30px auto 0; }
+      </style>
+
+      <div id="root" data-composition-id="character" data-width="1080" data-height="1920" data-duration="4.2">
+        <div id="ch-wipe" class="ch-wipe">
+        <div id="ch-stage" class="ch-stage">
+          <svg class="ch-deco" style="left:96px;top:330px;transform:rotate(-24deg)" viewBox="0 0 90 120" aria-hidden="true"><ellipse cx="45" cy="60" rx="36" ry="52" /><path d="M45 10 C 30 40, 60 80, 45 110" /></svg>
+          <svg class="ch-deco" style="left:880px;top:420px;transform:rotate(30deg)" viewBox="0 0 90 120" aria-hidden="true"><ellipse cx="45" cy="60" rx="36" ry="52" /><path d="M45 10 C 30 40, 60 80, 45 110" /></svg>
+          <svg class="ch-deco" style="left:120px;top:1560px;transform:rotate(18deg)" viewBox="0 0 90 120" aria-hidden="true"><ellipse cx="45" cy="60" rx="36" ry="52" /><path d="M45 10 C 30 40, 60 80, 45 110" /></svg>
+          <svg class="ch-deco" style="left:860px;top:1620px;transform:rotate(-36deg)" viewBox="0 0 90 120" aria-hidden="true"><ellipse cx="45" cy="60" rx="36" ry="52" /><path d="M45 10 C 30 40, 60 80, 45 110" /></svg>
+
+          <div id="ch-cup" class="ch-cup">
+            <svg viewBox="0 0 600 520" aria-hidden="true">
+              <ellipse cx="300" cy="468" rx="272" ry="44" fill="#D4A668" />
+              <ellipse cx="300" cy="458" rx="196" ry="24" fill="#B8893E" opacity="0.55" />
+              <ellipse cx="300" cy="200" rx="210" ry="36" fill="#3F2611" />
+            </svg>
+            <div id="ch-tina" class="ch-tina"><div class="ch-tina-label"><span style="display:block">[ILUSTRACIÓN</span><span style="display:block">TINA]</span></div></div>
+            <svg viewBox="0 0 600 520" aria-hidden="true">
+              <path d="M492 236 C 600 222, 604 372, 466 372" fill="none" stroke="#5C3A1E" stroke-width="30" stroke-linecap="round" />
+              <path d="M90 200 C 90 224, 510 224, 510 200 C 506 336, 446 446, 300 446 C 154 446, 94 336, 90 200 Z" fill="#5C3A1E" />
+              <path d="M112 262 C 180 284, 420 284, 488 262" fill="none" stroke="#B8893E" stroke-width="3" />
+              <path d="M300 372 C 300 372, 252 340, 252 312 C 252 294, 268 284, 282 284 C 292 284, 298 290, 300 296 C 302 290, 308 284, 318 284 C 332 284, 348 294, 348 312 C 348 340, 300 372, 300 372 Z" fill="#C97A5C" />
+            </svg>
+          </div>
+
+          <div id="ch-b1" class="ch-bean" style="left:120px;top:600px"><svg viewBox="0 0 112 134" aria-hidden="true"><g class="ch-b-body"><ellipse cx="56" cy="67" rx="46" ry="60" fill="#8B5E3C" transform="rotate(-12 56 67)" /><path d="M58 10 C 48 26, 64 38, 54 50" fill="none" stroke="#5C3A1E" stroke-width="5" stroke-linecap="round" /><g class="ch-eyes"><ellipse cx="40" cy="74" rx="5.5" ry="6.5" fill="#2A1B0E" /><ellipse cx="70" cy="74" rx="5.5" ry="6.5" fill="#2A1B0E" /></g><ellipse cx="30" cy="88" rx="8" ry="4.5" fill="#C97A5C" /><ellipse cx="80" cy="88" rx="8" ry="4.5" fill="#C97A5C" /><path d="M48 86 Q 55 94 62 86" fill="none" stroke="#2A1B0E" stroke-width="3.5" stroke-linecap="round" /></g></svg></div>
+          <div id="ch-b2" class="ch-bean" style="left:846px;top:640px"><svg viewBox="0 0 112 134" aria-hidden="true"><g class="ch-b-body"><ellipse cx="56" cy="67" rx="46" ry="60" fill="#8B5E3C" transform="rotate(10 56 67)" /><path d="M58 10 C 48 26, 64 38, 54 50" fill="none" stroke="#5C3A1E" stroke-width="5" stroke-linecap="round" /><g class="ch-eyes"><ellipse cx="40" cy="74" rx="5.5" ry="6.5" fill="#2A1B0E" /><ellipse cx="70" cy="74" rx="5.5" ry="6.5" fill="#2A1B0E" /></g><ellipse cx="30" cy="88" rx="8" ry="4.5" fill="#C97A5C" /><ellipse cx="80" cy="88" rx="8" ry="4.5" fill="#C97A5C" /><path d="M48 86 Q 55 94 62 86" fill="none" stroke="#2A1B0E" stroke-width="3.5" stroke-linecap="round" /></g></svg></div>
+          <div id="ch-b3" class="ch-bean" style="left:96px;top:1050px"><svg viewBox="0 0 112 134" aria-hidden="true"><g class="ch-b-body"><ellipse cx="56" cy="67" rx="46" ry="60" fill="#8B5E3C" transform="rotate(8 56 67)" /><path d="M58 10 C 48 26, 64 38, 54 50" fill="none" stroke="#5C3A1E" stroke-width="5" stroke-linecap="round" /><g class="ch-eyes"><ellipse cx="40" cy="74" rx="5.5" ry="6.5" fill="#2A1B0E" /><ellipse cx="70" cy="74" rx="5.5" ry="6.5" fill="#2A1B0E" /></g><ellipse cx="30" cy="88" rx="8" ry="4.5" fill="#C97A5C" /><ellipse cx="80" cy="88" rx="8" ry="4.5" fill="#C97A5C" /><path d="M48 86 Q 55 94 62 86" fill="none" stroke="#2A1B0E" stroke-width="3.5" stroke-linecap="round" /></g></svg></div>
+          <div id="ch-b4" class="ch-bean" style="left:872px;top:1040px"><svg viewBox="0 0 112 134" aria-hidden="true"><g class="ch-b-body"><ellipse cx="56" cy="67" rx="46" ry="60" fill="#8B5E3C" transform="rotate(-8 56 67)" /><path d="M58 10 C 48 26, 64 38, 54 50" fill="none" stroke="#5C3A1E" stroke-width="5" stroke-linecap="round" /><g class="ch-eyes"><ellipse cx="40" cy="74" rx="5.5" ry="6.5" fill="#2A1B0E" /><ellipse cx="70" cy="74" rx="5.5" ry="6.5" fill="#2A1B0E" /></g><ellipse cx="30" cy="88" rx="8" ry="4.5" fill="#C97A5C" /><ellipse cx="80" cy="88" rx="8" ry="4.5" fill="#C97A5C" /><path d="M48 86 Q 55 94 62 86" fill="none" stroke="#2A1B0E" stroke-width="3.5" stroke-linecap="round" /></g></svg></div>
+
+          <div id="ch-copy" class="ch-copy">café, bollitos y mimos
+            <svg id="ch-heart" class="ch-heart" viewBox="0 0 44 40" aria-hidden="true"><path d="M22 38 C 22 38, 2 25, 2 12 C 2 5, 8 1, 13 1 C 17 1, 20 4, 22 7 C 24 4, 27 1, 31 1 C 36 1, 42 5, 42 12 C 42 25, 22 38, 22 38 Z" fill="#C97A5C" /></svg>
+          </div>
+        </div>
+        <div class="ch-frame"></div>
+        </div>
+      </div>
+
+      <script>
+        const tl = gsap.timeline({ paused: true });
+        // barrido circular desde el centro del cuadro
+        tl.fromTo("#ch-wipe", { clipPath: "circle(0px at 540px 960px)" }, { clipPath: "circle(1110px at 540px 960px)", duration: 0.7, ease: "power3.inOut" }, 0);
+
+        // la taza llega desde abajo y se balancea ±3°
+        tl.fromTo("#ch-cup", { autoAlpha: 0, y: 220, rotation: 0 }, { autoAlpha: 1, y: 0, duration: 0.75, ease: "back.out(1.4)", transformOrigin: "50% 92%" }, 0.3);
+        tl.to("#ch-cup", { rotation: -3, duration: 0.45, ease: "sine.out", transformOrigin: "50% 92%" }, 1.05);
+        tl.to("#ch-cup", { rotation: 3, duration: 0.9, ease: "sine.inOut", yoyo: true, repeat: 2 }, 1.5);
+
+        // granitos: aparecen, saltan con un poco de aplastamiento y parpadean
+        const beans = ["#ch-b1", "#ch-b2", "#ch-b3", "#ch-b4"];
+        tl.fromTo(beans, { autoAlpha: 0, scale: 0.2 }, { autoAlpha: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)", stagger: 0.08 }, 0.55);
+        beans.forEach((b, i) => {
+          [1.25, 2.35].forEach((t0) => {
+            const t = t0 + i * 0.18;
+            tl.to(b, { scaleY: 0.86, scaleX: 1.08, duration: 0.1, ease: "power1.in", transformOrigin: "50% 100%" }, t);
+            tl.to(b, { y: -46, scaleY: 1.06, scaleX: 0.96, duration: 0.24, ease: "power2.out" }, t + 0.1);
+            tl.to(b, { y: 0, scaleY: 1, scaleX: 1, duration: 0.24, ease: "power2.in" }, t + 0.34);
+          });
+          tl.to(b + " .ch-eyes", { scaleY: 0.12, duration: 0.07, ease: "none", yoyo: true, repeat: 1, transformOrigin: "50% 74px" }, 1.9 + i * 0.22);
+        });
+
+        tl.fromTo("#ch-copy", { autoAlpha: 0, y: 50 }, { autoAlpha: 1, y: 0, duration: 0.65, ease: "power3.out" }, 0.85);
+        tl.fromTo("#ch-heart", { scale: 0 }, { scale: 1, duration: 0.45, ease: "back.out(1.7)" }, 1.3);
+
+        // salida hacia arriba, todavía en marcha cuando corta a las promos
+        tl.to("#ch-stage", { y: -300, autoAlpha: 0, duration: 0.4, ease: "power4.in" }, 3.8);
+        window.__timelines["character"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

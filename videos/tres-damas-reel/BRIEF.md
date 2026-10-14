@@ -11,7 +11,7 @@ length: 25s
 fps: 30
 style_preset: brand-native
 narration: none
-audio: original-piano
+audio: original-jazz-trio
 ---
 
 ## Intent
@@ -40,5 +40,5 @@ El servicio es divertido; la presentación, refinada. Guion en 7 tiempos, que se
 
 - La copia vive entre y=250 e y=1670 (zona segura de Instagram).
 - «Imágenes de referencia» aparece en los planos con foto (2, 4 y 5).
-- Música: vals de piano original, sintetizado en local (`assets/audio/fuente/piano.py`). Sin librería externa: el entorno bloquea las descargas y el catálogo de HeyGen requiere iniciar sesión.
+- Música: trío de jazz original en swing a 126 bpm, sintetizado en local (`assets/audio/fuente/jazz.py`). Sin librería externa: el entorno bloquea las descargas y el catálogo de HeyGen requiere iniciar sesión.
 - No hay precios, testimonios, clientes ni datos de contacto.

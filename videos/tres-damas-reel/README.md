@@ -10,7 +10,7 @@ Variable `instagram` (por defecto `@[pendiente]`). Se puede cambiar en Studio o 
 
 ## Música
 
-`assets/audio/musica.mp3` es un vals de piano original y sencillo (3/4, 66 bpm, re mayor): 9 compases que resuelven en el plano del logo. Lo he compuesto y sintetizado en local con una soundfont General MIDI libre (TimGM6mb) y una reverb de sala. El script que lo genera está en `assets/audio/fuente/piano.py`. No hay derechos de terceros, pero el sonido es de piano sintetizado, no grabado: sirve para publicar, aunque un tema de librería con piano real o cuerdas sonará más rico.
+`assets/audio/musica.mp3` es un tema de jazz original para trío (piano, contrabajo andante y batería con escobillas), en swing medio a 126 bpm y en fa mayor. Son 12 compases que cierran con un acorde final en el plano del logo. Lo he compuesto y sintetizado en local con una soundfont General MIDI libre (TimGM6mb). El script que lo genera está en `assets/audio/fuente/jazz.py`. No tiene derechos de terceros, pero los instrumentos son sintetizados: un tema de librería grabado con músicos reales sonará más rico.
 
 Para cambiarlo:
 - sustituye `assets/audio/musica.mp3` por el tema nuevo, o

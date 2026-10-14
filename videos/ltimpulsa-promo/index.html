@@ -51,9 +51,6 @@
       .slam.inv { color: var(--navy); }
       .slam.soft { font-weight: 800; letter-spacing: -0.035em; color: #c9d3e3; }
       #s1-flash { background: #fff; }
-      #s1-badge { left: 1500px; top: 80px; height: 64px; padding: 0 28px 0 22px; border-radius: 32px; background: rgba(32,32,49,0.9);
-        border: 1.5px solid rgba(240,82,82,0.6); font-size: 28px; font-weight: 700; line-height: 61px; color: #fff; white-space: nowrap; }
-      #s1-badge i { display: inline-block; width: 16px; height: 16px; border-radius: 50%; background: var(--red); margin-right: 14px; vertical-align: 1px; }
       #s1-ask { top: 470px; font-size: 92px; font-weight: 800; letter-spacing: -0.04em; color: #c9d3e3; }
       #s1-para { left: 920px; top: 500px; width: 80px; height: 80px; }
       .para { position: absolute; inset: 0; background: var(--blue-2); transform: skewX(-38deg); }
@@ -159,7 +156,6 @@
         <div class="cam" id="s1-cam"><div class="dots" id="s1-dots"></div></div>
         <div class="fill" id="s1-flash"></div>
         <div id="s1-words" data-layout-allow-overlap></div>
-        <div id="s1-badge" class="abs"><i></i><span id="s1-count">1</span> avisos pendientes</div>
         <div id="s1-ask" class="abs center" data-layout-allow-overlap>¿Te suena?</div>
         <div id="s1-para" class="abs"><div class="para"></div></div>
       </div>
@@ -392,7 +388,6 @@
         ];
         var box = $("#s1-words");
         tl.set("#s1-flash", { opacity: 0 }, 0);
-        tl.set("#s1-badge", { autoAlpha: 0 }, 0);
         W.forEach(function (w, i) {
           var d = document.createElement("div");
           d.className = "slam soft";
@@ -408,13 +403,6 @@
           tl.fromTo(d, { x: 0 }, { x: -60, duration: 4.0 - t, ease: "none", immediateRender: false }, t);
         });
         tl.fromTo("#s1-words", { opacity: 1, filter: "blur(0px)" }, { opacity: 0, filter: "blur(10px)", duration: 0.3, ease: "power2.in" }, 3.7);
-        var clk = { t: 0 };
-        tl.fromTo(clk, { t: 0 }, { t: 4, duration: 4, ease: "none", onUpdate: function () {
-          var n = 0; HITS.forEach(function (h, i) { if (clk.t >= h) n = i; });
-          $("#s1-count").textContent = String(1 + n * 3);
-        } }, 0);
-        tl.fromTo("#s1-badge", { autoAlpha: 0, y: -16 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out", immediateRender: false }, 1.0);
-        tl.to("#s1-badge", { autoAlpha: 0, duration: 0.3 }, 3.7);
         // Silencio: la pregunta, y el paralelogramo del logo aparece pequeño en el centro
         tl.set("#s1-ask", { autoAlpha: 0 }, 0);
         tl.set("#s1-ask", { autoAlpha: 1 }, 4.1);

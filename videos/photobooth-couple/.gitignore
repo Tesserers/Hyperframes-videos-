@@ -1,3 +1,5 @@
 snapshots/
 .hyperframes/
 renders/render.log
+renders/work-*/
+renders/.*hf-transaction*/

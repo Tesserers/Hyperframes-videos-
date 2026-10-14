@@ -1,0 +1,55 @@
+<!-- Cañero · 2–6 s · Un corte por golpe: fotos y palabras -->
+<template>
+  <style>
+    @font-face { font-family: "Cormorant Garamond"; src: url("assets/fonts/CormorantGaramond-normal.woff2") format("woff2"); font-style: normal; font-weight: 300 700; font-display: block; }
+    @font-face { font-family: "Cormorant Garamond"; src: url("assets/fonts/CormorantGaramond-italic.woff2") format("woff2"); font-style: italic; font-weight: 300 700; font-display: block; }
+    @font-face { font-family: "Jost"; src: url("assets/fonts/Jost-normal.woff2") format("woff2"); font-style: normal; font-weight: 100 900; font-display: block; }
+    #root { position: absolute; inset: 0; overflow: hidden; --marfil: #F6F1E7; --verde: #203C32; --burdeos: #652D38; --oro: #A58B60; }
+    .c-shot { position: absolute; inset: 0; overflow: hidden; opacity: 0; }
+    .c-ph { position: absolute; inset: 0; }
+    .c-ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .c-card { display: flex; align-items: center; justify-content: center; }
+    .c-verde { background: var(--verde); } .c-burdeos { background: var(--burdeos); } .c-marfil { background: var(--marfil); }
+    .c-word { display: block; line-height: 1; white-space: nowrap; }
+    .c-serif { font-family: "Cormorant Garamond", serif; font-style: italic; font-weight: 400; }
+    .c-caps { font-family: "Jost", sans-serif; font-weight: 400; text-transform: uppercase; letter-spacing: 0.18em; padding-left: 0.18em; }
+    .c-rule { display: block; height: 1px; background: var(--oro); }
+
+
+  </style>
+  <div id="root" data-composition-id="c2-drop" data-width="1080" data-height="1920" data-duration="4">
+    <div id="c2-a" class="c-shot"><div id="c2-a-ph" class="c-ph" style="transform-origin: 50% 30%"><img src="assets/foto-3-hd.png" alt="" style="object-position: 50% 30%" data-layout-allow-overflow /></div></div>
+    <div id="c2-b" class="c-shot c-card c-verde"><span id="c2-b-w" class="c-word c-serif" style="font-size: 330px; color: var(--marfil)">Hay</span></div>
+    <div id="c2-c" class="c-shot"><div id="c2-c-ph" class="c-ph" style="transform-origin: 50% 35%"><img src="assets/foto-1.png" alt="" style="object-position: 50% 50%" data-layout-allow-overflow /></div></div>
+    <div id="c2-d" class="c-shot c-card c-burdeos"><span id="c2-d-w" class="c-word c-serif" style="font-size: 236px; color: var(--marfil)">momentos</span></div>
+    <div id="c2-e" class="c-shot"><div id="c2-e-ph" class="c-ph" style="transform-origin: 60% 35%"><img src="assets/foto-1.png" alt="" style="object-position: 100% 50%" data-layout-allow-overflow /></div></div>
+    <div id="c2-f" class="c-shot c-card c-marfil"><span id="c2-f-w" class="c-word c-serif" style="font-size: 330px; color: var(--verde)">que</span></div>
+    <div id="c2-g" class="c-shot"><div id="c2-g-ph" class="c-ph" style="transform-origin: 72% 20%"><img src="assets/foto-3-hd.png" alt="" style="object-position: 50% 30%" data-layout-allow-overflow /></div></div>
+    <div id="c2-h" class="c-shot c-card c-verde"><span id="c2-h-w" class="c-word c-serif" style="font-size: 250px; color: var(--marfil)">merecen</span></div>
+  </div>
+  <script>
+    (function () {
+    var E = (function (x1, y1, x2, y2) {
+      function bx(t) { return 3 * x1 * t * (1 - t) * (1 - t) + 3 * x2 * t * t * (1 - t) + t * t * t; }
+      function by(t) { return 3 * y1 * t * (1 - t) * (1 - t) + 3 * y2 * t * t * (1 - t) + t * t * t; }
+      return function (x) { if (x <= 0) return 0; if (x >= 1) return 1; var lo = 0, hi = 1, t = x;
+        for (var i = 0; i < 30; i++) { t = (lo + hi) / 2; if (bx(t) < x) lo = t; else hi = t; } return by(t); };
+    })(0.2, 0.7, 0.2, 1);
+    var tl = gsap.timeline({ paused: true });
+    // Hard cut: a shot is on for exactly its slot, nothing in between.
+    function cut(sel, t0, t1) { tl.set(sel, { opacity: 1 }, t0); if (t1 != null) tl.set(sel, { opacity: 0 }, t1); }
+    // Punch: the frame lands slightly big and settles in 300 ms.
+    function punch(sel, at, from, to) { tl.fromTo(sel, { scale: from }, { scale: to, duration: 0.3, ease: E }, at); }
+
+      cut("#c2-a", 0.0, 0.5); punch("#c2-a-ph", 0.0, 1.18, 1.04);
+      cut("#c2-b", 0.5, 1.0); punch("#c2-b-w", 0.5, 1.25, 1.0);
+      cut("#c2-c", 1.0, 1.5); punch("#c2-c-ph", 1.0, 1.15, 1.0);
+      cut("#c2-d", 1.5, 2.0); punch("#c2-d-w", 1.5, 1.25, 1.0);
+      cut("#c2-e", 2.0, 2.5); punch("#c2-e-ph", 2.0, 1.15, 1.0);
+      cut("#c2-f", 2.5, 3.0); punch("#c2-f-w", 2.5, 1.25, 1.0);
+      cut("#c2-g", 3.0, 3.5); punch("#c2-g-ph", 3.0, 1.9, 1.7);
+      cut("#c2-h", 3.5, null); punch("#c2-h-w", 3.5, 1.25, 1.0);
+      window.__timelines["c2-drop"] = tl;
+    })();
+  </script>
+</template>

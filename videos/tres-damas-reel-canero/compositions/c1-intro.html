@@ -1,0 +1,48 @@
+<!-- Cañero · 0–2 s · Monograma sobre el riser -->
+<template>
+  <style>
+    @font-face { font-family: "Cormorant Garamond"; src: url("assets/fonts/CormorantGaramond-normal.woff2") format("woff2"); font-style: normal; font-weight: 300 700; font-display: block; }
+    @font-face { font-family: "Cormorant Garamond"; src: url("assets/fonts/CormorantGaramond-italic.woff2") format("woff2"); font-style: italic; font-weight: 300 700; font-display: block; }
+    @font-face { font-family: "Jost"; src: url("assets/fonts/Jost-normal.woff2") format("woff2"); font-style: normal; font-weight: 100 900; font-display: block; }
+    #root { position: absolute; inset: 0; overflow: hidden; --marfil: #F6F1E7; --verde: #203C32; --burdeos: #652D38; --oro: #A58B60; }
+    .c-shot { position: absolute; inset: 0; overflow: hidden; opacity: 0; }
+    .c-ph { position: absolute; inset: 0; }
+    .c-ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .c-card { display: flex; align-items: center; justify-content: center; }
+    .c-verde { background: var(--verde); } .c-burdeos { background: var(--burdeos); } .c-marfil { background: var(--marfil); }
+    .c-word { display: block; line-height: 1; white-space: nowrap; }
+    .c-serif { font-family: "Cormorant Garamond", serif; font-style: italic; font-weight: 400; }
+    .c-caps { font-family: "Jost", sans-serif; font-weight: 400; text-transform: uppercase; letter-spacing: 0.18em; padding-left: 0.18em; }
+    .c-rule { display: block; height: 1px; background: var(--oro); }
+
+    #c1-bg { position: absolute; inset: 0; background: var(--marfil); }
+    #c1-stack { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 60px; }
+    #c1-mono { width: 400px; height: auto; display: block; }
+    #c1-rule { width: 260px; transform-origin: 0 50%; }
+  </style>
+  <div id="root" data-composition-id="c1-intro" data-width="1080" data-height="1920" data-duration="2.05">
+    <div id="c1-bg"></div>
+    <div id="c1-stack"><img id="c1-mono" src="assets/monograma-verde.png" alt="Monograma Tres Damas" /><span id="c1-rule" class="c-rule"></span></div>
+  </div>
+  <script>
+    (function () {
+    var E = (function (x1, y1, x2, y2) {
+      function bx(t) { return 3 * x1 * t * (1 - t) * (1 - t) + 3 * x2 * t * t * (1 - t) + t * t * t; }
+      function by(t) { return 3 * y1 * t * (1 - t) * (1 - t) + 3 * y2 * t * t * (1 - t) + t * t * t; }
+      return function (x) { if (x <= 0) return 0; if (x >= 1) return 1; var lo = 0, hi = 1, t = x;
+        for (var i = 0; i < 30; i++) { t = (lo + hi) / 2; if (bx(t) < x) lo = t; else hi = t; } return by(t); };
+    })(0.2, 0.7, 0.2, 1);
+    var tl = gsap.timeline({ paused: true });
+    // Hard cut: a shot is on for exactly its slot, nothing in between.
+    function cut(sel, t0, t1) { tl.set(sel, { opacity: 1 }, t0); if (t1 != null) tl.set(sel, { opacity: 0 }, t1); }
+    // Punch: the frame lands slightly big and settles in 300 ms.
+    function punch(sel, at, from, to) { tl.fromTo(sel, { scale: from }, { scale: to, duration: 0.3, ease: E }, at); }
+
+      // The riser builds: the monogram comes in from big and the rule shoots across.
+      tl.fromTo("#c1-mono", { opacity: 0, scale: 1.35 }, { opacity: 1, scale: 1, duration: 1.2, ease: E }, 0.05);
+      tl.fromTo("#c1-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: E }, 1.0);
+      tl.to("#c1-mono", { scale: 1.06, duration: 0.5, ease: "power2.in" }, 1.5);
+      window.__timelines["c1-intro"] = tl;
+    })();
+  </script>
+</template>

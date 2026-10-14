@@ -3,3 +3,4 @@ snapshots/
 renders/render.log
 renders/work-*/
 renders/.*hf-transaction*/
+renders/master*.mp4

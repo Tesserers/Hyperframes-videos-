@@ -1,0 +1,65 @@
+<!-- Escena 5 · 15–19 s · foto-2 a pantalla completa con zoom lento hacia las tiras -->
+<template>
+  <style>
+    @font-face { font-family: "Cormorant Garamond"; src: url("assets/fonts/CormorantGaramond-normal.woff2") format("woff2"); font-style: normal; font-weight: 300 700; font-display: block; }
+    @font-face { font-family: "Cormorant Garamond"; src: url("assets/fonts/CormorantGaramond-italic.woff2") format("woff2"); font-style: italic; font-weight: 300 700; font-display: block; }
+    @font-face { font-family: "Jost"; src: url("assets/fonts/Jost-normal.woff2") format("woff2"); font-style: normal; font-weight: 100 900; font-display: block; }
+
+    #root {
+      position: absolute; inset: 0; overflow: hidden;
+      --marfil: #F6F1E7; --verde: #203C32; --burdeos: #652D38; --oro: #A58B60;
+    }
+    /* Shared vocabulary of the reel (same definitions in every scene). */
+    .td-serif-i { font-family: "Cormorant Garamond", serif; font-style: italic; font-weight: 400; letter-spacing: 0.005em; }
+    .td-caps { font-family: "Jost", sans-serif; font-weight: 300; text-transform: uppercase; letter-spacing: 0.32em; }
+    .td-nota { font-family: "Jost", sans-serif; font-weight: 400; font-size: 18px; letter-spacing: 0.24em; text-transform: uppercase; }
+    .td-rule { display: block; height: 1px; background: var(--oro); }
+
+    #s5-in { position: absolute; inset: 0; background: var(--verde); }
+    #s5-wrap { position: absolute; inset: 0; overflow: hidden; }
+    #s5-photo { width: 100%; height: 100%; object-fit: cover; display: block; transform-origin: 62% 46%; }
+    #s5-plate { position: absolute; left: 150px; right: 150px; top: 1380px; background: var(--burdeos); padding: 44px 30px 38px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+    #s5-frame { position: absolute; inset: 12px; border: 1px solid var(--oro); }
+    #s5-text { color: var(--marfil); font-size: 62px; line-height: 1.05; text-align: center; }
+    #s5-nota { color: var(--marfil); opacity: 0.82; font-size: 16px; }
+  </style>
+
+  <div id="root" data-composition-id="s5-tiras" data-width="1080" data-height="1920" data-duration="4.8">
+    <div id="s5-in">
+      <div id="s5-wrap"><img id="s5-photo" src="assets/foto-2-vertical.png" alt="" data-layout-allow-overflow /></div>
+      <div id="s5-plate">
+        <div id="s5-frame"></div>
+        <p id="s5-text" class="td-serif-i">Diseñado para cada evento.</p>
+        <p id="s5-nota" class="td-nota">Imágenes de referencia</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+    // The one curve of the piece: cubic-bezier(.2,.7,.2,1).
+    var E = (function (x1, y1, x2, y2) {
+      function bx(t) { return 3 * x1 * t * (1 - t) * (1 - t) + 3 * x2 * t * t * (1 - t) + t * t * t; }
+      function by(t) { return 3 * y1 * t * (1 - t) * (1 - t) + 3 * y2 * t * t * (1 - t) + t * t * t; }
+      return function (x) {
+        if (x <= 0) return 0;
+        if (x >= 1) return 1;
+        var lo = 0, hi = 1, t = x;
+        for (var i = 0; i < 30; i++) { t = (lo + hi) / 2; if (bx(t) < x) lo = t; else hi = t; }
+        return by(t);
+      };
+    })(0.2, 0.7, 0.2, 1);
+    var DRIFT = "sine.inOut"; // only for long, barely perceptible camera drift
+
+      var tl = gsap.timeline({ paused: true });
+      function rise(sel, at, dy) {
+        tl.fromTo(sel, { opacity: 0, y: dy || 16 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, at);
+      }
+      // Crossfade in, then a slow push towards the strips.
+      tl.fromTo("#s5-in", { opacity: 0 }, { opacity: 1, duration: 0.8, ease: E }, 0);
+      tl.fromTo("#s5-photo", { scale: 1.0 }, { scale: 1.12, duration: 4.8, ease: DRIFT }, 0);
+      tl.fromTo("#s5-plate", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.9, ease: E }, 0.7);
+      window.__timelines["s5-tiras"] = tl;
+    })();
+  </script>
+</template>

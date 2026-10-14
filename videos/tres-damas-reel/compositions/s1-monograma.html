@@ -1,0 +1,58 @@
+<!-- Escena 1 · 0–3 s · Monograma sobre marfil -->
+<template>
+  <style>
+    @font-face { font-family: "Cormorant Garamond"; src: url("assets/fonts/CormorantGaramond-normal.woff2") format("woff2"); font-style: normal; font-weight: 300 700; font-display: block; }
+    @font-face { font-family: "Cormorant Garamond"; src: url("assets/fonts/CormorantGaramond-italic.woff2") format("woff2"); font-style: italic; font-weight: 300 700; font-display: block; }
+    @font-face { font-family: "Jost"; src: url("assets/fonts/Jost-normal.woff2") format("woff2"); font-style: normal; font-weight: 100 900; font-display: block; }
+
+    #root {
+      position: absolute; inset: 0; overflow: hidden;
+      --marfil: #F6F1E7; --verde: #203C32; --burdeos: #652D38; --oro: #A58B60;
+    }
+    /* Shared vocabulary of the reel (same definitions in every scene). */
+    .td-serif-i { font-family: "Cormorant Garamond", serif; font-style: italic; font-weight: 400; letter-spacing: 0.005em; }
+    .td-caps { font-family: "Jost", sans-serif; font-weight: 300; text-transform: uppercase; letter-spacing: 0.32em; }
+    .td-nota { font-family: "Jost", sans-serif; font-weight: 400; font-size: 18px; letter-spacing: 0.24em; text-transform: uppercase; }
+    .td-rule { display: block; height: 1px; background: var(--oro); }
+
+    #s1-ground { position: absolute; inset: 0; background: var(--marfil); }
+    #s1-stack { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 64px; }
+    #s1-mono { display: block; width: 380px; height: auto; }
+    #s1-rule { width: 240px; transform-origin: 0 50%; }
+  </style>
+
+  <div id="root" data-composition-id="s1-monograma" data-width="1080" data-height="1920" data-duration="3.8">
+    <div id="s1-ground"></div>
+    <div id="s1-stack">
+      <img id="s1-mono" src="assets/monograma-verde.png" alt="Monograma Tres Damas" />
+      <span id="s1-rule" class="td-rule"></span>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+    // The one curve of the piece: cubic-bezier(.2,.7,.2,1).
+    var E = (function (x1, y1, x2, y2) {
+      function bx(t) { return 3 * x1 * t * (1 - t) * (1 - t) + 3 * x2 * t * t * (1 - t) + t * t * t; }
+      function by(t) { return 3 * y1 * t * (1 - t) * (1 - t) + 3 * y2 * t * t * (1 - t) + t * t * t; }
+      return function (x) {
+        if (x <= 0) return 0;
+        if (x >= 1) return 1;
+        var lo = 0, hi = 1, t = x;
+        for (var i = 0; i < 30; i++) { t = (lo + hi) / 2; if (bx(t) < x) lo = t; else hi = t; }
+        return by(t);
+      };
+    })(0.2, 0.7, 0.2, 1);
+    var DRIFT = "sine.inOut"; // only for long, barely perceptible camera drift
+
+      var tl = gsap.timeline({ paused: true });
+      function rise(sel, at, dy) {
+        tl.fromTo(sel, { opacity: 0, y: dy || 16 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, at);
+      }
+      // Slow fade and 0.96 -> 1; then the gold rule draws left to right.
+      tl.fromTo("#s1-mono", { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 2.2, ease: E }, 0.15);
+      tl.fromTo("#s1-rule", { scaleX: 0 }, { scaleX: 1, duration: 1.4, ease: E }, 1.1);
+      window.__timelines["s1-monograma"] = tl;
+    })();
+  </script>
+</template>

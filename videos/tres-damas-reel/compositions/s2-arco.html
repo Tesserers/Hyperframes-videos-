@@ -1,0 +1,68 @@
+<!-- Escena 2 · 3–7 s · foto-3 en marco de arco con filete marfil interior -->
+<template>
+  <style>
+    @font-face { font-family: "Cormorant Garamond"; src: url("assets/fonts/CormorantGaramond-normal.woff2") format("woff2"); font-style: normal; font-weight: 300 700; font-display: block; }
+    @font-face { font-family: "Cormorant Garamond"; src: url("assets/fonts/CormorantGaramond-italic.woff2") format("woff2"); font-style: italic; font-weight: 300 700; font-display: block; }
+    @font-face { font-family: "Jost"; src: url("assets/fonts/Jost-normal.woff2") format("woff2"); font-style: normal; font-weight: 100 900; font-display: block; }
+
+    #root {
+      position: absolute; inset: 0; overflow: hidden;
+      --marfil: #F6F1E7; --verde: #203C32; --burdeos: #652D38; --oro: #A58B60;
+    }
+    /* Shared vocabulary of the reel (same definitions in every scene). */
+    .td-serif-i { font-family: "Cormorant Garamond", serif; font-style: italic; font-weight: 400; letter-spacing: 0.005em; }
+    .td-caps { font-family: "Jost", sans-serif; font-weight: 300; text-transform: uppercase; letter-spacing: 0.32em; }
+    .td-nota { font-family: "Jost", sans-serif; font-weight: 400; font-size: 18px; letter-spacing: 0.24em; text-transform: uppercase; }
+    .td-rule { display: block; height: 1px; background: var(--oro); }
+
+    #s2-in { position: absolute; inset: 0; background: var(--marfil); }
+    #s2-arch { position: absolute; left: 72px; top: 160px; width: 936px; height: 1290px; border-radius: 468px 468px 0 0; overflow: hidden; background: #d8d4cc; }
+    #s2-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 28%; display: block; }
+    #s2-line { position: absolute; left: 22px; top: 22px; right: 22px; bottom: 22px; border: 1px solid var(--marfil); border-radius: 446px 446px 0 0; }
+    #s2-copy { position: absolute; left: 0; right: 0; top: 1488px; display: flex; flex-direction: column; align-items: center; gap: 30px; }
+    #s2-text { color: var(--verde); font-size: 78px; line-height: 1.05; text-align: center; }
+    #s2-nota { color: var(--verde); }
+  </style>
+
+  <div id="root" data-composition-id="s2-arco" data-width="1080" data-height="1920" data-duration="4">
+    <div id="s2-in">
+      <div id="s2-arch">
+        <img id="s2-photo" src="assets/foto-3-hd.png" alt="" data-layout-allow-overflow />
+        <div id="s2-line"></div>
+      </div>
+      <div id="s2-copy">
+        <p id="s2-text" class="td-serif-i">Hay momentos que merecen</p>
+        <p id="s2-nota" class="td-nota">Imágenes de referencia</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+    // The one curve of the piece: cubic-bezier(.2,.7,.2,1).
+    var E = (function (x1, y1, x2, y2) {
+      function bx(t) { return 3 * x1 * t * (1 - t) * (1 - t) + 3 * x2 * t * t * (1 - t) + t * t * t; }
+      function by(t) { return 3 * y1 * t * (1 - t) * (1 - t) + 3 * y2 * t * t * (1 - t) + t * t * t; }
+      return function (x) {
+        if (x <= 0) return 0;
+        if (x >= 1) return 1;
+        var lo = 0, hi = 1, t = x;
+        for (var i = 0; i < 30; i++) { t = (lo + hi) / 2; if (bx(t) < x) lo = t; else hi = t; }
+        return by(t);
+      };
+    })(0.2, 0.7, 0.2, 1);
+    var DRIFT = "sine.inOut"; // only for long, barely perceptible camera drift
+
+      var tl = gsap.timeline({ paused: true });
+      function rise(sel, at, dy) {
+        tl.fromTo(sel, { opacity: 0, y: dy || 16 }, { opacity: 1, y: 0, duration: 0.8, ease: E }, at);
+      }
+      // Fades up over the monogram; very soft Ken Burns inside the arch.
+      tl.fromTo("#s2-in", { opacity: 0 }, { opacity: 1, duration: 0.8, ease: E }, 0);
+      tl.fromTo("#s2-photo", { scale: 1.0, y: 0 }, { scale: 1.07, y: -14, duration: 4.0, ease: DRIFT }, 0);
+      rise("#s2-text", 0.5);
+      rise("#s2-nota", 0.8, 12);
+      window.__timelines["s2-arco"] = tl;
+    })();
+  </script>
+</template>

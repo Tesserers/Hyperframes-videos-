@@ -8,13 +8,15 @@ Variable `instagram` (por defecto `@[pendiente]`). Se puede cambiar en Studio o 
 
     npx hyperframes render --variables '{"instagram":"@tresdamasevents"}' -o renders/tres-damas-reel.mp4
 
-## Añadir la música
+## Música
 
-Ahora la pista de música está vacía (`assets/audio/musica.mp3` son 25 s de silencio). Hay dos opciones:
-- sustituir ese archivo por el tema, o
-- dejar el archivo en `assets/audio/` y apuntar la variable `musica` a él: `--variables '{"musica":"assets/audio/piano.mp3"}'`.
+`assets/audio/musica.mp3` es un vals de piano original y sencillo (3/4, 66 bpm, re mayor): 9 compases que resuelven en el plano del logo. Lo he compuesto y sintetizado en local con una soundfont General MIDI libre (TimGM6mb) y una reverb de sala. El script que lo genera está en `assets/audio/fuente/piano.py`. No hay derechos de terceros, pero el sonido es de piano sintetizado, no grabado: sirve para publicar, aunque un tema de librería con piano real o cuerdas sonará más rico.
 
-Volumen base 0,8, con 1,2 s de entrada y 2 s de salida (atributo `data-automation` de `<audio id="musica">` en `index.html`).
+Para cambiarlo:
+- sustituye `assets/audio/musica.mp3` por el tema nuevo, o
+- deja el archivo en `assets/audio/` y apunta la variable `musica` a él: `--variables '{"musica":"assets/audio/piano.mp3"}'`.
+
+Envolvente de volumen: 1,2 s de entrada y 2 s de salida (atributo `data-automation` de `<audio id="musica">` en `index.html`).
 
 ## Sustituir foto-4
 

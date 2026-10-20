@@ -8,71 +8,72 @@
       @font-face { font-family: "ArchivoExt"; src: url("assets/fonts/Archivo-Ext-900.woff2") format("woff2"); font-weight: 900; font-display: block; }
       @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/InstrumentSerif-400.woff2") format("woff2"); font-weight: 400; font-display: block; }
       @font-face { font-family: "Space Mono"; src: url("assets/fonts/SpaceMono-400.woff2") format("woff2"); font-weight: 400; font-display: block; }
-      @font-face { font-family: "Space Mono"; src: url("assets/fonts/SpaceMono-700.woff2") format("woff2"); font-weight: 700; font-display: block; }
+      @font-face { font-family: "InterList"; src: url("assets/fonts/Inter-300.woff2") format("woff2"); font-weight: 300; font-display: block; }
       @font-face { font-family: "InterList"; src: url("assets/fonts/Inter-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
-      @font-face { font-family: "InterList"; src: url("assets/fonts/Inter-600.woff2") format("woff2"); font-weight: 600; font-display: block; }
 
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
       #root {
         position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #000;
-        --black: #000000; --white: #ffffff; --acid: #d9ff00; --dim: rgba(255,255,255,0.55);
+        /* The brand's own off-white (sampled from the ENCABO' logo). Acid only marks. */
+        --white: #efefed; --acid: #d9ff00; --dim: rgba(239,239,237,0.62);
         color: var(--white);
       }
       .scene { position: absolute; inset: 0; width: 1920px; height: 1080px; background: #000; }
 
-      /* Roles — one family per job, never mixed. */
       .wm { font-family: "ArchivoExt", sans-serif; font-weight: 900; text-transform: uppercase; line-height: 0.9; letter-spacing: -0.01em; white-space: nowrap; }
-      .serif { font-family: "Instrument Serif", serif; font-weight: 400; line-height: 1.02; letter-spacing: -0.01em; white-space: nowrap; }
-      .mono { font-family: "Space Mono", monospace; font-weight: 400; text-transform: uppercase; letter-spacing: 0.22em; white-space: nowrap; }
+      .serif { font-family: "Instrument Serif", serif; font-weight: 400; line-height: 1.02; letter-spacing: -0.02em; white-space: nowrap; }
+      .mono { font-family: "Space Mono", monospace; font-weight: 400; text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap; }
       .acid { color: var(--acid); }
-      .reg { font-size: 0.26em; vertical-align: top; position: relative; top: 0.08em; margin-left: 0.04em; letter-spacing: 0; }
 
       .center-x { position: absolute; left: 0; width: 1920px; text-align: center; }
       .headline { top: 132px; font-size: 84px; }
 
-      /* Word-mask reveal: each word rises out of its own baseline. */
       .msk { display: inline-block; overflow: hidden; vertical-align: bottom; padding: 0.04em 0.02em 0.2em; margin: -0.04em -0.02em -0.2em; }
       .msk > span { display: inline-block; }
 
-      /* Claims: two lines, pushed apart left and right. */
-      .claim { position: absolute; left: 0; width: 1920px; top: 410px; text-align: center; font-size: 112px; }
-      .claim .l, .l { display: block; }
-      .claim .l1 { transform: translateX(-150px); }
-      .claim .l2 { transform: translateX(150px); }
-      .claim.long { font-size: 80px; top: 430px; }
-      .claim.long .l1 { transform: translateX(-110px); }
-      .claim.long .l2 { transform: translateX(110px); }
+      /* Claims as on encabo.consulting: first line centred, second pushed right. */
+      .claim { position: absolute; left: 0; width: 1920px; top: 420px; text-align: center; font-size: 116px; }
+      .l { display: block; }
+      .claim .l2 { transform: translateX(260px); }
 
-      /* Dotted separators, drawn left to right. */
-      .dots { height: 4px; background-image: radial-gradient(circle, rgba(255,255,255,0.7) 1.4px, transparent 1.8px); background-size: 12px 4px; background-repeat: repeat-x; transform-origin: left center; }
+      .dots { height: 2px; background-image: radial-gradient(circle, rgba(239,239,237,0.75) 0.9px, transparent 1.2px); background-size: 6px 2px; background-repeat: repeat-x; transform-origin: left center; }
+
+      /* ---------- Wordmarks: EDDY' borrows ENCABO's own apostrophe ---------- */
+      .mark { position: absolute; left: 0; width: 1920px; display: flex; justify-content: center; }
+      .mark .inner { position: relative; display: flex; align-items: flex-start; }
+      .mark .apos { display: block; flex: none; }
+      .mark .reg { font-family: "InterList", sans-serif; font-weight: 500; flex: none; line-height: 1; }
+      .logo { display: block; }
 
       /* ---------- Apostrophe beat ---------- */
       #ap { z-index: 50; }
-      #ap-glyph { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: flex; align-items: center; justify-content: center; font-family: "ArchivoExt", sans-serif; font-weight: 900; font-size: 1100px; line-height: 1; color: var(--acid); }
-      #ap-glyph span { display: block; transform: translateY(0.3em); }
+      #ap-glyph { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: flex; align-items: center; justify-content: center; }
+      #ap-glyph img { display: block; height: 560px; }
 
       /* ---------- 1 Apertura ---------- */
-      #s1-wm { top: 340px; font-size: 300px; }
-      #s1-claim { top: 640px; font-size: 104px; }
-      #s1-claim .l1 { transform: translateX(-110px); }
-      #s1-claim .l2 { transform: translateX(110px); }
-      #s1-foot { top: 960px; font-size: 22px; color: var(--dim); }
+      #s1-mark { top: 330px; }
+      #s1-claim { position: absolute; top: 590px; font-size: 92px; }
+      #s1-foot { top: 900px; font-size: 22px; line-height: 1.5; }
 
       /* ---------- Lists (Workin' with:) ---------- */
-      .list { position: absolute; left: 300px; width: 1320px; }
-      .list-label { font-size: 20px; color: var(--dim); margin-bottom: 26px; }
-      .row { position: relative; padding: 26px 0 28px; }
-      .row .name { font-family: "InterList", sans-serif; font-weight: 600; font-size: 64px; letter-spacing: -0.04em; line-height: 1; white-space: nowrap; }
-      .row .tag { margin-top: 16px; font-size: 22px; color: var(--dim); }
-      .row .tag b { font-weight: 700; color: var(--white); }
-      .row .tag b.acid { color: var(--acid); }
-      .list .dots { width: 1320px; }
-      #s2-list { top: 300px; }
-      #s4-list { top: 262px; }
-      #s4-list .row { padding: 18px 0 20px; }
-      #s4-list .row .name { font-size: 50px; }
-      #s4-list .row .tag { margin-top: 12px; font-size: 20px; }
+      .list-title { font-family: "InterList", sans-serif; font-weight: 300; letter-spacing: -0.04em; font-size: 60px; }
+      .row { position: relative; }
+      .row .name { font-family: "InterList", sans-serif; font-weight: 500; letter-spacing: -0.04em; line-height: 1.1; white-space: nowrap; }
+      .row .tag b { font-weight: 400; }
+
+      /* Block 2: the site's two-column client grid. */
+      #s2-title { top: 300px; }
+      #s2-grid { position: absolute; left: 150px; top: 440px; width: 1620px; display: grid; grid-template-columns: 770px 770px; column-gap: 80px; row-gap: 40px; }
+      #s2-grid .name { font-size: 44px; }
+      #s2-grid .dots { width: 770px; margin: 12px 0 12px; }
+      #s2-grid .tag { font-size: 21px; }
+
+      #s4-list { position: absolute; left: 330px; top: 280px; width: 1260px; }
+      #s4-list .row { padding-bottom: 20px; }
+      #s4-list .row .name { font-size: 46px; }
+      #s4-list .row .dots { width: 1260px; margin: 10px 0 10px; }
+      #s4-list .row .tag { font-size: 21px; }
 
       /* ---------- 3 Carousel ---------- */
       #s3-view { position: absolute; left: 250px; top: 300px; width: 1080px; height: 560px; overflow: hidden; }
@@ -80,95 +81,86 @@
       .card { position: absolute; top: 0; width: 440px; }
       .card .flag { width: 440px; height: 440px; border-radius: 18px; overflow: hidden; }
       .card .flag img { display: block; width: 440px; height: 440px; }
-      .card .cap { margin-top: 26px; font-size: 22px; letter-spacing: 0.2em; }
-      .card .cap .lvl { font-size: 15px; color: var(--dim); letter-spacing: 0.2em; }
+      .card .cap { margin-top: 24px; font-size: 24px; }
+      .card .cap .lvl { font-size: 17px; color: var(--dim); }
       #s3-pager { position: absolute; left: 250px; width: 440px; top: 882px; display: flex; justify-content: center; gap: 14px; }
-      #s3-pager i { display: block; width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.32); }
-      #s3-pager i.on { background: var(--acid); }
-      #s3-side { position: absolute; left: 1420px; top: 440px; font-size: 22px; line-height: 2.1; }
-      #s3-side .sep { color: var(--dim); }
+      #s3-pager i { display: block; width: 10px; height: 10px; border-radius: 50%; background: rgba(239,239,237,0.32); }
+      #s3-side { position: absolute; left: 1420px; top: 470px; font-size: 24px; line-height: 1.7; }
 
       /* ---------- 5 Loop ---------- */
       #s5-ring { position: absolute; left: 960px; top: 640px; width: 0; height: 0; }
       #s5-svg { position: absolute; left: -340px; top: -340px; width: 680px; height: 680px; overflow: visible; }
       .node { position: absolute; left: 0; top: 0; width: 0; height: 0; }
-      .node .w { position: absolute; left: 0; top: 0; font-size: 30px; letter-spacing: 0.22em; padding-left: 0.22em; }
+      .node .w { position: absolute; left: 0; top: 0; font-size: 32px; }
 
       /* ---------- 6 Cierre ---------- */
-      #s6-a { top: 196px; font-size: 168px; }
-      #s6-x { top: 392px; font-size: 26px; color: var(--dim); letter-spacing: 0; }
-      #s6-b { top: 452px; font-size: 168px; }
-      #s6-btn { position: absolute; left: 0; width: 1920px; top: 704px; display: flex; justify-content: center; }
-      #s6-btn span { display: block; background: var(--acid); color: #000; border-radius: 999px; padding: 22px 46px 20px 52px; font-size: 22px; font-weight: 700; letter-spacing: 0.24em; }
-      #s6-foot { top: 836px; font-size: 20px; color: var(--dim); }
-      #s6-sig { top: 902px; font-size: 46px; }
-      #s6-sig .l1 { display: block; transform: translateX(-46px); }
-      #s6-sig .l2 { display: block; transform: translateX(46px); }
+      #s6-a { top: 210px; }
+      #s6-x { top: 392px; font-size: 34px; }
+      #s6-b { top: 456px; }
+      #s6-btn { position: absolute; left: 0; width: 1920px; top: 702px; display: flex; justify-content: center; }
+      #s6-btn span { display: block; background: var(--acid); color: #000; border-radius: 999px; padding: 20px 40px 18px; font-size: 24px; }
+      #s6-foot { top: 830px; font-size: 20px; }
+      #s6-sig { position: absolute; top: 900px; font-size: 44px; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="90" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="55" data-width="1920" data-height="1080">
 
       <!-- 1 · APERTURA -->
-      <div id="s1" class="scene clip" data-start="1" data-duration="7" data-track-index="1">
-        <div id="s1-wm" class="center-x wm">EDDY'<span class="reg">®</span></div>
-        <div id="s1-claim" class="center-x serif"><span class="l l1" data-words="Hirin'"></span><span class="l l2" data-words="but."></span></div>
-        <div id="s1-foot" class="center-x mono">Edward Manrique · Madrid · 8+ years in talent</div>
+      <div id="s1" class="scene clip" data-start="0.5" data-duration="4.5" data-track-index="1">
+        <div id="s1-mark" class="mark wm" data-mark="EDDY" data-size="250"></div>
+        <div id="s1-claim" class="serif"><span class="l l1" data-words="Hirin'"></span><span class="l l2" data-words="but."></span></div>
+        <div id="s1-foot" class="center-x mono">Edward Manrique, Madrid<br />8+ years in talent</div>
       </div>
 
-      <!-- 2 · COMIN' FROM ADVERTISING -->
-      <div id="s2" class="scene clip" data-start="8.5" data-duration="16.5" data-track-index="2">
-        <div id="s2-head" class="center-x wm headline fit" data-words="Comin' from advertising"></div>
-        <div id="s2-list" class="list">
-          <div class="list-label mono">Workin' with:</div>
-          <div class="row" id="s2-r1"><div class="name">Seedtag</div><div class="tag mono">Adtech · 200 → <b class="acid" id="s2-count">200</b>+ people · 16 countries</div></div>
-          <div class="dots" id="s2-d1"></div>
-          <div class="row" id="s2-r2"><div class="name">200+ hires</div><div class="tag mono">Sales · Client success · Adtech · Marketing · Product · Tech</div></div>
-          <div class="dots" id="s2-d2"></div>
-          <div class="row" id="s2-r3"><div class="name">36 hires in one quarter</div><div class="tag mono">US GTM expansion</div></div>
-          <div class="dots" id="s2-d3"></div>
+      <!-- 2 · WHERE I'M COMIN' FROM -->
+      <div id="s2" class="scene clip" data-start="5.5" data-duration="8.5" data-track-index="2">
+        <div id="s2-head" class="center-x wm headline fit" data-words="Where I'm comin' from"></div>
+        <div id="s2-title" class="center-x list-title">Workin' at:</div>
+        <div id="s2-grid">
+          <div class="row"><div class="name">Tessera Group</div><div class="dots"></div><div class="tag mono">Head of Recruitment &amp; Talent Ops · 5 companies</div></div>
+          <div class="row"><div class="name">Seedtag</div><div class="dots"></div><div class="tag mono">Adtech · 200 → <b class="acid" id="s2-count">200</b>+ people · 16 countries</div></div>
+          <div class="row"><div class="name">Winning Consulting</div><div class="dots"></div><div class="tag mono">HR Manager · Banco Santander</div></div>
+          <div class="row"><div class="name">BNP Paribas</div><div class="dots"></div><div class="tag mono">Tech &amp; People Specialist · EMEA</div></div>
+          <div class="row"><div class="name">IBM</div><div class="dots"></div><div class="tag mono">Global Consultant</div></div>
+          <div class="row"><div class="name">Capgemini</div><div class="dots"></div><div class="tag mono">EMEA Talent Acquisition</div></div>
         </div>
-        <div id="s2-claim" class="claim serif"><span class="l l1" data-words="Conozco el sector"></span><span class="l l2" data-words="porque he contratado para él."></span></div>
+        <div id="s2-claim" class="claim serif"><span class="l l1" data-words="Banca, consultoría, adtech."></span><span class="l l2" data-words="Y ahora un grupo de cinco."></span></div>
       </div>
 
       <!-- 3 · WORKIN' IN 16 COUNTRIES -->
-      <div id="s3" class="scene clip" data-start="25.5" data-duration="14.5" data-track-index="3">
+      <div id="s3" class="scene clip" data-start="14.5" data-duration="9" data-track-index="3">
         <div id="s3-head" class="center-x wm headline fit" data-words="Workin' in 16 countries"></div>
         <div id="s3-view">
           <div id="s3-track">
             <div class="card" style="left:0px"><div class="flag"><img src="assets/flags/es.svg" alt="" /></div><div class="cap mono">Español <span class="lvl">· Nativo</span></div></div>
             <div class="card" style="left:480px"><div class="flag"><img src="assets/flags/gb.svg" alt="" /></div><div class="cap mono">English <span class="lvl">· C2</span></div></div>
             <div class="card" style="left:960px"><div class="flag"><img src="assets/flags/pt.svg" alt="" /></div><div class="cap mono">Português <span class="lvl">· C1</span></div></div>
-            <div class="card" style="left:1440px"><div class="flag"><img src="assets/flags/fr.svg" alt="" /></div><div class="cap mono">Français <span class="lvl">· B1</span></div></div>
-            <div class="card" style="left:1920px"><div class="flag"><img src="assets/flags/se.svg" alt="" /></div><div class="cap mono">Svenska <span class="lvl">· B1</span></div></div>
-            <div class="card" style="left:2400px"><div class="flag"><img src="assets/flags/it.svg" alt="" /></div><div class="cap mono">Italiano <span class="lvl">· A2</span></div></div>
+            <div class="card" style="left:1440px"><div class="flag"><img src="assets/flags/it.svg" alt="" /></div><div class="cap mono">Italiano <span class="lvl">· B2</span></div></div>
+            <div class="card" style="left:1920px"><div class="flag"><img src="assets/flags/fr.svg" alt="" /></div><div class="cap mono">Français <span class="lvl">· B1</span></div></div>
+            <div class="card" style="left:2400px"><div class="flag"><img src="assets/flags/se.svg" alt="" /></div><div class="cap mono">Svenska <span class="lvl">· B1</span></div></div>
           </div>
         </div>
         <div id="s3-pager"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-        <div id="s3-side" class="mono"><div>16 countries</div><div class="sep">·</div><div>Several companies</div><div>at once</div></div>
+        <div id="s3-side" class="mono"><div>16 countries</div><div>Several companies</div><div>at once</div></div>
         <div id="s3-claim" class="claim serif"><span class="l l1" data-words="Mismo proceso."></span><span class="l l2" data-words="Distinto mercado."></span></div>
       </div>
 
       <!-- 4 · BUILDIN' THE MACHINE -->
-      <div id="s4" class="scene clip" data-start="40.5" data-duration="19.5" data-track-index="4">
+      <div id="s4" class="scene clip" data-start="24" data-duration="11" data-track-index="4">
         <div id="s4-head" class="center-x wm headline fit" data-words="Buildin' the machine"></div>
-        <div id="s4-list" class="list">
-          <div class="row"><div class="name">Salary Benchmarking Program</div><div class="tag mono">Salarios por rol, nivel, género y país</div></div>
-          <div class="dots"></div>
-          <div class="row"><div class="name">Hiring Control Center</div><div class="tag mono">Headcount, prioridades y capacidad</div></div>
-          <div class="dots"></div>
-          <div class="row"><div class="name">Seedstart</div><div class="tag mono">Trainees globales con conversión a FTE</div></div>
-          <div class="dots"></div>
-          <div class="row"><div class="name">From zero</div><div class="tag mono">Shortlist en <b class="acid" id="s4-c72">0</b>h · ~<b id="s4-c13">0</b> días a contratar · Onboarding 30/60/90</div></div>
-          <div class="dots"></div>
-          <div class="row"><div class="name">Own AI tooling</div><div class="tag mono">Automatización con Claude en TA y RRHH</div></div>
-          <div class="dots"></div>
+        <div id="s4-list">
+          <div class="row"><div class="name">Salary Benchmarking Program</div><div class="dots"></div><div class="tag mono">Salarios por rol, nivel, género y país</div></div>
+          <div class="row"><div class="name">Hiring Control Center</div><div class="dots"></div><div class="tag mono">Headcount, prioridades y capacidad</div></div>
+          <div class="row"><div class="name">Seedstart</div><div class="dots"></div><div class="tag mono">Trainees globales con conversión a FTE</div></div>
+          <div class="row"><div class="name">From zero</div><div class="dots"></div><div class="tag mono">Shortlist en <b class="acid" id="s4-c72">0</b>h · ~<b id="s4-c13">0</b> días a contratar · Onboarding 30/60/90</div></div>
+          <div class="row"><div class="name">Own AI tooling</div><div class="dots"></div><div class="tag mono">Automatización con Claude en TA y RRHH</div></div>
         </div>
-        <div id="s4-claim" class="claim long serif"><span class="l l1" data-words="Me gusta cerrar ofertas."></span><span class="l l2" data-words="Me gusta más montar la máquina que las cierra."></span></div>
+        <div id="s4-claim" class="claim serif" style="font-size:88px"><span class="l l1" data-words="Me gusta cerrar ofertas."></span><span class="l l2" style="transform:translateX(120px)" data-words="Me gusta más montar la máquina que las cierra."></span></div>
       </div>
 
       <!-- 5 · THE TALENT LOOP -->
-      <div id="s5" class="scene clip" data-start="60.5" data-duration="19.5" data-track-index="5">
+      <div id="s5" class="scene clip" data-start="35.5" data-duration="11" data-track-index="5">
         <div id="s5-head" class="center-x wm headline fit" data-words="The talent loop"></div>
         <div id="s5-ring">
           <div id="s5-spin" style="position:absolute;left:0;top:0;width:0;height:0">
@@ -179,25 +171,25 @@
             <div class="node" id="n3"><div class="w mono">Growth</div></div>
           </div>
         </div>
-        <div id="s5-claim" class="claim long serif"><span class="l l1" data-words="Lo he montado por partes en tres empresas."></span><span class="l l2" data-words="Quiero montarlo entero en una."></span></div>
+        <div id="s5-claim" class="claim serif"><span class="l l1" data-words="Hago crecer a la gente."></span><span class="l l2" data-words="No solo la plantilla."></span></div>
       </div>
 
       <!-- 6 · CIERRE -->
-      <div id="s6" class="scene clip" data-start="80.5" data-duration="8.5" data-track-index="6">
-        <div id="s6-a" class="center-x wm">ENCABO'<span class="reg">®</span></div>
-        <div id="s6-x" class="center-x mono">x</div>
-        <div id="s6-b" class="center-x wm">EDDY'<span class="reg">®</span></div>
+      <div id="s6" class="scene clip" data-start="47" data-duration="7" data-track-index="6">
+        <div id="s6-a" class="mark"><img class="logo" src="assets/encabo-logo.svg" alt="ENCABO'" /></div>
+        <div id="s6-x" class="center-x mono acid">x</div>
+        <div id="s6-b" class="mark wm" data-mark="EDDY" data-size="168"></div>
         <div id="s6-btn"><span class="mono">Show me what you got</span></div>
         <div id="s6-foot" class="center-x mono">edwardmanriquevl@gmail.com · linkedin.com/in/edwardmanrique</div>
-        <div id="s6-sig" class="center-x serif"><span class="l1" data-words="Recruitin'"></span><span class="l2" data-words="but."></span></div>
+        <div id="s6-sig" class="serif"><span class="l l1" data-words="Recruitin'"></span><span class="l l2" data-words="but."></span></div>
       </div>
 
-      <!-- The apostrophe: the film's heartbeat, on the beat at every seam. -->
-      <div id="ap" class="scene clip" data-start="0" data-duration="80.5" data-track-index="0" style="background:transparent">
-        <div id="ap-glyph"><span>'</span></div>
+      <!-- ENCABO's apostrophe, alone: the beat at every seam. -->
+      <div id="ap" class="scene clip" data-start="0" data-duration="47" data-track-index="0" style="background:transparent">
+        <div id="ap-glyph"><img src="assets/encabo-apos.svg" alt="" /></div>
       </div>
 
-      <audio id="bgm" src="assets/audio/pulse.wav" data-start="0" data-duration="90" data-track-index="10" data-volume="1"></audio>
+      <audio id="bgm" src="assets/audio/pulse.wav" data-start="0" data-duration="55" data-track-index="10" data-volume="1"></audio>
     </div>
 
     <script>
@@ -206,6 +198,31 @@
         var $ = function (s) { return root.querySelector(s); };
         var $$ = function (s) { return Array.prototype.slice.call(root.querySelectorAll(s)); };
 
+        // Proportions read off the supplied ENCABO' logo (87px cap height):
+        // apostrophe 55px tall, 6px after the O; ® 9px tall, 6px after the apostrophe.
+        var LOGO = { capH: 87, aposH: 55.2, aposW: 30.8, gap: 6, regH: 9.5, regGap: 5.5 };
+        var LOGO_H = 87;
+
+        function capHeight(px) {
+          var c = document.createElement("canvas").getContext("2d");
+          c.font = "900 " + px + "px ArchivoExt";
+          return c.measureText("E").actualBoundingBoxAscent;
+        }
+        // Build EDDY' with ENCABO's own apostrophe and ® placement.
+        function buildMark(el) {
+          var px = parseFloat(el.getAttribute("data-size"));
+          var cap = capHeight(px), k = cap / LOGO.capH;
+          el.style.fontSize = px + "px";
+          var inner = document.createElement("div"); inner.className = "inner";
+          var t = document.createElement("span"); t.textContent = el.getAttribute("data-mark");
+          t.style.lineHeight = cap + "px"; t.style.display = "block"; t.style.height = cap + "px";
+          var a = document.createElement("img"); a.className = "apos"; a.src = "assets/encabo-apos.svg";
+          a.style.height = (LOGO.aposH * k) + "px"; a.style.width = (LOGO.aposW * k) + "px"; a.style.marginLeft = (LOGO.gap * k) + "px";
+          var r = document.createElement("span"); r.className = "reg"; r.textContent = "®";
+          r.style.fontSize = (LOGO.regH * k * 1.35) + "px"; r.style.marginLeft = (LOGO.regGap * k) + "px"; r.style.marginTop = (-LOGO.regH * k * 0.12) + "px";
+          inner.appendChild(t); inner.appendChild(a); inner.appendChild(r); el.appendChild(inner);
+          return cap;
+        }
         function maskWords(el) {
           var text = el.getAttribute("data-words"); var inners = [];
           var parts = text.split(" ");
@@ -218,11 +235,17 @@
           }
           return inners;
         }
-        // Headlines never touch the frame edge: shrink to 1640px if needed.
         function fit(el, max) {
-          var w = el.scrollWidth, inner = 0;
-          var r = document.createRange(); r.selectNodeContents(el); inner = r.getBoundingClientRect().width;
+          var r = document.createRange(); r.selectNodeContents(el); var inner = r.getBoundingClientRect().width;
           if (inner > max) el.style.fontSize = (parseFloat(getComputedStyle(el).fontSize) * max / inner) + "px";
+        }
+        // "Consultin' / but." layout: line 1 centred on the mark, "but." flush to its right edge.
+        function hangUnder(sig, markEl, top) {
+          var box = markEl.querySelector(".inner, .logo").getBoundingClientRect();
+          sig.style.left = box.left + "px"; sig.style.width = box.width + "px";
+          sig.querySelector(".l1").style.textAlign = "center";
+          sig.querySelector(".l2").style.textAlign = "right";
+          sig.style.top = top + "px";
         }
         function count(tl, el, from, to, at, dur) {
           var o = { v: from };
@@ -231,15 +254,15 @@
         }
         function words(tl, el, at, gap) {
           var ws = maskWords(el);
-          tl.from(ws, { yPercent: 110, duration: 0.42, ease: "power3.out", stagger: gap || 0.11 }, at);
+          tl.from(ws, { yPercent: 110, duration: 0.32, ease: "power3.out", stagger: gap || 0.07 }, at);
           return ws;
         }
         function claim(tl, el, at) {
           var ls = el.querySelectorAll("[data-words]");
-          var a = words(tl, ls[0], at, 0.1);
-          words(tl, ls[1], at + 0.1 * a.length + 0.35, 0.1);
+          var a = words(tl, ls[0], at, 0.07);
+          words(tl, ls[1], at + 0.07 * a.length + 0.2, 0.07);
         }
-        function draw(tl, el, at, dur) { tl.from(el, { scaleX: 0, duration: dur || 0.7, ease: "power2.inOut" }, at); }
+        function draw(tl, el, at, dur) { tl.from(el, { scaleX: 0, duration: dur || 0.5, ease: "power2.inOut" }, at); }
         function cutIn(tl, els, at) { tl.set(els, { autoAlpha: 0 }, 0); tl.set(els, { autoAlpha: 1 }, at); }
         function cutOut(tl, els, at) { tl.set(els, { autoAlpha: 0 }, at); }
 
@@ -248,62 +271,62 @@
 
           // ---- Apostrophe beats (120 BPM: every seam lands on a downbeat) ----
           var glyph = $("#ap-glyph");
-          // Visible from frame 0 by default; every later beat is a hard cut on.
-          [[0, 1.0], [8, 8.5], [25, 25.5], [40, 40.5], [60, 60.5], [80, 80.5]].forEach(function (w) {
+          [[0, 0.5], [5, 5.5], [14, 14.5], [23.5, 24], [35, 35.5], [46.5, 47]].forEach(function (w) {
             if (w[0] > 0) tl.set(glyph, { autoAlpha: 1 }, w[0]);
-            tl.fromTo(glyph, { scale: 1.12 }, { scale: 1, duration: 0.32, ease: "expo.out", immediateRender: false }, w[0]);
+            tl.fromTo(glyph, { scale: 1.12 }, { scale: 1, duration: 0.3, ease: "expo.out", immediateRender: false }, w[0]);
             tl.set(glyph, { autoAlpha: 0 }, w[1]);
           });
 
-          // ---- 1 Apertura (1.0 – 8.0) ----
-          tl.fromTo("#s1-wm", { scale: 1.04 }, { scale: 1, duration: 1.2, ease: "expo.out" }, 1.0);
-          words(tl, $("#s1-claim .l1"), 2.0);
-          words(tl, $("#s1-claim .l2"), 2.5);
-          cutIn(tl, "#s1-foot", 3.5);
+          // ---- 1 Apertura (0.5 – 5.0) ----
+          tl.fromTo("#s1-mark", { scale: 1.04 }, { scale: 1, duration: 1.0, ease: "expo.out" }, 0.5);
+          words(tl, $("#s1-claim .l1"), 1.1);
+          words(tl, $("#s1-claim .l2"), 1.4);
+          cutIn(tl, "#s1-foot", 2.0);
 
-          // ---- 2 Comin' from advertising (8.5 – 25.0) ----
-          words(tl, $("#s2-head"), 8.6, 0.12);
-          cutIn(tl, "#s2-list .list-label", 10.0);
-          cutIn(tl, "#s2-r1", 10.5); draw(tl, "#s2-d1", 10.6);
-          count(tl, $("#s2-count"), 200, 700, 11.1, 2.6);
-          cutIn(tl, "#s2-r2", 14.0); draw(tl, "#s2-d2", 14.1);
-          cutIn(tl, "#s2-r3", 16.5); draw(tl, "#s2-d3", 16.6);
-          cutOut(tl, ["#s2-list", "#s2-head"], 20.0);
-          claim(tl, $("#s2-claim"), 20.0);
+          // ---- 2 Where I'm comin' from (5.5 – 14.0) ----
+          words(tl, $("#s2-head"), 5.5, 0.08);
+          cutIn(tl, "#s2-title", 6.1);
+          // Pairs land together, left then right column, like the site's grid.
+          $$("#s2-grid .row").forEach(function (r, i) {
+            var t = 6.5 + Math.floor(i / 2) * 0.7 + (i % 2) * 0.15;
+            cutIn(tl, r, t); draw(tl, r.querySelector(".dots"), t + 0.05);
+          });
+          count(tl, $("#s2-count"), 200, 700, 6.8, 1.6);
+          cutOut(tl, ["#s2-grid", "#s2-head", "#s2-title"], 10.6);
+          claim(tl, $("#s2-claim"), 10.6);
 
-          // ---- 3 Workin' in 16 countries (25.5 – 40.0) ----
-          words(tl, $("#s3-head"), 25.6, 0.12);
-          cutIn(tl, ["#s3-view", "#s3-pager"], 26.5);
-          var dots = $$("#s3-pager i");
-          var OFF = "rgba(255,255,255,0.32)", ON = "#d9ff00";
+          // ---- 3 Workin' in 16 countries (14.5 – 23.5) ----
+          words(tl, $("#s3-head"), 14.5, 0.08);
+          cutIn(tl, ["#s3-view", "#s3-pager"], 15.1);
+          var dots = $$("#s3-pager i"), OFF = "rgba(239,239,237,0.32)", ON = "#d9ff00";
           tl.set(dots, { backgroundColor: OFF }, 0);
-          tl.set(dots[0], { backgroundColor: ON }, 26.5);
+          tl.set(dots[0], { backgroundColor: ON }, 15.1);
           for (var k = 1; k < 6; k++) {
-            var t = 27.6 + (k - 1) * 1.45;
-            // A thumb swipe: the card leaves fast and settles with friction.
-            tl.to("#s3-track", { x: -480 * k, duration: 0.85, ease: "expo.out" }, t);
-            tl.set(dots[k - 1], { backgroundColor: OFF }, t + 0.12);
-            tl.set(dots[k], { backgroundColor: ON }, t + 0.12);
+            var t = 15.8 + (k - 1) * 0.85;
+            // A thumb swipe: fast off the finger, settles with friction.
+            tl.to("#s3-track", { x: -480 * k, duration: 0.6, ease: "expo.out" }, t);
+            tl.set(dots[k - 1], { backgroundColor: OFF }, t + 0.08);
+            tl.set(dots[k], { backgroundColor: ON }, t + 0.08);
           }
           var side = $$("#s3-side > div");
-          cutIn(tl, side[0], 27.0); cutIn(tl, side[1], 27.4); cutIn(tl, side.slice(2), 27.8);
-          cutOut(tl, ["#s3-head", "#s3-view", "#s3-pager", "#s3-side"], 35.5);
-          claim(tl, $("#s3-claim"), 35.5);
+          cutIn(tl, side[0], 15.4); cutIn(tl, side.slice(1), 15.8);
+          cutOut(tl, ["#s3-head", "#s3-view", "#s3-pager", "#s3-side"], 20.4);
+          claim(tl, $("#s3-claim"), 20.4);
 
-          // ---- 4 Buildin' the machine (40.5 – 60.0) ----
-          words(tl, $("#s4-head"), 40.6, 0.12);
-          var rows = $$("#s4-list .row"), sep = $$("#s4-list .dots");
+          // ---- 4 Buildin' the machine (24.0 – 35.0) ----
+          words(tl, $("#s4-head"), 24.0, 0.08);
+          var rows = $$("#s4-list .row");
           rows.forEach(function (r, i) {
-            var t = 41.6 + i * 1.9;
-            cutIn(tl, r, t); draw(tl, sep[i], t + 0.1);
+            var t = 24.6 + i * 0.95;
+            cutIn(tl, r, t); draw(tl, r.querySelector(".dots"), t + 0.05);
           });
-          count(tl, $("#s4-c72"), 0, 72, 41.6 + 3 * 1.9 + 0.2, 1.4);
-          count(tl, $("#s4-c13"), 0, 13, 41.6 + 3 * 1.9 + 0.5, 1.4);
-          cutOut(tl, ["#s4-list", "#s4-head"], 52.5);
-          claim(tl, $("#s4-claim"), 52.5);
+          count(tl, $("#s4-c72"), 0, 72, 24.6 + 3 * 0.95 + 0.1, 1.1);
+          count(tl, $("#s4-c13"), 0, 13, 24.6 + 3 * 0.95 + 0.3, 1.1);
+          cutOut(tl, ["#s4-list", "#s4-head"], 30.4);
+          claim(tl, $("#s4-claim"), 30.4);
 
-          // ---- 5 The talent loop (60.5 – 80.0) ----
-          words(tl, $("#s5-head"), 60.6, 0.14);
+          // ---- 5 The talent loop (35.5 – 46.5) ----
+          words(tl, $("#s5-head"), 35.5, 0.09);
           var R = 300, svg = $("#s5-svg"), NS = "http://www.w3.org/2000/svg";
           var ang = [-90, 0, 90, 180], gap = [24, 13, 22, 13];
           var nodes = [$("#n0"), $("#n1"), $("#n2"), $("#n3")];
@@ -323,46 +346,51 @@
             mp.setAttribute("stroke-dasharray", len + " " + len); mp.setAttribute("stroke-dashoffset", len);
             m.appendChild(mp); svg.appendChild(m);
             var p = document.createElementNS(NS, "path"); p.setAttribute("d", d); p.setAttribute("fill", "none");
-            p.setAttribute("stroke", "rgba(255,255,255,0.75)"); p.setAttribute("stroke-width", "3.2"); p.setAttribute("stroke-linecap", "round");
-            p.setAttribute("stroke-dasharray", "0.1 12"); p.setAttribute("mask", "url(#mk" + i + ")");
+            p.setAttribute("stroke", "rgba(239,239,237,0.8)"); p.setAttribute("stroke-width", "2.4"); p.setAttribute("stroke-linecap", "round");
+            p.setAttribute("stroke-dasharray", "0.1 7"); p.setAttribute("mask", "url(#mk" + i + ")");
             svg.appendChild(p);
             arcs.push({ mask: mp, len: len });
           }
           var words5 = nodes.map(function (n) { return n.querySelector(".w"); });
           gsap.set(words5, { xPercent: -50, yPercent: -50 });
-          // Chain: word, then the dotted arc to the next word.
-          var t5 = 61.6;
+          var t5 = 36.1;
           for (var j = 0; j < 4; j++) {
             cutIn(tl, words5[j], t5);
-            tl.to(arcs[j].mask, { attr: { "stroke-dashoffset": 0 }, duration: 0.9, ease: "power2.inOut" }, t5 + 0.35);
-            t5 += 1.25;
+            tl.to(arcs[j].mask, { attr: { "stroke-dashoffset": 0 }, duration: 0.6, ease: "power2.inOut" }, t5 + 0.2);
+            t5 += 0.8;
           }
-          // The arc lands back on HIRING: the loop is closed, the word turns acid.
-          tl.set(words5[0], { color: "#d9ff00" }, t5 - 1.25 + 1.25);
-          tl.set(words5[0], { color: "#ffffff" }, 0);
-          // Spin up: slow at first, faster every turn. Words stay upright.
-          var spinAt = t5 + 0.3, spinDur = 7.0, turns = 900;
+          // The last arc lands back on HIRING: loop closed, the word gets marked.
+          tl.set(words5[0], { color: "#efefed" }, 0);
+          tl.set(words5[0], { color: "#d9ff00" }, t5);
+          var spinAt = t5 + 0.2, spinDur = 3.6, turns = 720;
           tl.to("#s5-spin", { rotation: turns, duration: spinDur, ease: "power3.in" }, spinAt);
           tl.to(words5, { rotation: -turns, duration: spinDur, ease: "power3.in" }, spinAt);
-          cutOut(tl, ["#s5-head", "#s5-ring"], 73.3);
-          claim(tl, $("#s5-claim"), 73.3);
+          cutOut(tl, ["#s5-head", "#s5-ring"], spinAt + spinDur);
+          claim(tl, $("#s5-claim"), spinAt + spinDur);
 
-          // ---- 6 Cierre (80.5 – 89.0), then black ----
-          cutIn(tl, "#s6-x", 81.1);
-          cutIn(tl, "#s6-b", 81.4);
-          cutIn(tl, "#s6-a", 80.5);
-          cutIn(tl, "#s6-btn", 82.4);
-          tl.fromTo("#s6-btn span", { scale: 0.92 }, { scale: 1, duration: 0.5, ease: "expo.out", immediateRender: false }, 82.4);
-          cutIn(tl, "#s6-foot", 83.4);
-          words(tl, $("#s6-sig .l1"), 84.4);
-          words(tl, $("#s6-sig .l2"), 84.8);
+          // ---- 6 Cierre (47.0 – 54.0), then black ----
+          cutIn(tl, "#s6-a", 47.0);
+          cutIn(tl, "#s6-x", 47.4);
+          cutIn(tl, "#s6-b", 47.7);
+          cutIn(tl, "#s6-btn", 48.3);
+          tl.fromTo("#s6-btn span", { scale: 0.92 }, { scale: 1, duration: 0.45, ease: "expo.out", immediateRender: false }, 48.3);
+          cutIn(tl, "#s6-foot", 48.8);
+          words(tl, $("#s6-sig .l1"), 49.3);
+          words(tl, $("#s6-sig .l2"), 49.6);
+          cutOut(tl, "#s6", 54.0);
 
-          tl.set({}, {}, 90);
+          tl.set({}, {}, 55);
           return tl;
         }
 
         document.fonts.ready.then(function () {
+          buildMark($("#s1-mark"));
+          var capB = buildMark($("#s6-b"));
+          // ENCABO' logo at the same cap height as EDDY' below it.
+          var logo = $("#s6-a .logo"); logo.style.height = (capB * LOGO_H / LOGO.capH) + "px";
           $$(".fit").forEach(function (h) { fit(h, 1640); });
+          hangUnder($("#s1-claim"), $("#s1-mark"), 590);
+          hangUnder($("#s6-sig"), $("#s6-b"), 900);
           window.__timelines["main"] = build();
         });
       })();

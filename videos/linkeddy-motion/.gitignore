@@ -1,0 +1,8 @@
+node_modules/
+studio/dist/
+# Los masters con alfa pesan ~100 MB por pieza: se regeneran con scripts/render.mjs
+renders/*.mov
+renders/*.webm
+renders/*.zip
+renders/*/
+renders/.props/

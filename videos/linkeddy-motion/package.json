@@ -1,0 +1,33 @@
+{
+  "name": "linkeddy-motion",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "vite --config studio/vite.config.ts",
+    "studio:build": "vite build --config studio/vite.config.ts",
+    "remotion": "remotion studio src/index.ts",
+    "render": "node scripts/render.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.539",
+    "@remotion/fonts": "^4.0.539",
+    "@remotion/player": "^4.0.539",
+    "@remotion/renderer": "^4.0.539",
+    "@remotion/zod-types": "^4.0.539",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.539",
+    "zod": "^3.22.3"
+  },
+  "devDependencies": {
+    "@fontsource/dm-mono": "^5.3.0",
+    "@fontsource/familjen-grotesk": "^5.3.0",
+    "@fontsource/instrument-serif": "^5.3.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
+  }
+}

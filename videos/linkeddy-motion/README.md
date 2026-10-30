@@ -38,7 +38,7 @@ node scripts/render.mjs ExperienceParadox webm     # VP9 con alfa
 node scripts/render.mjs ExperienceParadox mp4      # preview sin alfa
 ```
 
-Con tus ajustes del Studio (botón "Descargar ajustes"):
+Con tus ajustes del Studio (botón "Copiar ajustes", pegados en un .json):
 
 ```bash
 node scripts/render.mjs ExperienceParadox prores --props ExperienceParadox.props.json

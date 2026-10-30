@@ -81,6 +81,6 @@ export default defineConfig({
   base: './',
   publicDir: false,
   plugins: [react(), renderApi()],
-  build: { outDir: path.join(root, 'studio/dist'), emptyOutDir: true, assetsInlineLimit: 0 },
+  build: { outDir: path.join(root, 'studio/dist'), emptyOutDir: true, assetsInlineLimit: process.env.INLINE ? 100_000_000 : 0 },
   server: { port: 5180, host: true },
 });

@@ -428,20 +428,15 @@ const ExportPanel: React.FC<{ piece: MotionPiece; props: Props; bg: BgMode }> = 
     setJobs((j) => [job, ...j]);
   };
 
-  const downloadProps = () => {
-    const blob = new Blob([JSON.stringify(exportProps, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `${piece.id}.props.json`;
-    a.click();
-    URL.revokeObjectURL(a.href);
-  };
-
+  const propsJson = JSON.stringify(exportProps, null, 2);
   const copy = (text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopied(text);
-      setTimeout(() => setCopied(null), 1400);
-    });
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        setCopied(text);
+        setTimeout(() => setCopied(null), 1400);
+      })
+      .catch(() => setCopied(null));
   };
 
   if (api === null) return <p className="micro dim">Comprobando el motor de render…</p>;
@@ -493,11 +488,11 @@ const ExportPanel: React.FC<{ piece: MotionPiece; props: Props; bg: BgMode }> = 
     <div className="export">
       <p className="hint">
         Estás en la versión publicada del Studio: aquí no hay motor de render. En tu ordenador, dentro de
-        <code> videos/linkeddy-motion</code>, ejecuta <code>npm run studio</code> y estos botones renderizan de verdad. O descarga
-        tus ajustes y lanza el comando:
+        <code> videos/linkeddy-motion</code>, ejecuta <code>npm run studio</code> y estos botones renderizan de verdad. O copia
+        tus ajustes, pégalos en <code>{piece.id}.props.json</code> y lanza el comando:
       </p>
-      <button className="format" onClick={downloadProps}>
-        <span className="fname">Descargar ajustes (.json)</span>
+      <button className="format" onClick={() => copy(propsJson)}>
+        <span className="fname">{copied === propsJson ? 'Ajustes copiados' : 'Copiar ajustes (JSON)'}</span>
         <span className="micro dim">textos, colores y encuadre actuales</span>
       </button>
       {cmds.map((c, i) => (

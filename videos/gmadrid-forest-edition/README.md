@@ -15,8 +15,8 @@ de derechos.
 | --- | --- |
 | `gmadrid-forest-edition-1080x1920.mp4` | Vertical (stories / reels), 15 s, 30 fps, H.264 + AAC |
 | `gmadrid-forest-edition-1920x1080.mp4` | Horizontal, 15 s, 30 fps, H.264 + AAC |
-| `portada-1080x1920.png` | Fotograma de portada vertical (8,6 s) |
-| `portada-1920x1080.png` | Fotograma de portada horizontal (8,6 s) |
+| `portada-1080x1920.png` | Fotograma de portada vertical (7,3 s, camiseta) |
+| `portada-1920x1080.png` | Fotograma de portada horizontal (7,3 s, camiseta) |
 
 ## Guion
 

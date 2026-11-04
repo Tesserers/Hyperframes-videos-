@@ -11,11 +11,12 @@ window.buildForestFilm = function (compId) {
 
   // ---- textos desde la configuración ----
   const title = document.getElementById("title");
-  title.innerHTML = TX.title.map((w) => `<span class="w">${w}</span>`).join("");
-  document.getElementById("season").textContent = TX.season;
+  const chars = (str) => [...str].map((c) => `<span class="ch">${c === " " ? "&nbsp;" : c}</span>`).join("");
+  title.innerHTML = TX.title.map((w) => `<span class="w">${chars(w)}</span>`).join("");
+  document.getElementById("seasonTxt").textContent = TX.season;
   const words = [...document.querySelectorAll(".word")];
   words.forEach((el, i) => {
-    el.textContent = TX.words[i];
+    el.innerHTML = chars(TX.words[i]);
     el.style.color = cfg.color.words[i];
   });
 
@@ -36,21 +37,26 @@ window.buildForestFilm = function (compId) {
   // reloj del bosque: un único tween lineal que dibuja el canvas en cada seek
   tl.to(state, { t: T.total, duration: T.total, ease: "none", onUpdate: draw }, 0);
 
-  // ---- escena 3: FOREST EDITION / TEMPORADA 26/27 ----
+  // ---- escena 3: FOREST EDITION + etiqueta 26/27 ----
+  // cada palabra entra letra a letra: FOREST desde abajo, EDITION desde arriba
   tl.fromTo("#titleBox", { yPercent: -50 }, { yPercent: -50, duration: 0.01 }, 0);
-  tl.fromTo(
-    "#title .w",
-    { opacity: 0, y: 70, scale: 1.08, filter: "blur(16px)" },
-    { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", duration: 1.2, ease: "expo.out", stagger: 0.14 },
-    T.title
-  );
-  tl.fromTo(
-    "#season",
-    { opacity: 0, y: 24, scaleX: 1.25, filter: "blur(6px)" },
-    { opacity: 1, y: 0, scaleX: 1, filter: "blur(0px)", duration: 1.1, ease: "power3.out" },
-    T.title + 0.2
-  );
-  tl.to("#titleBox", { opacity: 0, scale: 1.06, filter: "blur(10px)", duration: 0.3, ease: "power2.in" }, T.reveal - 0.2);
+  tl.set("#titleBox", { opacity: 0 }, 0);
+  tl.set("#titleBox", { opacity: 1 }, T.title);
+  tl.set("#titleBox", { opacity: 0 }, T.reveal - 0.05);
+  document.querySelectorAll("#title .w, .word").forEach((el) => el.setAttribute("data-layout-allow-overflow", "true"));
+  const tw = [...document.querySelectorAll("#title .w")];
+  tw.forEach((w, wi) => {
+    const dir = wi % 2 === 0 ? 1 : -1;
+    tl.fromTo(w.querySelectorAll(".ch"), { yPercent: 115 * dir, rotation: 6 * dir },
+      { yPercent: 0, rotation: 0, duration: 0.7, ease: "expo.out", stagger: { each: 0.035, from: dir > 0 ? "start" : "end" } },
+      T.title + wi * 0.12);
+    tl.to(w.querySelectorAll(".ch"), { yPercent: -115 * dir, duration: 0.24, ease: "power3.in", stagger: 0.012 }, T.reveal - 0.42 + wi * 0.04);
+  });
+  tl.fromTo("#title", { scale: 1 }, { scale: 1.05, duration: T.reveal - T.title, ease: "none" }, T.title);
+  // etiqueta inclinada: se despliega de izquierda a derecha y entra el texto
+  tl.fromTo("#seasonWrap", { scaleX: 0, opacity: 1 }, { scaleX: 1, opacity: 1, duration: 0.5, ease: "expo.out" }, T.title + 0.35);
+  tl.fromTo("#seasonTxt", { xPercent: -40, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, T.title + 0.5);
+  tl.to("#seasonWrap", { scaleX: 0, duration: 0.22, ease: "power3.in" }, T.reveal - 0.32);
 
   // ---- la camiseta nace en el centro ----
   const P = H > W;
@@ -64,52 +70,48 @@ window.buildForestFilm = function (compId) {
   tl.fromTo("#heroFront", { xPercent: -50, yPercent: -50, opacity: 0, scale: 0.8, y: 70, filter: "blur(22px) brightness(1.8)" },
     { xPercent: -50, yPercent: -50, opacity: 1, scale: 1, y: 0, filter: "blur(0px) brightness(1)", duration: 1.1, ease: "expo.out" }, T.reveal);
   // empuje lento de cámara sobre la camiseta
-  tl.fromTo("#heroStage", { scale: 1 }, { scale: 1.05, duration: T.words[0] - T.reveal, ease: "none" }, T.reveal);
+  tl.fromTo("#heroStage", { scale: 1, x: P ? -30 : -60, rotation: -1.5 },
+    { scale: 1.09, x: P ? 30 : 60, rotation: 1.5, duration: T.words[0] - T.reveal, ease: "none" }, T.reveal);
   // giro: frontal -> espalda
-  tl.to("#heroFront", { scaleX: 0, duration: 0.17, ease: "power2.in" }, T.flip);
-  tl.set("#heroFront", { opacity: 0 }, T.flip + 0.17);
-  tl.fromTo("#heroBack", { xPercent: -50, yPercent: -50, opacity: 1, scaleX: 0 },
-    { xPercent: -50, yPercent: -50, opacity: 1, scaleX: 1, duration: 0.26, ease: "power2.out", immediateRender: false }, T.flip + 0.17);
+  tl.to("#heroFront", { scaleX: 0, filter: "blur(6px)", duration: 0.13, ease: "power2.in" }, T.flip);
+  tl.set("#heroFront", { opacity: 0 }, T.flip + 0.13);
+  tl.fromTo("#heroBack", { xPercent: -50, yPercent: -50, opacity: 1, scaleX: 0, filter: "blur(6px)" },
+    { xPercent: -50, yPercent: -50, opacity: 1, scaleX: 1, filter: "blur(0px)", duration: 0.22, ease: "power2.out", immediateRender: false }, T.flip + 0.13);
   tl.set("#heroBack", { opacity: 0 }, 0);
-  tl.set("#heroBack", { opacity: 1 }, T.flip + 0.17);
+  tl.set("#heroBack", { opacity: 1 }, T.flip + 0.13);
   // salida antes de las palabras
   tl.to(["#heroBack", "#heroGlow"], { opacity: 0, filter: "blur(14px)", duration: 0.25, ease: "power2.in" }, T.words[0] - 0.25);
 
-  // ---- escena 4: tres palabras con corte rítmico ----
+  // ---- escena 4: tres palabras, letra a letra, cada una con su detalle ----
   words.forEach((el, i) => {
     const at = T.words[i];
-    tl.fromTo(
-      el,
-      { opacity: 0, yPercent: -50, scale: 1.18, filter: "blur(18px)" },
-      { opacity: 1, yPercent: -50, scale: 1, filter: "blur(0px)", duration: 0.42, ease: "expo.out", immediateRender: false },
-      at
-    );
-    // corte seco antes de la siguiente
-    const end = i < words.length - 1 ? T.words[i + 1] : T.duo;
-    // detalle de producto que acompaña a la palabra
+    const next = i < words.length - 1 ? T.words[i + 1] : T.duo;
+    const d = i % 2 === 0 ? 1 : -1;   // alterna el sentido del movimiento
+    const chs = el.querySelectorAll(".ch");
+    tl.set(el, { opacity: 1, yPercent: -50 }, at);
+    tl.fromTo(el, { x: 70 * d }, { x: -70 * d, duration: next - at, ease: "none", immediateRender: false }, at);
+    tl.fromTo(chs, { yPercent: 115, rotation: 8 * d }, { yPercent: 0, rotation: 0, duration: 0.5, ease: "expo.out", stagger: 0.028, immediateRender: false }, at);
+    tl.to(chs, { yPercent: -115, duration: 0.14, ease: "power3.in", stagger: 0.006 }, next - 0.21);
+    tl.set(el, { opacity: 0 }, next);
+    // detalle: entra desde un lado, deriva y sale disparado hacia el otro
     const card = document.getElementById("card" + (i + 1));
     const img = card.querySelector("img");
-    tl.fromTo(card, { opacity: 0, scale: 1.1, y: 30, filter: "blur(14px)" },
-      { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "expo.out", immediateRender: false }, at);
-    tl.fromTo(img, { scale: 1.0 }, { scale: 1.09, duration: 1.0, ease: "none", immediateRender: false }, at);
-    if (i < words.length - 1) tl.set(card, { opacity: 0 }, T.words[i + 1]);
-    else tl.to(card, { opacity: 0, scale: 0.96, filter: "blur(10px)", duration: 0.22, ease: "power2.in" }, T.duo - 0.22);
-    // ligero empuje mientras se sostiene
-    const holdEnd = i < words.length - 1 ? end : end - 0.22;
-    tl.to(el, { scale: 1.035, duration: holdEnd - (at + 0.42), ease: "none" }, at + 0.42);
-    if (i < words.length - 1) tl.set(el, { opacity: 0 }, end);
-    else tl.to(el, { opacity: 0, scale: 1.12, filter: "blur(12px)", duration: 0.22, ease: "power2.in" }, end - 0.22);
+    tl.fromTo(card, { opacity: 0, x: 260 * d, rotation: 5 * d, filter: "blur(14px)" },
+      { opacity: 1, x: 24 * d, rotation: 0, filter: "blur(0px)", duration: 0.5, ease: "expo.out", immediateRender: false }, at);
+    tl.to(card, { x: -24 * d, duration: next - at - 0.72, ease: "none" }, at + 0.5);
+    tl.to(card, { x: -320 * d, rotation: -4 * d, opacity: 0, filter: "blur(12px)", duration: 0.22, ease: "power3.in" }, next - 0.22);
+    tl.fromTo(img, { scale: 1.0 }, { scale: 1.14, duration: next - at, ease: "none", immediateRender: false }, at);
   });
 
   // ---- oficial + portería ----
   const duoH = P ? 600 : 780, duoX = P ? 220 : 300;
   gsap.set(["#duoHome", "#duoGk"], { height: duoH, width: "auto" });
   gsap.set("#duoStage", { y: P ? -40 : 0 });
-  tl.fromTo("#duoHome", { xPercent: -50, yPercent: -50, x: -duoX - 260, opacity: 0, rotation: -4, filter: "blur(16px)" },
+  tl.fromTo("#duoHome", { xPercent: -50, yPercent: -50, x: -duoX - 520, opacity: 0, rotation: -10, filter: "blur(16px)" },
     { xPercent: -50, yPercent: -50, x: -duoX, opacity: 1, rotation: 0, filter: "blur(0px)", duration: 0.75, ease: "expo.out" }, T.duo);
-  tl.fromTo("#duoGk", { xPercent: -50, yPercent: -50, x: duoX + 260, opacity: 0, rotation: 4, filter: "blur(16px)" },
+  tl.fromTo("#duoGk", { xPercent: -50, yPercent: -50, x: duoX + 520, opacity: 0, rotation: 10, filter: "blur(16px)" },
     { xPercent: -50, yPercent: -50, x: duoX, opacity: 1, rotation: 0, filter: "blur(0px)", duration: 0.75, ease: "expo.out" }, T.duo + 0.1);
-  tl.fromTo("#duoStage", { scale: 0.96 }, { scale: 1.02, duration: T.open - T.duo, ease: "none" }, T.duo);
+  tl.fromTo("#duoStage", { scale: 0.94, rotation: 1.5 }, { scale: 1.06, rotation: -1.5, duration: T.open - T.duo, ease: "none" }, T.duo);
   tl.to(["#duoHome", "#duoGk"], { opacity: 0, scale: 1.12, filter: "blur(16px)", duration: 0.3, ease: "power2.in" }, T.open - 0.15);
 
   // ---- escena 5: logo original (sin fondo) naciendo de un halo de luz ----

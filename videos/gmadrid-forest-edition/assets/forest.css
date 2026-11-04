@@ -57,13 +57,31 @@ html, body { overflow: hidden; background: var(--bg); }
   white-space: nowrap;
 }
 #title .w { display: inline-block; }
+#seasonWrap {
+  display: block;
+  transform-origin: 0% 50%;
+}
 #season {
   display: block;
-  color: var(--lime);
-  font-weight: 700;
-  letter-spacing: 0.42em;
-  padding-left: 0.42em; /* compensa el tracking para centrar ópticamente */
+  background: var(--lime);
+  color: var(--bg);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  padding: 0.18em 0.55em 0.16em;
+  transform: skewX(-14deg);
   white-space: nowrap;
+}
+#seasonTxt {
+  display: block;
+  transform: skewX(14deg);
+}
+.ch {
+  display: inline-block;
+}
+#title .w {
+  overflow: hidden;
+  padding: 0.06em 0.02em;
 }
 
 /* ---------- escena 4: palabras ---------- */
@@ -78,6 +96,8 @@ html, body { overflow: hidden; background: var(--bg); }
   letter-spacing: 0.02em;
   white-space: nowrap;
   opacity: 0;
+  overflow: hidden;
+  padding: 0.08em 0;
   text-shadow: 0 6px 40px rgba(7, 31, 27, 0.7);
 }
 
@@ -152,13 +172,13 @@ html, body { overflow: hidden; background: var(--bg); }
 /* ---------- horizontal 1920×1080 ---------- */
 .landscape #title { font-size: 150px; }
 .landscape #title .w + .w { margin-left: 0.28em; }
-.landscape #season { font-size: 30px; margin-top: 30px; }
+.landscape #seasonWrap { font-size: 46px; margin-top: 26px; }
 .landscape .word { font-size: 132px; top: 860px; }
 .landscape .card { width: 900px; height: 560px; margin-left: -450px; top: 130px; }
 
 /* ---------- vertical 1080×1920 ---------- */
 .portrait #title { font-size: 168px; }
 .portrait #title .w { display: block; }
-.portrait #season { font-size: 34px; margin-top: 34px; }
+.portrait #seasonWrap { font-size: 54px; margin-top: 30px; }
 .portrait .word { font-size: 112px; top: 1390px; }
 .portrait .card { width: 940px; height: 640px; margin-left: -470px; top: 560px; }

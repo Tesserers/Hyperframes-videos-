@@ -458,7 +458,7 @@
           // escena 3: giran hacia el centro
           const f = L.form;
           const m = easeInOutCubic(prog(t, T.gather + f.delay * 0.7, 1.35));
-          const th = f.th0 + f.dTh * m + 0.06 * Math.max(0, t - (T.gather + 2.2)); // rotación lenta continua
+          const th = f.th0 + f.dTh * m + 0.17 * Math.max(0, t - (T.gather + 1.2)); // la corona gira de forma continua
           let r = lerp(f.r0, f.r, m);
           // respiración en cada palabra
           for (const wt of T.words) {

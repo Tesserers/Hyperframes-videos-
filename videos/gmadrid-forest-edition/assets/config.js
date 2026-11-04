@@ -8,7 +8,7 @@ window.FOREST_CONFIG = {
   // ---------- Textos ----------
   text: {
     title: ["FOREST", "EDITION"],          // escena 3 (en horizontal va en una línea)
-    season: "TEMPORADA 26/27",             // debajo del título, en lima
+    season: "26/27",                       // etiqueta inclinada en lima, debajo del título
     words: ["NATURALEZA", "CRECIMIENTO", "DIVERSIDAD"], // escena 4, una a una
     signature: ["G·MADRID", "BALONMANO"],  // cierre, debajo del logo
   },

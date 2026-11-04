@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>G·Madrid Balonmano — Forest Edition (1920×1080)</title>
+    <link rel="stylesheet" href="assets/forest.css" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <script src="assets/config.js"></script>
+    <script src="assets/star.js"></script>
+    <script src="assets/forest.js"></script>
+    <script src="assets/timeline.js"></script>
+    <style>
+      #root { position: relative; overflow: hidden; background: #071F1B; font-family: "Montserrat", sans-serif; }
+      html, body { width: 1920px; height: 1080px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="15" data-fps="30" data-width="1920" data-height="1080">
+      <canvas id="forest" class="clip" data-layout-allow-overflow="true" data-start="0" data-duration="15" data-track-index="0" width="1920" height="1080"></canvas>
+      <div id="textLayer" class="clip" data-start="0" data-duration="15" data-track-index="1">
+        <div id="titleBox">
+          <h1 id="title">FOREST EDITION</h1>
+          <p id="season">TEMPORADA 26/27</p>
+        </div>
+        <p class="word" id="word1">NATURALEZA</p>
+        <p class="word" id="word2">CRECIMIENTO</p>
+        <p class="word" id="word3">DIVERSIDAD</p>
+        <p id="signature">G·MADRID / BALONMANO</p>
+      </div>
+      <div id="fade" class="clip" data-start="0" data-duration="15" data-track-index="2"></div>
+      <audio id="bgm" src="assets/audio/forest-bgm.wav" data-start="0" data-duration="15" data-track-index="3" data-volume="1"></audio>
+    </div>
+    <script>
+      window.buildForestFilm("main");
+    </script>
+  </body>
+</html>

@@ -8,8 +8,6 @@ import sys, os
 import numpy as np, cv2
 from PIL import Image, ImageFilter
 
-home_p, gk_p, out = sys.argv[1], sys.argv[2], sys.argv[3]
-os.makedirs(out, exist_ok=True)
 UP = 2
 
 def upscale(im):
@@ -17,8 +15,10 @@ def upscale(im):
     im = im.resize((w * UP, h * UP), Image.LANCZOS)
     return im.filter(ImageFilter.UnsharpMask(radius=2, percent=60, threshold=2))
 
-def cutout(sheet, box, name):
-    """Quita el fondo gris claro rellenando desde los bordes del recorte."""
+def cutout(sheet, box, name=None, out=None, up=None):
+    """Quita el fondo gris claro rellenando desde los bordes del recorte.
+    Si name es None devuelve la imagen RGBA en lugar de guardarla."""
+    UPX = UP if up is None else up
     x0, y0, x1, y1 = box
     crop = np.array(sheet.crop(box)).astype(np.uint8)
     h, w = crop.shape[:2]
@@ -46,7 +46,7 @@ def cutout(sheet, box, name):
     holes = ~np.isin(lab, list(border)) & (inv > 0)
     alpha[holes] = 255
     im = Image.fromarray(np.dstack([crop, alpha]), "RGBA")
-    im = im.resize((w * UP, h * UP), Image.LANCZOS)
+    im = im.resize((w * UPX, h * UPX), Image.LANCZOS)
     a = np.array(im)
     al = cv2.GaussianBlur(a[..., 3], (0, 0), 1.1)
     al = np.clip((al.astype(float) - 60) * 255 / 150, 0, 255).astype(np.uint8)
@@ -54,25 +54,34 @@ def cutout(sheet, box, name):
     res = Image.fromarray(np.dstack([np.array(rgb), al]), "RGBA")
     bb = res.getbbox()
     res = res.crop(bb)
+    if name is None:
+        return res
     res.save(os.path.join(out, name + ".png"), optimize=True)
     print(name, res.size)
 
-def tile(sheet, box, name):
+def tile(sheet, box, name, out):
     im = upscale(sheet.crop(box))
     im.save(os.path.join(out, name + ".jpg"), quality=95)
     print(name, im.size)
 
-home = Image.open(home_p).convert("RGB")
-gk = Image.open(gk_p).convert("RGB")
+def main():
+    home_p, gk_p, out = sys.argv[1], sys.argv[2], sys.argv[3]
+    os.makedirs(out, exist_ok=True)
+    home = Image.open(home_p).convert("RGB")
+    gk = Image.open(gk_p).convert("RGB")
 
-# camisetas (y hasta antes de la sombra)
-cutout(home, (34, 135, 490, 672), "home-front")
-cutout(home, (487, 135, 902, 672), "home-back")
-cutout(gk, (34, 135, 490, 672), "gk-front")
-cutout(gk, (487, 135, 902, 672), "gk-back")
+    # camisetas (y hasta antes de la sombra)
+    cutout(home, (34, 135, 490, 672), "home-front", out)
+    cutout(home, (487, 135, 902, 672), "home-back", out)
+    cutout(gk, (34, 135, 490, 672), "gk-front", out)
+    cutout(gk, (487, 135, 902, 672), "gk-back", out)
 
-# detalles (columna derecha de la ficha oficial)
-tile(home, (1148, 4, 1536, 255), "detail-collar")
-tile(home, (1148, 264, 1536, 496), "detail-crest")
-tile(home, (1148, 504, 1536, 746), "detail-sleeve")
-tile(home, (1148, 754, 1536, 1024), "detail-fabric")
+    # detalles (columna derecha de la ficha oficial)
+    tile(home, (1148, 4, 1536, 255), "detail-collar", out)
+    tile(home, (1148, 264, 1536, 496), "detail-crest", out)
+    tile(home, (1148, 504, 1536, 746), "detail-sleeve", out)
+    tile(home, (1148, 754, 1536, 1024), "detail-fabric", out)
+
+
+if __name__ == "__main__":
+    main()

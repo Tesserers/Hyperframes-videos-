@@ -1,14 +1,16 @@
 """Sintetiza la pista ambiental del Forest Edition (15 s, 48 kHz, estéreo).
 Todo generado por código -> libre de derechos.
 Uso: python3 tools/make_audio.py assets/audio/forest-bgm.wav
-Sincronía con el vídeo: latido 0-2 s, arpegio desde 2 s, subida que estalla en 6 s (escena 3),
-golpes en 9/10/11 s (palabras), impacto y acorde final en 12 s, fundido hasta 15 s."""
+Sincronía con el vídeo (mismos tiempos que assets/config.js): latido 0-2 s, arpegio desde 2 s,
+oleada en la corona (4,5 s), subida que estalla cuando nace la camiseta (6,35 s), giro (7,55 s),
+golpes en cada palabra (8,6 / 9,6 / 10,6 s) y en el dúo (11,6 s), impacto y acorde final con el logo (12,8 s)."""
 import sys, wave
 import numpy as np
 from scipy.signal import fftconvolve, butter, sosfilt
 
 SR = 48000
 DUR = 15.0
+GATHER, REVEAL, FLIP, WORDS, DUO, OPEN = 4.5, 6.35, 7.55, (8.6, 9.6, 10.6), 11.6, 12.8
 N = int(SR * DUR)
 t = np.arange(N) / SR
 rng = np.random.default_rng(2627)
@@ -41,15 +43,17 @@ def smooth(x0, x1, a, b):
 
 # ---------------- pad (aditivo, brillo creciente) ----------------
 chords = [
-    (0.0, 6.0, [50, 57, 64, 65]),          # Dm(add9)
-    (6.0, 9.0, [46, 53, 57, 60, 62]),      # Bbmaj7(add9)  <- sube en la escena 3
-    (9.0, 10.0, [46, 53, 58, 62, 65]),     # Bb
-    (10.0, 11.0, [48, 55, 60, 64, 67]),    # C
-    (11.0, 12.0, [45, 52, 57, 61, 64]),    # A (tensión)
-    (12.0, 15.0, [38, 50, 57, 62, 66, 69]),# D mayor: resolución luminosa
+    (0.0, GATHER, [50, 57, 64, 65]),          # Dm(add9)
+    (GATHER, REVEAL, [46, 53, 57, 60, 62]),   # Bbmaj7(add9): la corona
+    (REVEAL, WORDS[0], [41, 53, 57, 60, 67]), # F(add9): nace la camiseta
+    (WORDS[0], WORDS[1], [46, 53, 58, 62, 65]),  # Bb
+    (WORDS[1], WORDS[2], [48, 55, 60, 64, 67]),  # C
+    (WORDS[2], DUO, [45, 52, 57, 61, 64]),       # A (tensión)
+    (DUO, OPEN, [46, 53, 58, 62, 65]),           # Bb
+    (OPEN, 15.0, [38, 50, 57, 62, 66, 69]),      # D mayor: resolución luminosa
 ]
-bright = smooth(0.15, 0.55, 1.5, 6.0) + smooth(0, 0.35, 5.6, 6.3) + smooth(0, 0.15, 11.8, 12.3)
-padlvl = smooth(0.0, 0.5, 0.0, 3.0) + smooth(0, 0.35, 5.5, 6.2) + smooth(0, 0.2, 11.9, 12.2)
+bright = smooth(0.15, 0.55, 1.5, GATHER) + smooth(0, 0.35, REVEAL - 0.7, REVEAL) + smooth(0, 0.15, OPEN - 0.2, OPEN + 0.3)
+padlvl = smooth(0.0, 0.5, 0.0, 3.0) + smooth(0, 0.35, REVEAL - 0.8, REVEAL) + smooth(0, 0.2, OPEN - 0.1, OPEN + 0.2)
 padlvl *= 1 - smooth(0, 1, 13.4, 15.0)
 for (a, b, notes) in chords:
     e = env_seg(a - 0.04, b + 0.5, a=0.25 if a > 0 else 1.5, r=0.6)
@@ -87,15 +91,16 @@ step = 0.125  # semicorcheas a 120 bpm
 pattern = [0, 2, 4, 1, 3, 5, 2, 4, 6, 3, 5, 7, 4, 6, 8, 5]
 k = 0
 at = 2.0
-while at < 12.0:
+while at < OPEN:
     idx = pattern[k % len(pattern)]
-    oct_up = 12 if at >= 6.0 else 0
-    if 9.0 <= at < 12.0:
-        base = {9: 70, 10: 72, 11: 69}[int(at)]
+    oct_up = 12 if at >= REVEAL else 0
+    if WORDS[0] <= at < DUO:
+        wi = sum(at >= w for w in WORDS) - 1
+        base = (70, 72, 69)[wi]
         n = base + [0, 7, 12, 16, 19, 12, 7, 4][k % 8]
     else:
         n = scale[idx] + oct_up
-    lvl = smooth(0.0, 1.0, 2.0, 5.8) * (0.7 + 0.3 * (at >= 6))
+    lvl = smooth(0.0, 1.0, 2.0, GATHER + 0.5) * (0.7 + 0.3 * (at >= REVEAL))
     i0 = int(at * SR); ln = int(SR * 0.6)
     x = np.arange(ln) / SR
     f = hz(n)
@@ -105,10 +110,11 @@ while at < 12.0:
     k += 1
     at += step
 
-# ---------------- subida (riser) 3.8 -> 6.0 ----------------
+# ---------------- subida (riser) hasta que nace la camiseta ----------------
 noise = rng.standard_normal(N)
 rise = np.zeros(N)
-i0, i1 = int(3.8 * SR), int(6.0 * SR)
+RS = REVEAL - 1.9
+i0, i1 = int(RS * SR), int(REVEAL * SR)
 chunk = 2400
 for c in range(i0, i1, chunk):
     pos = (c - i0) / (i1 - i0)
@@ -118,8 +124,8 @@ for c in range(i0, i1, chunk):
     rise[c:c + chunk] = seg * pos ** 2.2
 add(rise, pan=-0.2, gain=0.22)
 add(np.roll(rise, 480), pan=0.2, gain=0.22)
-sweep_f = 110 * 2 ** (smooth(0, 2.0, 3.8, 6.0))
-sweep = np.sin(2 * np.pi * np.cumsum(sweep_f) / SR) * env_seg(3.8, 6.02, a=1.5, r=0.02) * 0.6
+sweep_f = 110 * 2 ** (smooth(0, 2.0, RS, REVEAL))
+sweep = np.sin(2 * np.pi * np.cumsum(sweep_f) / SR) * env_seg(RS, REVEAL + 0.02, a=1.5, r=0.02) * 0.6
 add(sweep, gain=0.05)
 
 # ---------------- impactos ----------------
@@ -132,20 +138,20 @@ def impact(at, size=1.0):
     nz = sosfilt(sos, nz)
     hit = np.zeros(N); hit[i0:i0 + n] = nz[: max(0, min(n, N - i0))]
     return boom, hit * 0.35 * size
-for at, sz in ((6.0, 1.0), (9.0, 0.7), (10.0, 0.7), (11.0, 0.75), (12.0, 1.25)):
+for at, sz in ((GATHER, 0.55), (REVEAL, 1.1), (FLIP, 0.35), (WORDS[0], 0.7), (WORDS[1], 0.7), (WORDS[2], 0.75), (DUO, 0.8), (OPEN, 1.25)):
     b, h = impact(at, sz)
     add(b, gain=0.8); add(h, pan=-0.3, gain=0.8); add(np.roll(h, 300), pan=0.3, gain=0.8)
 
 # pulso suave (bombo) 6-12 s
-for beat in np.arange(6.5, 12.0, 0.5):
-    if any(abs(beat - w) < 0.01 for w in (9.0, 10.0, 11.0)):
+for beat in np.arange(REVEAL + 0.5, OPEN - 0.05, 0.5):
+    if any(abs(beat - w) < 0.2 for w in (FLIP,) + WORDS + (DUO,)):
         continue
     add(thump(beat, 0.22, f0=80, f1=45, dec=12), gain=0.9)
 
 # brillo final (shimmer) 12-15 s
 for n, pan in ((86, -0.5), (90, 0.5), (93, 0.0), (98, 0.3)):
     s = np.sin(2 * np.pi * hz(n) * t) * (0.6 + 0.4 * np.sin(2 * np.pi * 5.5 * t + n))
-    add(s * env_seg(12.0, 15.0, a=0.15, r=2.2), pan=pan, gain=0.012)
+    add(s * env_seg(OPEN, 15.0, a=0.15, r=2.0), pan=pan, gain=0.012)
 
 # ---------------- reverb ----------------
 irn = int(SR * 2.8)
@@ -160,7 +166,7 @@ outL = L * 0.8 + wetL * 0.45
 outR = Rch * 0.8 + wetR * 0.45
 
 # fundido final y limitador suave
-fade = 1 - smooth(0, 1, 14.0, 15.0)
+fade = 1 - smooth(0, 1, 14.2, 15.0)
 outL *= fade; outR *= fade
 peak = max(np.abs(outL).max(), np.abs(outR).max())
 outL = np.tanh(outL / peak * 1.1) * 0.89

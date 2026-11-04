@@ -236,6 +236,8 @@
       if (t < 2.0) return 0.62 * easeInOutSine(prog(t, 0.25, 1.75));
       return 0.62 + 0.38 * easeOutCubic(prog(t, 2.0, 2.6));
     }
+    // reloj de crecimiento: a partir del brote el bosque crece más rápido (gana tiempo para el producto)
+    const growT = (t) => (t < T.sprout ? t : T.sprout + (t - T.sprout) * (cfg.growthSpeed || 1));
     const stemTime = (s) => (s <= 0.62 ? 0.25 + 1.75 * (s / 0.62) : 2.0 + 2.6 * ((s - 0.62) / 0.38) * 0.55);
     stem.custom = stemProgress;
 
@@ -384,8 +386,8 @@
     // ============================================================
     // cámara global (empuje lento durante el crecimiento, zoom out final)
     function camera(t) {
-      let s = 1 + 0.07 * easeInOutSine(prog(t, 0, 6.2));
-      s = lerp(s, 1, easeInOutCubic(prog(t, 6.0, 2.2)));
+      let s = 1 + 0.07 * easeInOutSine(prog(t, 0, T.gather + 0.2));
+      s = lerp(s, 1, easeInOutCubic(prog(t, T.gather, 1.8)));
       s *= 1 - 0.06 * easeInOutSine(prog(t, T.zoomOut, T.total - T.zoomOut));
       return s;
     }
@@ -409,6 +411,7 @@
     }
 
     function strokeBranch(c, B, g, t, glow) {
+      // aquí t es el reloj de crecimiento
       const N = 30;
       const steps = Math.max(2, Math.ceil(N * g));
       c.beginPath();
@@ -440,8 +443,8 @@
     }
 
     // posición/estado de una hoja en el tiempo t
-    function leafState(L, t) {
-      const k = (t - L.birth) / 0.75;
+    function leafState(L, t, g) {
+      const k = (g - L.birth) / 0.75;
       if (k <= 0) return null;
       let sc = spring(k, 5.0, 9.5);
       const unfold = easeOutCubic(clamp(k * 1.25));
@@ -454,7 +457,7 @@
         if (L.form) {
           // escena 3: giran hacia el centro
           const f = L.form;
-          const m = easeInOutCubic(prog(t, T.gather + f.delay, 1.7));
+          const m = easeInOutCubic(prog(t, T.gather + f.delay * 0.7, 1.35));
           const th = f.th0 + f.dTh * m + 0.06 * Math.max(0, t - (T.gather + 2.2)); // rotación lenta continua
           let r = lerp(f.r0, f.r, m);
           // respiración en cada palabra
@@ -462,16 +465,19 @@
             const q = t - wt;
             if (q > 0) r *= 1 + 0.045 * Math.exp(-5 * q) * Math.sin(q * 14) ;
           }
-          // escena 5: se abren hacia fuera
+          // la corona se abre en un marco elíptico para dejar ver la camiseta
+          const iz = easeInOutCubic(prog(t, T.reveal, 1.0));
+          const ex = lerp(1, (W * 0.4) / RING, iz), ey = lerp(1, (H * 0.4) / RING, iz);
+          // escena final: se abren hacia fuera
           const o = prog(t, T.open + (f.delay * 0.12), 0.85);
           const oe = o * o;
-          r += oe * Math.hypot(W, H) * 0.75;
-          x = cx + Math.cos(th) * r;
-          y = cy + Math.sin(th) * r;
+          const burst = oe * Math.hypot(W, H) * 0.75;
+          x = cx + Math.cos(th) * (r * ex + burst);
+          y = cy + Math.sin(th) * (r * ey + burst);
           const fAng = f.ang + (th - (f.th0 + f.dTh));
           ang = lerp(ang, ang + angDiff(ang, fAng + SWIRL * 0), m) + oe * 1.6;
-          scale = sc * lerp(1, f.scale, m) * (1 + oe * 1.4);
-          alpha = 1 - easeInCubic(prog(t, T.open + 0.2, 0.6));
+          scale = sc * lerp(1, f.scale, m) * (1 + iz * 0.25) * (1 + oe * 1.4);
+          alpha = lerp(1, 0.88, iz) * (1 - easeInCubic(prog(t, T.open + 0.2, 0.6)));
         } else {
           // las que no forman la corona se apartan hacia fuera y se apagan
           const m = easeInOutCubic(prog(t, T.gather, 1.4));
@@ -482,7 +488,7 @@
           ang += m * 0.8 * L.side;
         }
       } else if (L.layer === "back") {
-        const dim = lerp(1, 0.45, easeInOutCubic(prog(t, T.gather, 1.5)));
+        const dim = lerp(1, 0.45, easeInOutCubic(prog(t, T.gather, 1.5))) * lerp(1, 0.6, easeInOutCubic(prog(t, T.reveal, 0.8)));
         const out = prog(t, T.open, 0.8);
         alpha = dim * (1 - out);
         const dx = L.x - cx, dy = L.y - cy;
@@ -547,12 +553,12 @@
       ctx.restore();
     }
 
-    function drawBloom(t) {
-      // destello de luz al abrirse
-      const k = prog(t, T.open - 0.1, 1.4);
+    function drawBloom(t, at = T.open, by = LOGO_Y, amp = 0.55) {
+      // destello de luz (nace la camiseta / se abre el logo)
+      const k = prog(t, at - 0.1, 1.4);
       if (k <= 0 || k >= 1) return;
-      const a = Math.sin(Math.PI * Math.pow(k, 0.5)) * 0.55;
-      const g = ctx.createRadialGradient(cx, LOGO_Y, 0, cx, LOGO_Y, 520 * U * (0.6 + k));
+      const a = Math.sin(Math.PI * Math.pow(k, 0.5)) * amp;
+      const g = ctx.createRadialGradient(cx, by, 0, cx, by, 520 * U * (0.6 + k));
       g.addColorStop(0, `rgba(255,255,235,${a})`);
       g.addColorStop(0.25, rgba(C.lime, a * 0.45));
       g.addColorStop(1, rgba(C.lime, 0));
@@ -564,7 +570,7 @@
 
     function drawScrim(t) {
       // velo oscuro en el centro para que se lean los textos
-      const a = 0.72 * easeInOutSine(prog(t, T.title - 0.4, 0.9)) * (1 - easeInOutSine(prog(t, T.open - 0.2, 0.6)));
+      const a = 0.72 * easeInOutSine(prog(t, T.title - 0.4, 0.9)) * (1 - easeInOutSine(prog(t, T.reveal - 0.1, 0.6)));
       if (a <= 0) return;
       const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, RING * 1.25);
       g.addColorStop(0, rgba(C.bgDeep, a));
@@ -591,6 +597,7 @@
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       drawBackground(t);
       const cam = camera(t);
+      const g = growT(t);
       const camT = (c, f = 1) => {
         const s = 1 + (cam - 1) * f;
         c.setTransform(s, 0, 0, s, cx - cx * s, cy - cy * s);
@@ -602,7 +609,7 @@
       camT(bctx, 0.6);
       for (const L of leaves) {
         if (L.layer !== "back") continue;
-        const s = leafState(L, t);
+        const s = leafState(L, t, g);
         if (!s) continue;
         drawLeaf(bctx, L, s.x, s.y, s.ang, s.scale, s.unfold, s.alpha * 0.8, s.light * 0.5);
       }
@@ -619,10 +626,10 @@
       if (branchFade > 0) {
         ctx.globalAlpha = branchFade;
         for (const B of branches) {
-          const g = B.depth === 0 ? stemProgress(t) : easeOutCubic(prog(t, B.birth, B.dur));
-          if (g <= 0) continue;
+          const gp = B.depth === 0 ? stemProgress(g) : easeOutCubic(prog(g, B.birth, B.dur));
+          if (gp <= 0) continue;
           ctx.globalAlpha = branchFade;
-          strokeBranch(ctx, B, g, t, 1);
+          strokeBranch(ctx, B, gp, g, 1);
         }
         ctx.globalAlpha = 1;
       }
@@ -631,16 +638,15 @@
       camT(ctx, 1);
       for (const L of leaves) {
         if (L.layer !== "mid") continue;
-        const s = leafState(L, t);
+        const s = leafState(L, t, g);
         if (!s) continue;
         drawLeaf(ctx, L, s.x, s.y, s.ang, s.scale, s.unfold, s.alpha, s.light);
       }
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       drawPollen(t);
+      drawBloom(t, T.reveal, cy, 0.42);
       drawBloom(t);
-      camT(ctx, 1);
-      drawLogo(t);
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      if (cfg.vectorLogo) { camT(ctx, 1); drawLogo(t); ctx.setTransform(1, 0, 0, 1, 0, 0); }
 
       // ---- primer plano (grande y desenfocado) ----
       fctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -649,7 +655,7 @@
       let anyFront = false;
       for (const L of leaves) {
         if (L.layer !== "front") continue;
-        const s = leafState(L, t);
+        const s = leafState(L, t, g);
         if (!s || s.alpha <= 0) continue;
         anyFront = true;
         drawLeaf(fctx, L, s.x, s.y, s.ang, s.scale, s.unfold, s.alpha * 0.92, 0);

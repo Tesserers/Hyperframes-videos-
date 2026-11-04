@@ -23,10 +23,12 @@ de derechos.
 | Tiempo | Escena |
 | --- | --- |
 | 0–2 s | Fondo casi negro, latido de luz y un tallo lima que crece desde abajo |
-| 2–6 s | Brotan hojas con muelle (escala, giro y leve rebote) y se ramifican. Polen flotando. Tres capas de profundidad |
-| 6–9 s | Las hojas giran hacia el centro y forman la corona (rojo arriba, naranja, amarillo, verde, azul y morado, como la estrella). FOREST EDITION / TEMPORADA 26/27 |
-| 9–12 s | NATURALEZA (lima) · CRECIMIENTO (rosa) · DIVERSIDAD (azul), con un corte en cada segundo |
-| 12–15 s | Las hojas se abren, el logo brota desde el centro, G·MADRID / BALONMANO, zoom out y fundido |
+| 2–4,5 s | Brotan hojas con muelle y se ramifican hasta llenar la pantalla. Polen, tres capas de profundidad |
+| 4,5–6,3 s | Las hojas forman la corona con los colores de la estrella (rojo arriba). FOREST EDITION / TEMPORADA 26/27 |
+| 6,3–8,5 s | La corona se abre en un marco y la camiseta oficial nace de la luz: frontal y giro a la espalda |
+| 8,6–11,6 s | NATURALEZA + tejido de hojas · CRECIMIENTO + escudo y BKA · DIVERSIDAD + manga Pride |
+| 11,6–12,8 s | Oficial y portería juntas |
+| 12,8–15 s | Las hojas se abren y el logo original nace de un halo de luz. Zoom out y fundido |
 
 ## Cómo editar textos, colores y tiempos
 
@@ -38,9 +40,12 @@ Los dos formatos leen ese mismo archivo.
 - Animación de los textos: `assets/timeline.js`.
 - Bosque, corona y logo (canvas): `assets/forest.js`.
 - Música: `tools/make_audio.py` (regenerar con `python3 tools/make_audio.py assets/audio/forest-bgm.wav`; requiere numpy y scipy).
-- Logo: `assets/star.js` es la estrella vectorizada a partir de `assets/src/gmadrid-star.png`
-  (`tools/vectorize_logo.py`; requiere opencv-python-headless). Si el club tiene el logo en SVG
-  original, conviene sustituirlo por ese.
+- Camisetas y detalles: `assets/product/`, recortados de las fichas oficiales
+  (`assets/src/ficha-*.webp`) con `tools/extract_product.py`. Para cambiarlos, sustituye los
+  archivos manteniendo el nombre.
+- Logo: `assets/logo/`, el logo original con el fondo blanco quitado (`tools/clean_logo.py`).
+  Se muestra sobre un halo claro porque las letras son azul marino.
+  (`assets/star.js` es una versión vectorial de la estrella que ya no se usa; se activa con `vectorLogo: true` en config.)
 
 ## Renderizar
 
@@ -56,8 +61,6 @@ Vista previa en el navegador: `npx hyperframes@0.9.12 preview`.
 
 ## Notas
 
-- El vídeo no muestra marcas de patrocinadores ni de la equipación (la marca técnica es BKA).
-- La estrella del logo usa exactamente los colores Pride del brief; los arcos grises van en gris
-  neutro `#9AA3A6`.
-- El wordmark original del logo es azul marino y no se leería sobre el fondo oscuro, así que en
-  el cierre se usa la estrella más «G·MADRID / BALONMANO» en blanco, tal como pide el guion.
+- La marca técnica es BKA (la del rinoceronte); aparece porque va en las propias camisetas.
+- Las camisetas salen de fichas de 1536×1024 px y están reescaladas x2. Si hay renders a más
+  resolución (o el logo en PNG/SVG grande), sustituirlos mejora la nitidez.

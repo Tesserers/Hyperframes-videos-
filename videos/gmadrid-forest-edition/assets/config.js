@@ -40,17 +40,25 @@ window.FOREST_CONFIG = {
     pollen: "#EEF8C4",
   },
 
+  // ---------- Producto ----------
+  // Las imágenes están en assets/product (recortadas de las fichas oficiales con tools/extract_product.py).
+  // Para cambiarlas, sustituye esos archivos manteniendo el nombre.
+
   // ---------- Tiempos (segundos) ----------
   time: {
     total: 15,
     sprout: 2.0,      // empiezan a brotar hojas
-    gather: 6.0,      // las hojas giran hacia el centro
-    title: 6.9,       // aparece FOREST EDITION
-    words: [9.0, 10.0, 11.0],
-    open: 12.0,       // las hojas se abren y aparece el logo
-    zoomOut: 13.2,
-    fade: 14.1,
+    gather: 4.5,      // las hojas giran hacia el centro y forman la corona
+    title: 4.85,      // aparece FOREST EDITION
+    reveal: 6.35,     // la corona se abre y nace la camiseta
+    flip: 7.55,       // la camiseta gira y enseña la espalda
+    words: [8.6, 9.6, 10.6], // palabra + detalle
+    duo: 11.6,        // oficial + portería
+    open: 12.8,       // las hojas se abren y aparece el logo
+    zoomOut: 13.6,
+    fade: 14.3,
   },
+  growthSpeed: 1.6,   // velocidad del crecimiento tras el brote
 
   // Semilla del bosque: cambia el número para otra distribución de ramas y hojas
   seed: 2627,

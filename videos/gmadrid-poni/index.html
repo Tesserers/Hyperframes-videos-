@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>G·Madrid · LA PONI</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      :root {
+        --navy: #0d1838;
+        --navy-2: #16255a;
+        --ink: #ffffff;
+        --muted: #a9b8e0;
+        --c-red: #e0303a;
+        --c-orange: #f2a21b;
+        --c-yellow: #f2dd2a;
+        --c-green: #8cc63f;
+        --c-blue: #2fa8e0;
+        --c-purple: #9b3fa6;
+        --display: "Archivo Black", sans-serif;
+        --body: "Montserrat", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--navy); }
+      #root {
+        position: relative; width: 1080px; height: 1920px; overflow: hidden;
+        font-family: var(--body); color: var(--ink);
+        background:
+          radial-gradient(900px 700px at 15% 8%, rgba(155, 63, 166, 0.22), transparent 70%),
+          radial-gradient(900px 800px at 95% 30%, rgba(47, 168, 224, 0.18), transparent 70%),
+          radial-gradient(1000px 700px at 50% 105%, rgba(242, 162, 27, 0.12), transparent 70%),
+          linear-gradient(180deg, #0b1533 0%, #101d45 55%, #0b1533 100%);
+      }
+      .scene { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+      .grid {
+        position: absolute; inset: 0;
+        background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+        background-size: 60px 60px;
+      }
+      .frame-line { position: absolute; inset: 22px; border: 2px solid rgba(169, 184, 224, 0.22); border-radius: 26px; }
+
+      /* HUD */
+      #hud-top {
+        position: absolute; left: 60px; right: 60px; top: 48px; height: 30px;
+        display: flex; justify-content: space-between; align-items: center;
+        font: 700 20px/1 var(--body); letter-spacing: 0.16em; color: var(--muted);
+      }
+      #hud-top .dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--c-red); margin-right: 12px; vertical-align: middle; }
+      .stripes { display: flex; gap: 6px; }
+      .stripes i { display: block; width: 26px; height: 8px; border-radius: 4px; }
+
+      /* Cabecera */
+      #head { position: absolute; left: 60px; right: 60px; top: 104px; height: 300px; }
+      #head-kicker { font: 800 26px/1 var(--body); letter-spacing: 0.2em; color: var(--c-yellow); }
+      #head-title {
+        position: absolute; left: 0; right: 0; top: 44px; height: 170px;
+        transform-origin: 50% 0%; display: flex; justify-content: center;
+      }
+      #head-title .t { display: flex; gap: 30px; transform: skewX(-9deg); }
+      #head-title .m { display: block; overflow: hidden; height: 168px; padding: 0 6px; }
+      #head-title .w { display: block; font: 400 150px/1.12 var(--display); letter-spacing: -0.01em; color: #fff; }
+      #head-title .w.acc { color: var(--c-yellow); }
+      #head-sub { position: absolute; left: 0; right: 0; top: 228px; display: flex; justify-content: center; }
+      .pill {
+        position: absolute; top: 0; left: 50%; margin-left: -260px; width: 520px; height: 58px;
+        display: flex; align-items: center; justify-content: center; gap: 14px;
+        border-radius: 29px; background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.22);
+        font: 800 25px/1 var(--body); letter-spacing: 0.12em; color: #fff;
+      }
+      .pill b { color: var(--c-yellow); font-weight: 800; }
+      #head-kicker { text-align: center; }
+
+      /* Pista 3D */
+      #stage { position: absolute; left: 0; top: 280px; width: 1080px; height: 1100px; perspective: 1500px; perspective-origin: 50% -10%; }
+      #plane {
+        position: absolute; left: 40px; top: 120px; width: 1000px; height: 890px;
+        transform-origin: 50% 100%; transform: rotateX(44deg); transform-style: preserve-3d;
+      }
+      .court { position: absolute; left: 0; top: 0; border-radius: 10px; box-shadow: 0 0 0 6px rgba(255,255,255,0.05), 0 40px 120px rgba(0,0,0,0.6); }
+      .arrows { position: absolute; left: 0; top: 0; overflow: visible; }
+      .ent, .bb { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; }
+      .bb-up { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-origin: 0 0; transform: rotateX(-44deg); transform-style: preserve-3d; }
+      .shadow { position: absolute; left: -32px; top: -13px; width: 64px; height: 26px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,0.55), rgba(0,0,0,0)); }
+      .pop { position: absolute; left: -47px; bottom: 0; width: 94px; height: 207px; transform-origin: 50% 100%; }
+      .pop svg { width: 94px; height: 207px; }
+      .pop svg { display: block; filter: drop-shadow(0 0 10px rgba(255,255,255,0.18)); }
+      .def .pop { opacity: 0.9; }
+      .ptag {
+        position: absolute; left: 50%; bottom: 112px; width: 64px; margin-left: -32px; height: 36px;
+        border-radius: 18px; background: var(--c); color: #0b1533; text-align: center;
+        font: 800 21px/36px var(--body); letter-spacing: 0.04em; box-shadow: 0 0 0 3px #fff;
+      }
+      .ball-shadow { left: -12px; top: -6px; width: 24px; height: 12px; }
+      .lift { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+      .ball {
+        position: absolute; left: -15px; top: -15px; width: 30px; height: 30px; border-radius: 50%;
+        background: radial-gradient(circle at 35% 32%, #ffffff 0%, #fff4b0 30%, #f2c21b 70%, #b27a00 100%);
+        box-shadow: 0 0 18px rgba(255, 230, 120, 0.9), 0 0 0 2px #0b1533;
+      }
+      .goal .bb-up svg { position: absolute; left: -85px; bottom: 0; }
+      .goal-flash { position: absolute; left: -130px; bottom: -30px; width: 260px; height: 170px; opacity: 0; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,240,150,0.85), rgba(255,240,150,0)); }
+      .callout-pos { position: absolute; left: -150px; bottom: 222px; width: 300px; display: flex; justify-content: center; }
+      .callout-pos.small { bottom: 222px; }
+      .callout-pos.small.low { bottom: 28px; }
+      .callout {
+        padding: 10px 22px; border-radius: 14px; background: #fff; color: #0b1533;
+        font: 400 30px/1 var(--display); letter-spacing: 0.02em; white-space: nowrap;
+        box-shadow: 0 0 0 4px var(--c), 0 10px 30px rgba(0,0,0,0.45);
+      }
+      .callout.small { font-size: 26px; padding: 7px 14px; background: #0b1533; color: #fff; box-shadow: 0 0 0 3px var(--c); }
+
+      /* Texto de pasos */
+      #caps { position: absolute; left: 60px; right: 60px; top: 1452px; height: 270px; }
+      .cap {
+        position: absolute; left: 0; top: 0; width: 960px; min-height: 230px; padding: 30px 36px 32px 44px;
+        border-radius: 26px; background: rgba(9, 16, 40, 0.82); border: 2px solid rgba(169, 184, 224, 0.25);
+        box-shadow: 0 30px 80px rgba(0,0,0,0.45); overflow: hidden;
+      }
+      .cap::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 10px;
+        background: linear-gradient(180deg, var(--c-purple), var(--c-blue), var(--c-green), var(--c-yellow), var(--c-orange), var(--c-red)); }
+      .cap-label { font: 800 22px/1 var(--body); letter-spacing: 0.2em; color: var(--c-yellow); margin-bottom: 18px; }
+      .cap-text { font: 700 40px/1.3 var(--body); color: #fff; max-width: 880px; }
+      .cap-text em { font-style: normal; color: var(--c-yellow); }
+      .chip {
+        display: inline-block; padding: 0 12px; height: 44px; line-height: 44px; border-radius: 22px; margin: 0 2px;
+        background: var(--c); color: #0b1533; font: 800 26px/44px var(--body); vertical-align: 4px;
+      }
+
+      #legend {
+        position: absolute; left: 60px; right: 60px; top: 1764px; height: 40px; display: flex; justify-content: center; gap: 46px;
+        font: 600 22px/40px var(--body); color: var(--muted);
+      }
+      #legend span { display: flex; align-items: center; gap: 12px; }
+      #legend .l-move { width: 46px; height: 6px; border-radius: 3px; background: #fff; }
+      #legend .l-pass { width: 46px; height: 0; border-top: 5px dashed #fff; }
+      #legend .l-ball { width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 32%, #fff, #f2c21b 70%); }
+      #progress { position: absolute; left: 60px; right: 60px; top: 1840px; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.12); overflow: hidden; }
+      #progress-fill { width: 960px; height: 6px; transform-origin: 0 50%;
+        background: linear-gradient(90deg, var(--c-purple), var(--c-blue), var(--c-green), var(--c-yellow), var(--c-orange), var(--c-red)); }
+
+      /* Intro / outro */
+      .badge { position: absolute; left: 50%; width: 400px; height: 400px; margin-left: -200px; border-radius: 50%; background: #fff;
+        display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 10px rgba(255,255,255,0.12), 0 30px 90px rgba(0,0,0,0.5); }
+      .badge img { width: 300px; height: auto; display: block; }
+      #intro-badge { top: 330px; }
+      #intro-kicker { position: absolute; left: 0; right: 0; top: 770px; text-align: center; font: 800 30px/1 var(--body); letter-spacing: 0.28em; color: var(--c-yellow); }
+      #mirror-flash { position: absolute; left: 0; right: 0; top: 410px; display: flex; justify-content: center; opacity: 0; }
+      #mirror-flash div { padding: 18px 36px; border-radius: 18px; background: var(--c-yellow); color: #0b1533; font: 400 54px/1 var(--display); transform: skewX(-9deg); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+      #outro { position: absolute; inset: 0; opacity: 0; }
+      #outro-badge { top: 520px; }
+      #outro .o-1 { position: absolute; left: 0; right: 0; top: 990px; text-align: center; font: 400 76px/1 var(--display); }
+      #outro .o-1 span { display: inline-block; transform: skewX(-9deg); }
+      #outro .o-2 { position: absolute; left: 0; right: 0; top: 1090px; text-align: center; font: 800 30px/1 var(--body); letter-spacing: 0.26em; color: var(--muted); }
+      #outro .o-3 { position: absolute; left: 50%; top: 1200px; width: 640px; margin-left: -320px; height: 80px; border-radius: 40px;
+        border: 3px solid var(--c-yellow); text-align: center; font: 800 32px/74px var(--body); letter-spacing: 0.06em; color: #fff; }
+      #outro .o-3 b { color: var(--c-yellow); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="60" data-width="1080" data-height="1920">
+      <div id="scene" class="scene clip" data-start="0" data-duration="60" data-track-index="0">
+        <div class="grid"></div>
+        <div class="frame-line"></div>
+
+        <div id="hud-top">
+          <div><span class="dot"></span>PIZARRA TÁCTICA · G·MADRID</div>
+          <div class="stripes"><i style="background:#9b3fa6"></i><i style="background:#2fa8e0"></i><i style="background:#8cc63f"></i><i style="background:#f2dd2a"></i><i style="background:#f2a21b"></i><i style="background:#e0303a"></i></div>
+        </div>
+
+        <div id="intro-badge" class="badge"><img src="assets/gmadrid-logo.png" alt="G·Madrid Balonmano" /></div>
+        <div id="intro-kicker">JUGADA 01 / 03</div>
+
+        <div id="head">
+          <div id="head-kicker">JUGADA 01 · PERMUTA CENTRAL–LATERAL</div>
+          <div id="head-title" data-layout-allow-overflow><div class="t"><span class="m"><span class="w">LA</span></span><span class="m"><span class="w acc">PONI</span></span></div></div>
+          <div id="head-sub">
+            <div id="side-pill" class="pill">▶ POR LA <b>DERECHA</b></div>
+            <div id="side-pill-2" class="pill" style="opacity:0"></div>
+          </div>
+        </div>
+
+        <div id="stage" data-layout-ignore><div id="plane"></div></div>
+        <div id="mirror-flash"><div>↔ AHORA EN ESPEJO</div></div>
+
+        <div id="caps"></div>
+        <div id="legend">
+          <span><i class="l-move"></i>Desplazamiento</span>
+          <span><i class="l-pass"></i>Pase / tiro</span>
+          <span><i class="l-ball"></i>Balón</span>
+        </div>
+        <div id="progress"><div id="progress-fill"></div></div>
+
+        <div id="outro">
+          <div id="outro-badge" class="badge"><img src="assets/gmadrid-logo.png" alt="G·Madrid Balonmano" /></div>
+          <div class="o-line o-1"><span>LA PONI</span></div>
+          <div class="o-line o-2">PIZARRA G·MADRID · 01/03</div>
+          <div class="o-line o-3">PRÓXIMA: <b>LA PROHIBIDA</b></div>
+        </div>
+      </div>
+    </div>
+    <script src="assets/pizarra.js"></script>
+    <script>
+      const PLAY = {"num": "01", "title": ["LA", "PONI"], "accent": 1, "titleSize": 150, "subtitle": "PERMUTA CENTRAL–LATERAL", "sideMain": "▶ POR LA <b>DERECHA</b>", "sideMirror": "◀ POR LA <b>IZQUIERDA</b>", "next": "PRÓXIMA: <b>LA PROHIBIDA</b>", "ball": "CE", "intro": "Ataque en 6:0. El balón lo tiene el central {CE}.", "steps": [{"cap": "El central {CE} pasa el balón al lateral derecho {LD}.", "acts": [{"pass": ["CE", "LD"], "at": 0.1, "dur": 0.55}]}, {"cap": "Al pasar, el central {CE} se va <em>hacia atrás</em>, al lado contrario del pase.", "acts": [{"move": "CE", "pts": [[430, 680], [310, 700], [215, 600]], "dur": 1.7}]}, {"cap": "El lateral izquierdo {LI}, en <em>trayectoria amplia</em>, ocupa el puesto de central.", "acts": [{"move": "LI", "pts": [[300, 455], [420, 520], [495, 650]], "dur": 1.7}]}, {"cap": "El lateral derecho {LD} <em>aguanta el balón</em> y fija a su defensor.", "acts": [{"move": "LD", "pts": [[760, 450], [785, 500]], "dur": 1.2, "arrow": false}, {"call": "LD", "text": "¡AGUANTA!", "at": 0.1, "hold": 1.5}]}, {"cap": "El nuevo central {LI} <em>entra en carrera</em> y recibe de {LD}.", "acts": [{"move": "LI", "pts": [[500, 540], [508, 430]], "dur": 1.3, "ease": "power1.in"}, {"pass": ["LD", "LI"], "at": 0.35, "dur": 0.55}]}, {"cap": "Decide: <em>tira</em>… o, si le defienden, la pasa a uno u otro lateral: {CE} o {LD}.", "acts": [{"opts": "LI", "to": ["goal", "CE", "LD"], "at": 0, "hold": 1.6}, {"shot": "LI", "at": 1.6, "dur": 0.45}], "after": 1.0}], "key": "Tres cosas: pase al lateral, el central sale <em>por detrás</em> al otro lado y el lateral <em>entra en carrera</em> por el centro.", "mirrorCap": "Poni por la izquierda: lo mismo, cambiando el lado. Pase a {LI} y el que entra es {LD}."};
+      const tl = Pizarra.build(PLAY);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

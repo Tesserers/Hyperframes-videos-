@@ -30,4 +30,4 @@ se imita su diseño.
   `python3 videos/_pizarra-src/build.py`. La duración va en `.duration`.
 - Colores de jugador = colores del logo. Defensa 6:0 en gris, bascula con cada pase.
 - Vídeo independiente: sin numeración de serie ni "próxima jugada".
-- Música: pista original sintetizada (`_pizarra-src/music.py`, 124 BPM, La menor), con la duración exacta del vídeo y normalizada a -16 LUFS.
+- Música: «Brisk Beat» (aportada por Eddy), recortada a la duración del vídeo con fundido final y normalizada a -16 LUFS.

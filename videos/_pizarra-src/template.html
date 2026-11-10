@@ -144,14 +144,14 @@
         display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 10px rgba(255,255,255,0.12), 0 30px 90px rgba(0,0,0,0.5); }
       .badge img { width: 300px; height: auto; display: block; }
       #intro-badge { top: 330px; }
-      #intro-kicker { position: absolute; left: 0; right: 0; top: 770px; text-align: center; font: 800 30px/1 var(--body); letter-spacing: 0.28em; color: var(--c-yellow); }
+      #intro-kicker { position: absolute; left: 0; right: 0; top: 1110px; text-align: center; font: 800 30px/1 var(--body); letter-spacing: 0.28em; color: var(--c-yellow); }
       #mirror-flash { position: absolute; left: 0; right: 0; top: 410px; display: flex; justify-content: center; opacity: 0; }
       #mirror-flash div { padding: 18px 36px; border-radius: 18px; background: var(--c-yellow); color: #0b1533; font: 400 54px/1 var(--display); transform: skewX(-9deg); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
       #outro { position: absolute; inset: 0; opacity: 0; }
-      #outro-badge { top: 520px; }
-      #outro .o-1 { position: absolute; left: 0; right: 0; top: 990px; text-align: center; font: 400 76px/1 var(--display); }
+      #outro-badge { top: 640px; }
+      #outro .o-1 { position: absolute; left: 0; right: 0; top: 1110px; text-align: center; font: 400 76px/1 var(--display); }
       #outro .o-1 span { display: inline-block; transform: skewX(-9deg); }
-      #outro .o-2 { position: absolute; left: 0; right: 0; top: 1090px; text-align: center; font: 800 30px/1 var(--body); letter-spacing: 0.26em; color: var(--muted); }
+      #outro .o-2 { position: absolute; left: 0; right: 0; top: 1210px; text-align: center; font: 800 30px/1 var(--body); letter-spacing: 0.26em; color: var(--muted); }
       #outro .o-3 { position: absolute; left: 50%; top: 1200px; width: 640px; margin-left: -320px; height: 80px; border-radius: 40px;
         border: 3px solid var(--c-yellow); text-align: center; font: 800 32px/74px var(--body); letter-spacing: 0.06em; color: #fff; }
       #outro .o-3 b { color: var(--c-yellow); }
@@ -169,10 +169,10 @@
         </div>
 
         <div id="intro-badge" class="badge"><img src="assets/gmadrid-logo.png" alt="G·Madrid Balonmano" /></div>
-        <div id="intro-kicker">JUGADA __NUM__ / 03</div>
+        <div id="intro-kicker">__SUBTITLE__</div>
 
         <div id="head">
-          <div id="head-kicker">JUGADA __NUM__ · __SUBTITLE__</div>
+          <div id="head-kicker">__SUBTITLE__</div>
           <div id="head-title" data-layout-allow-overflow><div class="t">__TITLE_WORDS__</div></div>
           <div id="head-sub">
             <div id="side-pill" class="pill">__SIDE_MAIN__</div>
@@ -194,10 +194,10 @@
         <div id="outro">
           <div id="outro-badge" class="badge"><img src="assets/gmadrid-logo.png" alt="G·Madrid Balonmano" /></div>
           <div class="o-line o-1"><span>__TITLE_PLAIN__</span></div>
-          <div class="o-line o-2">PIZARRA G·MADRID · __NUM__/03</div>
-          <div class="o-line o-3">__NEXT__</div>
+          <div class="o-line o-2">__SUBTITLE__</div>
         </div>
       </div>
+      <audio id="bgm" src="assets/music/bgm.mp3" data-start="0" data-duration="__DURATION__" data-track-index="1" data-volume="0.9"></audio>
     </div>
     <script src="assets/pizarra.js"></script>
     <script>

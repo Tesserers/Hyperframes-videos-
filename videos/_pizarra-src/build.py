@@ -4,7 +4,7 @@ Uso:  python3 videos/_pizarra-src/build.py
 Coordenadas de pista: x 0..1000 (20 m de ancho), y = distancia a la línea de gol
 (50 px = 1 m). Posiciones de salida en pizarra.js (START).
 """
-import json, os, shutil
+import json, os, shutil, subprocess, tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 VIDEOS = os.path.dirname(HERE)
@@ -136,6 +136,18 @@ def main():
             .replace("__PLAY_JSON__", json.dumps(cfg, ensure_ascii=False))
         )
         open(os.path.join(proj, "index.html"), "w").write(html)
+        # música con la duración exacta del vídeo (fundido final incluido)
+        mdir = os.path.join(proj, "assets", "music")
+        os.makedirs(mdir, exist_ok=True)
+        mp3 = os.path.join(mdir, "bgm.mp3")
+        stamp = os.path.join(mdir, ".len")
+        if not (os.path.exists(mp3) and os.path.exists(stamp) and open(stamp).read() == duration):
+            with tempfile.TemporaryDirectory() as td:
+                raw = os.path.join(td, "raw.wav")
+                subprocess.run(["python3", os.path.join(HERE, "music.py"), raw, duration], check=True)
+                subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", raw, "-af", "loudnorm=I=-16:TP=-1.5:LRA=11",
+                                "-ar", "44100", "-c:a", "libmp3lame", "-b:a", "192k", mp3], check=True)
+            open(stamp, "w").write(duration)
         print("ok", key, duration)
 
 

@@ -2,3 +2,5 @@
 .check.json
 .render.log
 node_modules/
+renders/work-*/
+renders/.*

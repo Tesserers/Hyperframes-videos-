@@ -25,33 +25,22 @@
       #root {
         position: relative; width: 1080px; height: 1920px; overflow: hidden;
         font-family: var(--body); color: var(--ink);
-        background:
-          radial-gradient(900px 700px at 15% 8%, rgba(155, 63, 166, 0.22), transparent 70%),
-          radial-gradient(900px 800px at 95% 30%, rgba(47, 168, 224, 0.18), transparent 70%),
-          radial-gradient(1000px 700px at 50% 105%, rgba(242, 162, 27, 0.12), transparent 70%),
-          linear-gradient(180deg, #0b1533 0%, #101d45 55%, #0b1533 100%);
+        background: linear-gradient(180deg, #1b336b 0%, #142a5c 45%, #0e1f47 100%);
       }
       .scene { position: absolute; inset: 0; width: 1080px; height: 1920px; }
-      .grid {
-        position: absolute; inset: 0;
-        background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-        background-size: 60px 60px;
-      }
-      .frame-line { position: absolute; inset: 22px; border: 2px solid rgba(169, 184, 224, 0.22); border-radius: 26px; }
 
       /* HUD */
       #hud-top {
-        position: absolute; left: 60px; right: 60px; top: 48px; height: 30px;
-        display: flex; justify-content: space-between; align-items: center;
-        font: 700 20px/1 var(--body); letter-spacing: 0.16em; color: var(--muted);
+        position: absolute; left: 60px; right: 60px; top: 34px; height: 64px;
+        display: flex; justify-content: center; align-items: center; gap: 16px;
       }
-      #hud-top .dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--c-red); margin-right: 12px; vertical-align: middle; }
-      .stripes { display: flex; gap: 6px; }
-      .stripes i { display: block; width: 26px; height: 8px; border-radius: 4px; }
+      .hud-logo { width: 64px; height: 64px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; }
+      .hud-logo img { width: 48px; height: auto; display: block; }
+      .hud-name { font: 400 30px/1 var(--display); color: #fff; letter-spacing: 0.01em; }
+      .hud-name span { color: #fff; }
 
       /* Cabecera */
-      #head { position: absolute; left: 60px; right: 60px; top: 104px; height: 300px; }
+      #head { position: absolute; left: 60px; right: 60px; top: 124px; height: 300px; }
       #head-kicker { font: 800 26px/1 var(--body); letter-spacing: 0.2em; color: var(--c-yellow); }
       #head-title {
         position: absolute; left: 0; right: 0; top: 44px; height: 170px;
@@ -111,7 +100,7 @@
       .callout.small { font-size: 26px; padding: 7px 14px; background: #0b1533; color: #fff; box-shadow: 0 0 0 3px var(--c); }
 
       /* Texto de pasos */
-      #caps { position: absolute; left: 60px; right: 60px; top: 1452px; height: 270px; }
+      #caps { position: absolute; left: 60px; right: 60px; top: 1392px; height: 270px; }
       .cap {
         position: absolute; left: 0; top: 0; width: 960px; min-height: 230px; padding: 30px 36px 32px 44px;
         border-radius: 26px; background: rgba(9, 16, 40, 0.82); border: 2px solid rgba(169, 184, 224, 0.25);
@@ -135,9 +124,6 @@
       #legend .l-move { width: 46px; height: 6px; border-radius: 3px; background: #fff; }
       #legend .l-pass { width: 46px; height: 0; border-top: 5px dashed #fff; }
       #legend .l-ball { width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 32%, #fff, #f2c21b 70%); }
-      #progress { position: absolute; left: 60px; right: 60px; top: 1840px; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.12); overflow: hidden; }
-      #progress-fill { width: 960px; height: 6px; transform-origin: 0 50%;
-        background: linear-gradient(90deg, var(--c-purple), var(--c-blue), var(--c-green), var(--c-yellow), var(--c-orange), var(--c-red)); }
 
       /* Intro / outro */
       .badge { position: absolute; left: 50%; width: 400px; height: 400px; margin-left: -200px; border-radius: 50%; background: #fff;
@@ -145,7 +131,7 @@
       .badge img { width: 300px; height: auto; display: block; }
       #intro-badge { top: 330px; }
       #intro-kicker { position: absolute; left: 0; right: 0; top: 1110px; text-align: center; font: 800 30px/1 var(--body); letter-spacing: 0.28em; color: var(--c-yellow); }
-      #mirror-flash { position: absolute; left: 0; right: 0; top: 410px; display: flex; justify-content: center; opacity: 0; }
+      #mirror-flash { position: absolute; left: 0; right: 0; top: 440px; display: flex; justify-content: center; opacity: 0; }
       #mirror-flash div { padding: 18px 36px; border-radius: 18px; background: var(--c-yellow); color: #0b1533; font: 400 54px/1 var(--display); transform: skewX(-9deg); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
       #outro { position: absolute; inset: 0; opacity: 0; }
       #outro-badge { top: 640px; }
@@ -160,12 +146,10 @@
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="__DURATION__" data-width="1080" data-height="1920">
       <div id="scene" class="scene clip" data-start="0" data-duration="__DURATION__" data-track-index="0">
-        <div class="grid"></div>
-        <div class="frame-line"></div>
 
         <div id="hud-top">
-          <div><span class="dot"></span>PIZARRA TÁCTICA · G·MADRID</div>
-          <div class="stripes"><i style="background:#9b3fa6"></i><i style="background:#2fa8e0"></i><i style="background:#8cc63f"></i><i style="background:#f2dd2a"></i><i style="background:#f2a21b"></i><i style="background:#e0303a"></i></div>
+          <div class="hud-logo"><img src="assets/gmadrid-logo.png" alt="" /></div>
+          <div class="hud-name"><span>G·MADRID</span> BALONMANO</div>
         </div>
 
         <div id="intro-badge" class="badge"><img src="assets/gmadrid-logo.png" alt="G·Madrid Balonmano" /></div>
@@ -183,13 +167,12 @@
         <div id="stage" data-layout-ignore><div id="plane"></div></div>
         <div id="mirror-flash"><div>↔ AHORA EN ESPEJO</div></div>
 
-        <div id="caps"></div>
+        <div id="caps" data-hold></div>
         <div id="legend">
           <span><i class="l-move"></i>Desplazamiento</span>
           <span><i class="l-pass"></i>Pase / tiro</span>
           <span><i class="l-ball"></i>Balón</span>
         </div>
-        <div id="progress"><div id="progress-fill"></div></div>
 
         <div id="outro">
           <div id="outro-badge" class="badge"><img src="assets/gmadrid-logo.png" alt="G·Madrid Balonmano" /></div>

@@ -551,8 +551,6 @@
       tl.fromTo("#outro .o-line", { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.12 }, t + 0.6);
       t += 3.4;
 
-      // barra de progreso
-      tl.fromTo("#progress-fill", { scaleX: 0 }, { scaleX: 1, duration: t, ease: "none" }, 0);
       window.__playLength = t;
       return tl;
     },

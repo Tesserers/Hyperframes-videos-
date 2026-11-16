@@ -18,8 +18,9 @@
       #root { position: relative; width: 100%; height: 100%; background: var(--navy-deep); overflow: hidden; }
 
       #grid { position: absolute; inset: 0; transform-origin: 50% 50%; will-change: transform; }
-      .col  { position: absolute; top: 0; width: 320px; height: 1080px; overflow: hidden; }
-      .reel { position: absolute; left: 0; top: 0; width: 320px; will-change: transform; }
+      /* 80 px de más arriba y abajo: al alejarse la cámara asoma la tesela vecina, no un borde vacío. */
+      .col  { position: absolute; top: -80px; width: 320px; height: 1240px; overflow: hidden; }
+      .reel { position: absolute; left: 0; top: 80px; width: 320px; will-change: transform; }
       .panel { position: relative; width: 320px; height: 1080px; overflow: hidden; background: var(--navy-deep); }
       .panel > img { display: block; width: 320px; height: 1080px; }
       .hero { position: absolute; inset: 0; background-size: 1920px 1080px; background-repeat: no-repeat; }
@@ -65,10 +66,11 @@
       (function () {
         var W = 1920, H = 1080, COLS = 6, CW = 320, JOINT = 8;
         var LOOP = 16, NSTATE = 8;
-        // La foto entera aguanta 2,5 s y el mosaico 1,5 s: la foto se lee, el mosaico es el golpe.
-        var HERO_T = 2.5, MOS_T = 1.5;
-        var MOVE = 0.75, STAGGER = 0.05;                   // cada columna tarda 0,75 s; entre columnas, 50 ms
-        var LEAD = 1.05;                                   // el cambio arranca 1,05 s antes del tiempo y termina 0,05 s antes
+        // Las columnas no paran nunca: corren, frenan y encajan, y vuelven a arrancar.
+        // Llegadas a cada parada (s). Foto entera en las pares, mosaico en las impares.
+        var ARRIVE = [0, 2.4, 4, 6.4, 8, 10.4, 12, 14.4, 16];
+        var HOLD_HERO = 1.2, HOLD_MOS = 0.4;   // lo que aguanta cada parada
+                var MARGIN = 0.06;                     // todas paradas 0,06 s antes de la llegada: el último fotograma ya está encajado
         var P = "assets/photos/";
 
         // Formas: cruz, píldora, onda, arco y barra.
@@ -113,41 +115,61 @@
             return '<div class="panel"><div class="hero" style="background-image:url(' + P + state.hero +
                    '-hero.jpg);background-position:' + (-c * CW) + 'px 0"></div></div>';
           }
-          var spec = state.cols[c];
+          return specHTML(state.cols[c]);
+        }
+        function specHTML(spec) {
           if (spec.full) return '<div class="panel"><img src="' + P + spec.full + '-full.jpg" alt=""></div>';
           if (spec.block) return '<div class="panel ' + spec.block + '">' + (spec.shape ? SHAPES[spec.shape] : "") + '</div>';
           return '<div class="panel">' + cellHTML(spec.top, "top") + cellHTML(spec.bot, "bot") + '</div>';
         }
 
+        // Relleno: lo que pasa por delante mientras las columnas corren.
+        var POOL = [F("molinos"), B("b-teal", "cross"), F("despacho"), S(h("granvia"), B("b-navy", "wave")),
+                    B("b-grad", "pill"), F("oficina"), S(B("b-deep", "arc"), h("reunion")), F("ciudad"),
+                    B("b-gradv", "bar"), S(h("equipo"), B("b-teal")), F("granvia"), B("b-navy", "wave"),
+                    S(h("tesserers"), B("b-grad")), F("reunion"), B("b-deep", "arc"), S(B("b-teal", "cross"), h("despacho"))];
+        function fillerHTML(c, k, i) {
+          return specHTML(POOL[(((c * 5 + k * 3 + i * 7) % POOL.length) + POOL.length) % POOL.length]);
+        }
+        // Cuántos paneles de relleno cruza cada columna en cada carrera: de 2 a 4. Distinto en
+        // cada columna, así cada una va a su velocidad y el cuadro nunca se mueve en bloque.
+        function nFill(c, k) { return 2 + ((c * 2 + k * 5 + (c * k) % 3) % 3); }
+
         var grid = document.getElementById("grid");
         var tl = gsap.timeline({ paused: true });
 
-        // Columnas. Las pares suben y las impares bajan: al juntarse, las tiras de la foto
-        // llegan de lados contrarios y encajan; al romperse, se separan en sentidos opuestos.
+        // Columnas. Las pares suben y las impares bajan.
+        // Más una columna a cada lado, fuera de cuadro: solo asoman cuando la cámara se aleja,
+        // y así nunca se ve el borde del mosaico.
         var reels = [];
-        for (var c = 0; c < COLS; c++) {
+        for (var c = -1; c <= COLS; c++) {
+          var outer = c < 0 || c >= COLS;
           var col = document.createElement("div");
           col.className = "col"; col.style.left = (c * CW) + "px";
           col.setAttribute("data-layout-allow-overflow", "");
           var reel = document.createElement("div");
           reel.className = "reel"; reel.setAttribute("data-layout-allow-overflow", "");
-          var up = c % 2 === 0;
-          // Nueve paneles: los ocho tiempos y el primero repetido, que es el que cierra el bucle.
-          var html = "";
-          for (var j = 0; j <= NSTATE; j++) {
-            var s = up ? j % NSTATE : (NSTATE - j) % NSTATE;
-            html += panelHTML(STATES[s], c);
+          var up = (c + 2) % 2 === 0;
+          // Tira en orden de paso: parada 0, relleno, parada 1, relleno... y la parada 0 otra vez,
+          // que es la que cierra el bucle.
+          var panels = [], idx = [];
+          for (var k = 0; k < NSTATE; k++) {
+            idx.push(panels.length);
+            panels.push(outer ? fillerHTML(c, k, 9) : panelHTML(STATES[k], c));
+            for (var i = 0; i < nFill(c, k); i++) panels.push(fillerHTML(c, k, i));
           }
-          reel.innerHTML = html;
+          idx.push(panels.length);
+          panels.push(outer ? fillerHTML(c, 0, 9) : panelHTML(STATES[0], c));
+          var N = panels.length - 1;
+          reel.innerHTML = (up ? panels : panels.slice().reverse()).join("");
           col.appendChild(reel); grid.appendChild(col);
-          reels.push({ el: reel, up: up });
+          reels.push({ el: reel, up: up, idx: idx, N: N, c: c });
         }
+        function reelY(r, k) { return r.up ? -r.idx[k] * H : -(r.N - r.idx[k]) * H; }
 
-        function reelY(r, s) { return r.up ? -s * H : -(NSTATE - s) * H; }
-
-        // Juntas: cinco líneas entre columnas. Abiertas en mosaico, cerradas en foto entera.
+        // Juntas: cerradas en foto entera, abiertas en todo lo demás.
         var joints = [];
-        for (var k = 1; k < COLS; k++) {
+        for (var k = 0; k <= COLS; k++) {
           var j = document.createElement("div");
           j.className = "joint"; j.setAttribute("data-layout-allow-overflow", "");
           j.style.left = (k * CW) + "px";
@@ -155,41 +177,53 @@
           joints.push(j);
         }
         function jointSet(open) { return { width: open ? JOINT : 0, marginLeft: open ? -JOINT / 2 : 0 }; }
-        var j0 = jointSet(!STATES[0].hero);
-        joints.forEach(function (j) { gsap.set(j, j0); });
+        joints.forEach(function (j) { gsap.set(j, jointSet(false)); });
         reels.forEach(function (r) { gsap.set(r.el, { y: reelY(r, 0) }); });
 
-        var START = [0];
-        for (var s = 0; s < NSTATE; s++) START.push(START[s] + (STATES[s].hero ? HERO_T : MOS_T));
-        for (var s = 0; s < NSTATE; s++) {
-          var at = START[s + 1] - LEAD;
-          var toHero = !!STATES[(s + 1) % NSTATE].hero;
-          for (var c = 0; c < COLS; c++) {
-            // El relevo barre de izquierda a derecha cuando se rompe la foto y de fuera hacia
-            // dentro cuando se junta, así la foto se cierra en el centro, donde va el título.
-            var order = toHero ? Math.abs(c - (COLS - 1) / 2) : c;
-            var delay = toHero ? (2.5 - order) * STAGGER * 2 : order * STAGGER;
-            tl.fromTo(reels[c].el, { y: reelY(reels[c], s) },
-              { y: reelY(reels[c], s + 1), duration: MOVE, ease: "power4.inOut", immediateRender: false }, at + delay);
+        // Salida escalonada de cada columna (s). Hacia la foto entera, de fuera hacia dentro:
+        // la foto se cierra en el centro, donde va el título.
+        var DEP_MOS  = [0.00, 0.08, 0.03, 0.11, 0.05, 0.14];
+        var DEP_HERO = [0.00, 0.06, 0.12, 0.12, 0.06, 0.00];
+
+        for (var k = 0; k < NSTATE; k++) {
+          var hero = !!STATES[k].hero;
+          var depart = ARRIVE[k] + (hero ? HOLD_HERO : HOLD_MOS);
+          var toHero = !!STATES[(k + 1) % NSTATE].hero;
+          var window_ = ARRIVE[k + 1] - MARGIN - depart;      // tiempo para salir escalonado y llegar
+          for (var r = 0; r < reels.length; r++) {
+            var cc = Math.min(Math.max(reels[r].c, 0), COLS - 1);
+            var d = (toHero ? DEP_HERO : DEP_MOS)[cc];
+            tl.fromTo(reels[r].el, { y: reelY(reels[r], k) },
+              { y: reelY(reels[r], k + 1), duration: window_ - 0.15, ease: "power3.inOut", immediateRender: false },
+              depart + d);
+          }
+          if (hero) {
+            // se abren justo antes de que la foto se rompa
+            tl.fromTo(joints, jointSet(false), Object.assign({ duration: 0.12, ease: "power2.out", immediateRender: false }, jointSet(true)), depart - 0.06);
           }
           if (toHero) {
-            // las juntas se cierran cuando la última columna ya ha encajado
-            tl.fromTo(joints, jointSet(true), Object.assign({ duration: 0.3, ease: "power2.out", immediateRender: false }, jointSet(false)), at + 0.65);
-          } else {
-            // y se abren justo antes de que la foto se rompa
-            tl.fromTo(joints, jointSet(false), Object.assign({ duration: 0.25, ease: "power2.out", immediateRender: false }, jointSet(true)), at - 0.1);
+            // y se cierran cuando las columnas ya están encajando
+            tl.fromTo(joints, jointSet(true), Object.assign({ duration: 0.17, ease: "power2.out", immediateRender: false }, jointSet(false)), ARRIVE[k + 1] - MARGIN - 0.2);
           }
         }
 
-        // Cámara: empuja hacia dentro mientras se ve la foto entera y se retira en el mosaico.
-        // Cambia de sentido en cada tiempo, nunca se queda quieta y en t = 16 vuelve a 1,0.
-        for (var s = 0; s < NSTATE; s++) {
-          var hero = !!STATES[s].hero;
-          tl.fromTo(grid,
-            { scale: hero ? 1.0 : 1.07, x: hero ? 0 : -36 },
-            { scale: hero ? 1.07 : 1.0, x: hero ? -36 : 0, duration: START[s + 1] - START[s], ease: "sine.inOut", immediateRender: s === 0 },
-            START[s]);
+        // Cámara: empuja sobre la foto entera, se abre de golpe al arrancar y vuelve al frenar.
+        // Sin pausas y con la misma escala en t = 0 y t = 16.
+        var cam = [];
+        for (var k = 0; k < NSTATE; k++) {
+          var hero = !!STATES[k].hero;
+          var depart = ARRIVE[k] + (hero ? HOLD_HERO : HOLD_MOS);
+          if (hero) {
+            cam.push([ARRIVE[k], depart, { scale: 1.0, x: 0 }, { scale: 1.09, x: -40 }, "sine.out"]);
+            cam.push([depart, ARRIVE[k + 1], { scale: 1.09, x: -40 }, { scale: 0.94, x: 0 }, "power3.inOut"]);
+          } else {
+            cam.push([ARRIVE[k], depart, { scale: 0.94, x: 0 }, { scale: 0.97, x: 20 }, "sine.inOut"]);
+            cam.push([depart, ARRIVE[k + 1], { scale: 0.97, x: 20 }, { scale: 1.0, x: 0 }, "power3.inOut"]);
+          }
         }
+        cam.forEach(function (seg, i) {
+          tl.fromTo(grid, seg[2], Object.assign({ duration: seg[1] - seg[0], ease: seg[4], immediateRender: i === 0 }, seg[3]), seg[0]);
+        });
 
         try {
           var vars = (window.__hyperframes && window.__hyperframes.getVariables)

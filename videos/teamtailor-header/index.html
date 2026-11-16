@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=1920, height=1080" />
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
-      /* Paleta Tessera 2027, sin más colores que estos seis. */
+      /* Paleta Tessera 2027 y su único degradado (Teal 0 % a Navy 75 %). */
       :root {
         --navy: #202031; --navy-deep: #16161F; --teal: #587579;
-        --teal-light: #8AA3A5; --bruma: #E6ECEC; --white: #FFFFFF;
-        /* El único degradado de la marca: Teal 0 % a Navy 75 %. */
+        --teal-light: #8AA3A5; --white: #FFFFFF;
         --grad-diag: linear-gradient(135deg, #587579 0%, #202031 75%);
         --grad-vert: linear-gradient(180deg, #587579 0%, #202031 75%);
       }
@@ -18,16 +17,15 @@
       body { background: var(--navy-deep); }
       #root { position: relative; width: 100%; height: 100%; background: var(--navy-deep); overflow: hidden; }
 
-      #strip { position: absolute; left: 0; top: 0; height: 1080px; width: 5120px; will-change: transform; }
-      .col  { position: absolute; top: 0; width: 320px; height: 1080px; }
-      /* 8 px de junta navy profundo entre teselas: es un mosaico, se tiene que ver la junta. */
-      .tile { position: absolute; left: 4px; width: 312px; overflow: hidden; }
-      .tile.full { top: 0; height: 1080px; }
-      .tile.top  { top: 0; height: 536px; }
-      .tile.bot  { top: 544px; height: 536px; }
-
-      .reel { position: absolute; left: 0; top: 0; width: 312px; will-change: transform; }
-      .reel img { display: block; width: 312px; }
+      #grid { position: absolute; inset: 0; transform-origin: 50% 50%; will-change: transform; }
+      .col  { position: absolute; top: 0; width: 320px; height: 1080px; overflow: hidden; }
+      .reel { position: absolute; left: 0; top: 0; width: 320px; will-change: transform; }
+      .panel { position: relative; width: 320px; height: 1080px; overflow: hidden; background: var(--navy-deep); }
+      .panel > img { display: block; width: 320px; height: 1080px; }
+      .hero { position: absolute; inset: 0; background-size: 1920px 1080px; background-repeat: no-repeat; }
+      .half { position: absolute; left: 0; width: 320px; height: 536px; overflow: hidden; }
+      .half.top { top: 0; } .half.bot { top: 544px; }
+      .half img { display: block; width: 320px; height: 536px; }
 
       .b-teal { background: var(--teal); }
       .b-navy { background: var(--navy); }
@@ -35,18 +33,19 @@
       .b-grad { background: var(--grad-diag); }
       .b-gradv { background: var(--grad-vert); }
 
-      /* Formas de apoyo del brandbook (lámina 18): pequeñas, de acento. */
-      .shape { position: absolute; left: 44px; overflow: visible; }
+      /* Formas de apoyo del brandbook (lámina 18), pequeñas y de acento. */
+      .shape { position: absolute; left: 44px; bottom: 48px; overflow: visible; }
       .shape * { fill: none; stroke: var(--teal-light); stroke-width: 4; stroke-linecap: round; }
       .shape.w * { stroke: var(--white); }
 
-      /* Velo Navy para que el título de la vacante se lea en blanco encima.
-         Monocromo, de Navy a transparente: el tipo de velo que pide la lámina 20. */
+      /* Las juntas del mosaico. Se cierran cuando las columnas forman una foto entera. */
+      .joint { position: absolute; top: -40px; height: 1160px; background: var(--navy-deep); }
+
+      /* Velo Navy para el título blanco de la vacante: monocromo, de Navy a transparente. */
       #velo {
         position: absolute; inset: 0; pointer-events: none;
-        background:
-          radial-gradient(ellipse 46% 52% at 50% 50%,
-            rgba(32,32,49,0.66) 0%, rgba(32,32,49,0.58) 40%, rgba(32,32,49,0.30) 78%, rgba(32,32,49,0.18) 100%);
+        background: radial-gradient(ellipse 50% 62% at 50% 50%,
+          rgba(32,32,49,0.76) 0%, rgba(32,32,49,0.68) 42%, rgba(32,32,49,0.36) 82%, rgba(32,32,49,0.20) 100%);
       }
     </style>
   </head>
@@ -55,8 +54,8 @@
          data-width="1920" data-height="1080"
          data-composition-variables='{"velo": true}'>
       <div class="clip" id="mosaic" data-start="0" data-duration="16" data-track-index="0"
-           style="position:absolute;inset:0">
-        <div id="strip"></div>
+           style="position:absolute;inset:0;overflow:hidden">
+        <div id="grid" data-layout-allow-overflow></div>
       </div>
       <div class="clip" id="velo" data-start="0" data-duration="16" data-track-index="1"></div>
     </div>
@@ -64,132 +63,133 @@
     <script>
       window.__timelines = window.__timelines || {};
       (function () {
-        var LOOP = 16;              // s. Bucle exacto.
-        var COLW = 320;             // ancho de columna, junta incluida
-        var NCOL = 8;               // columnas por periodo
-        var PERIOD = COLW * NCOL;   // 2560 px: más ancho que el cuadro, así nunca se ven dos copias de la misma tesela a la vez
-        var SPEED = PERIOD / LOOP;  // 160 px/s, constante
-        var FULL_H = 1080, HALF_H = 536;
+        var W = 1920, H = 1080, COLS = 6, CW = 320, JOINT = 8;
+        var LOOP = 16, NSTATE = 8;
+        // La foto entera aguanta 2,5 s y el mosaico 1,5 s: la foto se lee, el mosaico es el golpe.
+        var HERO_T = 2.5, MOS_T = 1.5;
+        var MOVE = 0.75, STAGGER = 0.05;                   // cada columna tarda 0,75 s; entre columnas, 50 ms
+        var LEAD = 1.05;                                   // el cambio arranca 1,05 s antes del tiempo y termina 0,05 s antes
+        var P = "assets/photos/";
 
-        //            0         1          2         3          4          5          6           7
-        var PHOTOS = ["equipo", "oficina", "ciudad", "granvia", "molinos", "reunion", "despacho", "tesserers"];
-
-        // Cuatro relevos por bucle. Las teselas completas cambian a 2,7 / 6,7 / 10,7 / 14,7 s;
-        // las medias, dos segundos antes. Siempre pasa algo cada dos segundos y cada zona
-        // del cuadro cambia cada cuatro.
-        var SWAPS = 4, BEAT = LOOP / SWAPS;
-        var FULL_AT = 2.7, HALF_AT = 0.7;
-        var SWAP_DUR = 0.8, WAVE = 0.36;   // el relevo cruza la pantalla de izquierda a derecha en 0,36 s
-
-        // Columna a columna. seq = las cuatro fotos que pasan por cada tesela, en orden. Repartidas
-        // para que salgan las ocho en cada bucle y casi nunca coincida la misma foto dos veces en
-        // pantalla. La oficina de TESSERA (7) abre el vídeo en la primera tesela.
-        var LAYOUT = [
-          [{ pos: "full", seq: [7, 4, 0, 1] }],
-          [{ pos: "top", block: "b-teal", shape: "cross" }, { pos: "bot", seq: [0, 6, 2, 5], half: true }],
-          [{ pos: "full", block: "b-grad", shape: "pill" }],
-          [{ pos: "full", seq: [3, 0, 4, 2] }],
-          [{ pos: "top", seq: [4, 1, 6, 0], half: true }, { pos: "bot", block: "b-navy", shape: "wave" }],
-          [{ pos: "full", seq: [2, 7, 5, 3] }],
-          [{ pos: "full", block: "b-deep", shape: "arc" }],
-          [{ pos: "top", block: "b-gradv", shape: "bar" }, { pos: "bot", seq: [6, 5, 1, 7], half: true }]
-        ];
-
+        // Formas: cruz, píldora, onda, arco y barra.
         var SHAPES = {
-          // cruz, píldora, onda, arco y barra: las formas de la lámina 18
-          cross: '<svg class="shape" width="44" height="44" viewBox="0 0 44 44" style="bottom:44px"><g class="spin" style="transform-origin:22px 22px"><path d="M22 4 V40 M4 22 H40"/></g></svg>',
-          pill:  '<svg class="shape w" width="160" height="12" viewBox="0 0 160 12" style="bottom:52px"><path class="grow" d="M6 6 H50"/></svg>',
-          wave:  '<svg class="shape" width="88" height="24" viewBox="0 0 88 24" style="bottom:48px"><defs><clipPath id="wc"><rect x="0" y="-4" width="88" height="32"/></clipPath></defs><g clip-path="url(#wc)"><path class="slide" d="M-44 12 q11 -10 22 0 t22 0 t22 0 t22 0 t22 0 t22 0 t22 0"/></g></svg>',
-          arc:   '<svg class="shape" width="64" height="64" viewBox="0 0 64 64" style="bottom:40px"><g class="spin" style="transform-origin:32px 32px"><path d="M8 40 A24 24 0 0 1 56 40"/></g></svg>',
-          bar:   '<svg class="shape w" width="12" height="120" viewBox="0 0 12 120" style="bottom:44px"><path class="grow" d="M6 114 V74"/></svg>'
+          cross: '<svg class="shape" width="44" height="44" viewBox="0 0 44 44"><path d="M22 4 V40 M4 22 H40"/></svg>',
+          pill:  '<svg class="shape w" width="110" height="12" viewBox="0 0 110 12"><path d="M6 6 H104"/></svg>',
+          wave:  '<svg class="shape" width="88" height="24" viewBox="0 0 88 24"><path d="M2 12 q11 -10 22 0 t22 0 t22 0 t20 0"/></svg>',
+          arc:   '<svg class="shape" width="64" height="40" viewBox="0 0 64 40"><path d="M8 34 A24 24 0 0 1 56 34"/></svg>',
+          bar:   '<svg class="shape w" width="12" height="90" viewBox="0 0 12 90"><path d="M6 84 V6"/></svg>'
         };
 
-        var strip = document.getElementById("strip");
-        var tl = gsap.timeline({ paused: true });
+        // Atajos para describir columnas.
+        function F(id) { return { full: id }; }                 // foto a toda altura
+        function B(cls, shape) { return { block: cls, shape: shape }; }
+        function S(top, bot) { return { top: top, bot: bot }; } // columna partida en dos
+        function h(id) { return { half: id }; }                 // media tesela de foto
 
-        // Cuándo pasa el relevo por una columna concreta: según dónde esté en pantalla
-        // en ese momento, para que el cambio barra el cuadro de izquierda a derecha.
-        function swapTime(colLeft, base, k) {
-          var t0 = base + k * BEAT;
-          var x = colLeft - SPEED * t0;
-          var f = Math.min(Math.max(x / (1920 - COLW), 0), 1);
-          return t0 + f * WAVE;
+        // Ocho tiempos: foto entera, mosaico, foto entera, mosaico...
+        // Empieza con la oficina de TESSERA a pantalla completa: es lo primero que se ve.
+        // En los mosaicos, las columnas 2 y 3 (detrás del título) llevan más bloques de color.
+        var STATES = [
+          { hero: "tesserers" },
+          { cols: [F("equipo"), S(B("b-teal", "cross"), h("molinos")), B("b-grad", "pill"),
+                   S(h("despacho"), B("b-navy", "wave")), F("oficina"), S(B("b-gradv", "bar"), h("granvia"))] },
+          { hero: "ciudad" },
+          { cols: [S(h("tesserers"), B("b-navy", "arc")), F("molinos"), S(B("b-teal", "cross"), h("equipo")),
+                   B("b-deep", "arc"), F("granvia"), F("reunion")] },
+          { hero: "reunion" },
+          { cols: [F("despacho"), S(B("b-gradv", "bar"), h("oficina")), B("b-navy", "wave"),
+                   S(h("ciudad"), B("b-teal", "cross")), F("equipo"), S(h("molinos"), B("b-deep", "arc"))] },
+          { hero: "equipo" },
+          { cols: [S(B("b-teal", "cross"), h("reunion")), F("granvia"), S(h("tesserers"), B("b-grad", "pill")),
+                   B("b-deep", "arc"), S(B("b-teal", "wave"), h("despacho")), F("oficina")] }
+        ];
+
+        function cellHTML(spec, cls) {
+          if (spec.half) return '<div class="half ' + cls + '"><img src="' + P + spec.half + '-half.jpg" alt=""></div>';
+          return '<div class="half ' + cls + ' ' + spec.block + '">' + (spec.shape ? SHAPES[spec.shape] : "") + '</div>';
+        }
+        function panelHTML(state, c) {
+          if (state.hero) {
+            return '<div class="panel"><div class="hero" style="background-image:url(' + P + state.hero +
+                   '-hero.jpg);background-position:' + (-c * CW) + 'px 0"></div></div>';
+          }
+          var spec = state.cols[c];
+          if (spec.full) return '<div class="panel"><img src="' + P + spec.full + '-full.jpg" alt=""></div>';
+          if (spec.block) return '<div class="panel ' + spec.block + '">' + (spec.shape ? SHAPES[spec.shape] : "") + '</div>';
+          return '<div class="panel">' + cellHTML(spec.top, "top") + cellHTML(spec.bot, "bot") + '</div>';
         }
 
-        // Dos copias del periodo: la segunda entra por la derecha mientras la primera sale.
-        // En t = 16 la tira ha avanzado exactamente un periodo y la copia 2 ocupa el sitio
-        // que la copia 1 tenía en t = 0, en el mismo estado. Ahí cierra el bucle.
-        for (var copy = 0; copy < 2; copy++) {
-          for (var c = 0; c < NCOL; c++) {
-            var left = (copy * NCOL + c) * COLW;
-            var col = document.createElement("div");
-            col.className = "col"; col.setAttribute("data-layout-allow-overflow", "");
-            col.style.left = left + "px";
-            strip.appendChild(col);
+        var grid = document.getElementById("grid");
+        var tl = gsap.timeline({ paused: true });
 
-            LAYOUT[c].forEach(function (cell) {
-              var tile = document.createElement("div");
-              tile.setAttribute("data-layout-allow-overflow", ""); tile.className = "tile " + cell.pos + (cell.block ? " " + cell.block : "");
-              col.appendChild(tile);
+        // Columnas. Las pares suben y las impares bajan: al juntarse, las tiras de la foto
+        // llegan de lados contrarios y encajan; al romperse, se separan en sentidos opuestos.
+        var reels = [];
+        for (var c = 0; c < COLS; c++) {
+          var col = document.createElement("div");
+          col.className = "col"; col.style.left = (c * CW) + "px";
+          col.setAttribute("data-layout-allow-overflow", "");
+          var reel = document.createElement("div");
+          reel.className = "reel"; reel.setAttribute("data-layout-allow-overflow", "");
+          var up = c % 2 === 0;
+          // Nueve paneles: los ocho tiempos y el primero repetido, que es el que cierra el bucle.
+          var html = "";
+          for (var j = 0; j <= NSTATE; j++) {
+            var s = up ? j % NSTATE : (NSTATE - j) % NSTATE;
+            html += panelHTML(STATES[s], c);
+          }
+          reel.innerHTML = html;
+          col.appendChild(reel); grid.appendChild(col);
+          reels.push({ el: reel, up: up });
+        }
 
-              if (cell.seq) {
-                var h = cell.half ? HALF_H : FULL_H;
-                var reel = document.createElement("div");
-                reel.className = "reel"; reel.setAttribute("data-layout-allow-overflow", "");
-                // Cuatro fotos y la primera repetida al final: tras el cuarto relevo
-                // la tesela vuelve a enseñar lo mismo que en t = 0.
-                for (var i = 0; i <= SWAPS; i++) {
-                  var im = document.createElement("img");
-                  im.src = "assets/photos/" + PHOTOS[cell.seq[cell.pos === "top" ? (SWAPS - i) % SWAPS : i % SWAPS]] + (cell.half ? "-half" : "-full") + ".jpg";
-                  im.alt = "";
-                  im.style.height = h + "px";
-                  reel.appendChild(im);
-                }
-                tile.appendChild(reel);
-                var base = cell.half ? HALF_AT : FULL_AT;
-                // Las teselas de abajo suben y las de arriba bajan, así en las columnas
-                // partidas las dos mitades se cruzan en lugar de ir en bloque.
-                var dir = cell.pos === "top" ? 1 : -1;
-                if (dir === 1) {
-                  // la tira se lee al revés: arranca enseñando la última imagen, que es la inicial
-                  reel.style.transform = "translateY(" + (-SWAPS * h) + "px)";
-                }
-                for (var k = 0; k < SWAPS; k++) {
-                  var at = swapTime(left, base, k);
-                  var y0 = dir === -1 ? -k * h : -(SWAPS - k) * h;
-                  var y1 = dir === -1 ? -(k + 1) * h : -(SWAPS - k - 1) * h;
-                  tl.fromTo(reel, { y: y0 }, { y: y1, duration: SWAP_DUR, ease: "power3.inOut", immediateRender: k === 0 }, at);
-                }
-              } else if (cell.shape) {
-                tile.insertAdjacentHTML("beforeend", SHAPES[cell.shape]);
-                // La forma reacciona al mismo relevo que su columna: no se mueve por moverse.
-                var sb = (c === 1 || c === 7) ? HALF_AT : FULL_AT;
-                for (var s = 0; s < SWAPS; s++) {
-                  var sat = swapTime(left, sb, s) + 0.15;
-                  var ease = "power3.inOut";
-                  if (cell.shape === "cross") {
-                    tl.fromTo(tile.querySelector(".spin"), { rotation: 90 * s }, { rotation: 90 * (s + 1), duration: 0.7, ease: ease, immediateRender: s === 0 }, sat);
-                  } else if (cell.shape === "arc") {
-                    tl.fromTo(tile.querySelector(".spin"), { rotation: 180 * s }, { rotation: 180 * (s + 1), duration: 0.8, ease: ease, immediateRender: s === 0 }, sat);
-                  } else if (cell.shape === "wave") {
-                    tl.fromTo(tile.querySelector(".slide"), { x: 44 * s }, { x: 44 * (s + 1), duration: 0.8, ease: ease, immediateRender: s === 0 }, sat);
-                  } else if (cell.shape === "pill") {
-                    var long = s % 2 === 0;
-                    tl.fromTo(tile.querySelector(".grow"), { attr: { d: long ? "M6 6 H50" : "M6 6 H154" } },
-                      { attr: { d: long ? "M6 6 H154" : "M6 6 H50" }, duration: 0.8, ease: ease, immediateRender: s === 0 }, sat);
-                  } else if (cell.shape === "bar") {
-                    var tall = s % 2 === 0;
-                    tl.fromTo(tile.querySelector(".grow"), { attr: { d: tall ? "M6 114 V74" : "M6 114 V6" } },
-                      { attr: { d: tall ? "M6 114 V6" : "M6 114 V74" }, duration: 0.8, ease: ease, immediateRender: s === 0 }, sat);
-                  }
-                }
-              }
-            });
+        function reelY(r, s) { return r.up ? -s * H : -(NSTATE - s) * H; }
+
+        // Juntas: cinco líneas entre columnas. Abiertas en mosaico, cerradas en foto entera.
+        var joints = [];
+        for (var k = 1; k < COLS; k++) {
+          var j = document.createElement("div");
+          j.className = "joint"; j.setAttribute("data-layout-allow-overflow", "");
+          j.style.left = (k * CW) + "px";
+          grid.appendChild(j);
+          joints.push(j);
+        }
+        function jointSet(open) { return { width: open ? JOINT : 0, marginLeft: open ? -JOINT / 2 : 0 }; }
+        var j0 = jointSet(!STATES[0].hero);
+        joints.forEach(function (j) { gsap.set(j, j0); });
+        reels.forEach(function (r) { gsap.set(r.el, { y: reelY(r, 0) }); });
+
+        var START = [0];
+        for (var s = 0; s < NSTATE; s++) START.push(START[s] + (STATES[s].hero ? HERO_T : MOS_T));
+        for (var s = 0; s < NSTATE; s++) {
+          var at = START[s + 1] - LEAD;
+          var toHero = !!STATES[(s + 1) % NSTATE].hero;
+          for (var c = 0; c < COLS; c++) {
+            // El relevo barre de izquierda a derecha cuando se rompe la foto y de fuera hacia
+            // dentro cuando se junta, así la foto se cierra en el centro, donde va el título.
+            var order = toHero ? Math.abs(c - (COLS - 1) / 2) : c;
+            var delay = toHero ? (2.5 - order) * STAGGER * 2 : order * STAGGER;
+            tl.fromTo(reels[c].el, { y: reelY(reels[c], s) },
+              { y: reelY(reels[c], s + 1), duration: MOVE, ease: "power4.inOut", immediateRender: false }, at + delay);
+          }
+          if (toHero) {
+            // las juntas se cierran cuando la última columna ya ha encajado
+            tl.fromTo(joints, jointSet(true), Object.assign({ duration: 0.3, ease: "power2.out", immediateRender: false }, jointSet(false)), at + 0.65);
+          } else {
+            // y se abren justo antes de que la foto se rompa
+            tl.fromTo(joints, jointSet(false), Object.assign({ duration: 0.25, ease: "power2.out", immediateRender: false }, jointSet(true)), at - 0.1);
           }
         }
 
-        // La tira avanza a velocidad constante todo el bucle.
-        tl.fromTo(strip, { x: 0 }, { x: -PERIOD, duration: LOOP, ease: "none" }, 0);
+        // Cámara: empuja hacia dentro mientras se ve la foto entera y se retira en el mosaico.
+        // Cambia de sentido en cada tiempo, nunca se queda quieta y en t = 16 vuelve a 1,0.
+        for (var s = 0; s < NSTATE; s++) {
+          var hero = !!STATES[s].hero;
+          tl.fromTo(grid,
+            { scale: hero ? 1.0 : 1.07, x: hero ? 0 : -36 },
+            { scale: hero ? 1.07 : 1.0, x: hero ? -36 : 0, duration: START[s + 1] - START[s], ease: "sine.inOut", immediateRender: s === 0 },
+            START[s]);
+        }
 
         try {
           var vars = (window.__hyperframes && window.__hyperframes.getVariables)

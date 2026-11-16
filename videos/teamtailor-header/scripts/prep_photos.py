@@ -3,14 +3,15 @@
 Uso: python3 -I scripts/prep_photos.py <carpeta_origen> <carpeta_destino>
 
 Cada foto sale en dos formatos, al tamaño exacto en pantalla (sin reescalar en el navegador):
-  <id>-full.jpg  312x1080  tesela de altura completa
-  <id>-half.jpg  312x536   media tesela (detalle)
+  <id>-full.jpg  320x1080   tesela de altura completa
+  <id>-half.jpg  320x536    media tesela (detalle)
+  <id>-hero.jpg  1920x1080  solo las de HERO: la foto entera que forman las seis columnas al juntarse
 FOCUS dice, en fracciones de la foto, dónde centrar cada recorte y cuánto acercar el detalle.
 """
 import sys, os
 from PIL import Image, ImageFilter
 
-TW, FH, HH = 312, 1080, 536
+TW, FH, HH = 320, 1080, 536
 FOCUS = {
     # id: (archivo, full_cx, full_cy, full_zoom, half_cx, half_cy, half_zoom)
     "equipo":  ("Equipo_Marketing_Tessera.jpg",   0.42, 0.50, 1.00, 0.70, 0.30, 1.9),
@@ -21,6 +22,13 @@ FOCUS = {
     "reunion": ("Reunion_Equipo_Tessera.jpg",      0.50, 0.55, 1.00, 0.50, 0.56, 1.8),
     "despacho":("Despacho_Tessera.jpg",            0.64, 0.50, 1.00, 0.66, 0.36, 1.9),
     "tesserers":("Oficina_Tesserers.jpg",          0.445, 0.50, 1.00, 0.78, 0.62, 1.6),
+}
+# Las que se ven enteras al juntarse las columnas: (cx, cy) del encuadre 16:9
+HERO = {
+    "tesserers": (0.50, 0.50),
+    "ciudad":    (0.50, 0.62),
+    "reunion":   (0.50, 0.56),
+    "equipo":    (0.50, 0.30),
 }
 
 def crop(im, w, h, cx, cy, zoom):
@@ -40,4 +48,6 @@ for pid, (fn, fx, fy, fz, hx, hy, hz) in FOCUS.items():
     im = Image.open(os.path.join(src, fn)).convert("RGB")
     crop(im, TW, FH, fx, fy, fz).save(os.path.join(dst, pid + "-full.jpg"), quality=92)
     crop(im, TW, HH, hx, hy, hz).save(os.path.join(dst, pid + "-half.jpg"), quality=92)
-    print(pid, im.size, "zoom detalle x%.2f" % (max(TW / im.size[0], HH / im.size[1]) * hz))
+    if pid in HERO:
+        crop(im, 1920, 1080, *HERO[pid], 1.0).save(os.path.join(dst, pid + "-hero.jpg"), quality=90)
+    print(pid, im.size)

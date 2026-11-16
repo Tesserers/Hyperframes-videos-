@@ -71,8 +71,8 @@
         var SPEED = PERIOD / LOOP;  // 160 px/s, constante
         var FULL_H = 1080, HALF_H = 536;
 
-        var PHOTOS = ["equipo", "oficina", "ciudad", "granvia"];
-        var N = PHOTOS.length;
+        //            0         1          2         3          4          5          6           7
+        var PHOTOS = ["equipo", "oficina", "ciudad", "granvia", "molinos", "reunion", "despacho", "tesserers"];
 
         // Cuatro relevos por bucle. Las teselas completas cambian a 2,7 / 6,7 / 10,7 / 14,7 s;
         // las medias, dos segundos antes. Siempre pasa algo cada dos segundos y cada zona
@@ -81,17 +81,18 @@
         var FULL_AT = 2.7, HALF_AT = 0.7;
         var SWAP_DUR = 0.8, WAVE = 0.36;   // el relevo cruza la pantalla de izquierda a derecha en 0,36 s
 
-        // Columna a columna. slot = tesela de foto con la foto inicial (base) que le toca.
-        // Las bases están escogidas para que dos teselas vecinas nunca enseñen la misma foto.
+        // Columna a columna. seq = las cuatro fotos que pasan por cada tesela, en orden. Repartidas
+        // para que salgan las ocho en cada bucle y casi nunca coincida la misma foto dos veces en
+        // pantalla. La oficina de TESSERA (7) abre el vídeo en la primera tesela.
         var LAYOUT = [
-          [{ pos: "full", photo: 0 }],
-          [{ pos: "top", block: "b-teal", shape: "cross" }, { pos: "bot", photo: 3, half: true }],
+          [{ pos: "full", seq: [7, 4, 0, 1] }],
+          [{ pos: "top", block: "b-teal", shape: "cross" }, { pos: "bot", seq: [0, 6, 2, 5], half: true }],
           [{ pos: "full", block: "b-grad", shape: "pill" }],
-          [{ pos: "full", photo: 1 }],
-          [{ pos: "top", photo: 0, half: true }, { pos: "bot", block: "b-navy", shape: "wave" }],
-          [{ pos: "full", photo: 2 }],
+          [{ pos: "full", seq: [3, 0, 4, 2] }],
+          [{ pos: "top", seq: [4, 1, 6, 0], half: true }, { pos: "bot", block: "b-navy", shape: "wave" }],
+          [{ pos: "full", seq: [2, 7, 5, 3] }],
           [{ pos: "full", block: "b-deep", shape: "arc" }],
-          [{ pos: "top", block: "b-gradv", shape: "bar" }, { pos: "bot", photo: 1, half: true }]
+          [{ pos: "top", block: "b-gradv", shape: "bar" }, { pos: "bot", seq: [6, 5, 1, 7], half: true }]
         ];
 
         var SHAPES = {
@@ -131,7 +132,7 @@
               tile.setAttribute("data-layout-allow-overflow", ""); tile.className = "tile " + cell.pos + (cell.block ? " " + cell.block : "");
               col.appendChild(tile);
 
-              if (cell.photo !== undefined) {
+              if (cell.seq) {
                 var h = cell.half ? HALF_H : FULL_H;
                 var reel = document.createElement("div");
                 reel.className = "reel"; reel.setAttribute("data-layout-allow-overflow", "");
@@ -139,7 +140,7 @@
                 // la tesela vuelve a enseñar lo mismo que en t = 0.
                 for (var i = 0; i <= SWAPS; i++) {
                   var im = document.createElement("img");
-                  im.src = "assets/photos/" + PHOTOS[(cell.photo + i) % N] + (cell.half ? "-half" : "-full") + ".jpg";
+                  im.src = "assets/photos/" + PHOTOS[cell.seq[cell.pos === "top" ? (SWAPS - i) % SWAPS : i % SWAPS]] + (cell.half ? "-half" : "-full") + ".jpg";
                   im.alt = "";
                   im.style.height = h + "px";
                   reel.appendChild(im);

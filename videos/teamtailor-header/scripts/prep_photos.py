@@ -17,6 +17,10 @@ FOCUS = {
     "oficina": ("Oficina_Minimalista_Tessera.jpg", 0.70, 0.62, 1.00, 0.72, 0.66, 2.2),
     "ciudad":  ("Ciudad_Luces_Tessera.jpg",        0.38, 0.55, 1.00, 0.30, 0.70, 1.7),
     "granvia": ("Madrid_GranVia_Tessera.jpg",      0.38, 0.62, 1.00, 0.40, 0.80, 1.3),
+    "molinos": ("Molinos_Tessera.jpg",             0.62, 0.55, 1.00, 0.70, 0.42, 1.6),
+    "reunion": ("Reunion_Equipo_Tessera.jpg",      0.50, 0.55, 1.00, 0.50, 0.56, 1.8),
+    "despacho":("Despacho_Tessera.jpg",            0.64, 0.50, 1.00, 0.66, 0.36, 1.9),
+    "tesserers":("Oficina_Tesserers.jpg",          0.445, 0.50, 1.00, 0.78, 0.62, 1.6),
 }
 
 def crop(im, w, h, cx, cy, zoom):

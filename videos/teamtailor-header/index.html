@@ -5,32 +5,39 @@
     <meta name="viewport" content="width=1920, height=1080" />
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
-      /* Paleta Tessera 2027 y su único degradado (Teal 0 % a Navy 75 %). */
-      :root { --navy: #202031; --navy-deep: #16161F; --teal: #587579; }
+      @font-face { font-family: "Raleway"; src: url(assets/fonts/Raleway-200.woff2) format("woff2"); font-weight: 200; }
+      @font-face { font-family: "Raleway"; src: url(assets/fonts/Raleway-400.woff2) format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Raleway"; src: url(assets/fonts/Raleway-600.woff2) format("woff2"); font-weight: 600; }
+      @font-face { font-family: "Raleway"; src: url(assets/fonts/Raleway-800.woff2) format("woff2"); font-weight: 800; }
+      /* Paleta Tessera 2027. Único degradado: Teal 0 % → Navy 75 %. */
+      :root {
+        --navy: #202031; --deep: #16161F; --teal: #587579; --teal-l: #8AA3A5; --bruma: #E6ECEC; --white: #FFFFFF;
+        --grad: linear-gradient(135deg, #587579 0%, #202031 75%);
+        --grad-h: linear-gradient(90deg, #587579 0%, #202031 75%);
+      }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; }
-      body { background: var(--navy-deep); }
-      #root { position: relative; width: 100%; height: 100%; background: var(--navy-deep); overflow: hidden; }
+      body { background: var(--navy); font-family: "Raleway", sans-serif; }
+      #root { position: relative; width: 100%; height: 100%; background: var(--navy); overflow: hidden; }
+      .scene { position: absolute; inset: 0; overflow: hidden; }
+      .abs { position: absolute; }
+      svg.sh { position: absolute; overflow: visible; }
+      svg.sh * { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 
-      .shot { position: absolute; inset: 0; overflow: hidden; background: var(--navy-deep); }
-      .cam  { position: absolute; inset: 0; will-change: transform, filter; }
-      /* Las fotos vienen un 15 % más grandes que el cuadro: la cámara se mueve sobre píxeles reales. */
-      .cam > img.full { position: absolute; left: -144px; top: -81px; width: 2208px; height: 1242px; }
-
-      /* Pantalla partida: paneles verticales con junta de 8 px en Navy profundo. */
-      .pn { position: absolute; top: 0; height: 1080px; overflow: hidden; background: var(--navy-deep); }
-      .pn img { position: absolute; top: -81px; height: 1242px; will-change: transform; }
-      .p3 img { left: -48px; width: 736px; }
-      .p2 img { left: -72px; width: 1104px; }
-
-      /* Cortinilla con el degradado de marca, en diagonal. */
-      .wipe { position: absolute; top: -20px; left: 0; width: 2600px; height: 1120px;
-              background: linear-gradient(135deg, #587579 0%, #202031 75%); }
+      /* Palabras: grandes, en Raleway, en la franja baja y en Teal claro.
+         El título blanco de la vacante, que Teamtailor pone en el centro, sigue mandando. */
+      .word { position: absolute; left: 120px; bottom: 150px; font-weight: 800; font-size: 210px;
+              letter-spacing: -6px; line-height: 1; color: var(--teal-l); white-space: nowrap; }
+      .word span { display: inline-block; }
+      .line-mask { position: absolute; overflow: hidden; }
+      .tag { position: absolute; left: 120px; bottom: 120px; font-weight: 400; font-size: 44px; color: var(--white);
+             letter-spacing: 1px; white-space: nowrap; }
+      .tag em { font-style: italic; color: var(--teal-l); }
 
       #velo {
         position: absolute; inset: 0; pointer-events: none;
-        background: radial-gradient(ellipse 50% 62% at 50% 50%,
-          rgba(32,32,49,0.76) 0%, rgba(32,32,49,0.68) 42%, rgba(32,32,49,0.36) 82%, rgba(32,32,49,0.20) 100%);
+        background: radial-gradient(ellipse 50% 60% at 50% 50%,
+          rgba(32,32,49,0.62) 0%, rgba(32,32,49,0.50) 45%, rgba(32,32,49,0.18) 85%, rgba(32,32,49,0) 100%);
       }
     </style>
   </head>
@@ -39,165 +46,194 @@
          data-width="1920" data-height="1080"
          data-composition-variables='{"velo": true}'>
       <div id="stage"></div>
-      <div class="clip" id="velo" data-start="0" data-duration="15" data-track-index="40" style="z-index:40"></div>
+      <div class="clip" id="velo" data-start="0" data-duration="15" data-track-index="40" style="z-index:40" data-layout-allow-occlusion></div>
     </div>
 
     <script>
       window.__timelines = window.__timelines || {};
       (function () {
-        var A = "assets/spot/";
+        var W = 1920, H = 1080;
+        var T_PATH = "M121.995 417.139C118.218 415.766 115.357 413.248 114.213 410.387C113.526 408.556 113.526 394.136 113.411 235.177L113.297 62.0272L57.564 61.7984L1.83105 61.5695L3.66212 58.8229C4.80653 57.3351 6.06539 55.5041 6.63759 54.9319C7.09536 54.2452 8.01089 53.1008 8.5831 52.4142C27.237 27.3515 28.6103 25.406 28.8392 25.1771C29.0681 24.9482 32.5014 20.3706 35.3624 16.4796C38.4523 12.1308 43.6022 8.01089 48.5232 5.72206C49.4387 5.2643 50.5831 4.69209 51.0409 4.46321C52.1853 3.77656 54.3597 3.31879 58.8229 2.5177C61.9128 1.9455 81.5967 1.83105 185.967 1.83105H309.564L308.42 3.31879C307.847 4.11988 307.275 4.92097 307.161 5.03541C307.046 5.14986 305.673 6.86648 304.185 8.92642C302.698 10.9864 301.324 12.703 301.21 12.8174C301.095 12.9319 299.722 14.6485 298.234 16.7084C296.747 18.7684 295.373 20.485 295.259 20.5994C295.144 20.7139 292.283 24.4905 288.85 29.0681C285.417 33.6458 282.556 37.4223 282.441 37.5368C282.327 37.6512 280.725 39.8256 278.779 42.3433C275.117 47.3787 268.708 53.9019 266.305 55.1608C265.504 55.5041 263.673 56.5341 262.3 57.3351C260.926 58.0218 257.951 59.2806 255.662 60.0817L251.542 61.455L217.896 61.7984L184.251 62.0272L181.962 63.2861C178.643 65.2316 176.354 67.6349 174.752 70.9537L173.264 73.9291L173.15 246.163L173.035 418.398H149.117H125.199L121.995 417.139Z";   // isotipo T original del brandbook (312 x 420)
         var tl = gsap.timeline({ paused: true });
         var stage = document.getElementById("stage");
-        var track = 0;
+        var z = 0;
 
-        // Velocidad de la cámara en el plano general de la oficina. El primer y el último plano
-        // la comparten, así el bucle empalma en mitad de un mismo movimiento.
-        var RATE_S = 0.04375, RATE_X = -17.5;   // escala / s y px / s
-
-        function shot(start, dur, inner) {
+        function scene(start, dur, bg) {
           var d = document.createElement("div");
-          d.className = "clip shot";
+          d.className = "clip scene";
           d.setAttribute("data-start", start.toFixed(3));
           d.setAttribute("data-duration", dur.toFixed(3));
-          d.setAttribute("data-track-index", String(track));
+          d.setAttribute("data-track-index", String(z));
           d.setAttribute("data-layout-allow-overflow", "");
-          d.style.zIndex = String(++track);
-          d.innerHTML = '<div class="cam" data-layout-allow-overflow>' + inner + "</div>";
+          d.style.zIndex = String(++z);
+          if (bg) d.style.background = bg;
           stage.appendChild(d);
-          return { el: d, cam: d.firstChild, start: start, dur: dur };
+          // Cámara: cada escena empuja hacia dentro de principio a fin, así nunca hay un fotograma quieto.
+          tl.fromTo(d, { scale: 1.0, x: 0 }, { scale: 1.07, x: -30, duration: dur, ease: "none", immediateRender: false }, start);
+          return d;
         }
-        function full(name) { return '<img class="full" data-layout-allow-overflow src="' + A + "full-" + name + '.jpg" alt="">'; }
-        function split(kind, names) {
-          var n = names.length, w = 1920 / n, html = "";
-          for (var i = 0; i < n; i++) {
-            var x0 = i * w + (i ? 4 : 0), x1 = (i + 1) * w - (i < n - 1 ? 4 : 0);
-            html += '<div class="pn ' + kind + '" data-layout-allow-overflow style="left:' + x0 + "px;width:" + (x1 - x0) + 'px">' +
-                    '<img data-layout-allow-overflow src="' + A + kind + "-" + names[i] + '.jpg" alt=""></div>';
+        function el(parent, html) {
+          var t = document.createElement("div"); t.innerHTML = html.trim();
+          var n = t.firstChild; n.setAttribute && n.setAttribute("data-layout-allow-overflow", "");
+          parent.appendChild(n); return n;
+        }
+        function ft(target, from, to, at, dur, ease) {
+          gsap.set(target, from);
+          tl.fromTo(target, from, Object.assign({ duration: dur, ease: ease || "power3.out", immediateRender: false }, to), at);
+        }
+        function to(target, from, toV, at, dur, ease) {
+          tl.fromTo(target, from, Object.assign({ duration: dur, ease: ease || "power3.in", immediateRender: false }, toV), at);
+        }
+
+        // Formas de la lámina 18 del brandbook.
+        var SH = {
+          cross: function (c, s) { return '<svg class="sh" width="' + s + '" height="' + s + '" viewBox="0 0 90 90"><path d="M45 5V85M5 45H85" stroke="' + c + '" stroke-width="10"/></svg>'; },
+          wave:  function (c, s) { return '<svg class="sh" width="' + s + '" height="' + (s * 42 / 128) + '" viewBox="0 0 128 42"><path d="M4 38C22 38 26 4 48 4C70 4 74 38 96 38C108 38 116 26 124 12" stroke="' + c + '" stroke-width="8"/></svg>'; },
+          arc:   function (c, s) { return '<svg class="sh" width="' + s + '" height="' + (s * 43 / 128) + '" viewBox="0 0 128 43"><path d="M4 38.5C24 -7.5 104 -7.5 124 38.5" stroke="' + c + '" stroke-width="8"/></svg>'; },
+          pill:  function (c, s) { return '<svg class="sh" width="' + s + '" height="' + (s * 0.16) + '" viewBox="0 0 100 16"><path d="M8 8H92" stroke="' + c + '" stroke-width="14"/></svg>'; },
+          bar:   function (c, s) { return '<svg class="sh" width="' + (s * 0.16) + '" height="' + s + '" viewBox="0 0 16 100"><path d="M8 8V92" stroke="' + c + '" stroke-width="14"/></svg>'; },
+          tri:   function (c, s) { return '<svg class="sh" width="' + s + '" height="' + s + '" viewBox="0 0 40 36"><path d="M20 2L38 34H2Z" fill="' + c + '" stroke="' + c + '" stroke-width="2" style="fill:' + c + '"/></svg>'; }
+        };
+        function shape(parent, kind, color, size, x, y) {
+          var n = el(parent, SH[kind](color, size));
+          n.style.left = (x - n.getAttribute("width") / 2) + "px";
+          n.style.top = (y - n.getAttribute("height") / 2) + "px";
+          return n;
+        }
+        // Palabra con letras que suben desde una máscara.
+        function word(parent, text, style) {
+          var w = el(parent, '<div class="word" data-layout-allow-occlusion' + (style ? ' style="' + style + '"' : "") + "></div>");
+          var spans = [];
+          for (var i = 0; i < text.length; i++) {
+            var s = document.createElement("span");
+            s.textContent = text[i] === " " ? " " : text[i];
+            w.appendChild(s); spans.push(s);
           }
-          return html;
+          w.style.overflow = "hidden"; w.style.paddingBottom = "24px"; w.style.paddingTop = "10px";
+          return { box: w, letters: spans };
         }
-        function move(el, from, to, at, dur, ease) {
-          tl.fromTo(el, from, Object.assign({ duration: dur, ease: ease || "none", immediateRender: false }, to), at);
+        function wordIn(wd, at, stagger) {
+          wd.letters.forEach(function (s, i) {
+            ft(s, { yPercent: 115 }, { yPercent: 0 }, at + i * (stagger || 0.035), 0.55, "power4.out");
+          });
         }
-        // Dentro de una pantalla partida cada panel se mueve a contrapelo del de al lado.
-        function panelDrift(s, push) {
-          var imgs = s.el.querySelectorAll(".pn img");
-          for (var i = 0; i < imgs.length; i++) {
-            var dir = i % 2 ? 1 : -1;
-            gsap.set(imgs[i], { scale: 1.0, y: -30 * dir });
-            move(imgs[i], { scale: 1.0, y: -30 * dir }, { scale: push || 1.06, y: 30 * dir }, s.start, s.dur, "none");
-          }
-        }
-        function wipe(start, leftToRight) {
-          // Entra hasta tapar el cuadro entero (0,3 s) y sigue de largo (0,3 s). El corte va debajo,
-          // en el fotograma en que lo tapa todo.
-          var w = document.createElement("div");
-          w.className = "clip wipe";
-          w.setAttribute("data-start", start.toFixed(3));
-          w.setAttribute("data-duration", "0.6");
-          w.setAttribute("data-track-index", String(30 + track));
-          w.setAttribute("data-layout-allow-overflow", "");
-          w.style.zIndex = "30";
-          stage.appendChild(w);
-          var a = leftToRight ? -2900 : 2240, m = -340, b = leftToRight ? 2240 : -2900;
-          gsap.set(w, { x: a, skewX: -12 });
-          move(w, { x: a }, { x: m }, start, 0.3, "power3.in");
-          move(w, { x: m }, { x: b }, start + 0.3, 0.3, "power3.out");
+        function wordOut(wd, at) {
+          wd.letters.forEach(function (s, i) {
+            to(s, { yPercent: 0 }, { yPercent: -115 }, at + i * 0.02, 0.35, "power3.in");
+          });
         }
 
-        // ---------------- Guion ----------------
-
-        // 1 · Oficina TESSERA, plano general. Abre (y cierra) el bucle.
-        var s1 = shot(0, 2.0, full("tesserers"));
-        gsap.set(s1.cam, { scale: 1.05, x: 0 });
-        move(s1.cam, { scale: 1.05, x: 0 }, { scale: 1.05 + RATE_S * 2.0, x: RATE_X * 2.0 }, 0, 2.0);
-
-        // 2 · Pantalla partida en tres. Los paneles entran por arriba y por abajo, alternos,
-        //     tapando el plano anterior.
-        var s2 = shot(1.6, 1.0, split("p3", ["equipo-ella", "ciudad", "oficina"]));
-        s2.el.style.background = "transparent";   // debajo tiene que seguir viéndose el plano 1
-        var pns = s2.el.querySelectorAll(".pn");
-        for (var i = 0; i < pns.length; i++) {
-          var fromY = i % 2 ? -1080 : 1080;
-          gsap.set(pns[i], { y: fromY });
-          move(pns[i], { y: fromY }, { y: 0 }, 1.6 + i * 0.07, 0.4, "power4.out");
+        // ============ 1 · Estallido de formas (0 – 2,7 s) ============
+        var s1 = scene(0, 2.9);
+        var grid = el(s1, '<div class="abs" style="inset:0"></div>');
+        var KINDS = ["cross", "wave", "arc", "pill", "cross", "tri", "bar", "wave"];
+        var COLS = ["#587579", "#8AA3A5", "#FFFFFF", "#587579", "#8AA3A5", "#587579"];
+        var cells = [];
+        var NX = 9, NY = 5;
+        for (var gy = 0; gy < NY; gy++) for (var gx = 0; gx < NX; gx++) {
+          var x = 110 + gx * (W - 220) / (NX - 1), y = 120 + gy * (H - 240) / (NY - 1);
+          var k = KINDS[(gx * 3 + gy * 5) % KINDS.length];
+          var c = COLS[(gx + gy * 2) % COLS.length];
+          var size = (k === "pill" || k === "wave" || k === "arc") ? 120 : 64;
+          var n = shape(grid, k, c, size, x, y);
+          var dist = Math.hypot(x - W / 2, y - H / 2);
+          cells.push({ n: n, d: dist, i: gx + gy * NX });
         }
-        panelDrift(s2);
-        // y sale atravesada por la cámara
-        move(s2.cam, { scale: 1, filter: "blur(0px)" }, { scale: 1.35, filter: "blur(14px)" }, 2.4, 0.2, "power2.in");
+        cells.forEach(function (cl) {
+          var at = 0.15 + cl.d / 1100 * 0.6;
+          ft(cl.n, { scale: 0, rotation: -90 }, { scale: 1, rotation: 0 }, at, 0.6, "back.out(2.2)");
+          // cada forma da medio giro en el segundo tiempo: la rejilla «respira» con un golpe, no con un vaivén
+          to(cl.n, { rotation: 0 }, { rotation: (cl.i % 2 ? 180 : -180) }, 1.35 + cl.d / 1100 * 0.25, 0.6, "power3.inOut");
+        });
+        // y sale disparada hacia arriba
+        to(grid, { y: 0 }, { y: -1250 }, 2.25, 0.5, "power4.in");
 
-        // 3 · Ciudad. Entra en pleno empuje y frena.
-        var s3 = shot(2.4, 1.0, full("ciudad"));
-        gsap.set(s3.el, { opacity: 0 });
-        move(s3.el, { opacity: 0 }, { opacity: 1 }, 2.4, 0.18, "power1.out");
-        gsap.set(s3.cam, { scale: 1.25, rotation: -1.5, filter: "blur(16px)" });
-        move(s3.cam, { scale: 1.25, rotation: -1.5 }, { scale: 1.04, rotation: 0 }, 2.4, 1.0, "power3.out");
-        move(s3.cam, { filter: "blur(16px)" }, { filter: "blur(0px)" }, 2.4, 0.25, "power2.out");
+        // ============ 2 · Personas. (2,4 – 5,1 s) ============
+        var s2 = scene(2.4, 3.3);
+        var g2 = el(s2, '<div class="abs" style="left:-300px;top:0;width:2520px;height:1080px;background:var(--grad)"></div>');
+        ft(g2, { xPercent: -100, skewX: -14 }, { xPercent: 0, skewX: -14 }, 2.4, 0.5, "power4.out");
+        var w2 = word(s2, "Personas.");
+        wordIn(w2, 2.7);
+        var p2 = shape(s2, "pill", "#FFFFFF", 760, 1450, 830);
+        ft(p2, { scaleX: 0, transformOrigin: "100% 50%" }, { scaleX: 1 }, 2.85, 0.6, "power4.out");
+        var c2 = shape(s2, "cross", "#8AA3A5", 120, 1680, 230);
+        ft(c2, { scale: 0, rotation: -135 }, { scale: 1, rotation: 0 }, 2.95, 0.7, "back.out(2)");
+        to(c2, { rotation: 0 }, { rotation: 90 }, 3.9, 0.5, "power3.inOut");
+        var a2 = shape(s2, "arc", "#587579", 260, 300, 230);
+        ft(a2, { y: -300, opacity: 0 }, { y: 0, opacity: 1 }, 3.05, 0.6, "power4.out");
+        var t2 = shape(s2, "tri", "#FFFFFF", 46, 1720, 640);
+        ft(t2, { scale: 0, rotation: 60 }, { scale: 1, rotation: 0 }, 3.2, 0.5, "back.out(2.5)");
+        wordOut(w2, 4.65);
+        to(p2, { scaleX: 1 }, { scaleX: 0, transformOrigin: "0% 50%" }, 4.65, 0.35);
 
-        // 4 · Corte seco a dos paneles: despacho y molinos.
-        var s4 = shot(3.4, 0.6, split("p2", ["despacho", "molinos"]));
-        panelDrift(s4, 1.08);
+        // ============ 3 · Decisiones. (4,8 – 7,7 s) ============
+        var s3 = scene(4.8, 3.2);
+        s3.style.background = "transparent";
+        var PCOL = ["var(--teal)", "var(--navy)", "var(--grad)", "var(--deep)", "var(--teal)", "var(--navy)"];
+        var panels = [];
+        for (var i = 0; i < 6; i++) {
+          var p = el(s3, '<div class="abs" style="top:0;height:1080px;left:' + (i * 320) + 'px;width:321px;background:' + PCOL[i] + '"></div>');
+          ft(p, { yPercent: i % 2 ? -100 : 100 }, { yPercent: 0 }, 4.8 + i * 0.06, 0.55, "power4.out");
+          panels.push(p);
+        }
+        // los paneles se recolocan: dos se abren hacia arriba y descubren Navy profundo
+        to(panels[1], { yPercent: 0 }, { yPercent: -100 }, 6.0, 0.6, "power4.inOut");
+        to(panels[4], { yPercent: 0 }, { yPercent: 100 }, 6.08, 0.6, "power4.inOut");
+        var w3 = word(s3, "Decisiones.", "color:#FFFFFF");
+        wordIn(w3, 5.25, 0.03);
+        var b3 = shape(s3, "bar", "#FFFFFF", 300, 1600, 380);
+        ft(b3, { scaleY: 0, transformOrigin: "50% 0%" }, { scaleY: 1 }, 5.5, 0.6, "power4.out");
+        var c3 = shape(s3, "cross", "#FFFFFF", 90, 1440, 300);
+        ft(c3, { scale: 0, rotation: 90 }, { scale: 1, rotation: 0 }, 6.1, 0.6, "back.out(2)");
+        var w3b = shape(s3, "wave", "#8AA3A5", 240, 400, 250);
+        ft(w3b, { x: -500 }, { x: 0 }, 6.2, 0.6, "power4.out");
+        wordOut(w3, 7.2);
 
-        // 5 · Reunión. Paneo lateral largo.
-        var s5 = shot(4.0, 1.3, full("reunion"));
-        gsap.set(s5.cam, { scale: 1.1, x: 70 });
-        move(s5.cam, { scale: 1.1, x: 70 }, { scale: 1.12, x: -70 }, 4.0, 1.3);
+        // ============ 4 · Juntos. (7,5 – 10,3 s) ============
+        var s4 = scene(7.5, 3.0);
+        var cover4 = el(s4, '<div class="abs" style="inset:0;background:var(--deep)"></div>');
+        ft(cover4, { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(75% at 50% 50%)" }, 7.5, 0.5, "power3.out");
+        // onda gigante que cruza el cuadro de lado a lado, dibujándose
+        var big = el(s4, '<svg class="sh" style="left:-60px;top:300px" width="2040" height="520" viewBox="0 0 2040 520">' +
+          '<path id="bw1" d="M0 420 C 240 420 300 80 560 80 C 820 80 880 420 1140 420 C 1400 420 1460 80 1720 80 C 1860 80 1960 180 2040 300" stroke="#587579" stroke-width="22"/>' +
+          '<path id="bw2" d="M0 470 C 240 470 300 130 560 130 C 820 130 880 470 1140 470 C 1400 470 1460 130 1720 130 C 1860 130 1960 230 2040 350" stroke="#8AA3A5" stroke-width="8"/></svg>');
+        var bw1 = big.querySelector("#bw1"), bw2 = big.querySelector("#bw2");
+        var L1 = 2600, L2 = 2600;
+        ft(bw1, { strokeDasharray: L1, strokeDashoffset: L1 }, { strokeDashoffset: 0 }, 7.7, 1.1, "power2.inOut");
+        ft(bw2, { strokeDasharray: L2, strokeDashoffset: L2 }, { strokeDashoffset: 0 }, 7.85, 1.1, "power2.inOut");
+        to(big, { x: 0 }, { x: -260 }, 7.7, 2.6, "none");
+        var w4 = word(s4, "Juntos.");
+        wordIn(w4, 8.05, 0.045);
+        var arcs = [];
+        [[1600, 180, 200], [1760, 300, 120]].forEach(function (a, i) {
+          var n = shape(s4, "arc", i ? "#FFFFFF" : "#8AA3A5", a[2], a[0], a[1]);
+          ft(n, { rotation: 180, scale: 0 }, { rotation: 0, scale: 1 }, 8.3 + i * 0.12, 0.7, "back.out(1.8)");
+          arcs.push(n);
+        });
+        wordOut(w4, 9.8);
 
-        // Cortinilla de marca, de izquierda a derecha.
-        wipe(5.0, true);
+        // ============ 5 · Isotipo T (10,0 – 13,4 s) ============
+        var s5 = scene(10.0, 4.0);
+        var g5 = el(s5, '<div class="abs" style="inset:0;background:var(--grad)"></div>');
+        ft(g5, { clipPath: "inset(0 0 0 100%)" }, { clipPath: "inset(0 0 0 0%)" }, 10.0, 0.5, "power4.out");
+        var T = el(s5, '<svg class="sh" style="left:1210px;top:250px" width="390" height="525" viewBox="0 0 312 420"><path d="' + T_PATH + '" fill="#FFFFFF" style="fill:#FFFFFF;stroke:none" fill-rule="evenodd" clip-rule="evenodd"/></svg>');
+        ft(T, { scale: 3.2, opacity: 0, filter: "blur(18px)", transformOrigin: "50% 50%" }, { scale: 1, opacity: 1, filter: "blur(0px)" }, 10.25, 0.9, "power4.out");
+        to(T, { y: 0 }, { y: -18 }, 11.15, 2.0, "sine.inOut");
+        var pT = shape(s5, "pill", "#8AA3A5", 300, 1405, 830);
+        ft(pT, { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1 }, 11.0, 0.5, "power4.out");
+        var tag = el(s5, '<div class="tag">Better decisions, <em>together.</em></div>');
+        ft(tag, { y: 60, opacity: 0 }, { y: 0, opacity: 1 }, 11.2, 0.7, "power3.out");
+        var cT = shape(s5, "cross", "#FFFFFF", 70, 1720, 230);
+        ft(cT, { scale: 0, rotation: -90 }, { scale: 1, rotation: 0 }, 11.4, 0.6, "back.out(2)");
 
-        // 6 · Molinos. La cámara se aleja y descubre el plano.
-        var s6 = shot(5.3, 1.4, full("molinos"));
-        gsap.set(s6.cam, { scale: 1.22 });
-        move(s6.cam, { scale: 1.22 }, { scale: 1.02 }, 5.3, 1.4, "power2.out");
-
-        // 7 · Tres paneles: Gran Vía, vuestro portátil, la reunión.
-        var s7 = shot(6.7, 0.6, split("p3", ["granvia", "tesserers", "reunion"]));
-        panelDrift(s7, 1.08);
-
-        // 8 · Equipo. Empuje lento hacia las caras: el momento emocional.
-        var s8 = shot(7.3, 1.6, full("equipo"));
-        gsap.set(s8.cam, { scale: 1.0, transformOrigin: "50% 35%" });
-        move(s8.cam, { scale: 1.0 }, { scale: 1.14 }, 7.3, 1.6, "power1.inOut");
-
-        // 9 · Barrido rápido: equipo sale por la izquierda, la oficina entra por la derecha,
-        //     como un único paneo de cámara.
-        var s9 = shot(8.6, 1.5, full("oficina"));
-        gsap.set(s9.el, { x: 1920 });
-        move(s8.el, { x: 0 }, { x: -1920 }, 8.6, 0.3, "power2.inOut");
-        move(s9.el, { x: 1920 }, { x: 0 }, 8.6, 0.3, "power2.inOut");
-        move(s8.cam, { filter: "blur(0px)" }, { filter: "blur(30px)" }, 8.6, 0.15, "power2.in");
-        gsap.set(s9.cam, { scale: 1.08, x: 0, filter: "blur(30px)" });
-        move(s9.cam, { filter: "blur(30px)" }, { filter: "blur(0px)" }, 8.75, 0.15, "power2.out");
-        move(s9.cam, { x: 0 }, { x: -70 }, 8.6, 1.5);
-
-        // 10 · Arranca la ráfaga: los cortes se acortan hasta 0,4 s.
-        var s10 = shot(10.1, 0.5, split("p2", ["ciudad", "despacho-b"]));
-        panelDrift(s10, 1.08);
-        var s11 = shot(10.6, 0.4, split("p3", ["molinos", "equipo-el", "granvia-b"]));
-        panelDrift(s11, 1.08);
-        var s12 = shot(11.0, 0.4, full("ciudad"));
-        gsap.set(s12.cam, { scale: 1.3 });
-        move(s12.cam, { scale: 1.3 }, { scale: 1.37 }, 11.0, 0.4);
-        var s13 = shot(11.4, 0.4, full("reunion"));
-        gsap.set(s13.cam, { scale: 1.28, transformOrigin: "45% 50%" });
-        move(s13.cam, { scale: 1.28 }, { scale: 1.35 }, 11.4, 0.4);
-        var s14 = shot(11.8, 0.5, full("equipo"));
-        gsap.set(s14.cam, { scale: 1.3, transformOrigin: "40% 30%" });
-        move(s14.cam, { scale: 1.3 }, { scale: 1.38 }, 11.8, 0.5);
-
-        // Segunda cortinilla, ahora de derecha a izquierda.
-        wipe(12.0, false);
-
-        // 15 · Vuestro equipo en primer plano.
-        var s15 = shot(12.3, 1.7, full("tesserers"));
-        gsap.set(s15.cam, { scale: 1.3, x: 40, transformOrigin: "42% 38%" });
-        move(s15.cam, { scale: 1.3, x: 40 }, { scale: 1.37, x: -20 }, 12.3, 1.7);
-
-        // 16 · Corte al plano general. Su movimiento sigue en el plano 1: ahí empalma el bucle.
-        var s16 = shot(14.0, 1.0, full("tesserers"));
-        gsap.set(s16.cam, { scale: 1.05 - RATE_S, x: -RATE_X });
-        move(s16.cam, { scale: 1.05 - RATE_S, x: -RATE_X }, { scale: 1.05, x: 0 }, 14.0, 1.0);
+        // ============ 6 · Cierre: barras Navy barren el cuadro (13,1 – 15 s) ============
+        var s6 = scene(13.1, 1.9);
+        s6.style.background = "transparent";
+        for (var i = 0; i < 6; i++) {
+          var bar = el(s6, '<div class="abs" style="left:0;top:' + (i * 180) + 'px;width:1920px;height:181px;background:var(--navy)"></div>');
+          ft(bar, { xPercent: i % 2 ? -100 : 100 }, { xPercent: 0 }, 13.1 + i * 0.05, 0.6, "power4.inOut");
+        }
+        // Al terminar el cuadro queda Navy liso, igual que el fotograma 0: ahí empalma el bucle.
 
         try {
           var vars = (window.__hyperframes && window.__hyperframes.getVariables)

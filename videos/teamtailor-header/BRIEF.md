@@ -7,7 +7,7 @@ destination: web
 aspect: 1920x1080
 language: es
 length: 15s
-angle: "Spot de TV sin texto, en bucle exacto, rodado con la fotografía tratada de la marca"
+angle: "Spot de motion graphics de marca, sin fotos, en bucle exacto"
 style_preset: brand-native
 narration: none
 audio: none
@@ -27,6 +27,28 @@ ciudad, Gran Vía) y las cuatro que aportó Eddy en el chat (molinos, reunión, 
 oficina de TESSERA con el portátil #TESSERERS). Las cuatro de Eddy llegaron como imagen pegada,
 no como archivo, y se extrajeron del historial de la sesión a 1125–1448 px de lado. Llegan de
 sobra para teselas de 312×1080. La oficina de TESSERA abre el vídeo en la primera tesela.
+
+## Sistema (v5, motion graphics)
+
+Tras el spot con fotos (v4, ahora en `archivo/index-spot-fotos.html`), Eddy pidió que fuese
+animación pura, «como un spot de TV»: solo motion graphics, sin fotos. Lleva tipografía grande
+de marca, las formas de la lámina 18, el degradado y el isotipo T original del brandbook
+(`assets/brand/isotipo-t.svg`, extraído del PPTX).
+
+`index.html` se genera desde `scripts/index.template.html` (ver `scripts/README-spot.md`).
+
+| s | Escena |
+|---|---|
+| 0–2,9 | Rejilla 9×5 de formas (cruz, onda, arco, píldora, barra, triángulo) que estalla desde el centro, da medio giro y sale disparada hacia arriba |
+| 2,4–5,7 | Cortinilla con el degradado diagonal y «Personas.» letra a letra; píldora, cruz, arco y triángulo |
+| 4,8–8,0 | Seis paneles de color caen alternos; dos se abren; «Decisiones.» en blanco |
+| 7,5–10,5 | Círculo Navy profundo; onda gigante que se dibuja de lado a lado; «Juntos.» |
+| 10,0–14,0 | Degradado; el isotipo T entra desde 3,2× y desenfocado; «Better decisions, *together.*» |
+| 13,1–15 | Seis barras Navy cierran el cuadro: Navy liso, igual que el fotograma 0 |
+
+Las palabras van en Raleway 800 a 210 px, abajo a la izquierda y en Teal claro (salvo
+«Decisiones.»), para que el título blanco de la vacante mande. Cada escena empuja la cámara de
+1,0 a 1,07. El empalme del bucle mide 0,4/255.
 
 ## Sistema (v4, spot de TV)
 

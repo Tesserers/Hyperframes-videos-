@@ -5,9 +5,9 @@ Video, y sube `renders/tessera-header.mp4`.
 
 | Fichero | Para qué |
 |---|---|
-| `tessera-header.mp4` · 4,4 MB | El principal: 1920×1080, H.264, 15 s en bucle exacto, sin pista de audio, con velo Navy en el centro. |
-| `tessera-header-sin-velo.mp4` · 5,2 MB | Sin velo. Úsalo solo si activas el overlay oscuro de Teamtailor, para no oscurecer dos veces. |
-| `tessera-header-720.mp4` · 1,8 MB | 1280×720, por si Teamtailor pide un fichero más ligero. |
+| `tessera-header.mp4` · 1,5 MB | El principal: 1920×1080, H.264, 15 s en bucle exacto, sin pista de audio, con velo Navy en el centro. |
+| `tessera-header-sin-velo.mp4` · 1,3 MB | Sin velo. Úsalo solo si activas el overlay oscuro de Teamtailor, para no oscurecer dos veces. |
+| `tessera-header-720.mp4` · 0,6 MB | 1280×720, por si Teamtailor pide un fichero más ligero. |
 | `tessera-header-poster.jpg` | Fotograma 0, como imagen de reserva o portada. |
 
 Con el fichero principal, el overlay de Teamtailor va **apagado o al mínimo**, porque el velo ya
@@ -17,8 +17,8 @@ Teamtailor recorta el vídeo para que cubra la cabecera, y suele cortar arriba y
 pensado para eso: no hay nada importante en los bordes.
 
 `maqueta-teamtailor.html` simula la cabecera de una vacante con el vídeo detrás. Las capturas
-`maqueta-spot.jpg` son cuatro planos del spot con el título encima.
+`maqueta-motion.jpg` son cuatro momentos del spot con el título encima.
 
 Codificación usada:
 
-    ffmpeg -i renders/master.mp4 -an -c:v libx264 -preset slow -crf 23 -pix_fmt yuv420p -profile:v high -movflags +faststart renders/tessera-header.mp4
+    ffmpeg -i renders/master.mp4 -an -c:v libx264 -preset slow -crf 22 -pix_fmt yuv420p -profile:v high -movflags +faststart renders/tessera-header.mp4

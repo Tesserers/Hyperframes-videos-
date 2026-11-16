@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="es" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Raleway"; src: url(assets/fonts/Raleway-200.woff2) format("woff2"); font-weight: 200; }
+      @font-face { font-family: "Raleway"; src: url(assets/fonts/Raleway-400.woff2) format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Raleway"; src: url(assets/fonts/Raleway-600.woff2) format("woff2"); font-weight: 600; }
+      @font-face { font-family: "Raleway"; src: url(assets/fonts/Raleway-800.woff2) format("woff2"); font-weight: 800; }
+      /* Paleta Tessera 2027. Único degradado: Teal 0 % → Navy 75 %. */
+      :root {
+        --navy: #202031; --deep: #16161F; --teal: #587579; --teal-l: #8AA3A5; --bruma: #E6ECEC; --white: #FFFFFF;
+        --grad: linear-gradient(135deg, #587579 0%, #202031 75%);
+        --grad-h: linear-gradient(90deg, #587579 0%, #202031 75%);
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      body { background: var(--navy); font-family: "Raleway", sans-serif; }
+      #root { position: relative; width: 100%; height: 100%; background: var(--navy); overflow: hidden; }
+      .scene { position: absolute; inset: 0; overflow: hidden; }
+      .abs { position: absolute; }
+      svg.sh { position: absolute; overflow: visible; }
+      svg.sh * { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+      /* Palabras: grandes, en Raleway, en la franja baja y en Teal claro.
+         El título blanco de la vacante, que Teamtailor pone en el centro, sigue mandando. */
+      .word { position: absolute; left: 120px; bottom: 150px; font-weight: 800; font-size: 210px;
+              letter-spacing: -6px; line-height: 1; color: var(--teal-l); white-space: nowrap; }
+      .word span { display: inline-block; }
+      .line-mask { position: absolute; overflow: hidden; }
+      .tag { position: absolute; left: 120px; bottom: 120px; font-weight: 400; font-size: 44px; color: var(--white);
+             letter-spacing: 1px; white-space: nowrap; }
+      .tag em { font-style: italic; color: var(--teal-l); }
+
+      #velo {
+        position: absolute; inset: 0; pointer-events: none;
+        background: radial-gradient(ellipse 50% 60% at 50% 50%,
+          rgba(32,32,49,0.62) 0%, rgba(32,32,49,0.50) 45%, rgba(32,32,49,0.18) 85%, rgba(32,32,49,0) 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="15"
+         data-width="1920" data-height="1080"
+         data-composition-variables='{"velo": true}'>
+      <div id="stage"></div>
+      <div class="clip" id="velo" data-start="0" data-duration="15" data-track-index="40" style="z-index:40" data-layout-allow-occlusion></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      (function () {
+        var W = 1920, H = 1080;
+        var T_PATH = "__T_PATH__";   // isotipo T original del brandbook (312 x 420)
+        var tl = gsap.timeline({ paused: true });
+        var stage = document.getElementById("stage");
+        var z = 0;
+
+        function scene(start, dur, bg) {
+          var d = document.createElement("div");
+          d.className = "clip scene";
+          d.setAttribute("data-start", start.toFixed(3));
+          d.setAttribute("data-duration", dur.toFixed(3));
+          d.setAttribute("data-track-index", String(z));
+          d.setAttribute("data-layout-allow-overflow", "");
+          d.style.zIndex = String(++z);
+          if (bg) d.style.background = bg;
+          stage.appendChild(d);
+          // Cámara: cada escena empuja hacia dentro de principio a fin, así nunca hay un fotograma quieto.
+          tl.fromTo(d, { scale: 1.0, x: 0 }, { scale: 1.07, x: -30, duration: dur, ease: "none", immediateRender: false }, start);
+          return d;
+        }
+        function el(parent, html) {
+          var t = document.createElement("div"); t.innerHTML = html.trim();
+          var n = t.firstChild; n.setAttribute && n.setAttribute("data-layout-allow-overflow", "");
+          parent.appendChild(n); return n;
+        }
+        function ft(target, from, to, at, dur, ease) {
+          gsap.set(target, from);
+          tl.fromTo(target, from, Object.assign({ duration: dur, ease: ease || "power3.out", immediateRender: false }, to), at);
+        }
+        function to(target, from, toV, at, dur, ease) {
+          tl.fromTo(target, from, Object.assign({ duration: dur, ease: ease || "power3.in", immediateRender: false }, toV), at);
+        }
+
+        // Formas de la lámina 18 del brandbook.
+        var SH = {
+          cross: function (c, s) { return '<svg class="sh" width="' + s + '" height="' + s + '" viewBox="0 0 90 90"><path d="M45 5V85M5 45H85" stroke="' + c + '" stroke-width="10"/></svg>'; },
+          wave:  function (c, s) { return '<svg class="sh" width="' + s + '" height="' + (s * 42 / 128) + '" viewBox="0 0 128 42"><path d="M4 38C22 38 26 4 48 4C70 4 74 38 96 38C108 38 116 26 124 12" stroke="' + c + '" stroke-width="8"/></svg>'; },
+          arc:   function (c, s) { return '<svg class="sh" width="' + s + '" height="' + (s * 43 / 128) + '" viewBox="0 0 128 43"><path d="M4 38.5C24 -7.5 104 -7.5 124 38.5" stroke="' + c + '" stroke-width="8"/></svg>'; },
+          pill:  function (c, s) { return '<svg class="sh" width="' + s + '" height="' + (s * 0.16) + '" viewBox="0 0 100 16"><path d="M8 8H92" stroke="' + c + '" stroke-width="14"/></svg>'; },
+          bar:   function (c, s) { return '<svg class="sh" width="' + (s * 0.16) + '" height="' + s + '" viewBox="0 0 16 100"><path d="M8 8V92" stroke="' + c + '" stroke-width="14"/></svg>'; },
+          tri:   function (c, s) { return '<svg class="sh" width="' + s + '" height="' + s + '" viewBox="0 0 40 36"><path d="M20 2L38 34H2Z" fill="' + c + '" stroke="' + c + '" stroke-width="2" style="fill:' + c + '"/></svg>'; }
+        };
+        function shape(parent, kind, color, size, x, y) {
+          var n = el(parent, SH[kind](color, size));
+          n.style.left = (x - n.getAttribute("width") / 2) + "px";
+          n.style.top = (y - n.getAttribute("height") / 2) + "px";
+          return n;
+        }
+        // Palabra con letras que suben desde una máscara.
+        function word(parent, text, style) {
+          var w = el(parent, '<div class="word" data-layout-allow-occlusion' + (style ? ' style="' + style + '"' : "") + "></div>");
+          var spans = [];
+          for (var i = 0; i < text.length; i++) {
+            var s = document.createElement("span");
+            s.textContent = text[i] === " " ? " " : text[i];
+            w.appendChild(s); spans.push(s);
+          }
+          w.style.overflow = "hidden"; w.style.paddingBottom = "24px"; w.style.paddingTop = "10px";
+          return { box: w, letters: spans };
+        }
+        function wordIn(wd, at, stagger) {
+          wd.letters.forEach(function (s, i) {
+            ft(s, { yPercent: 115 }, { yPercent: 0 }, at + i * (stagger || 0.035), 0.55, "power4.out");
+          });
+        }
+        function wordOut(wd, at) {
+          wd.letters.forEach(function (s, i) {
+            to(s, { yPercent: 0 }, { yPercent: -115 }, at + i * 0.02, 0.35, "power3.in");
+          });
+        }
+
+        // ============ 1 · Estallido de formas (0 – 2,7 s) ============
+        var s1 = scene(0, 2.9);
+        var grid = el(s1, '<div class="abs" style="inset:0"></div>');
+        var KINDS = ["cross", "wave", "arc", "pill", "cross", "tri", "bar", "wave"];
+        var COLS = ["#587579", "#8AA3A5", "#FFFFFF", "#587579", "#8AA3A5", "#587579"];
+        var cells = [];
+        var NX = 9, NY = 5;
+        for (var gy = 0; gy < NY; gy++) for (var gx = 0; gx < NX; gx++) {
+          var x = 110 + gx * (W - 220) / (NX - 1), y = 120 + gy * (H - 240) / (NY - 1);
+          var k = KINDS[(gx * 3 + gy * 5) % KINDS.length];
+          var c = COLS[(gx + gy * 2) % COLS.length];
+          var size = (k === "pill" || k === "wave" || k === "arc") ? 120 : 64;
+          var n = shape(grid, k, c, size, x, y);
+          var dist = Math.hypot(x - W / 2, y - H / 2);
+          cells.push({ n: n, d: dist, i: gx + gy * NX });
+        }
+        cells.forEach(function (cl) {
+          var at = 0.15 + cl.d / 1100 * 0.6;
+          ft(cl.n, { scale: 0, rotation: -90 }, { scale: 1, rotation: 0 }, at, 0.6, "back.out(2.2)");
+          // cada forma da medio giro en el segundo tiempo: la rejilla «respira» con un golpe, no con un vaivén
+          to(cl.n, { rotation: 0 }, { rotation: (cl.i % 2 ? 180 : -180) }, 1.35 + cl.d / 1100 * 0.25, 0.6, "power3.inOut");
+        });
+        // y sale disparada hacia arriba
+        to(grid, { y: 0 }, { y: -1250 }, 2.25, 0.5, "power4.in");
+
+        // ============ 2 · Personas. (2,4 – 5,1 s) ============
+        var s2 = scene(2.4, 3.3);
+        var g2 = el(s2, '<div class="abs" style="left:-300px;top:0;width:2520px;height:1080px;background:var(--grad)"></div>');
+        ft(g2, { xPercent: -100, skewX: -14 }, { xPercent: 0, skewX: -14 }, 2.4, 0.5, "power4.out");
+        var w2 = word(s2, "Personas.");
+        wordIn(w2, 2.7);
+        var p2 = shape(s2, "pill", "#FFFFFF", 760, 1450, 830);
+        ft(p2, { scaleX: 0, transformOrigin: "100% 50%" }, { scaleX: 1 }, 2.85, 0.6, "power4.out");
+        var c2 = shape(s2, "cross", "#8AA3A5", 120, 1680, 230);
+        ft(c2, { scale: 0, rotation: -135 }, { scale: 1, rotation: 0 }, 2.95, 0.7, "back.out(2)");
+        to(c2, { rotation: 0 }, { rotation: 90 }, 3.9, 0.5, "power3.inOut");
+        var a2 = shape(s2, "arc", "#587579", 260, 300, 230);
+        ft(a2, { y: -300, opacity: 0 }, { y: 0, opacity: 1 }, 3.05, 0.6, "power4.out");
+        var t2 = shape(s2, "tri", "#FFFFFF", 46, 1720, 640);
+        ft(t2, { scale: 0, rotation: 60 }, { scale: 1, rotation: 0 }, 3.2, 0.5, "back.out(2.5)");
+        wordOut(w2, 4.65);
+        to(p2, { scaleX: 1 }, { scaleX: 0, transformOrigin: "0% 50%" }, 4.65, 0.35);
+
+        // ============ 3 · Decisiones. (4,8 – 7,7 s) ============
+        var s3 = scene(4.8, 3.2);
+        s3.style.background = "transparent";
+        var PCOL = ["var(--teal)", "var(--navy)", "var(--grad)", "var(--deep)", "var(--teal)", "var(--navy)"];
+        var panels = [];
+        for (var i = 0; i < 6; i++) {
+          var p = el(s3, '<div class="abs" style="top:0;height:1080px;left:' + (i * 320) + 'px;width:321px;background:' + PCOL[i] + '"></div>');
+          ft(p, { yPercent: i % 2 ? -100 : 100 }, { yPercent: 0 }, 4.8 + i * 0.06, 0.55, "power4.out");
+          panels.push(p);
+        }
+        // los paneles se recolocan: dos se abren hacia arriba y descubren Navy profundo
+        to(panels[1], { yPercent: 0 }, { yPercent: -100 }, 6.0, 0.6, "power4.inOut");
+        to(panels[4], { yPercent: 0 }, { yPercent: 100 }, 6.08, 0.6, "power4.inOut");
+        var w3 = word(s3, "Decisiones.", "color:#FFFFFF");
+        wordIn(w3, 5.25, 0.03);
+        var b3 = shape(s3, "bar", "#FFFFFF", 300, 1600, 380);
+        ft(b3, { scaleY: 0, transformOrigin: "50% 0%" }, { scaleY: 1 }, 5.5, 0.6, "power4.out");
+        var c3 = shape(s3, "cross", "#FFFFFF", 90, 1440, 300);
+        ft(c3, { scale: 0, rotation: 90 }, { scale: 1, rotation: 0 }, 6.1, 0.6, "back.out(2)");
+        var w3b = shape(s3, "wave", "#8AA3A5", 240, 400, 250);
+        ft(w3b, { x: -500 }, { x: 0 }, 6.2, 0.6, "power4.out");
+        wordOut(w3, 7.2);
+
+        // ============ 4 · Juntos. (7,5 – 10,3 s) ============
+        var s4 = scene(7.5, 3.0);
+        var cover4 = el(s4, '<div class="abs" style="inset:0;background:var(--deep)"></div>');
+        ft(cover4, { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(75% at 50% 50%)" }, 7.5, 0.5, "power3.out");
+        // onda gigante que cruza el cuadro de lado a lado, dibujándose
+        var big = el(s4, '<svg class="sh" style="left:-60px;top:300px" width="2040" height="520" viewBox="0 0 2040 520">' +
+          '<path id="bw1" d="M0 420 C 240 420 300 80 560 80 C 820 80 880 420 1140 420 C 1400 420 1460 80 1720 80 C 1860 80 1960 180 2040 300" stroke="#587579" stroke-width="22"/>' +
+          '<path id="bw2" d="M0 470 C 240 470 300 130 560 130 C 820 130 880 470 1140 470 C 1400 470 1460 130 1720 130 C 1860 130 1960 230 2040 350" stroke="#8AA3A5" stroke-width="8"/></svg>');
+        var bw1 = big.querySelector("#bw1"), bw2 = big.querySelector("#bw2");
+        var L1 = 2600, L2 = 2600;
+        ft(bw1, { strokeDasharray: L1, strokeDashoffset: L1 }, { strokeDashoffset: 0 }, 7.7, 1.1, "power2.inOut");
+        ft(bw2, { strokeDasharray: L2, strokeDashoffset: L2 }, { strokeDashoffset: 0 }, 7.85, 1.1, "power2.inOut");
+        to(big, { x: 0 }, { x: -260 }, 7.7, 2.6, "none");
+        var w4 = word(s4, "Juntos.");
+        wordIn(w4, 8.05, 0.045);
+        var arcs = [];
+        [[1600, 180, 200], [1760, 300, 120]].forEach(function (a, i) {
+          var n = shape(s4, "arc", i ? "#FFFFFF" : "#8AA3A5", a[2], a[0], a[1]);
+          ft(n, { rotation: 180, scale: 0 }, { rotation: 0, scale: 1 }, 8.3 + i * 0.12, 0.7, "back.out(1.8)");
+          arcs.push(n);
+        });
+        wordOut(w4, 9.8);
+
+        // ============ 5 · Isotipo T (10,0 – 13,4 s) ============
+        var s5 = scene(10.0, 4.0);
+        var g5 = el(s5, '<div class="abs" style="inset:0;background:var(--grad)"></div>');
+        ft(g5, { clipPath: "inset(0 0 0 100%)" }, { clipPath: "inset(0 0 0 0%)" }, 10.0, 0.5, "power4.out");
+        var T = el(s5, '<svg class="sh" style="left:1210px;top:250px" width="390" height="525" viewBox="0 0 312 420"><path d="' + T_PATH + '" fill="#FFFFFF" style="fill:#FFFFFF;stroke:none" fill-rule="evenodd" clip-rule="evenodd"/></svg>');
+        ft(T, { scale: 3.2, opacity: 0, filter: "blur(18px)", transformOrigin: "50% 50%" }, { scale: 1, opacity: 1, filter: "blur(0px)" }, 10.25, 0.9, "power4.out");
+        to(T, { y: 0 }, { y: -18 }, 11.15, 2.0, "sine.inOut");
+        var pT = shape(s5, "pill", "#8AA3A5", 300, 1405, 830);
+        ft(pT, { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1 }, 11.0, 0.5, "power4.out");
+        var tag = el(s5, '<div class="tag">Better decisions, <em>together.</em></div>');
+        ft(tag, { y: 60, opacity: 0 }, { y: 0, opacity: 1 }, 11.2, 0.7, "power3.out");
+        var cT = shape(s5, "cross", "#FFFFFF", 70, 1720, 230);
+        ft(cT, { scale: 0, rotation: -90 }, { scale: 1, rotation: 0 }, 11.4, 0.6, "back.out(2)");
+
+        // ============ 6 · Cierre: barras Navy barren el cuadro (13,1 – 15 s) ============
+        var s6 = scene(13.1, 1.9);
+        s6.style.background = "transparent";
+        for (var i = 0; i < 6; i++) {
+          var bar = el(s6, '<div class="abs" style="left:0;top:' + (i * 180) + 'px;width:1920px;height:181px;background:var(--navy)"></div>');
+          ft(bar, { xPercent: i % 2 ? -100 : 100 }, { xPercent: 0 }, 13.1 + i * 0.05, 0.6, "power4.inOut");
+        }
+        // Al terminar el cuadro queda Navy liso, igual que el fotograma 0: ahí empalma el bucle.
+
+        try {
+          var vars = (window.__hyperframes && window.__hyperframes.getVariables)
+            ? window.__hyperframes.getVariables() : null;
+          if (vars && vars.velo === false) document.getElementById("velo").style.display = "none";
+        } catch (e) {}
+
+        window.__timelines["main"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

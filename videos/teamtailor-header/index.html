@@ -6,43 +6,27 @@
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
       /* Paleta Tessera 2027 y su único degradado (Teal 0 % a Navy 75 %). */
-      :root {
-        --navy: #202031; --navy-deep: #16161F; --teal: #587579;
-        --teal-light: #8AA3A5; --white: #FFFFFF;
-        --grad-diag: linear-gradient(135deg, #587579 0%, #202031 75%);
-        --grad-vert: linear-gradient(180deg, #587579 0%, #202031 75%);
-      }
+      :root { --navy: #202031; --navy-deep: #16161F; --teal: #587579; }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; }
       body { background: var(--navy-deep); }
       #root { position: relative; width: 100%; height: 100%; background: var(--navy-deep); overflow: hidden; }
 
-      #grid { position: absolute; inset: 0; transform-origin: 50% 50%; will-change: transform; }
-      /* 80 px de más arriba y abajo: al alejarse la cámara asoma la tesela vecina, no un borde vacío. */
-      .col  { position: absolute; top: -80px; width: 320px; height: 1240px; overflow: hidden; }
-      .reel { position: absolute; left: 0; top: 80px; width: 320px; will-change: transform; }
-      .panel { position: relative; width: 320px; height: 1080px; overflow: hidden; background: var(--navy-deep); }
-      .panel > img { display: block; width: 320px; height: 1080px; }
-      .hero { position: absolute; inset: 0; background-size: 1920px 1080px; background-repeat: no-repeat; }
-      .half { position: absolute; left: 0; width: 320px; height: 536px; overflow: hidden; }
-      .half.top { top: 0; } .half.bot { top: 544px; }
-      .half img { display: block; width: 320px; height: 536px; }
+      .shot { position: absolute; inset: 0; overflow: hidden; background: var(--navy-deep); }
+      .cam  { position: absolute; inset: 0; will-change: transform, filter; }
+      /* Las fotos vienen un 15 % más grandes que el cuadro: la cámara se mueve sobre píxeles reales. */
+      .cam > img.full { position: absolute; left: -144px; top: -81px; width: 2208px; height: 1242px; }
 
-      .b-teal { background: var(--teal); }
-      .b-navy { background: var(--navy); }
-      .b-deep { background: var(--navy-deep); }
-      .b-grad { background: var(--grad-diag); }
-      .b-gradv { background: var(--grad-vert); }
+      /* Pantalla partida: paneles verticales con junta de 8 px en Navy profundo. */
+      .pn { position: absolute; top: 0; height: 1080px; overflow: hidden; background: var(--navy-deep); }
+      .pn img { position: absolute; top: -81px; height: 1242px; will-change: transform; }
+      .p3 img { left: -48px; width: 736px; }
+      .p2 img { left: -72px; width: 1104px; }
 
-      /* Formas de apoyo del brandbook (lámina 18), pequeñas y de acento. */
-      .shape { position: absolute; left: 44px; bottom: 48px; overflow: visible; }
-      .shape * { fill: none; stroke: var(--teal-light); stroke-width: 4; stroke-linecap: round; }
-      .shape.w * { stroke: var(--white); }
+      /* Cortinilla con el degradado de marca, en diagonal. */
+      .wipe { position: absolute; top: -20px; left: 0; width: 2600px; height: 1120px;
+              background: linear-gradient(135deg, #587579 0%, #202031 75%); }
 
-      /* Las juntas del mosaico. Se cierran cuando las columnas forman una foto entera. */
-      .joint { position: absolute; top: -40px; height: 1160px; background: var(--navy-deep); }
-
-      /* Velo Navy para el título blanco de la vacante: monocromo, de Navy a transparente. */
       #velo {
         position: absolute; inset: 0; pointer-events: none;
         background: radial-gradient(ellipse 50% 62% at 50% 50%,
@@ -51,179 +35,169 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="16"
+    <div id="root" data-composition-id="main" data-start="0" data-duration="15"
          data-width="1920" data-height="1080"
          data-composition-variables='{"velo": true}'>
-      <div class="clip" id="mosaic" data-start="0" data-duration="16" data-track-index="0"
-           style="position:absolute;inset:0;overflow:hidden">
-        <div id="grid" data-layout-allow-overflow></div>
-      </div>
-      <div class="clip" id="velo" data-start="0" data-duration="16" data-track-index="1"></div>
+      <div id="stage"></div>
+      <div class="clip" id="velo" data-start="0" data-duration="15" data-track-index="40" style="z-index:40"></div>
     </div>
 
     <script>
       window.__timelines = window.__timelines || {};
       (function () {
-        var W = 1920, H = 1080, COLS = 6, CW = 320, JOINT = 8;
-        var LOOP = 16, NSTATE = 8;
-        // Las columnas no paran nunca: corren, frenan y encajan, y vuelven a arrancar.
-        // Llegadas a cada parada (s). Foto entera en las pares, mosaico en las impares.
-        var ARRIVE = [0, 2.4, 4, 6.4, 8, 10.4, 12, 14.4, 16];
-        var HOLD_HERO = 1.2, HOLD_MOS = 0.4;   // lo que aguanta cada parada
-                var MARGIN = 0.06;                     // todas paradas 0,06 s antes de la llegada: el último fotograma ya está encajado
-        var P = "assets/photos/";
-
-        // Formas: cruz, píldora, onda, arco y barra.
-        var SHAPES = {
-          cross: '<svg class="shape" width="44" height="44" viewBox="0 0 44 44"><path d="M22 4 V40 M4 22 H40"/></svg>',
-          pill:  '<svg class="shape w" width="110" height="12" viewBox="0 0 110 12"><path d="M6 6 H104"/></svg>',
-          wave:  '<svg class="shape" width="88" height="24" viewBox="0 0 88 24"><path d="M2 12 q11 -10 22 0 t22 0 t22 0 t20 0"/></svg>',
-          arc:   '<svg class="shape" width="64" height="40" viewBox="0 0 64 40"><path d="M8 34 A24 24 0 0 1 56 34"/></svg>',
-          bar:   '<svg class="shape w" width="12" height="90" viewBox="0 0 12 90"><path d="M6 84 V6"/></svg>'
-        };
-
-        // Atajos para describir columnas.
-        function F(id) { return { full: id }; }                 // foto a toda altura
-        function B(cls, shape) { return { block: cls, shape: shape }; }
-        function S(top, bot) { return { top: top, bot: bot }; } // columna partida en dos
-        function h(id) { return { half: id }; }                 // media tesela de foto
-
-        // Ocho tiempos: foto entera, mosaico, foto entera, mosaico...
-        // Empieza con la oficina de TESSERA a pantalla completa: es lo primero que se ve.
-        // En los mosaicos, las columnas 2 y 3 (detrás del título) llevan más bloques de color.
-        var STATES = [
-          { hero: "tesserers" },
-          { cols: [F("equipo"), S(B("b-teal", "cross"), h("molinos")), B("b-grad", "pill"),
-                   S(h("despacho"), B("b-navy", "wave")), F("oficina"), S(B("b-gradv", "bar"), h("granvia"))] },
-          { hero: "ciudad" },
-          { cols: [S(h("tesserers"), B("b-navy", "arc")), F("molinos"), S(B("b-teal", "cross"), h("equipo")),
-                   B("b-deep", "arc"), F("granvia"), F("reunion")] },
-          { hero: "reunion" },
-          { cols: [F("despacho"), S(B("b-gradv", "bar"), h("oficina")), B("b-navy", "wave"),
-                   S(h("ciudad"), B("b-teal", "cross")), F("equipo"), S(h("molinos"), B("b-deep", "arc"))] },
-          { hero: "equipo" },
-          { cols: [S(B("b-teal", "cross"), h("reunion")), F("granvia"), S(h("tesserers"), B("b-grad", "pill")),
-                   B("b-deep", "arc"), S(B("b-teal", "wave"), h("despacho")), F("oficina")] }
-        ];
-
-        function cellHTML(spec, cls) {
-          if (spec.half) return '<div class="half ' + cls + '"><img src="' + P + spec.half + '-half.jpg" alt=""></div>';
-          return '<div class="half ' + cls + ' ' + spec.block + '">' + (spec.shape ? SHAPES[spec.shape] : "") + '</div>';
-        }
-        function panelHTML(state, c) {
-          if (state.hero) {
-            return '<div class="panel"><div class="hero" style="background-image:url(' + P + state.hero +
-                   '-hero.jpg);background-position:' + (-c * CW) + 'px 0"></div></div>';
-          }
-          return specHTML(state.cols[c]);
-        }
-        function specHTML(spec) {
-          if (spec.full) return '<div class="panel"><img src="' + P + spec.full + '-full.jpg" alt=""></div>';
-          if (spec.block) return '<div class="panel ' + spec.block + '">' + (spec.shape ? SHAPES[spec.shape] : "") + '</div>';
-          return '<div class="panel">' + cellHTML(spec.top, "top") + cellHTML(spec.bot, "bot") + '</div>';
-        }
-
-        // Relleno: lo que pasa por delante mientras las columnas corren.
-        var POOL = [F("molinos"), B("b-teal", "cross"), F("despacho"), S(h("granvia"), B("b-navy", "wave")),
-                    B("b-grad", "pill"), F("oficina"), S(B("b-deep", "arc"), h("reunion")), F("ciudad"),
-                    B("b-gradv", "bar"), S(h("equipo"), B("b-teal")), F("granvia"), B("b-navy", "wave"),
-                    S(h("tesserers"), B("b-grad")), F("reunion"), B("b-deep", "arc"), S(B("b-teal", "cross"), h("despacho"))];
-        function fillerHTML(c, k, i) {
-          return specHTML(POOL[(((c * 5 + k * 3 + i * 7) % POOL.length) + POOL.length) % POOL.length]);
-        }
-        // Cuántos paneles de relleno cruza cada columna en cada carrera: de 2 a 4. Distinto en
-        // cada columna, así cada una va a su velocidad y el cuadro nunca se mueve en bloque.
-        function nFill(c, k) { return 2 + ((c * 2 + k * 5 + (c * k) % 3) % 3); }
-
-        var grid = document.getElementById("grid");
+        var A = "assets/spot/";
         var tl = gsap.timeline({ paused: true });
+        var stage = document.getElementById("stage");
+        var track = 0;
 
-        // Columnas. Las pares suben y las impares bajan.
-        // Más una columna a cada lado, fuera de cuadro: solo asoman cuando la cámara se aleja,
-        // y así nunca se ve el borde del mosaico.
-        var reels = [];
-        for (var c = -1; c <= COLS; c++) {
-          var outer = c < 0 || c >= COLS;
-          var col = document.createElement("div");
-          col.className = "col"; col.style.left = (c * CW) + "px";
-          col.setAttribute("data-layout-allow-overflow", "");
-          var reel = document.createElement("div");
-          reel.className = "reel"; reel.setAttribute("data-layout-allow-overflow", "");
-          var up = (c + 2) % 2 === 0;
-          // Tira en orden de paso: parada 0, relleno, parada 1, relleno... y la parada 0 otra vez,
-          // que es la que cierra el bucle.
-          var panels = [], idx = [];
-          for (var k = 0; k < NSTATE; k++) {
-            idx.push(panels.length);
-            panels.push(outer ? fillerHTML(c, k, 9) : panelHTML(STATES[k], c));
-            for (var i = 0; i < nFill(c, k); i++) panels.push(fillerHTML(c, k, i));
-          }
-          idx.push(panels.length);
-          panels.push(outer ? fillerHTML(c, 0, 9) : panelHTML(STATES[0], c));
-          var N = panels.length - 1;
-          reel.innerHTML = (up ? panels : panels.slice().reverse()).join("");
-          col.appendChild(reel); grid.appendChild(col);
-          reels.push({ el: reel, up: up, idx: idx, N: N, c: c });
+        // Velocidad de la cámara en el plano general de la oficina. El primer y el último plano
+        // la comparten, así el bucle empalma en mitad de un mismo movimiento.
+        var RATE_S = 0.04375, RATE_X = -17.5;   // escala / s y px / s
+
+        function shot(start, dur, inner) {
+          var d = document.createElement("div");
+          d.className = "clip shot";
+          d.setAttribute("data-start", start.toFixed(3));
+          d.setAttribute("data-duration", dur.toFixed(3));
+          d.setAttribute("data-track-index", String(track));
+          d.setAttribute("data-layout-allow-overflow", "");
+          d.style.zIndex = String(++track);
+          d.innerHTML = '<div class="cam" data-layout-allow-overflow>' + inner + "</div>";
+          stage.appendChild(d);
+          return { el: d, cam: d.firstChild, start: start, dur: dur };
         }
-        function reelY(r, k) { return r.up ? -r.idx[k] * H : -(r.N - r.idx[k]) * H; }
-
-        // Juntas: cerradas en foto entera, abiertas en todo lo demás.
-        var joints = [];
-        for (var k = 0; k <= COLS; k++) {
-          var j = document.createElement("div");
-          j.className = "joint"; j.setAttribute("data-layout-allow-overflow", "");
-          j.style.left = (k * CW) + "px";
-          grid.appendChild(j);
-          joints.push(j);
+        function full(name) { return '<img class="full" data-layout-allow-overflow src="' + A + "full-" + name + '.jpg" alt="">'; }
+        function split(kind, names) {
+          var n = names.length, w = 1920 / n, html = "";
+          for (var i = 0; i < n; i++) {
+            var x0 = i * w + (i ? 4 : 0), x1 = (i + 1) * w - (i < n - 1 ? 4 : 0);
+            html += '<div class="pn ' + kind + '" data-layout-allow-overflow style="left:' + x0 + "px;width:" + (x1 - x0) + 'px">' +
+                    '<img data-layout-allow-overflow src="' + A + kind + "-" + names[i] + '.jpg" alt=""></div>';
+          }
+          return html;
         }
-        function jointSet(open) { return { width: open ? JOINT : 0, marginLeft: open ? -JOINT / 2 : 0 }; }
-        joints.forEach(function (j) { gsap.set(j, jointSet(false)); });
-        reels.forEach(function (r) { gsap.set(r.el, { y: reelY(r, 0) }); });
-
-        // Salida escalonada de cada columna (s). Hacia la foto entera, de fuera hacia dentro:
-        // la foto se cierra en el centro, donde va el título.
-        var DEP_MOS  = [0.00, 0.08, 0.03, 0.11, 0.05, 0.14];
-        var DEP_HERO = [0.00, 0.06, 0.12, 0.12, 0.06, 0.00];
-
-        for (var k = 0; k < NSTATE; k++) {
-          var hero = !!STATES[k].hero;
-          var depart = ARRIVE[k] + (hero ? HOLD_HERO : HOLD_MOS);
-          var toHero = !!STATES[(k + 1) % NSTATE].hero;
-          var window_ = ARRIVE[k + 1] - MARGIN - depart;      // tiempo para salir escalonado y llegar
-          for (var r = 0; r < reels.length; r++) {
-            var cc = Math.min(Math.max(reels[r].c, 0), COLS - 1);
-            var d = (toHero ? DEP_HERO : DEP_MOS)[cc];
-            tl.fromTo(reels[r].el, { y: reelY(reels[r], k) },
-              { y: reelY(reels[r], k + 1), duration: window_ - 0.15, ease: "power3.inOut", immediateRender: false },
-              depart + d);
-          }
-          if (hero) {
-            // se abren justo antes de que la foto se rompa
-            tl.fromTo(joints, jointSet(false), Object.assign({ duration: 0.12, ease: "power2.out", immediateRender: false }, jointSet(true)), depart - 0.06);
-          }
-          if (toHero) {
-            // y se cierran cuando las columnas ya están encajando
-            tl.fromTo(joints, jointSet(true), Object.assign({ duration: 0.17, ease: "power2.out", immediateRender: false }, jointSet(false)), ARRIVE[k + 1] - MARGIN - 0.2);
+        function move(el, from, to, at, dur, ease) {
+          tl.fromTo(el, from, Object.assign({ duration: dur, ease: ease || "none", immediateRender: false }, to), at);
+        }
+        // Dentro de una pantalla partida cada panel se mueve a contrapelo del de al lado.
+        function panelDrift(s, push) {
+          var imgs = s.el.querySelectorAll(".pn img");
+          for (var i = 0; i < imgs.length; i++) {
+            var dir = i % 2 ? 1 : -1;
+            gsap.set(imgs[i], { scale: 1.0, y: -30 * dir });
+            move(imgs[i], { scale: 1.0, y: -30 * dir }, { scale: push || 1.06, y: 30 * dir }, s.start, s.dur, "none");
           }
         }
-
-        // Cámara: empuja sobre la foto entera, se abre de golpe al arrancar y vuelve al frenar.
-        // Sin pausas y con la misma escala en t = 0 y t = 16.
-        var cam = [];
-        for (var k = 0; k < NSTATE; k++) {
-          var hero = !!STATES[k].hero;
-          var depart = ARRIVE[k] + (hero ? HOLD_HERO : HOLD_MOS);
-          if (hero) {
-            cam.push([ARRIVE[k], depart, { scale: 1.0, x: 0 }, { scale: 1.09, x: -40 }, "sine.out"]);
-            cam.push([depart, ARRIVE[k + 1], { scale: 1.09, x: -40 }, { scale: 0.94, x: 0 }, "power3.inOut"]);
-          } else {
-            cam.push([ARRIVE[k], depart, { scale: 0.94, x: 0 }, { scale: 0.97, x: 20 }, "sine.inOut"]);
-            cam.push([depart, ARRIVE[k + 1], { scale: 0.97, x: 20 }, { scale: 1.0, x: 0 }, "power3.inOut"]);
-          }
+        function wipe(start, leftToRight) {
+          // Entra hasta tapar el cuadro entero (0,3 s) y sigue de largo (0,3 s). El corte va debajo,
+          // en el fotograma en que lo tapa todo.
+          var w = document.createElement("div");
+          w.className = "clip wipe";
+          w.setAttribute("data-start", start.toFixed(3));
+          w.setAttribute("data-duration", "0.6");
+          w.setAttribute("data-track-index", String(30 + track));
+          w.setAttribute("data-layout-allow-overflow", "");
+          w.style.zIndex = "30";
+          stage.appendChild(w);
+          var a = leftToRight ? -2900 : 2240, m = -340, b = leftToRight ? 2240 : -2900;
+          gsap.set(w, { x: a, skewX: -12 });
+          move(w, { x: a }, { x: m }, start, 0.3, "power3.in");
+          move(w, { x: m }, { x: b }, start + 0.3, 0.3, "power3.out");
         }
-        cam.forEach(function (seg, i) {
-          tl.fromTo(grid, seg[2], Object.assign({ duration: seg[1] - seg[0], ease: seg[4], immediateRender: i === 0 }, seg[3]), seg[0]);
-        });
+
+        // ---------------- Guion ----------------
+
+        // 1 · Oficina TESSERA, plano general. Abre (y cierra) el bucle.
+        var s1 = shot(0, 2.0, full("tesserers"));
+        gsap.set(s1.cam, { scale: 1.05, x: 0 });
+        move(s1.cam, { scale: 1.05, x: 0 }, { scale: 1.05 + RATE_S * 2.0, x: RATE_X * 2.0 }, 0, 2.0);
+
+        // 2 · Pantalla partida en tres. Los paneles entran por arriba y por abajo, alternos,
+        //     tapando el plano anterior.
+        var s2 = shot(1.6, 1.0, split("p3", ["equipo-ella", "ciudad", "oficina"]));
+        s2.el.style.background = "transparent";   // debajo tiene que seguir viéndose el plano 1
+        var pns = s2.el.querySelectorAll(".pn");
+        for (var i = 0; i < pns.length; i++) {
+          var fromY = i % 2 ? -1080 : 1080;
+          gsap.set(pns[i], { y: fromY });
+          move(pns[i], { y: fromY }, { y: 0 }, 1.6 + i * 0.07, 0.4, "power4.out");
+        }
+        panelDrift(s2);
+        // y sale atravesada por la cámara
+        move(s2.cam, { scale: 1, filter: "blur(0px)" }, { scale: 1.35, filter: "blur(14px)" }, 2.4, 0.2, "power2.in");
+
+        // 3 · Ciudad. Entra en pleno empuje y frena.
+        var s3 = shot(2.4, 1.0, full("ciudad"));
+        gsap.set(s3.el, { opacity: 0 });
+        move(s3.el, { opacity: 0 }, { opacity: 1 }, 2.4, 0.18, "power1.out");
+        gsap.set(s3.cam, { scale: 1.25, rotation: -1.5, filter: "blur(16px)" });
+        move(s3.cam, { scale: 1.25, rotation: -1.5 }, { scale: 1.04, rotation: 0 }, 2.4, 1.0, "power3.out");
+        move(s3.cam, { filter: "blur(16px)" }, { filter: "blur(0px)" }, 2.4, 0.25, "power2.out");
+
+        // 4 · Corte seco a dos paneles: despacho y molinos.
+        var s4 = shot(3.4, 0.6, split("p2", ["despacho", "molinos"]));
+        panelDrift(s4, 1.08);
+
+        // 5 · Reunión. Paneo lateral largo.
+        var s5 = shot(4.0, 1.3, full("reunion"));
+        gsap.set(s5.cam, { scale: 1.1, x: 70 });
+        move(s5.cam, { scale: 1.1, x: 70 }, { scale: 1.12, x: -70 }, 4.0, 1.3);
+
+        // Cortinilla de marca, de izquierda a derecha.
+        wipe(5.0, true);
+
+        // 6 · Molinos. La cámara se aleja y descubre el plano.
+        var s6 = shot(5.3, 1.4, full("molinos"));
+        gsap.set(s6.cam, { scale: 1.22 });
+        move(s6.cam, { scale: 1.22 }, { scale: 1.02 }, 5.3, 1.4, "power2.out");
+
+        // 7 · Tres paneles: Gran Vía, vuestro portátil, la reunión.
+        var s7 = shot(6.7, 0.6, split("p3", ["granvia", "tesserers", "reunion"]));
+        panelDrift(s7, 1.08);
+
+        // 8 · Equipo. Empuje lento hacia las caras: el momento emocional.
+        var s8 = shot(7.3, 1.6, full("equipo"));
+        gsap.set(s8.cam, { scale: 1.0, transformOrigin: "50% 35%" });
+        move(s8.cam, { scale: 1.0 }, { scale: 1.14 }, 7.3, 1.6, "power1.inOut");
+
+        // 9 · Barrido rápido: equipo sale por la izquierda, la oficina entra por la derecha,
+        //     como un único paneo de cámara.
+        var s9 = shot(8.6, 1.5, full("oficina"));
+        gsap.set(s9.el, { x: 1920 });
+        move(s8.el, { x: 0 }, { x: -1920 }, 8.6, 0.3, "power2.inOut");
+        move(s9.el, { x: 1920 }, { x: 0 }, 8.6, 0.3, "power2.inOut");
+        move(s8.cam, { filter: "blur(0px)" }, { filter: "blur(30px)" }, 8.6, 0.15, "power2.in");
+        gsap.set(s9.cam, { scale: 1.08, x: 0, filter: "blur(30px)" });
+        move(s9.cam, { filter: "blur(30px)" }, { filter: "blur(0px)" }, 8.75, 0.15, "power2.out");
+        move(s9.cam, { x: 0 }, { x: -70 }, 8.6, 1.5);
+
+        // 10 · Arranca la ráfaga: los cortes se acortan hasta 0,4 s.
+        var s10 = shot(10.1, 0.5, split("p2", ["ciudad", "despacho-b"]));
+        panelDrift(s10, 1.08);
+        var s11 = shot(10.6, 0.4, split("p3", ["molinos", "equipo-el", "granvia-b"]));
+        panelDrift(s11, 1.08);
+        var s12 = shot(11.0, 0.4, full("ciudad"));
+        gsap.set(s12.cam, { scale: 1.3 });
+        move(s12.cam, { scale: 1.3 }, { scale: 1.37 }, 11.0, 0.4);
+        var s13 = shot(11.4, 0.4, full("reunion"));
+        gsap.set(s13.cam, { scale: 1.28, transformOrigin: "45% 50%" });
+        move(s13.cam, { scale: 1.28 }, { scale: 1.35 }, 11.4, 0.4);
+        var s14 = shot(11.8, 0.5, full("equipo"));
+        gsap.set(s14.cam, { scale: 1.3, transformOrigin: "40% 30%" });
+        move(s14.cam, { scale: 1.3 }, { scale: 1.38 }, 11.8, 0.5);
+
+        // Segunda cortinilla, ahora de derecha a izquierda.
+        wipe(12.0, false);
+
+        // 15 · Vuestro equipo en primer plano.
+        var s15 = shot(12.3, 1.7, full("tesserers"));
+        gsap.set(s15.cam, { scale: 1.3, x: 40, transformOrigin: "42% 38%" });
+        move(s15.cam, { scale: 1.3, x: 40 }, { scale: 1.37, x: -20 }, 12.3, 1.7);
+
+        // 16 · Corte al plano general. Su movimiento sigue en el plano 1: ahí empalma el bucle.
+        var s16 = shot(14.0, 1.0, full("tesserers"));
+        gsap.set(s16.cam, { scale: 1.05 - RATE_S, x: -RATE_X });
+        move(s16.cam, { scale: 1.05 - RATE_S, x: -RATE_X }, { scale: 1.05, x: 0 }, 14.0, 1.0);
 
         try {
           var vars = (window.__hyperframes && window.__hyperframes.getVariables)

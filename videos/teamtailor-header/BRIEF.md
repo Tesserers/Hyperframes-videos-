@@ -6,8 +6,8 @@ message: "Cabecera de fondo para las vacantes de TESSERA en Teamtailor"
 destination: web
 aspect: 1920x1080
 language: es
-length: 16s
-angle: "Mosaico de teselas (Tessera = tesela) que avanza en bucle exacto, con la fotografía tratada de la marca"
+length: 15s
+angle: "Spot de TV sin texto, en bucle exacto, rodado con la fotografía tratada de la marca"
 style_preset: brand-native
 narration: none
 audio: none
@@ -28,27 +28,44 @@ oficina de TESSERA con el portátil #TESSERERS). Las cuatro de Eddy llegaron com
 no como archivo, y se extrajeron del historial de la sesión a 1125–1448 px de lado. Llegan de
 sobra para teselas de 312×1080. La oficina de TESSERA abre el vídeo en la primera tesela.
 
-## Sistema (v3)
+## Sistema (v4, spot de TV)
 
-La v1 (mosaico deslizándose) y la v2 (columnas que se juntan cada 2 s y se quedan quietas)
-se vieron aburridas. La v3 no para nunca: **las columnas corren como un rodillo, frenan,
-encajan y vuelven a arrancar**.
+Tres versiones de mosaico (v1 a v3) se rechazaron por aburridas y por el estilo. Eddy pidió
+«casi un anuncio de TV», sin texto propio (Teamtailor pone el título) y en 15 s.
 
-- Ocho paradas en 16 s (llegadas a 0 · 2,4 · 4 · 6,4 · 8 · 10,4 · 12 · 14,4 · 16). Las pares son
-  foto entera y aguantan 1,2 s; las impares son mosaico y aguantan 0,4 s. Todo lo demás es
-  carrera.
-- En cada carrera, cada columna cruza de 2 a 4 paneles de relleno (`nFill`), así que cada una
-  va a su velocidad. Las pares suben y las impares bajan, con `power3.inOut` y salida
-  escalonada. Hacia la foto entera llegan de fuera hacia dentro.
-- Cámara: sobre la foto entera empuja hasta 1,09; al arrancar se abre hasta 0,94 y vuelve a 1,0
-  al frenar. Hay una columna extra a cada lado y 80 px de tesela arriba y abajo, para que al
-  abrirse nunca se vea el borde.
-- Las juntas Navy profundo de 8 px se cierran solo con la foto entera.
-- Fotos enteras: oficina TESSERA (abre), ciudad, reunión, equipo. Las demás, en el mosaico.
-- Velo Navy central (variable `velo`). Bucle exacto: 0,8/255 entre el último fotograma y el
-  primero.
+La v4 está planteada como un spot rodado con fotos fijas: plano general, primeros planos en
+pantalla partida (2 o 3 paneles verticales con junta de 8 px) y la cámara siempre en
+movimiento. Guion (s):
+
+| | Plano | Entrada | Cámara |
+|---|---|---|---|
+| 0–2,0 | Oficina TESSERA, general | (empalme del bucle) | empuje lineal 1,05 → 1,14 |
+| 1,6–2,6 | 3 paneles: equipo, ciudad, oficina | entran por arriba y abajo, escalonados | deriva a contrapelo |
+| 2,4–3,4 | Ciudad | zoom que atraviesa (desenfoque 16 px) | 1,25 → 1,04, giro −1,5° → 0 |
+| 3,4–4,0 | 2 paneles: despacho, molinos | corte seco | deriva |
+| 4,0–5,3 | Reunión | corte | paneo +70 → −70 px |
+| 5,0–5,6 | Cortinilla degradado Teal→Navy | izquierda a derecha | |
+| 5,3–6,7 | Molinos | bajo la cortinilla | se aleja 1,22 → 1,02 |
+| 6,7–7,3 | 3 paneles: Gran Vía, portátil #TESSERERS, reunión | corte | deriva |
+| 7,3–8,9 | Equipo | corte | empuje lento a las caras |
+| 8,6–10,1 | Oficina | barrido de cámara con desenfoque 30 px | paneo |
+| 10,1–12,3 | Ráfaga: 2 paneles, 3 paneles, ciudad, reunión, equipo | cortes de 0,5 y 0,4 s | empujes cortos |
+| 12,0–12,6 | Cortinilla degradado | derecha a izquierda | |
+| 12,3–14,0 | Oficina TESSERA, primer plano | bajo la cortinilla | empuje lento |
+| 14,0–15,0 | Oficina TESSERA, general | corte | sigue en el plano 1 |
+
+El bucle empalma dentro del plano general de la oficina: el último plano y el primero llevan la
+misma velocidad de cámara. El último fotograma contra el primero da 1,2/255, lo mismo que dos
+fotogramas seguidos.
+
+Encuadres en `scripts/prep_spot.py`, que los saca un 15 % más grandes que el hueco donde van.
+Los paneles sacan las fotos verticales a su resolución nativa. Los planos generales que salen
+de fotos verticales van ampliados entre 1,2 y 1,7 veces.
 
 ## Cambiar las fotos
+
+(Para el spot: edita `SHOTS` en `scripts/prep_spot.py`, ejecútalo sobre `brand` y `assets/spot`,
+y cambia los nombres en el guion de `index.html`. Los pasos de abajo eran para el mosaico.)
 
 1. Mete las fotos en `brand/` y dales un id, archivo y encuadre en `FOCUS` (`scripts/prep_photos.py`).
 2. `python3 -I scripts/prep_photos.py brand assets/photos`

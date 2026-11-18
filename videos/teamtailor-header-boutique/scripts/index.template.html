@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="es" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Raleway"; src: url(assets/fonts/Raleway-200.woff2) format("woff2"); font-weight: 200; }
+      @font-face { font-family: "Raleway"; src: url(assets/fonts/Raleway-400.woff2) format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Manrope"; src: url(assets/fonts/Manrope-200.woff2) format("woff2"); font-weight: 200; }
+      /* Paleta Tessera 2027. Único degradado: Teal 0 % → Navy 75 %. */
+      :root { --navy: #202031; --deep: #16161F; --teal: #587579; --teal-l: #8AA3A5; --white: #FFFFFF; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      body { background: var(--deep); font-family: "Raleway", sans-serif; }
+      #root { position: relative; width: 100%; height: 100%; background: var(--deep); overflow: hidden; }
+      .abs { position: absolute; }
+
+      /* Luz: una banda ancha del degradado de marca que cruza el cuadro despacio, una vez por bucle. */
+      #light { position: absolute; top: -400px; left: 0; width: 2200px; height: 1880px;
+               background: linear-gradient(90deg, rgba(88,117,121,0) 0%, rgba(88,117,121,0.55) 40%, rgba(32,32,49,0.0) 75%);
+               transform-origin: 50% 50%; }
+      #base { position: absolute; inset: 0; background: linear-gradient(135deg, #202031 0%, #16161F 75%); }
+
+      svg.rule { position: absolute; overflow: visible; }
+      svg.rule * { fill: none; stroke: var(--teal-l); stroke-width: 1.5; stroke-linecap: square; }
+
+      .area { position: absolute; left: 140px; font-weight: 200; font-size: 30px; letter-spacing: 0.34em;
+              text-transform: uppercase; color: var(--teal-l); white-space: nowrap; }
+      #ind { position: absolute; left: 110px; width: 2px; height: 34px; background: var(--white); }
+
+      .fig { position: absolute; right: 140px; top: 398px; text-align: right; white-space: nowrap; }
+      .fig .num { font-family: "Manrope", sans-serif; font-weight: 200; font-size: 104px; line-height: 1;
+                  color: var(--white); letter-spacing: -2px; font-variant-numeric: tabular-nums; }
+      .fig .lab { margin-top: 34px; font-weight: 400; font-size: 18px; letter-spacing: 0.32em;
+                  text-transform: uppercase; color: var(--white); }
+
+      #tag { position: absolute; left: 140px; top: 812px; font-weight: 200; font-size: 24px; letter-spacing: 0.14em;
+             color: var(--white); white-space: nowrap; }
+      #iso { position: absolute; right: 140px; top: 790px; }
+
+      #velo { position: absolute; inset: 0; pointer-events: none;
+        background: radial-gradient(ellipse 34% 46% at 50% 50%, rgba(22,22,31,0.55) 0%, rgba(22,22,31,0) 100%); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="16"
+         data-width="1920" data-height="1080"
+         data-composition-variables='{"velo": true}'>
+      <div class="clip" id="scene" data-start="0" data-duration="16" data-track-index="0"
+           style="position:absolute;inset:0" data-layout-allow-overflow>
+        <div id="base"></div>
+        <div id="light" data-layout-allow-overflow></div>
+
+        <!-- Esquinas de marco y dos filetes: la estructura de una página de informe. -->
+        <svg class="rule" id="corners" width="1920" height="1080" viewBox="0 0 1920 1080" style="left:0;top:0">
+          <path class="c" d="M96 156V96H156"/>
+          <path class="c" d="M1764 96H1824V156"/>
+          <path class="c" d="M1824 924V984H1764"/>
+          <path class="c" d="M156 984H96V924"/>
+        </svg>
+        <svg class="rule" id="rules" width="1920" height="1080" viewBox="0 0 1920 1080" style="left:0;top:0">
+          <path id="rTopL" d="M960 216H136"/><path id="rTopR" d="M960 216H1784"/>
+          <path id="rBotL" d="M960 864H136"/><path id="rBotR" d="M960 864H1784"/>
+        </svg>
+
+        <div class="area" id="a0" style="top:400px">Finanzas</div>
+        <div class="area" id="a1" style="top:470px">Capital humano</div>
+        <div class="area" id="a2" style="top:540px">Estrategia</div>
+        <div id="ind"></div>
+
+        <div class="fig" id="f0"><div class="num" data-to="500" data-pre="+€" data-post="M">+€0M</div><div class="lab">asesorados</div></div>
+        <div class="fig" id="f1"><div class="num" data-to="40" data-pre="+" data-post="">+0</div><div class="lab">operaciones</div></div>
+        <div class="fig" id="f2"><div class="num" data-to="72" data-pre="" data-post=" h">0 h</div><div class="lab">primer shortlist</div></div>
+        <div class="fig" id="f3"><div class="num" data-to="15" data-pre="+" data-post="">+0</div><div class="lab">años de experiencia</div></div>
+
+        <div id="tag">Better decisions, together.</div>
+        <svg id="iso" width="30" height="40" viewBox="0 0 312 420"><path d="__T_PATH__" fill="#FFFFFF" fill-rule="evenodd" clip-rule="evenodd"/></svg>
+      </div>
+      <div class="clip" id="velo" data-start="0" data-duration="16" data-track-index="1" data-layout-allow-occlusion></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      (function () {
+        var tl = gsap.timeline({ paused: true });
+        function ft(t, from, to, at, dur, ease) {
+          gsap.set(t, from);
+          tl.fromTo(t, from, Object.assign({ duration: dur, ease: ease || "power2.out", immediateRender: false }, to), at);
+        }
+        function out(t, from, to, at, dur, ease) {
+          tl.fromTo(t, from, Object.assign({ duration: dur, ease: ease || "power2.in", immediateRender: false }, to), at);
+        }
+        function dash(path, at, dur, ease, reverseAt) {
+          var L = path.getTotalLength();
+          ft(path, { strokeDasharray: L, strokeDashoffset: L }, { strokeDashoffset: 0 }, at, dur, ease || "power2.inOut");
+          if (reverseAt != null) out(path, { strokeDashoffset: 0 }, { strokeDashoffset: L }, reverseAt, 0.9, "power2.inOut");
+        }
+
+        // Luz: cruza en diagonal de izquierda a derecha durante todo el bucle; fuera de cuadro en 0 y en 16.
+        ft("#light", { x: -2600, rotation: 18 }, { x: 2200, rotation: 18 }, 0, 16, "none");
+
+        // Estructura: esquinas y filetes se trazan, y se recogen al final.
+        var cs = document.querySelectorAll("#corners .c");
+        for (var i = 0; i < cs.length; i++) dash(cs[i], 0.4 + i * 0.12, 1.0, "power2.inOut", 14.5 + i * 0.06);
+        ["#rTopL", "#rTopR", "#rBotL", "#rBotR"].forEach(function (id, i) {
+          dash(document.querySelector(id), 0.8 + (i > 1 ? 0.15 : 0), 1.6, "power3.inOut", 14.4);
+        });
+
+        // Áreas: entran despacio, con el espaciado abriéndose.
+        ["#a0", "#a1", "#a2"].forEach(function (id, i) {
+          ft(id, { opacity: 0, y: 14, letterSpacing: "0.18em" }, { opacity: 1, y: 0, letterSpacing: "0.34em" }, 1.7 + i * 0.22, 1.2, "power2.out");
+          out(id, { opacity: 1 }, { opacity: 0 }, 14.6 + i * 0.08, 0.8);
+        });
+
+        // Cifras: una cada 3 s, contando. El indicador marca el área a la que pertenece cada una.
+        var FIG = [
+          { id: "#f0", at: 2.6, area: 0 },   // +€500M asesorados → Finanzas
+          { id: "#f1", at: 5.6, area: 2 },   // +40 operaciones → Estrategia
+          { id: "#f2", at: 8.6, area: 1 },   // 72 h primer shortlist → Capital humano
+          { id: "#f3", at: 11.6, area: -1 }  // +15 años → las tres
+        ];
+        var AREA_Y = [400, 470, 540];
+        gsap.set("#ind", { opacity: 0, top: AREA_Y[0], y: 0, scaleY: 1, transformOrigin: "50% 0%" });
+        var ALL = (AREA_Y[2] - AREA_Y[0] + 34) / 34;
+        FIG.forEach(function (f, k) {
+          var el = document.querySelector(f.id), num = el.querySelector(".num"), lab = el.querySelector(".lab");
+          var end = k < FIG.length - 1 ? FIG[k + 1].at : 14.3;
+          ft(num, { opacity: 0, y: 40, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)" }, f.at, 1.0, "power3.out");
+          ft(lab, { opacity: 0, y: 16 }, { opacity: 1, y: 0 }, f.at + 0.25, 0.9, "power2.out");
+          // la cifra cuenta desde cero; el texto se calcula del reloj, así es igual en cualquier fotograma
+          var o = { v: 0 }, to = +num.dataset.to, pre = num.dataset.pre, post = num.dataset.post;
+          tl.fromTo(o, { v: 0 }, { v: to, duration: 1.4, ease: "power2.out", immediateRender: false,
+            onUpdate: function () { num.textContent = pre + Math.round(o.v) + post; } }, f.at);
+          num.textContent = pre + "0" + post;
+          out(num, { opacity: 1, y: 0, filter: "blur(0px)" }, { opacity: 0, y: -30, filter: "blur(6px)" }, end - 0.55, 0.55, "power2.in");
+          out(lab, { opacity: 1 }, { opacity: 0 }, end - 0.5, 0.45);
+          // indicador
+          // origen y destino explícitos: el indicador es el mismo en cualquier fotograma, se llegue como se llegue
+          var prevY = k === 0 ? AREA_Y[0] : AREA_Y[FIG[k - 1].area];
+          if (f.area >= 0) {
+            tl.fromTo("#ind", { opacity: k === 0 ? 0 : 1, y: prevY - AREA_Y[0], scaleY: 1 }, { opacity: 1, y: AREA_Y[f.area] - AREA_Y[0], scaleY: 1, duration: 0.7, ease: "power3.inOut", immediateRender: false }, f.at);
+          } else {
+            tl.fromTo("#ind", { opacity: 1, y: prevY - AREA_Y[0], scaleY: 1 }, { opacity: 1, y: 0, scaleY: ALL, duration: 0.8, ease: "power3.inOut", immediateRender: false }, f.at);
+          }
+        });
+        out("#ind", { opacity: 1 }, { opacity: 0 }, 14.4, 0.6);
+
+        // Firma.
+        ft("#tag", { opacity: 0, x: -16 }, { opacity: 1, x: 0 }, 3.2, 1.4, "power2.out");
+        out("#tag", { opacity: 1 }, { opacity: 0 }, 14.7, 0.7);
+        ft("#iso", { opacity: 0, y: 10 }, { opacity: 1, y: 0 }, 3.5, 1.2, "power2.out");
+        out("#iso", { opacity: 1 }, { opacity: 0 }, 14.8, 0.6);
+
+        try {
+          var vars = (window.__hyperframes && window.__hyperframes.getVariables) ? window.__hyperframes.getVariables() : null;
+          if (vars && vars.velo === false) document.getElementById("velo").style.display = "none";
+        } catch (e) {}
+
+        window.__timelines["main"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

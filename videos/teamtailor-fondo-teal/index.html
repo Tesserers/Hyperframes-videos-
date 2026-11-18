@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* Fondo de malla difusa sobre la paleta Tessera: Teal dominante, brillos en Teal claro
+         y un pozo Navy abajo. Calcado de la referencia de Eddy, con más Teal y en movimiento. */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #3E5A60; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden;
+              background: linear-gradient(160deg, #5E7D81 0%, #4B6669 40%, #34464F 75%, #283141 100%); }
+      .blob { position: absolute; left: 0; top: 0; border-radius: 50%; will-change: transform; }
+      #grano { position: absolute; inset: 0; background-image: url(assets/grano.png); background-size: 512px 512px;
+               opacity: 0.09; mix-blend-mode: overlay; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="16"
+         data-width="1920" data-height="1080" data-composition-variables='{}'>
+      <div class="clip" id="malla" data-start="0" data-duration="16" data-track-index="0"
+           style="position:absolute;inset:0;overflow:hidden" data-layout-allow-overflow></div>
+      <div class="clip" id="grano" data-start="0" data-duration="16" data-track-index="1"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      (function () {
+        var LOOP = 16, TAU = Math.PI * 2;
+        var malla = document.getElementById("malla");
+
+        // Cada mancha: color, tamaño, centro de su órbita, radios de la órbita y vueltas por bucle.
+        // Las vueltas son enteras: en t = 16 todas están donde estaban en t = 0, y el bucle cierra solo.
+        var BLOBS = [
+          // Teal de fondo, grande, arriba a la izquierda
+          { c: "rgba(88,117,121,0.95)",  w: 1500, h: 1200, cx: 300,  cy: 250, rx: 160, ry: 90,  n: 1, ph: 0.00 },
+          // Pozo Navy, abajo hacia el centro-derecha
+          { c: "rgba(32,32,49,0.85)",    w: 1300, h: 900,  cx: 1150, cy: 980, rx: 220, ry: 70,  n: 1, ph: 0.40 },
+          // Teal medio que cruza el centro y empuja el Navy
+          { c: "rgba(88,117,121,0.70)",  w: 1100, h: 900,  cx: 900,  cy: 520, rx: 260, ry: 140, n: 1, ph: 0.65 },
+          // Brillo frío arriba a la derecha (Teal claro)
+          { c: "rgba(150,176,179,0.80)", w: 1000, h: 800,  cx: 1550, cy: 120, rx: 180, ry: 110, n: 1, ph: 0.15 },
+          // Brillo abajo a la izquierda
+          { c: "rgba(138,163,165,0.70)", w: 900,  h: 700,  cx: 180,  cy: 980, rx: 150, ry: 90,  n: 1, ph: 0.85 },
+          // Matiz Teal claro que pasea por la derecha, dos vueltas por bucle
+          { c: "rgba(138,163,165,0.35)", w: 800,  h: 700,  cx: 1600, cy: 620, rx: 140, ry: 160, n: 2, ph: 0.30 }
+        ];
+        var els = BLOBS.map(function (b) {
+          var d = document.createElement("div");
+          d.className = "blob";
+          d.setAttribute("data-layout-allow-overflow", "");
+          d.style.width = b.w + "px"; d.style.height = b.h + "px";
+          d.style.background = "radial-gradient(closest-side, " + b.c + " 0%, " + b.c.replace(/[\d.]+\)$/, "0)") + " 100%)";
+          malla.appendChild(d);
+          return d;
+        });
+
+        // La posición sale del reloj del timeline: igual en cualquier fotograma, se llegue como se llegue.
+        function place(t) {
+          for (var i = 0; i < BLOBS.length; i++) {
+            var b = BLOBS[i], a = TAU * (b.n * t / LOOP + b.ph);
+            var x = b.cx + b.rx * Math.cos(a) - b.w / 2;
+            var y = b.cy + b.ry * Math.sin(a) - b.h / 2;
+            var s = 1 + 0.08 * Math.sin(a * 1 + i);   // respiración de tamaño, también periódica
+            els[i].style.transform = "translate(" + x.toFixed(2) + "px," + y.toFixed(2) + "px) scale(" + s.toFixed(4) + ")";
+          }
+        }
+        var clock = { t: 0 };
+        var tl = gsap.timeline({ paused: true });
+        tl.fromTo(clock, { t: 0 }, { t: LOOP, duration: LOOP, ease: "none", immediateRender: false,
+          onUpdate: function () { place(clock.t); } }, 0);
+        place(0);
+
+        window.__timelines["main"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

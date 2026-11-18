@@ -34,24 +34,31 @@
         // Las vueltas son enteras: en t = 16 todas están donde estaban en t = 0, y el bucle cierra solo.
         var BLOBS = [
           // Teal de fondo, grande, arriba a la izquierda
-          { c: "rgba(88,117,121,0.95)",  w: 1500, h: 1200, cx: 300,  cy: 250, rx: 160, ry: 90,  n: 1, ph: 0.00 },
-          // Pozo Navy, abajo hacia el centro-derecha
-          { c: "rgba(32,32,49,0.85)",    w: 1300, h: 900,  cx: 1150, cy: 980, rx: 220, ry: 70,  n: 1, ph: 0.40 },
+          { c: "rgba(88,117,121,0.95)",  w: 1500, h: 1200, cx: 300,  cy: 250, rx: 320, ry: 180, n: 1, ph: 0.00 },
+          // Pozo Navy, abajo; cruza de lado a lado
+          { c: "rgba(32,32,49,0.85)",    w: 1300, h: 900,  cx: 1050, cy: 960, rx: 520, ry: 120, n: 1, ph: 0.40 },
           // Teal medio que cruza el centro y empuja el Navy
-          { c: "rgba(88,117,121,0.70)",  w: 1100, h: 900,  cx: 900,  cy: 520, rx: 260, ry: 140, n: 1, ph: 0.65 },
+          { c: "rgba(88,117,121,0.70)",  w: 1100, h: 900,  cx: 900,  cy: 520, rx: 420, ry: 220, n: 2, ph: 0.65 },
           // Brillo frío arriba a la derecha (Teal claro)
-          { c: "rgba(150,176,179,0.80)", w: 1000, h: 800,  cx: 1550, cy: 120, rx: 180, ry: 110, n: 1, ph: 0.15 },
+          { c: "rgba(150,176,179,0.66)", w: 1000, h: 800,  cx: 1450, cy: 150, rx: 380, ry: 180, n: 2, ph: 0.15 },
           // Brillo abajo a la izquierda
-          { c: "rgba(138,163,165,0.70)", w: 900,  h: 700,  cx: 180,  cy: 980, rx: 150, ry: 90,  n: 1, ph: 0.85 },
-          // Matiz Teal claro que pasea por la derecha, dos vueltas por bucle
-          { c: "rgba(138,163,165,0.35)", w: 800,  h: 700,  cx: 1600, cy: 620, rx: 140, ry: 160, n: 2, ph: 0.30 }
+          { c: "rgba(138,163,165,0.60)", w: 900,  h: 700,  cx: 250,  cy: 950, rx: 280, ry: 160, n: 2, ph: 0.85 },
+          // Matiz Teal claro que pasea por la derecha
+          { c: "rgba(138,163,165,0.40)", w: 800,  h: 700,  cx: 1550, cy: 620, rx: 260, ry: 260, n: 3, ph: 0.30 },
+          // Segundo brillo que cruza el cuadro en diagonal
+          { c: "rgba(160,184,186,0.32)", w: 900,  h: 700,  cx: 960,  cy: 420, rx: 760, ry: 300, n: 1, ph: 0.55 }
         ];
         var els = BLOBS.map(function (b) {
           var d = document.createElement("div");
           d.className = "blob";
           d.setAttribute("data-layout-allow-overflow", "");
+          // 1,5 veces más grandes y con caída suave en cuatro tramos: se funden, no se ven como círculos
+          b.w *= 1.5; b.h *= 1.5;
           d.style.width = b.w + "px"; d.style.height = b.h + "px";
-          d.style.background = "radial-gradient(closest-side, " + b.c + " 0%, " + b.c.replace(/[\d.]+\)$/, "0)") + " 100%)";
+          var al = +b.c.match(/([\d.]+)\)$/)[1], rgb = b.c.replace(/,\s*[\d.]+\)$/, "");
+          function col(k) { return rgb + "," + (al * k).toFixed(3) + ")"; }
+          d.style.background = "radial-gradient(closest-side, " + col(1) + " 0%, " + col(0.72) + " 30%, " +
+                               col(0.32) + " 60%, " + col(0.08) + " 85%, " + col(0) + " 100%)";
           malla.appendChild(d);
           return d;
         });
@@ -62,7 +69,7 @@
             var b = BLOBS[i], a = TAU * (b.n * t / LOOP + b.ph);
             var x = b.cx + b.rx * Math.cos(a) - b.w / 2;
             var y = b.cy + b.ry * Math.sin(a) - b.h / 2;
-            var s = 1 + 0.08 * Math.sin(a * 1 + i);   // respiración de tamaño, también periódica
+            var s = 1 + 0.18 * Math.sin(a * 2 + i);   // respiración de tamaño, también periódica
             els[i].style.transform = "translate(" + x.toFixed(2) + "px," + y.toFixed(2) + "px) scale(" + s.toFixed(4) + ")";
           }
         }

@@ -35,9 +35,13 @@
       .fig .lab { margin-top: 34px; font-weight: 400; font-size: 18px; letter-spacing: 0.32em;
                   text-transform: uppercase; color: var(--white); }
 
-      #tag { position: absolute; left: 140px; top: 812px; font-weight: 200; font-size: 24px; letter-spacing: 0.14em;
-             color: var(--white); white-space: nowrap; }
-      #iso { position: absolute; right: 140px; top: 790px; }
+      /* El eslogan: protagonista de la franja baja, palabra a palabra. */
+      #tag { position: absolute; left: 140px; top: 712px; font-weight: 200; font-size: 92px; line-height: 1.15;
+             letter-spacing: 0.01em; color: var(--white); white-space: nowrap; }
+      #tag .w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 6px; margin-right: 0.24em; }
+      #tag .w > span { display: inline-block; }
+      #tag .w.acc > span { color: var(--teal-l); }
+      #iso { position: absolute; right: 140px; top: 772px; }
 
       #velo { position: absolute; inset: 0; pointer-events: none;
         background: radial-gradient(ellipse 34% 46% at 50% 50%, rgba(22,22,31,0.55) 0%, rgba(22,22,31,0) 100%); }
@@ -74,7 +78,7 @@
         <div class="fig" id="f2"><div class="num" data-to="72" data-pre="" data-post=" h">0 h</div><div class="lab">primer shortlist</div></div>
         <div class="fig" id="f3"><div class="num" data-to="15" data-pre="+" data-post="">+0</div><div class="lab">años de experiencia</div></div>
 
-        <div id="tag">Better decisions, together.</div>
+        <div id="tag" data-layout-allow-overflow><span class="w"><span data-layout-allow-occlusion>Better</span></span><span class="w"><span data-layout-allow-occlusion>decisions,</span></span><span class="w acc"><span data-layout-allow-occlusion>together.</span></span></div>
         <svg id="iso" width="30" height="40" viewBox="0 0 312 420"><path d="M121.995 417.139C118.218 415.766 115.357 413.248 114.213 410.387C113.526 408.556 113.526 394.136 113.411 235.177L113.297 62.0272L57.564 61.7984L1.83105 61.5695L3.66212 58.8229C4.80653 57.3351 6.06539 55.5041 6.63759 54.9319C7.09536 54.2452 8.01089 53.1008 8.5831 52.4142C27.237 27.3515 28.6103 25.406 28.8392 25.1771C29.0681 24.9482 32.5014 20.3706 35.3624 16.4796C38.4523 12.1308 43.6022 8.01089 48.5232 5.72206C49.4387 5.2643 50.5831 4.69209 51.0409 4.46321C52.1853 3.77656 54.3597 3.31879 58.8229 2.5177C61.9128 1.9455 81.5967 1.83105 185.967 1.83105H309.564L308.42 3.31879C307.847 4.11988 307.275 4.92097 307.161 5.03541C307.046 5.14986 305.673 6.86648 304.185 8.92642C302.698 10.9864 301.324 12.703 301.21 12.8174C301.095 12.9319 299.722 14.6485 298.234 16.7084C296.747 18.7684 295.373 20.485 295.259 20.5994C295.144 20.7139 292.283 24.4905 288.85 29.0681C285.417 33.6458 282.556 37.4223 282.441 37.5368C282.327 37.6512 280.725 39.8256 278.779 42.3433C275.117 47.3787 268.708 53.9019 266.305 55.1608C265.504 55.5041 263.673 56.5341 262.3 57.3351C260.926 58.0218 257.951 59.2806 255.662 60.0817L251.542 61.455L217.896 61.7984L184.251 62.0272L181.962 63.2861C178.643 65.2316 176.354 67.6349 174.752 70.9537L173.264 73.9291L173.15 246.163L173.035 418.398H149.117H125.199L121.995 417.139Z" fill="#FFFFFF" fill-rule="evenodd" clip-rule="evenodd"/></svg>
       </div>
       <div class="clip" id="velo" data-start="0" data-duration="16" data-track-index="1" data-layout-allow-occlusion></div>
@@ -147,8 +151,11 @@
         out("#ind", { opacity: 1 }, { opacity: 0 }, 14.4, 0.6);
 
         // Firma.
-        ft("#tag", { opacity: 0, x: -16 }, { opacity: 1, x: 0 }, 3.2, 1.4, "power2.out");
-        out("#tag", { opacity: 1 }, { opacity: 0 }, 14.7, 0.7);
+        // el eslogan sube palabra a palabra desde su máscara y se queda todo el bucle
+        document.querySelectorAll("#tag .w > span").forEach(function (w, i) {
+          ft(w, { yPercent: 110 }, { yPercent: 0 }, 2.9 + i * 0.28, 1.1, "power3.out");
+          out(w, { yPercent: 0 }, { yPercent: -110 }, 14.5 + i * 0.12, 0.7, "power3.in");
+        });
         ft("#iso", { opacity: 0, y: 10 }, { opacity: 1, y: 0 }, 3.5, 1.2, "power2.out");
         out("#iso", { opacity: 1 }, { opacity: 0 }, 14.8, 0.6);
 

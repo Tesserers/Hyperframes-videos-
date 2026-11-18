@@ -32,7 +32,9 @@ precisión, con la estética de un informe de banca privada.
   +40 operaciones (Estrategia), 72 h primer shortlist (Capital humano) y +15 años de experiencia
   (las tres). Son las cifras verificadas en la web (ver `../tessera-promo/BRIEF.md`). No hay
   ninguna otra.
-- Firma: «Better decisions, together.» y el isotipo T original del brandbook, pequeño.
+- Eslogan: «Better decisions, *together.*» en Raleway 200 a 92 px, protagonista de la franja
+  baja (Eddy: «mucho más grande, es nuestro eslogan»). Entra palabra a palabra desde su
+  máscara y se queda todo el bucle; «together.» en Teal claro. Al lado, el isotipo T pequeño.
 - El centro (x 480–1440) queda vacío para el título de la vacante. Velo Navy suave en el
   centro (variable `velo`).
 - Ritmo: entradas de 1–1,6 s con `power2`/`power3`. Nada rebota.

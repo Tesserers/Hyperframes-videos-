@@ -35,9 +35,13 @@
       .fig .lab { margin-top: 34px; font-weight: 400; font-size: 18px; letter-spacing: 0.32em;
                   text-transform: uppercase; color: var(--white); }
 
-      #tag { position: absolute; left: 140px; top: 812px; font-weight: 200; font-size: 24px; letter-spacing: 0.14em;
-             color: var(--white); white-space: nowrap; }
-      #iso { position: absolute; right: 140px; top: 790px; }
+      /* El eslogan: protagonista de la franja baja, palabra a palabra. */
+      #tag { position: absolute; left: 140px; top: 712px; font-weight: 200; font-size: 92px; line-height: 1.15;
+             letter-spacing: 0.01em; color: var(--white); white-space: nowrap; }
+      #tag .w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 6px; margin-right: 0.24em; }
+      #tag .w > span { display: inline-block; }
+      #tag .w.acc > span { color: var(--teal-l); }
+      #iso { position: absolute; right: 140px; top: 772px; }
 
       #velo { position: absolute; inset: 0; pointer-events: none;
         background: radial-gradient(ellipse 34% 46% at 50% 50%, rgba(22,22,31,0.55) 0%, rgba(22,22,31,0) 100%); }
@@ -74,7 +78,7 @@
         <div class="fig" id="f2"><div class="num" data-to="72" data-pre="" data-post=" h">0 h</div><div class="lab">primer shortlist</div></div>
         <div class="fig" id="f3"><div class="num" data-to="15" data-pre="+" data-post="">+0</div><div class="lab">años de experiencia</div></div>
 
-        <div id="tag">Better decisions, together.</div>
+        <div id="tag" data-layout-allow-overflow><span class="w"><span data-layout-allow-occlusion>Better</span></span><span class="w"><span data-layout-allow-occlusion>decisions,</span></span><span class="w acc"><span data-layout-allow-occlusion>together.</span></span></div>
         <svg id="iso" width="30" height="40" viewBox="0 0 312 420"><path d="__T_PATH__" fill="#FFFFFF" fill-rule="evenodd" clip-rule="evenodd"/></svg>
       </div>
       <div class="clip" id="velo" data-start="0" data-duration="16" data-track-index="1" data-layout-allow-occlusion></div>
@@ -147,8 +151,11 @@
         out("#ind", { opacity: 1 }, { opacity: 0 }, 14.4, 0.6);
 
         // Firma.
-        ft("#tag", { opacity: 0, x: -16 }, { opacity: 1, x: 0 }, 3.2, 1.4, "power2.out");
-        out("#tag", { opacity: 1 }, { opacity: 0 }, 14.7, 0.7);
+        // el eslogan sube palabra a palabra desde su máscara y se queda todo el bucle
+        document.querySelectorAll("#tag .w > span").forEach(function (w, i) {
+          ft(w, { yPercent: 110 }, { yPercent: 0 }, 2.9 + i * 0.28, 1.1, "power3.out");
+          out(w, { yPercent: 0 }, { yPercent: -110 }, 14.5 + i * 0.12, 0.7, "power3.in");
+        });
         ft("#iso", { opacity: 0, y: 10 }, { opacity: 1, y: 0 }, 3.5, 1.2, "power2.out");
         out("#iso", { opacity: 1 }, { opacity: 0 }, 14.8, 0.6);
 

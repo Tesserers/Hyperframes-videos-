@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* Versión clara: fondo Bruma con dos masas Teal difusas, arriba a la derecha y abajo a la
+         izquierda, como la segunda referencia de Eddy, en movimiento. */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #E3E8E9; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden;
+              background: linear-gradient(160deg, #E6ECEC 0%, #E2E7E8 55%, #DCE3E3 100%); }
+      .blob { position: absolute; left: 0; top: 0; border-radius: 50%; will-change: transform; }
+      #grano { position: absolute; inset: 0; background-image: url(assets/grano.png); background-size: 512px 512px;
+               opacity: 0.12; mix-blend-mode: overlay; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="16"
+         data-width="1920" data-height="1080" data-composition-variables='{}'>
+      <div class="clip" id="malla" data-start="0" data-duration="16" data-track-index="0"
+           style="position:absolute;inset:0;overflow:hidden" data-layout-allow-overflow></div>
+      <div class="clip" id="grano" data-start="0" data-duration="16" data-track-index="1"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      (function () {
+        var LOOP = 16, TAU = Math.PI * 2;
+        var malla = document.getElementById("malla");
+
+        // Cada mancha: color, tamaño, centro de su órbita, radios de la órbita y vueltas por bucle.
+        // Las vueltas son enteras: en t = 16 todas están donde estaban en t = 0, y el bucle cierra solo.
+        var BLOBS = [
+          // Masa Teal principal, arriba a la derecha
+          { c: "rgba(88,117,121,0.95)",  w: 1300, h: 1100, cx: 1650, cy: 220, rx: 240, ry: 150, n: 1, ph: 0.00 },
+          // Su halo, más claro y más ancho, que la acompaña desfasado
+          { c: "rgba(118,145,147,0.55)", w: 1300, h: 1000, cx: 1400, cy: 420, rx: 260, ry: 180, n: 2, ph: 0.20 },
+          // Masa Teal abajo a la izquierda
+          { c: "rgba(110,137,140,0.85)", w: 1000, h: 850,  cx: 120,  cy: 1010, rx: 220, ry: 120, n: 1, ph: 0.55 },
+          // Velo Teal muy suave que cruza el centro y da relieve al Bruma
+          { c: "rgba(140,163,165,0.22)", w: 1100, h: 900,  cx: 960,  cy: 560, rx: 520, ry: 200, n: 1, ph: 0.70 },
+          // Brillo Bruma que se cuela entre las dos masas y las recorta
+          { c: "rgba(230,236,236,0.70)", w: 900,  h: 800,  cx: 1250, cy: 760, rx: 300, ry: 160, n: 2, ph: 0.35 },
+          // Toque Teal pequeño que pasea arriba, tres vueltas
+          { c: "rgba(88,117,121,0.35)",  w: 700,  h: 600,  cx: 1050, cy: 80,  rx: 260, ry: 90,  n: 3, ph: 0.10 }
+        ];
+        var els = BLOBS.map(function (b) {
+          var d = document.createElement("div");
+          d.className = "blob";
+          d.setAttribute("data-layout-allow-overflow", "");
+          // 1,5 veces más grandes y con caída suave en cuatro tramos: se funden, no se ven como círculos
+          b.w *= 1.5; b.h *= 1.5;
+          d.style.width = b.w + "px"; d.style.height = b.h + "px";
+          var al = +b.c.match(/([\d.]+)\)$/)[1], rgb = b.c.replace(/,\s*[\d.]+\)$/, "");
+          function col(k) { return rgb + "," + (al * k).toFixed(3) + ")"; }
+          d.style.background = "radial-gradient(closest-side, " + col(1) + " 0%, " + col(0.72) + " 30%, " +
+                               col(0.32) + " 60%, " + col(0.08) + " 85%, " + col(0) + " 100%)";
+          malla.appendChild(d);
+          return d;
+        });
+
+        // La posición sale del reloj del timeline: igual en cualquier fotograma, se llegue como se llegue.
+        function place(t) {
+          for (var i = 0; i < BLOBS.length; i++) {
+            var b = BLOBS[i], a = TAU * (b.n * t / LOOP + b.ph);
+            var x = b.cx + b.rx * Math.cos(a) - b.w / 2;
+            var y = b.cy + b.ry * Math.sin(a) - b.h / 2;
+            var s = 1 + 0.18 * Math.sin(a * 2 + i);   // respiración de tamaño, también periódica
+            els[i].style.transform = "translate(" + x.toFixed(2) + "px," + y.toFixed(2) + "px) scale(" + s.toFixed(4) + ")";
+          }
+        }
+        var clock = { t: 0 };
+        var tl = gsap.timeline({ paused: true });
+        tl.fromTo(clock, { t: 0 }, { t: LOOP, duration: LOOP, ease: "none", immediateRender: false,
+          onUpdate: function () { place(clock.t); } }, 0);
+        place(0);
+
+        window.__timelines["main"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

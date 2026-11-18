@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Raleway"; src: url(assets/fonts/Raleway-200.woff2) format("woff2"); font-weight: 200; }
+      @font-face { font-family: "Raleway"; src: url(assets/fonts/Raleway-400.woff2) format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Manrope"; src: url(assets/fonts/Manrope-200.woff2) format("woff2"); font-weight: 200; }
+      /* Paleta Tessera 2027. Único degradado: Teal 0 % → Navy 75 %. */
+      :root { --navy: #202031; --deep: #16161F; --teal: #587579; --teal-l: #8AA3A5; --white: #FFFFFF; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      body { background: var(--deep); font-family: "Raleway", sans-serif; }
+      #root { position: relative; width: 100%; height: 100%; background: var(--deep); overflow: hidden; }
+      #base { position: absolute; inset: 0; background: linear-gradient(135deg, #202031 0%, #16161F 75%); }
+      #light { position: absolute; top: -400px; left: 0; width: 2200px; height: 1880px;
+               background: linear-gradient(90deg, rgba(88,117,121,0) 0%, rgba(88,117,121,0.45) 40%, rgba(32,32,49,0) 75%); }
+
+      /* La ventana: 400 x 600, siempre a un lado del título. */
+      .win { position: absolute; top: 150px; width: 400px; height: 600px; overflow: hidden; background: var(--navy); }
+      .win img { position: absolute; left: -40px; top: -60px; width: 480px; height: 720px; will-change: transform; }
+      svg.frame { position: absolute; overflow: visible; }
+      svg.frame rect { fill: none; stroke: var(--teal-l); stroke-width: 1.2; }
+      .cap { position: absolute; top: 772px; white-space: nowrap; }
+      .cap .n { font-family: "Manrope", sans-serif; font-weight: 200; font-size: 22px; color: var(--white); letter-spacing: 0.08em; }
+      .cap .l { margin-left: 18px; font-weight: 400; font-size: 15px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--white); }
+
+      /* El eslogan, siempre en el lado contrario a la ventana. */
+      .tag { position: absolute; top: 812px; font-weight: 200; font-size: 84px; line-height: 1.1; color: var(--white);
+             white-space: nowrap; letter-spacing: 0.01em; }
+      .tag em { font-style: normal; color: var(--teal-l); }
+      #tagL { left: 140px; } #tagR { right: 140px; text-align: right; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="16"
+         data-width="1920" data-height="1080" data-composition-variables='{}'>
+      <div class="clip" id="scene" data-start="0" data-duration="16" data-track-index="0"
+           style="position:absolute;inset:0" data-layout-allow-overflow>
+        <div id="base"></div>
+        <div id="light" data-layout-allow-overflow></div>
+        <div id="beats"></div>
+        <div class="tag" id="tagL" data-layout-allow-occlusion>Better decisions, <em>together.</em></div>
+        <div class="tag" id="tagR" data-layout-allow-occlusion>Better decisions, <em>together.</em></div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      (function () {
+        var tl = gsap.timeline({ paused: true });
+        function ft(t, from, to, at, dur, ease) {
+          gsap.set(t, from);
+          tl.fromTo(t, from, Object.assign({ duration: dur, ease: ease || "power3.out", immediateRender: false }, to), at);
+        }
+        function go(t, from, to, at, dur, ease) {
+          tl.fromTo(t, from, Object.assign({ duration: dur, ease: ease || "power3.inOut", immediateRender: false }, to), at);
+        }
+
+        // Cuatro tiempos de 4 s. La ventana alterna derecha / izquierda; el eslogan, al revés.
+        var BEATS = [
+          { side: "R", a: "tesserers", b: "equipo",  n: "01 / 04", l: "Capital humano" },
+          { side: "L", a: "despacho",  b: "ciudad",  n: "02 / 04", l: "Finanzas" },
+          { side: "R", a: "reunion",   b: "molinos", n: "03 / 04", l: "Estrategia" },
+          { side: "L", a: "oficina",   b: "granvia", n: "04 / 04", l: "Madrid" }
+        ];
+        var X = { R: 1380, L: 140 };
+        var host = document.getElementById("beats");
+        var CLOSED = "inset(50% 0% 50% 0%)", OPEN = "inset(0% 0% 0% 0%)";
+
+        BEATS.forEach(function (b, k) {
+          var T = k * 4, x = X[b.side];
+          var w = document.createElement("div");
+          w.innerHTML =
+            '<svg class="frame" width="440" height="640" viewBox="0 0 440 640" style="left:' + (x - 20) + 'px;top:130px"><rect x="0.6" y="0.6" width="438.8" height="638.8"/></svg>' +
+            '<div class="win" style="left:' + x + 'px" data-layout-allow-overflow>' +
+              '<img class="pa" src="assets/fotos/' + b.a + '.jpg" alt="">' +
+              '<img class="pb" src="assets/fotos/' + b.b + '.jpg" alt="">' +
+            '</div>' +
+            '<div class="cap" style="' + (b.side === "R" ? "left:" + x : "left:" + x) + 'px"><span class="n">' + b.n + '</span><span class="l">' + b.l + '</span></div>';
+          host.appendChild(w);
+          var win = w.querySelector(".win"), pa = w.querySelector(".pa"), pb = w.querySelector(".pb");
+          var rect = w.querySelector("rect"), cap = w.querySelector(".cap");
+          var L = 2 * (438.8 + 638.8);
+
+          // abre como un párpado desde una línea horizontal
+          ft(win, { clipPath: CLOSED }, { clipPath: OPEN }, T + 0.05, 0.9, "power3.inOut");
+          go(win, { clipPath: OPEN }, { clipPath: CLOSED }, T + 3.2, 0.7, "power3.inOut");
+          // filete alrededor: se traza y se recoge
+          ft(rect, { strokeDasharray: L, strokeDashoffset: L }, { strokeDashoffset: 0 }, T + 0.3, 1.2, "power2.inOut");
+          go(rect, { strokeDashoffset: 0 }, { strokeDashoffset: -L }, T + 3.0, 0.9, "power2.inOut");
+          // foto A con zoom lento, la B entra con un barrido desde abajo a mitad de tiempo
+          ft(pa, { scale: 1.14, x: b.side === "R" ? 18 : -18 }, { scale: 1.0, x: 0 }, T, 2.6, "power1.out");
+          ft(pb, { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)" }, T + 1.9, 0.75, "power3.inOut");
+          ft(pb, { scale: 1.12 }, { scale: 1.0 }, T + 1.9, 2.0, "power2.out");
+          // pie
+          ft(cap, { opacity: 0, y: 12 }, { opacity: 1, y: 0 }, T + 0.7, 0.8, "power2.out");
+          go(cap, { opacity: 1, y: 0 }, { opacity: 0, y: -8 }, T + 3.1, 0.5, "power2.in");
+        });
+
+        // Eslogan: cambia de lado en cada frontera, con la ventana cerrada.
+        // En t = 0 está a la izquierda y entero; en t = 16 vuelve a estarlo.
+        gsap.set("#tagR", { opacity: 0 });
+        BEATS.forEach(function (b, k) {
+          var T = k * 4;
+          var cur = b.side === "R" ? "#tagL" : "#tagR";
+          var nxt = b.side === "R" ? "#tagR" : "#tagL";
+          go(cur, { opacity: 1, y: 0, filter: "blur(0px)" }, { opacity: 0, y: -14, filter: "blur(6px)" }, T + 3.0, 0.5, "power2.in");
+          ft(nxt, { opacity: 0, y: 18, filter: "blur(6px)" }, { opacity: 1, y: 0, filter: "blur(0px)" }, T + 3.5, 0.5, "power2.out");
+        });
+        gsap.set("#tagL", { opacity: 1, y: 0, filter: "blur(0px)" });
+
+        // Luz de fondo: una pasada por bucle, fuera de cuadro en 0 y en 16.
+        ft("#light", { x: -2600, rotation: 18 }, { x: 2200, rotation: 18 }, 0, 16, "none");
+
+        window.__timelines["main"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

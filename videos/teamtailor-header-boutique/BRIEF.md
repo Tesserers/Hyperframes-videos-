@@ -40,4 +40,7 @@ precisión, con la estética de un informe de banca privada.
 - Ritmo: entradas de 1–1,6 s con `power2`/`power3`. Nada rebota.
 - Bucle exacto: Navy liso en 0 y en 16 (empalme 0,01/255).
 
+Variable `solo_fondo` (por defecto `false`): con `true` el render deja solo el fondo y la luz.
+`npx hyperframes render --variables '{"solo_fondo":true}'`.
+
 `index.html` se genera desde `scripts/index.template.html` (ver `scripts/README.md`).

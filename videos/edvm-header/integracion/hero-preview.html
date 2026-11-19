@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>edvm · hero con vídeo</title>
+<style>
+  @font-face { font-family: Manrope; font-weight: 700; src: url(../assets/fonts/Manrope-700.woff2) format("woff2"); }
+  @font-face { font-family: Manrope; font-weight: 800; src: url(../assets/fonts/Manrope-800.woff2) format("woff2"); }
+  * { margin: 0; box-sizing: border-box; }
+  body { background: #A61C1C; font-family: Manrope, Inter, system-ui, sans-serif; }
+
+  /* Maqueta del hero según la retícula del brandkit: logo arriba a la
+     izquierda a 96/72 px, titular abajo a la izquierda, en minúsculas. */
+  #inicio { position: relative; height: 100vh; min-height: 560px; overflow: hidden; color: #F6F3EE; background: #A61C1C; }
+  #inicio video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 100% 50%; }
+  .logo { position: absolute; left: 5vw; top: 6.67vh; height: 44px; z-index: 1; }
+  .txt { position: absolute; left: 5vw; bottom: 10vh; width: min(34vw, 640px); z-index: 1; }
+  h1 { font-weight: 800; font-size: clamp(44px, 5.2vw, 104px); line-height: .95; letter-spacing: -.035em; }
+  p { margin-top: 28px; font-weight: 700; font-size: clamp(16px, 1.15vw, 22px); line-height: 1.35; max-width: 30ch; }
+
+  /* Móvil: el recorte central metería las fotos detrás del titular, y el
+     brandkit lo prohíbe. El vídeo baja a la mitad inferior, anclado a la
+     derecha, y el texto sube a la mitad superior, sobre rojo liso. */
+  @media (max-width: 899px) {
+    #inicio video { top: auto; bottom: 0; height: 50%; }
+    .txt { bottom: auto; top: 15vh; width: auto; right: 5vw; }
+    .logo { height: 32px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #inicio video { display: none; }
+    #inicio { background: #A61C1C url(../renders/edvm-header-poster.jpg) 100% 50% / cover; }
+  }
+</style>
+</head>
+<body>
+<section id="inicio">
+  <video poster="../renders/edvm-header-poster.jpg"
+         autoplay muted loop playsinline preload="metadata" aria-hidden="true">
+    <source src="../renders/edvm-header.webm" type="video/webm">
+    <source src="../renders/edvm-header.mp4" type="video/mp4">
+  </video>
+  <img class="logo" src="../brand/edvm-horizontal-white.svg" alt="edvm">
+  <div class="txt">
+    <h1>people for<br>what’s next.</h1>
+    <p>tres perfiles en cuatro semanas. te acompaño yo, de principio a fin.</p>
+  </div>
+</section>
+</body>
+</html>

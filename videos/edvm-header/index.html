@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; }
+      body { background: #A61C1C; }
+      #root { position: relative; width: 100%; height: 100%; background: var(--marco, #A61C1C); overflow: hidden; }
+
+      /* The window is the brandkit's "marco de foto" (slide 35), taken from the
+         shapes' own coordinates: three tables 260 px tall, 40 px apart, from
+         x=760 to the right edge, each with a left end of radius 130. Everything
+         outside it is the flat frame colour. */
+      #win {
+        position: absolute; left: 760px; top: 110px; width: 1160px; height: 860px; overflow: hidden;
+        clip-path: path('M130 0H1160V260H130A130 130 0 0 1 130 0Z M130 300H1160V560H130A130 130 0 0 1 130 300Z M130 600H1160V860H130A130 130 0 0 1 130 600Z');
+      }
+      .layer { position: absolute; inset: 0; }
+      /* One strip per table, so each table can take its new photo on its own
+         clock. The photo inside is offset by the table's top, which keeps the
+         picture continuous across the three strips. */
+      .strip { position: absolute; left: 0; width: 1160px; height: 260px; overflow: hidden; }
+      .strip .ph { position: absolute; left: 0; width: 1300px; height: 860px; will-change: transform; }
+      .strip .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="16"
+         data-width="1920" data-height="1080"
+         data-composition-variables='{"marco": "rojo"}'>
+      <div id="win" class="clip" data-start="0" data-duration="16" data-track-index="0"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      (function () {
+        var FPS = 30, DUR = 16;
+        var BEAT = 4;          // one photo every 4 s
+        var WIPE = 42 / FPS;   // 1.4 s for one table to change
+        var STAG = 6 / FPS;    // 0.2 s between tables: top, middle, bottom
+        var V = 16;            // constant pan, px/s, right to left
+        var PAR = 140;         // the incoming photo travels this far as it lands
+        var TABLE_TOP = [0, 300, 600];
+
+        var P = "assets/photos/";
+        var PHOTOS = [
+          { img: P + "01-bosque.jpg",       pos: "50% 62%" },
+          { img: P + "02-casa.jpg",         pos: "40% 55%" },
+          { img: P + "03-conversacion.jpg", pos: "50% 30%" },
+          { img: P + "04-mesa.jpg",         pos: "55% 60%" }
+        ];
+
+        // Frame colour: the brandkit's three frames. Red is the default.
+        try {
+          var vars = (window.__hyperframes && window.__hyperframes.getVariables)
+            ? window.__hyperframes.getVariables() : null;
+          var marco = { rojo: "#A61C1C", carbon: "#191919", claro: "#F6F3EE" }[(vars && vars.marco) || "rojo"] || "#A61C1C";
+          document.getElementById("root").style.setProperty("--marco", marco);
+          document.body.style.background = marco;
+        } catch (e) {}
+
+        // Layers, bottom to top: the tail of photo 4 (what is on screen at t=0,
+        // carried over from the end of the previous loop), then photos 1..4.
+        // Each layer knows when it started arriving; a photo's pan is measured
+        // from that moment, so the tail is just photo 4 started one loop early.
+        var win = document.getElementById("win");
+        var defs = [{ p: PHOTOS[3], t0: -BEAT, tail: true }];
+        for (var k = 0; k < PHOTOS.length; k++) defs.push({ p: PHOTOS[k], t0: k * BEAT });
+
+        var layers = defs.map(function (d) {
+          var layer = document.createElement("div");
+          layer.className = "layer";
+          var strips = TABLE_TOP.map(function (top) {
+            var s = document.createElement("div");
+            s.className = "strip"; s.style.top = top + "px";
+            var ph = document.createElement("div");
+            ph.className = "ph"; ph.setAttribute("data-layout-allow-overflow", ""); ph.style.top = (-top) + "px";
+            var im = document.createElement("img");
+            im.src = d.p.img; im.alt = ""; im.style.objectPosition = d.p.pos;
+            ph.appendChild(im); s.appendChild(ph); layer.appendChild(s);
+            return { s: s, ph: ph };
+          });
+          win.appendChild(layer);
+          return { d: d, el: layer, strips: strips };
+        });
+
+        function ease(p) { // power2.inOut
+          return p < 0.5 ? 2 * p * p : 1 - 2 * (1 - p) * (1 - p);
+        }
+        function arrival(d, i, t) { // 0..1, how far table i of this layer has landed
+          if (d.tail) return 1;
+          var p = (t - d.t0 - i * STAG) / WIPE;
+          return p <= 0 ? 0 : p >= 1 ? 1 : ease(p);
+        }
+
+        // The whole frame is a pure function of the clock. Nothing depends on a
+        // tween having fired, so any frame can be seeked to directly.
+        function draw(t) {
+          for (var n = 0; n < layers.length; n++) {
+            var L = layers[n], d = L.d;
+            // A layer is gone once the next one has fully covered all three tables.
+            var next = layers[n + 1];
+            var covered = next && arrival(next.d, 2, t) >= 1;
+            var started = d.tail || t >= d.t0;
+            L.el.style.display = (started && !covered) ? "block" : "none";
+            if (!started || covered) continue;
+            for (var i = 0; i < 3; i++) {
+              var a = arrival(d, i, t);
+              var edge = 1160 * (1 - a);
+              var x = -V * (t - d.t0) + PAR * (1 - a);
+              L.strips[i].s.style.clipPath = a >= 1 ? "none" : "inset(0 0 0 " + edge.toFixed(2) + "px)";
+              L.strips[i].ph.style.transform = "translate3d(" + x.toFixed(2) + "px,0,0)";
+            }
+          }
+        }
+
+        var tl = gsap.timeline({ paused: true, onUpdate: function () { draw(tl.time()); } });
+        tl.set({}, {}, DUR); // the loop is exactly 16 s
+        window.__timelines["main"] = tl;
+        draw(0);
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

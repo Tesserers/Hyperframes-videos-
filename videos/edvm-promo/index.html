@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="es" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Manrope"; font-weight: 700; src: url(assets/fonts/Manrope-700.woff2) format("woff2"); }
+      @font-face { font-family: "Manrope"; font-weight: 800; src: url(assets/fonts/Manrope-800.woff2) format("woff2"); }
+      @font-face { font-family: "Inter"; font-weight: 400; src: url(assets/fonts/Inter-Regular.otf) format("opentype"); }
+      @font-face { font-family: "Inter"; font-weight: 600; src: url(assets/fonts/Inter-SemiBold.otf) format("opentype"); }
+
+      :root {
+        --red: #A61C1C; --red-tone: #8E1616; --red-on-dark: #C4433A;
+        --carbon: #191919; --carbon-tone: #2C2C2C; --white: #F6F3EE; --stone: #D2D4D6; --rule: #45494D;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; }
+      body { background: var(--red); }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--red); }
+
+      .scene { position: absolute; inset: 0; overflow: hidden; }
+      .scene.red    { background: var(--red);    color: var(--white); }
+      .scene.carbon { background: var(--carbon); color: var(--white); }
+      .scene.claro  { background: var(--white);  color: var(--carbon); }
+      .ct { position: absolute; inset: 0; will-change: transform; }
+
+      /* Brandkit grid: 96 px sides, 72 px top, logo top-left at 44 px high,
+         label top-right, titular bottom-left in lowercase Manrope Bold. */
+      .logo { position: absolute; left: 96px; top: 72px; width: 142.7px; height: 44px; overflow: visible; }
+      .logo path { fill: none; stroke-width: 10; stroke-linejoin: round; }
+      .label { position: absolute; right: 96px; top: 80px; font: 700 24px/1 Manrope, sans-serif; letter-spacing: -0.01em; }
+      .foot { position: absolute; left: 40px; bottom: 30px; font: 400 18px/1 Inter, sans-serif; opacity: .85; }
+      .red .label, .carbon .label { color: var(--white); }
+      .carbon .label { color: var(--red-on-dark); }
+      .claro .label { color: var(--red); }
+
+      .t { font-family: Manrope, sans-serif; font-weight: 700; letter-spacing: -0.04em; line-height: .94; }
+      .t span { display: block; }
+      .acc-dark { color: var(--red-on-dark); }
+      .acc { color: var(--red); }
+      .body { font: 400 26px/1.4 Inter, sans-serif; }
+
+      /* Photo frame — brandkit slide 35, from the shapes' own coordinates. */
+      .win { position: absolute; left: 760px; top: 110px; width: 1160px; height: 860px; overflow: hidden; }
+      .win .ph { position: absolute; left: 0; top: 0; width: 1340px; height: 860px; will-change: transform; }
+      .win img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+      /* Scene 2 — the process, slide 22 */
+      .steps { position: absolute; left: 96px; top: 640px; width: 1728px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+      .step { border-top: 2px solid var(--rule); padding-top: 26px; }
+      .step .n { font: 700 64px/1 Manrope, sans-serif; color: var(--red-on-dark); letter-spacing: -0.03em; }
+      .step .k { font: 700 44px/1 Manrope, sans-serif; margin-top: 18px; letter-spacing: -0.03em; }
+      .step .d { font: 400 22px/1.4 Inter, sans-serif; color: var(--stone); margin-top: 16px; max-width: 360px; }
+      .step .w { font: 600 20px/1 Inter, sans-serif; color: var(--white); margin-top: 18px; }
+
+      /* Scene 3 — the list with the symbol as bullet, slide 39 */
+      .list { position: absolute; left: 96px; top: 230px; }
+      .row { display: flex; align-items: center; gap: 44px; height: 172px; }
+      .row svg { width: 96px; height: 79px; flex: none; overflow: visible; }
+      .row svg path { fill: none; stroke: var(--red); stroke-width: 10; }
+      .row .t { font-size: 136px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30"
+         data-width="1920" data-height="1080">
+
+      <!-- 1 · apertura -->
+      <div id="s0" class="scene red clip" data-start="0" data-duration="30" data-track-index="0">
+        <div class="ct">
+          <div class="win" id="win0"><div class="ph"><img src="assets/photos/01-bosque.jpg" alt="" style="object-position:50% 62%"></div></div>
+          <svg class="logo" viewBox="-1 -31 266 82"><path stroke="#F6F3EE" d="M5 25H45A20 20 0 1 0 39.14 39.14M63 25a20 20 0 1 0 40 0a20 20 0 1 0-40 0M103-30V50M121 0L141 45L161 0"/><path stroke="#F6F3EE" transform="translate(174 0)" d="M5 50V25a20 20 0 0 1 40 0v25M45 25a20 20 0 0 1 40 0v25"/></svg>
+          <div data-layout-allow-overlap class="label">selección comercial</div>
+          <div class="t" style="position:absolute;left:96px;bottom:150px;font-size:128px">
+            <span data-layout-allow-overlap class="in" data-at="1.0">el talento</span>
+            <span data-layout-allow-overlap class="in" data-at="1.12">comercial</span>
+            <span data-layout-allow-overlap class="in" data-at="1.24">no espera.</span>
+          </div>
+          <div data-layout-allow-overlap class="foot">people for what’s next.</div>
+        </div>
+      </div>
+
+      <!-- 2 · cómo trabajamos -->
+      <div id="s1" class="scene carbon clip" data-start="0" data-duration="30" data-track-index="1">
+        <div class="ct">
+          <svg class="logo" viewBox="-1 -31 266 82"><path stroke="#F6F3EE" d="M5 25H45A20 20 0 1 0 39.14 39.14M63 25a20 20 0 1 0 40 0a20 20 0 1 0-40 0M103-30V50M121 0L141 45L161 0"/><path stroke="#F6F3EE" transform="translate(174 0)" d="M5 50V25a20 20 0 0 1 40 0v25M45 25a20 20 0 0 1 40 0v25"/></svg>
+          <div data-layout-allow-overlap class="label">cómo trabajamos</div>
+          <div class="t" style="position:absolute;left:96px;top:205px;font-size:120px">
+            <span data-layout-allow-overlap class="in" data-at="0">tres perfiles</span>
+            <span data-layout-allow-overlap class="in acc-dark" data-at="0.12">en cuatro semanas.</span>
+          </div>
+          <div class="steps">
+            <div class="step in" data-at="0.9"><div class="n">01</div><div class="k">discovery</div><div class="d">Sesión con dirección. Perfil y scorecard.</div><div class="w">semana 1</div></div>
+            <div class="step in" data-at="1.25"><div class="n">02</div><div class="k">mapa</div><div class="d">Empresas objetivo, rangos, disponibilidad real.</div><div class="w">semana 2</div></div>
+            <div class="step in" data-at="1.6"><div class="n">03</div><div class="k">shortlist</div><div class="d">Tres perfiles por posición, con informe.</div><div class="w">semanas 3–4</div></div>
+            <div class="step in" data-at="1.95"><div class="n">04</div><div class="k">cierre</div><div class="d">Oferta, negociación y seguimiento.</div><div class="w">semanas 5–6</div></div>
+          </div>
+          <div data-layout-allow-overlap class="foot">people for what’s next.</div>
+        </div>
+      </div>
+
+      <!-- 3 · perfiles -->
+      <div id="s2" class="scene claro clip" data-start="0" data-duration="30" data-track-index="2">
+        <div class="ct">
+          <svg class="logo" viewBox="-1 -31 266 82"><path stroke="#191919" d="M5 25H45A20 20 0 1 0 39.14 39.14M63 25a20 20 0 1 0 40 0a20 20 0 1 0-40 0M103-30V50M121 0L141 45L161 0"/><path stroke="#A61C1C" transform="translate(174 0)" d="M5 50V25a20 20 0 0 1 40 0v25M45 25a20 20 0 0 1 40 0v25"/></svg>
+          <div data-layout-allow-overlap class="label">perfiles</div>
+          <div class="list">
+            <div class="row in" data-at="0"><svg viewBox="0 0 110 90"><path d="M110 5H25A20 20 0 0 0 25 45H110M25 45A20 20 0 0 0 25 85H110"/></svg><div class="t">sales.</div></div>
+            <div class="row in" data-at="0.3"><svg viewBox="0 0 110 90"><path d="M110 5H25A20 20 0 0 0 25 45H110M25 45A20 20 0 0 0 25 85H110"/></svg><div class="t">customer success.</div></div>
+            <div class="row in" data-at="0.6"><svg viewBox="0 0 110 90"><path d="M110 5H25A20 20 0 0 0 25 45H110M25 45A20 20 0 0 0 25 85H110"/></svg><div class="t">marketing.</div></div>
+          </div>
+          <div data-layout-allow-overlap class="foot" style="opacity:1">people for what’s next.</div>
+        </div>
+      </div>
+
+      <!-- 4 · te acompaño yo -->
+      <div id="s3" class="scene carbon clip" data-start="0" data-duration="30" data-track-index="3">
+        <div class="ct">
+          <div class="win" id="win3"><div class="ph"><img src="assets/photos/03-conversacion.jpg" alt="" style="object-position:50% 30%"></div></div>
+          <svg class="logo" viewBox="-1 -31 266 82"><path stroke="#F6F3EE" d="M5 25H45A20 20 0 1 0 39.14 39.14M63 25a20 20 0 1 0 40 0a20 20 0 1 0-40 0M103-30V50M121 0L141 45L161 0"/><path stroke="#F6F3EE" transform="translate(174 0)" d="M5 50V25a20 20 0 0 1 40 0v25M45 25a20 20 0 0 1 40 0v25"/></svg>
+          <div style="position:absolute;left:96px;bottom:150px;width:664px">
+            <div class="t" style="font-size:104px;white-space:nowrap">
+              <span data-layout-allow-overlap class="in" data-at="0.7">te acompaño</span>
+              <span data-layout-allow-overlap class="in acc-dark" data-at="0.82">yo.</span>
+            </div>
+            <div class="body in" data-at="1.3" style="color:var(--stone);margin-top:36px">Edward del Valle Manrique,<br>de principio a fin.</div>
+          </div>
+          <div data-layout-allow-overlap class="foot">people for what’s next.</div>
+        </div>
+      </div>
+
+      <!-- 5 · si no encaja -->
+      <div id="s4" class="scene claro clip" data-start="0" data-duration="30" data-track-index="4">
+        <div class="ct">
+          <svg class="logo" viewBox="-1 -31 266 82"><path stroke="#191919" d="M5 25H45A20 20 0 1 0 39.14 39.14M63 25a20 20 0 1 0 40 0a20 20 0 1 0-40 0M103-30V50M121 0L141 45L161 0"/><path stroke="#A61C1C" transform="translate(174 0)" d="M5 50V25a20 20 0 0 1 40 0v25M45 25a20 20 0 0 1 40 0v25"/></svg>
+          <div class="t" style="position:absolute;left:96px;bottom:150px;font-size:160px">
+            <span data-layout-allow-overlap class="in" data-at="0">si no encaja,</span>
+            <span data-layout-allow-overlap class="in acc" data-at="0.45">te lo diremos.</span>
+          </div>
+          <div data-layout-allow-overlap class="foot" style="opacity:1">people for what’s next.</div>
+        </div>
+      </div>
+
+      <!-- 6 · let's talk -->
+      <div id="s5" class="scene red clip" data-start="0" data-duration="30" data-track-index="5">
+        <div class="ct">
+          <svg id="bigm" viewBox="0 0 1920 1080" style="position:absolute;inset:0;width:1920px;height:1080px">
+            <path id="bigm-path" d="M172 5H25A20 20 0 0 0 25 45H172M25 45A20 20 0 0 0 25 85H172"
+                  transform="translate(820 170) scale(6.4)" fill="none" stroke="#8E1616" stroke-width="10"/>
+          </svg>
+          <svg class="logo" viewBox="-1 -31 266 82"><path stroke="#F6F3EE" d="M5 25H45A20 20 0 1 0 39.14 39.14M63 25a20 20 0 1 0 40 0a20 20 0 1 0-40 0M103-30V50M121 0L141 45L161 0"/><path stroke="#F6F3EE" transform="translate(174 0)" d="M5 50V25a20 20 0 0 1 40 0v25M45 25a20 20 0 0 1 40 0v25"/></svg>
+          <div style="position:absolute;left:96px;bottom:150px">
+            <div class="t" style="font-size:210px">
+              <span data-layout-allow-overlap class="in" data-at="0">let’s</span>
+              <span data-layout-allow-overlap class="in" data-at="0.12">talk.</span>
+            </div>
+            <div class="body in" data-at="0.7" style="margin-top:40px;font-weight:600">Edward del Valle Manrique</div>
+          </div>
+          <div data-layout-allow-overlap class="foot">people for what’s next.</div>
+        </div>
+      </div>
+
+      <!-- Sound: the music bed, cut on the bar, and a soft whoosh on each seam. -->
+      <audio id="bgm" src="assets/bgm/bed.wav" data-start="0" data-duration="30" data-track-index="10" data-volume="1"></audio>
+      <audio id="sfx1" src="assets/sfx/whoosh-short.mp3" data-start="4.725" data-duration="0.57" data-track-index="11" data-volume="0.3"></audio>
+      <audio id="sfx2" src="assets/sfx/whoosh-short.mp3" data-start="10.35" data-duration="0.57" data-track-index="12" data-volume="0.3"></audio>
+      <audio id="sfx3" src="assets/sfx/whoosh-short.mp3" data-start="15.975" data-duration="0.57" data-track-index="13" data-volume="0.3"></audio>
+      <audio id="sfx4" src="assets/sfx/whoosh-short.mp3" data-start="21.6" data-duration="0.57" data-track-index="14" data-volume="0.3"></audio>
+      <audio id="sfx5" src="assets/sfx/whoosh-short.mp3" data-start="25.35" data-duration="0.57" data-track-index="15" data-volume="0.3"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      (function () {
+        var DUR = 30;
+        var BAR = 1.875;                       // 128 BPM, four beats
+        // Scene boundaries on the downbeat: 3 + 3 + 3 + 3 + 2 + 2 bars = 16 bars = 30 s.
+        var BOUNDS = [0, 3 * BAR, 6 * BAR, 9 * BAR, 12 * BAR, 14 * BAR, DUR];
+        var WIPE = 0.72, STAG = 0.09, LEAD = WIPE + 2 * STAG; // the cover lands ON the downbeat
+        var scenes = [0, 1, 2, 3, 4, 5].map(function (i) { return document.getElementById("s" + i); });
+
+        function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+        function inOut3(p) { return p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; }
+        function out3(p) { return 1 - Math.pow(1 - p, 3); }
+
+        // ---- The seam: three tables with the «m»'s round end sweep in from the
+        // right, top first, and carry the next scene in with them.
+        function wipePath(t, ws) {
+          var d = "", full = true;
+          for (var i = 0; i < 3; i++) {
+            var p = inOut3(clamp((t - ws - i * STAG) / WIPE));
+            if (p < 1) full = false;
+            var xl = 1920 - p * 2120, y = 360 * i, r = 180;
+            if (xl + r >= 1920) continue;
+            d += "M" + (xl + r).toFixed(1) + " " + y + "H1920V" + (y + 360) + "H" + (xl + r).toFixed(1) +
+                 "A" + r + " " + r + " 0 0 1 " + (xl + r).toFixed(1) + " " + y + "Z";
+          }
+          return full ? null : (d || "M0 0Z");
+        }
+
+        // ---- The photo frame: its three tables slide in from the right edge,
+        // round end first, the same gesture as the seam at a smaller scale.
+        var WINS = [
+          { el: document.getElementById("win0"), at: 0.15, scene: 0 },
+          { el: document.getElementById("win3"), at: BOUNDS[3] + 0.05, scene: 3 }
+        ];
+        function winPath(t, at) {
+          var d = "";
+          for (var i = 0; i < 3; i++) {
+            var p = inOut3(clamp((t - at - i * 0.12) / 1.0));
+            var a = 1160 * (1 - p), y = 300 * i;
+            if (a + 130 >= 1160) continue;
+            d += "M" + (a + 130).toFixed(1) + " " + y + "H1160V" + (y + 260) + "H" + (a + 130).toFixed(1) +
+                 "A130 130 0 0 1 " + (a + 130).toFixed(1) + " " + y + "Z";
+          }
+          return d || "M0 0Z";
+        }
+
+        // Everything with a clip is a pure function of the clock.
+        function draw(t) {
+          for (var k = 0; k < scenes.length; k++) {
+            var ws = k === 0 ? -1 : BOUNDS[k] - LEAD;
+            var gone = k + 1 < scenes.length && t >= BOUNDS[k + 1];
+            var on = t >= ws && !gone;
+            scenes[k].style.display = on ? "block" : "none";
+            if (on && k > 0) {
+              var cp = wipePath(t, ws);
+              scenes[k].style.clipPath = cp ? "path('" + cp + "')" : "none";
+            }
+          }
+          for (var w = 0; w < WINS.length; w++) {
+            var W = WINS[w];
+            W.el.style.clipPath = "path('" + winPath(t, W.at) + "')";
+            var local = Math.max(0, t - W.at);
+            W.el.firstElementChild.style.transform = "translate3d(" + (-16 * local).toFixed(2) + "px,0,0)";
+          }
+        }
+
+        var tl = gsap.timeline({ paused: true, onUpdate: function () { draw(tl.time()); } });
+
+        // ---- Text: every line arrives from the right and settles, staggered.
+        // The film's one direction is right to left, the same as the seams.
+        for (var k = 0; k < scenes.length; k++) {
+          var base = BOUNDS[k];
+          var items = scenes[k].querySelectorAll(".in");
+          for (var j = 0; j < items.length; j++) {
+            var at = base + parseFloat(items[j].getAttribute("data-at"));
+            tl.fromTo(items[j], { x: 90, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, at);
+          }
+          // The outgoing scene gives way: it slides left a little while it is covered.
+          if (k + 1 < scenes.length) {
+            tl.to(scenes[k].querySelector(".ct"), { x: -140, duration: LEAD, ease: "power2.in" }, BOUNDS[k + 1] - LEAD);
+          }
+        }
+
+        // ---- The closing «m»: drawn in one stroke, tone on tone, right to left.
+        var mp = document.getElementById("bigm-path");
+        var len = mp.getTotalLength();
+        mp.style.strokeDasharray = len + " " + len;
+        tl.fromTo(mp, { strokeDashoffset: len }, { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" }, BOUNDS[5] - 0.2);
+
+        tl.set({}, {}, DUR);
+        window.__timelines["main"] = tl;
+        draw(0);
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

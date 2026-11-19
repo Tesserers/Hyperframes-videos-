@@ -2,7 +2,7 @@
 workflow: general-video
 flow: automation
 storyboard: no
-message: "people for what's next: selección comercial con nombre y apellido, tres perfiles en cuatro semanas."
+message: "people for what's next: selección comercial con nombre y apellido, de principio a fin."
 destination: web
 aspect: 1920x1080
 language: es
@@ -25,7 +25,7 @@ claims inventados.
 | t | Fondo | Contenido | Fuente en el brandkit |
 |---|---|---|---|
 | 0–5,6 | rojo | «el talento comercial no espera.» + marco de foto con bosque | diap. 33, 35 |
-| 5,6–11,3 | carbón | «tres perfiles en cuatro semanas.» + discovery · mapa · shortlist · cierre | diap. 22, 28 |
+| 5,6–11,3 | carbón | «cómo trabajamos.» + discovery · mapa · shortlist · cierre, sin plazos | diap. 20, 22 |
 | 11,3–16,9 | claro | sales · customer success · marketing, con la viñeta símbolo | diap. 39 |
 | 16,9–22,5 | carbón | «te acompaño yo.» + marco carbón con la conversación | diap. 24, 28, 36 |
 | 22,5–26,3 | claro | «si no encaja, te lo diremos.» | diap. 28 |
@@ -46,3 +46,7 @@ claims inventados.
   104,85 s), que arranca en el primer tiempo de compás, normalizado a −17 LUFS. Un soplido
   suave en cada transición, a 0,3. Si me pasas otra pista para edvm, se cambia en un minuto.
 - **Color.** Mismo arreglo de matriz BT.601 → BT.709 que en la cabecera.
+- **Sin plazos en semanas.** El brandkit v1.0 todavía dice «Semana 1… Semanas 5–6» (diap. 22) y
+  «tres perfiles en cuatro semanas» (diap. 28), pero edvm ya no habla de semanas. El vídeo usa
+  los cuatro pasos con su descripción y sin plazos, y el titular «cómo trabajamos.» de la
+  plantilla b. Conviene actualizar esas dos diapositivas en el brandkit.

@@ -2,11 +2,11 @@
 workflow: general-video
 flow: automation
 storyboard: no
-message: "people for what's next: selección comercial con nombre y apellido, de principio a fin."
+message: "Tu área de people, sin montar un departamento: selección y headhunting, people externalizado, talent ops y employer branding."
 destination: web
 aspect: 1920x1080
 language: es
-audience: "Directores y fundadores que van a abrir una búsqueda comercial"
+audience: "Pymes y startups que crecen y no tienen un departamento de personas"
 length: 30s
 angle: "Promo de marca sin voz, montado sobre 16 compases de música, con los textos y recursos del brandkit"
 style_preset: brand-native
@@ -16,20 +16,23 @@ narration: none
 
 ## Intent
 
-Promo de 30 s de edvm (Edward del Valle Manrique) que se sostiene solo, con mensaje, logo y
-música. Todos los textos salen del brandkit (`../edvm-header/brand/EDVM_brandkit.pptx`); no hay
-claims inventados.
+Promo de 30 s de edvm para **pymes y startups**. Cuenta qué hace edvm por la empresa: ser su
+área de people sin que tenga que montar un departamento. Los servicios son los que fijó Eddy:
+selección y headhunting, people externalizado, y talent ops y employer branding. La primera
+versión se apoyaba en los textos de ejemplo de las plantillas del brandkit («el talento
+comercial», sales y customer success, «te acompaño yo»). Hablaba en primera persona y de
+perfiles comerciales, y no servía como publicidad. Esta la sustituye.
 
 ## Escenas (cortes en el primer tiempo de compás, 128 BPM, compás de 1,875 s)
 
-| t | Fondo | Contenido | Fuente en el brandkit |
-|---|---|---|---|
-| 0–5,6 | rojo | «el talento comercial no espera.» + marco de foto con bosque | diap. 33, 35 |
-| 5,6–11,3 | carbón | «cómo trabajamos.» + discovery · mapa · shortlist · cierre, sin plazos | diap. 20, 22 |
-| 11,3–16,9 | claro | sales · customer success · marketing, con la viñeta símbolo | diap. 39 |
-| 16,9–22,5 | carbón | «te acompaño yo.» + marco carbón con la conversación | diap. 24, 28, 36 |
-| 22,5–26,3 | claro | «si no encaja, te lo diremos.» | diap. 28 |
-| 26,3–30 | rojo | «let's talk.» + la «m» en grande tono sobre tono, trazada | diap. 18, 25 |
+| t | Fondo | Contenido |
+|---|---|---|
+| 0–5,6 | rojo | «crecer es contratar bien.» + marco de foto con bosque |
+| 5,6–11,3 | carbón | «tu área de people, sin montar un departamento.» |
+| 11,3–16,9 | claro | Los tres servicios con la viñeta símbolo, cada uno con una línea de qué incluye |
+| 16,9–22,5 | carbón | «equipos que escalan.» + «Te ayudamos a contratar, ordenar y retener al equipo que viene.» + marco carbón con la conversación |
+| 22,5–26,3 | claro | «si no encaja, te lo diremos.» (tono del brandkit, diap. 28) |
+| 26,3–30 | rojo | «let's talk.» + selección · people · talent ops + la «m» tono sobre tono |
 
 ## Decisiones
 

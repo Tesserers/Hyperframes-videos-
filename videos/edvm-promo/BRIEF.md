@@ -23,20 +23,26 @@ versión se apoyaba en los textos de ejemplo de las plantillas del brandkit («e
 comercial», sales y customer success, «te acompaño yo»). Hablaba en primera persona y de
 perfiles comerciales, y no servía como publicidad. Esta la sustituye.
 
-## Escenas (cortes en el primer tiempo de compás, 128 BPM, compás de 1,875 s)
+## Escenas — versión estudio (16 compases, 128 BPM; cada cambio cae en el primer tiempo del compás)
 
-| t | Fondo | Contenido |
-|---|---|---|
-| 0–5,6 | rojo | «crecer es contratar bien.» + marco de foto con bosque |
-| 5,6–11,3 | carbón | «tu área de people, sin montar un departamento.» |
-| 11,3–16,9 | claro | Los tres servicios con la viñeta símbolo, cada uno con una línea de qué incluye |
-| 16,9–22,5 | carbón | «equipos que escalan.» + «Te ayudamos a contratar, ordenar y retener al equipo que viene.» + marco carbón con la conversación |
-| 22,5–26,3 | claro | «si no encaja, te lo diremos.» (tono del brandkit, diap. 28) |
-| 26,3–30 | rojo | «let's talk.» + selección · people · talent ops + la «m» tono sobre tono |
+Pedido de Eddy: «más studio boutique, tipo agencia de marketing moderna y cool». Respuesta, sin
+salir de la marca: tipografía gigante que sube desde su línea base con máscara y a tiempo de
+música, mezcla de cortes secos y de la transición de la «m», y detalles de estudio (índice
+01/07, línea de contexto arriba, índice de servicios numerado, ticker).
+
+| t | Fondo | Entrada | Contenido |
+|---|---|---|---|
+| 0–3,75 | carbón | — | «people for what's next.», una palabra por tiempo |
+| 3,75–7,5 | rojo | «m» | «tu área de people, sin montar un departamento.» |
+| 7,5–11,25 | claro | corte | «para pymes y startups que crecen.» + marco claro con las 4 fotos, una cada 2 tiempos |
+| 11,25–18,75 | carbón | «m» | Índice (01)–(03) de servicios, uno por compás, y ticker de servicios |
+| 18,75–22,5 | rojo | corte | «equipos que escalan.» + marco rojo con la conversación |
+| 22,5–26,25 | claro | corte | «si no encaja, te lo diremos.» |
+| 26,25–30 | rojo | «m» | «let's talk.» + la «m» trazada tono sobre tono |
 
 ## Decisiones
 
-- **Transición de marca.** Tres tablas con el extremo redondo de la «m» barren la pantalla de
+- **Transición de marca** (solo en los cambios grandes; el resto, corte seco). Tres tablas con el extremo redondo de la «m» barren la pantalla de
   derecha a izquierda, de arriba abajo, y traen la escena siguiente. El barrido termina justo en
   el primer tiempo del compás.
 - **Un solo sentido.** Los barridos, las entradas de texto y el desplazamiento de las fotos van

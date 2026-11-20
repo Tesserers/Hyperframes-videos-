@@ -12,12 +12,12 @@
 
       :root {
         --red: #A61C1C; --red-tone: #8E1616; --red-on-dark: #C4433A;
-        --carbon: #191919; --carbon-tone: #2C2C2C; --white: #F6F3EE; --stone: #D2D4D6; --rule: #45494D;
+        --carbon: #191919; --white: #F6F3EE; --stone: #D2D4D6; --rule: #45494D;
       }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1920px; height: 1080px; overflow: hidden; }
-      body { background: var(--red); }
-      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--red); }
+      body { background: var(--carbon); }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--carbon); }
 
       .scene { position: absolute; inset: 0; overflow: hidden; }
       .scene.red    { background: var(--red);    color: var(--white); }
@@ -25,163 +25,193 @@
       .scene.claro  { background: var(--white);  color: var(--carbon); }
       .ct { position: absolute; inset: 0; will-change: transform; }
 
-      /* Brandkit grid: 96 px sides, 72 px top, logo top-left at 44 px high,
-         label top-right, titular bottom-left in lowercase Manrope Bold. */
+      /* Studio chrome: logo top-left, a meta line top-right, the strapline
+         bottom-left and a running index bottom-right. Same place in every scene. */
       .logo { position: absolute; left: 96px; top: 72px; width: 142.7px; height: 44px; overflow: visible; }
       .logo path { fill: none; stroke-width: 10; stroke-linejoin: round; }
-      .label { position: absolute; right: 96px; top: 80px; font: 700 24px/1 Manrope, sans-serif; letter-spacing: -0.01em; }
-      .foot { position: absolute; left: 40px; bottom: 30px; font: 400 18px/1 Inter, sans-serif; opacity: .85; }
-      .red .label, .carbon .label { color: var(--white); }
-      .carbon .label { color: var(--red-on-dark); }
-      .claro .label { color: var(--red); }
+      .meta, .idx, .foot { position: absolute; font: 600 20px/1 Inter, sans-serif; letter-spacing: .01em; }
+      .meta { right: 96px; top: 84px; }
+      .foot { left: 96px; bottom: 56px; font-weight: 400; }
+      .idx  { right: 96px; bottom: 56px; font-variant-numeric: tabular-nums; }
+      .carbon .meta, .carbon .idx { color: var(--stone); }
+      .claro .meta, .claro .idx { color: var(--red); }
 
-      .t { font-family: Manrope, sans-serif; font-weight: 700; letter-spacing: -0.04em; line-height: .94; }
-      .t span { display: block; }
+      .t { font-family: Manrope, sans-serif; font-weight: 700; letter-spacing: -0.045em; line-height: .9; }
+      /* A masked line: the text rises out of its own baseline. */
+      .m  { display: block; overflow: hidden; padding: .12em 0 .1em; margin: -.12em 0 -.1em; }
+      .mw { display: inline-block; overflow: hidden; padding: .12em .02em .1em; margin: -.12em -.02em -.1em; vertical-align: top; }
+      .mi { display: inline-block; will-change: transform; }
       .acc-dark { color: var(--red-on-dark); }
       .acc { color: var(--red); }
       .body { font: 400 26px/1.4 Inter, sans-serif; }
 
-      /* Photo frame — brandkit slide 35, from the shapes' own coordinates. */
+      /* Photo frame — brandkit slide 35/36, from the shapes' own coordinates. */
       .win { position: absolute; left: 760px; top: 110px; width: 1160px; height: 860px; overflow: hidden; }
       .win .ph { position: absolute; left: 0; top: 0; width: 1340px; height: 860px; will-change: transform; }
-      .win img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .win img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 
-      /* Scene 2 — the process, slide 22 */
-      .steps { position: absolute; left: 96px; top: 640px; width: 1728px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-      .step { border-top: 2px solid var(--rule); padding-top: 26px; }
-      .step .n { font: 700 64px/1 Manrope, sans-serif; color: var(--red-on-dark); letter-spacing: -0.03em; }
-      .step .k { font: 700 44px/1 Manrope, sans-serif; margin-top: 18px; letter-spacing: -0.03em; }
-      .step .d { font: 400 22px/1.4 Inter, sans-serif; color: var(--stone); margin-top: 16px; max-width: 360px; }
-      .step .w { font: 600 20px/1 Inter, sans-serif; color: var(--white); margin-top: 18px; }
-
-      /* Scene 3 — the list with the symbol as bullet, slide 39 */
-      .list { position: absolute; left: 96px; top: 200px; }
-      .row { display: flex; align-items: center; gap: 44px; height: 210px; }
-      .row svg { width: 96px; height: 79px; flex: none; overflow: visible; }
-      .row svg path { fill: none; stroke: var(--red); stroke-width: 10; }
-      .row .t { font-size: 88px; }
-      .row .desc { font: 400 26px/1.35 Inter, sans-serif; color: #45494D; margin-top: 14px; }
+      /* Services index */
+      .svc { position: absolute; left: 96px; width: 1728px; height: 230px; }
+      .svc .rule { position: absolute; left: 0; top: 0; width: 100%; height: 2px; background: var(--rule); transform-origin: 100% 50%; }
+      .svc .no { position: absolute; left: 0; top: 36px; font: 700 30px/1 Manrope, sans-serif; color: var(--red-on-dark); }
+      .svc .name { position: absolute; left: 150px; top: 26px; font-size: 96px; white-space: nowrap; }
+      .svc .d { position: absolute; left: 150px; top: 146px; width: 1400px; font: 400 26px/1.4 Inter, sans-serif; color: var(--stone); }
+      .ticker { position: absolute; left: 0; top: 952px; white-space: nowrap; font: 700 44px/1 Manrope, sans-serif; letter-spacing: -0.03em; color: var(--red-on-dark); will-change: transform; }
     </style>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="30"
          data-width="1920" data-height="1080">
 
-      <!-- 1 · apertura -->
-      <div id="s0" class="scene red clip" data-start="0" data-duration="30" data-track-index="0">
+      <!-- 1 · manifiesto -->
+      <div id="s0" class="scene carbon clip" data-start="0" data-duration="30" data-track-index="0">
         <div class="ct">
-          <div class="win" id="win0"><div class="ph"><img src="assets/photos/01-bosque.jpg" alt="" style="object-position:50% 62%"></div></div>
           <svg class="logo" viewBox="-1 -31 266 82"><path stroke="#F6F3EE" d="M5 25H45A20 20 0 1 0 39.14 39.14M63 25a20 20 0 1 0 40 0a20 20 0 1 0-40 0M103-30V50M121 0L141 45L161 0"/><path stroke="#F6F3EE" transform="translate(174 0)" d="M5 50V25a20 20 0 0 1 40 0v25M45 25a20 20 0 0 1 40 0v25"/></svg>
-          <div data-layout-allow-overlap class="label">pymes y startups</div>
-          <div class="t" style="position:absolute;left:96px;bottom:150px;font-size:128px">
-            <span data-layout-allow-overlap class="in" data-at="1.0">crecer es</span>
-            <span data-layout-allow-overlap class="in" data-at="1.12">contratar</span>
-            <span data-layout-allow-overlap class="in" data-at="1.24">bien.</span>
+          <div data-layout-allow-overlap class="meta">people studio — madrid</div>
+          <div class="t" style="position:absolute;left:96px;bottom:170px;font-size:250px">
+            <span class="m"><span class="mw"><span data-layout-allow-overlap class="mi up" data-at="0.1">people</span></span> <span class="mw"><span data-layout-allow-overlap class="mi up" data-at="0.57">for</span></span></span>
+            <span class="m"><span class="mw"><span data-layout-allow-overlap class="mi up" data-at="1.04">what’s</span></span> <span class="mw"><span data-layout-allow-overlap class="mi up acc-dark" data-at="1.51">next.</span></span></span>
           </div>
-          <div data-layout-allow-overlap class="foot">people for what’s next.</div>
+          <div data-layout-allow-overlap class="idx">01 / 07</div>
         </div>
       </div>
 
-      <!-- 2 · tu área de people -->
-      <div id="s1" class="scene carbon clip" data-start="0" data-duration="30" data-track-index="1">
+      <!-- 2 · qué somos -->
+      <div id="s1" class="scene red clip" data-start="0" data-duration="30" data-track-index="1">
         <div class="ct">
           <svg class="logo" viewBox="-1 -31 266 82"><path stroke="#F6F3EE" d="M5 25H45A20 20 0 1 0 39.14 39.14M63 25a20 20 0 1 0 40 0a20 20 0 1 0-40 0M103-30V50M121 0L141 45L161 0"/><path stroke="#F6F3EE" transform="translate(174 0)" d="M5 50V25a20 20 0 0 1 40 0v25M45 25a20 20 0 0 1 40 0v25"/></svg>
-          <div data-layout-allow-overlap class="label">qué somos</div>
-          <div class="t" style="position:absolute;left:96px;bottom:150px;font-size:128px">
-            <span data-layout-allow-overlap class="in" data-at="0">tu área de people,</span>
-            <span data-layout-allow-overlap class="in acc-dark" data-at="0.3">sin montar un departamento.</span>
+          <div data-layout-allow-overlap class="meta">qué somos</div>
+          <div class="t" style="position:absolute;left:96px;bottom:170px;font-size:168px">
+            <span class="m"><span data-layout-allow-overlap class="mi up" data-at="0.0">tu área</span></span>
+            <span class="m"><span data-layout-allow-overlap class="mi up" data-at="0.47">de people,</span></span>
+            <span class="m"><span data-layout-allow-overlap class="mi up" data-at="1.41">sin montar</span></span>
+            <span class="m"><span data-layout-allow-overlap class="mi up" data-at="1.88">un departamento.</span></span>
           </div>
           <div data-layout-allow-overlap class="foot">people for what’s next.</div>
+          <div data-layout-allow-overlap class="idx">02 / 07</div>
         </div>
       </div>
 
-      <!-- 3 · servicios -->
+      <!-- 3 · para quién — montaje de fotos a tiempo -->
       <div id="s2" class="scene claro clip" data-start="0" data-duration="30" data-track-index="2">
         <div class="ct">
+          <div class="win" id="win2"><div class="ph">
+            <img src="assets/photos/01-bosque.jpg" alt="" style="object-position:50% 62%">
+            <img src="assets/photos/02-casa.jpg" alt="" style="object-position:40% 55%">
+            <img src="assets/photos/03-conversacion.jpg" alt="" style="object-position:50% 30%">
+            <img src="assets/photos/04-mesa.jpg" alt="" style="object-position:55% 60%">
+          </div></div>
           <svg class="logo" viewBox="-1 -31 266 82"><path stroke="#191919" d="M5 25H45A20 20 0 1 0 39.14 39.14M63 25a20 20 0 1 0 40 0a20 20 0 1 0-40 0M103-30V50M121 0L141 45L161 0"/><path stroke="#A61C1C" transform="translate(174 0)" d="M5 50V25a20 20 0 0 1 40 0v25M45 25a20 20 0 0 1 40 0v25"/></svg>
-          <div data-layout-allow-overlap class="label">servicios</div>
-          <div class="list">
-            <div class="row in" data-at="0"><svg viewBox="0 0 110 90"><path d="M110 5H25A20 20 0 0 0 25 45H110M25 45A20 20 0 0 0 25 85H110"/></svg><div><div class="t">selección y headhunting.</div><div class="desc">Perfiles clave y directivos, de la definición del puesto a la incorporación.</div></div></div>
-            <div class="row in" data-at="0.35"><svg viewBox="0 0 110 90"><path d="M110 5H25A20 20 0 0 0 25 45H110M25 45A20 20 0 0 0 25 85H110"/></svg><div><div class="t">people externalizado.</div><div class="desc">Estructura, políticas, compensación y desempeño, sin contratar un director de RRHH.</div></div></div>
-            <div class="row in" data-at="0.7"><svg viewBox="0 0 110 90"><path d="M110 5H25A20 20 0 0 0 25 45H110M25 45A20 20 0 0 0 25 85H110"/></svg><div><div class="t">talent ops y employer branding.</div><div class="desc">Procesos, ATS, onboarding y una marca que atraiga al talento que buscas.</div></div></div>
-          </div>
-          <div data-layout-allow-overlap class="foot" style="opacity:1">people for what’s next.</div>
-        </div>
-      </div>
-
-      <!-- 4 · equipos que escalan -->
-      <div id="s3" class="scene carbon clip" data-start="0" data-duration="30" data-track-index="3">
-        <div class="ct">
-          <div class="win" id="win3"><div class="ph"><img src="assets/photos/03-conversacion.jpg" alt="" style="object-position:50% 30%"></div></div>
-          <svg class="logo" viewBox="-1 -31 266 82"><path stroke="#F6F3EE" d="M5 25H45A20 20 0 1 0 39.14 39.14M63 25a20 20 0 1 0 40 0a20 20 0 1 0-40 0M103-30V50M121 0L141 45L161 0"/><path stroke="#F6F3EE" transform="translate(174 0)" d="M5 50V25a20 20 0 0 1 40 0v25M45 25a20 20 0 0 1 40 0v25"/></svg>
-          <div style="position:absolute;left:96px;bottom:150px;width:664px">
-            <div class="t" style="font-size:112px;white-space:nowrap">
-              <span data-layout-allow-overlap class="in" data-at="0.7">equipos</span>
-              <span data-layout-allow-overlap class="in acc-dark" data-at="0.82">que escalan.</span>
-            </div>
-            <div class="body in" data-at="1.3" style="color:var(--stone);margin-top:36px">Te ayudamos a contratar, ordenar<br>y retener al equipo que viene.</div>
-          </div>
+          <div class="t" style="position:absolute;left:96px;bottom:170px;font-size:124px">
+            <span class="m"><span data-layout-allow-overlap class="mi up" data-at="0.0">para pymes</span></span>
+            <span class="m"><span data-layout-allow-overlap class="mi up" data-at="0.47">y startups</span></span>
+            <span class="m"><span data-layout-allow-overlap class="mi up acc" data-at="0.94">que crecen.</span></span>
           </div>
           <div data-layout-allow-overlap class="foot">people for what’s next.</div>
+          <div data-layout-allow-overlap class="idx" style="right:auto;left:96px;top:150px;bottom:auto">03 / 07</div>
         </div>
       </div>
 
-      <!-- 5 · si no encaja -->
-      <div id="s4" class="scene claro clip" data-start="0" data-duration="30" data-track-index="4">
+      <!-- 4 · servicios -->
+      <div id="s3" class="scene carbon clip" data-start="0" data-duration="30" data-track-index="3">
+        <div class="ct">
+          <svg class="logo" viewBox="-1 -31 266 82"><path stroke="#F6F3EE" d="M5 25H45A20 20 0 1 0 39.14 39.14M63 25a20 20 0 1 0 40 0a20 20 0 1 0-40 0M103-30V50M121 0L141 45L161 0"/><path stroke="#F6F3EE" transform="translate(174 0)" d="M5 50V25a20 20 0 0 1 40 0v25M45 25a20 20 0 0 1 40 0v25"/></svg>
+          <div data-layout-allow-overlap class="meta">servicios — 04 / 07</div>
+          <div class="svc" style="top:200px">
+            <div class="rule" data-at="0.0"></div>
+            <div class="no in" data-at="0.15">(01)</div>
+            <div class="t name"><span class="m"><span data-layout-allow-overlap class="mi up" data-at="0.15">selección y headhunting.</span></span></div>
+            <div class="d in" data-at="0.45">Perfiles clave y directivos, de la definición del puesto a la incorporación.</div>
+          </div>
+          <div class="svc" style="top:440px">
+            <div class="rule" data-at="1.875"></div>
+            <div class="no in" data-at="2.025">(02)</div>
+            <div class="t name"><span class="m"><span data-layout-allow-overlap class="mi up" data-at="2.025">people externalizado.</span></span></div>
+            <div class="d in" data-at="2.325">Estructura, políticas, compensación y desempeño, sin contratar un director de RRHH.</div>
+          </div>
+          <div class="svc" style="top:680px">
+            <div class="rule" data-at="3.75"></div>
+            <div class="no in" data-at="3.9">(03)</div>
+            <div class="t name"><span class="m"><span data-layout-allow-overlap class="mi up" data-at="3.9">talent ops y employer branding.</span></span></div>
+            <div class="d in" data-at="4.2">Procesos, ATS, onboarding y una marca que atraiga al talento que buscas.</div>
+          </div>
+          <div class="ticker" id="ticker">selección — headhunting — people externalizado — talent ops — employer branding — selección — headhunting — people externalizado — talent ops — employer branding — selección — headhunting — people externalizado —</div>
+        </div>
+      </div>
+
+      <!-- 5 · equipos que escalan -->
+      <div id="s4" class="scene red clip" data-start="0" data-duration="30" data-track-index="4">
+        <div class="ct">
+          <div class="win" id="win4"><div class="ph"><img src="assets/photos/03-conversacion.jpg" alt="" style="object-position:50% 30%"></div></div>
+          <svg class="logo" viewBox="-1 -31 266 82"><path stroke="#F6F3EE" d="M5 25H45A20 20 0 1 0 39.14 39.14M63 25a20 20 0 1 0 40 0a20 20 0 1 0-40 0M103-30V50M121 0L141 45L161 0"/><path stroke="#F6F3EE" transform="translate(174 0)" d="M5 50V25a20 20 0 0 1 40 0v25M45 25a20 20 0 0 1 40 0v25"/></svg>
+          <div style="position:absolute;left:96px;bottom:170px;width:640px">
+            <div class="t" style="font-size:150px">
+              <span class="m"><span data-layout-allow-overlap class="mi up" data-at="0.0">equipos</span></span>
+              <span class="m"><span data-layout-allow-overlap class="mi up" data-at="0.47">que</span></span>
+              <span class="m"><span data-layout-allow-overlap class="mi up" data-at="0.94">escalan.</span></span>
+            </div>
+            <div class="body in" data-at="1.6" style="margin-top:40px">Te ayudamos a contratar, ordenar<br>y retener al equipo que viene.</div>
+          </div>
+          <div data-layout-allow-overlap class="foot">people for what’s next.</div>
+          <div data-layout-allow-overlap class="idx" style="right:auto;left:96px;top:150px;bottom:auto">05 / 07</div>
+        </div>
+      </div>
+
+      <!-- 6 · si no encaja -->
+      <div id="s5" class="scene claro clip" data-start="0" data-duration="30" data-track-index="5">
         <div class="ct">
           <svg class="logo" viewBox="-1 -31 266 82"><path stroke="#191919" d="M5 25H45A20 20 0 1 0 39.14 39.14M63 25a20 20 0 1 0 40 0a20 20 0 1 0-40 0M103-30V50M121 0L141 45L161 0"/><path stroke="#A61C1C" transform="translate(174 0)" d="M5 50V25a20 20 0 0 1 40 0v25M45 25a20 20 0 0 1 40 0v25"/></svg>
-          <div class="t" style="position:absolute;left:96px;bottom:150px;font-size:160px">
-            <span data-layout-allow-overlap class="in" data-at="0">si no encaja,</span>
-            <span data-layout-allow-overlap class="in acc" data-at="0.45">te lo diremos.</span>
+          <div data-layout-allow-overlap class="meta">cómo trabajamos</div>
+          <div class="t" style="position:absolute;left:96px;bottom:170px;font-size:200px">
+            <span class="m"><span data-layout-allow-overlap class="mi up" data-at="0.0">si no encaja,</span></span>
+            <span class="m"><span data-layout-allow-overlap class="mi up acc" data-at="0.94">te lo diremos.</span></span>
           </div>
-          <div data-layout-allow-overlap class="foot" style="opacity:1">people for what’s next.</div>
+          <div data-layout-allow-overlap class="foot">people for what’s next.</div>
+          <div data-layout-allow-overlap class="idx">06 / 07</div>
         </div>
       </div>
 
-      <!-- 6 · let's talk -->
-      <div id="s5" class="scene red clip" data-start="0" data-duration="30" data-track-index="5">
+      <!-- 7 · let's talk -->
+      <div id="s6" class="scene red clip" data-start="0" data-duration="30" data-track-index="6">
         <div class="ct">
           <svg id="bigm" viewBox="0 0 1920 1080" style="position:absolute;inset:0;width:1920px;height:1080px">
             <path id="bigm-path" d="M172 5H25A20 20 0 0 0 25 45H172M25 45A20 20 0 0 0 25 85H172"
-                  transform="translate(820 170) scale(6.4)" fill="none" stroke="#8E1616" stroke-width="10"/>
+                  transform="translate(900 200) scale(6.2)" fill="none" stroke="#8E1616" stroke-width="10"/>
           </svg>
           <svg class="logo" viewBox="-1 -31 266 82"><path stroke="#F6F3EE" d="M5 25H45A20 20 0 1 0 39.14 39.14M63 25a20 20 0 1 0 40 0a20 20 0 1 0-40 0M103-30V50M121 0L141 45L161 0"/><path stroke="#F6F3EE" transform="translate(174 0)" d="M5 50V25a20 20 0 0 1 40 0v25M45 25a20 20 0 0 1 40 0v25"/></svg>
-          <div style="position:absolute;left:96px;bottom:150px">
-            <div class="t" style="font-size:210px">
-              <span data-layout-allow-overlap class="in" data-at="0">let’s</span>
-              <span data-layout-allow-overlap class="in" data-at="0.12">talk.</span>
-            </div>
-            <div class="body in" data-at="0.7" style="margin-top:40px;font-weight:600">selección · people · talent ops</div>
+          <div data-layout-allow-overlap class="meta">people studio — madrid</div>
+          <div class="t" style="position:absolute;left:96px;bottom:250px;font-size:290px">
+            <span class="m"><span data-layout-allow-overlap class="mi up" data-at="0.0">let’s</span></span>
+            <span class="m"><span data-layout-allow-overlap class="mi up" data-at="0.47">talk.</span></span>
           </div>
+          <div class="body in" data-at="1.1" style="position:absolute;left:96px;bottom:150px;font-weight:600">selección · people · talent ops</div>
           <div data-layout-allow-overlap class="foot">people for what’s next.</div>
+          <div data-layout-allow-overlap class="idx">07 / 07</div>
         </div>
       </div>
 
-      <!-- Sound: the music bed, cut on the bar, and a soft whoosh on each seam. -->
+      <!-- Sound: the music bed, cut on the bar, and a soft whoosh on each «m» wipe. -->
       <audio id="bgm" src="assets/bgm/bed.wav" data-start="0" data-duration="30" data-track-index="10" data-volume="1"></audio>
-      <audio id="sfx1" src="assets/sfx/whoosh-short.mp3" data-start="4.725" data-duration="0.57" data-track-index="11" data-volume="0.3"></audio>
+      <audio id="sfx1" src="assets/sfx/whoosh-short.mp3" data-start="2.85" data-duration="0.57" data-track-index="11" data-volume="0.3"></audio>
       <audio id="sfx2" src="assets/sfx/whoosh-short.mp3" data-start="10.35" data-duration="0.57" data-track-index="12" data-volume="0.3"></audio>
-      <audio id="sfx3" src="assets/sfx/whoosh-short.mp3" data-start="15.975" data-duration="0.57" data-track-index="13" data-volume="0.3"></audio>
-      <audio id="sfx4" src="assets/sfx/whoosh-short.mp3" data-start="21.6" data-duration="0.57" data-track-index="14" data-volume="0.3"></audio>
-      <audio id="sfx5" src="assets/sfx/whoosh-short.mp3" data-start="25.35" data-duration="0.57" data-track-index="15" data-volume="0.3"></audio>
+      <audio id="sfx3" src="assets/sfx/whoosh-short.mp3" data-start="25.35" data-duration="0.57" data-track-index="13" data-volume="0.3"></audio>
     </div>
 
     <script>
       window.__timelines = window.__timelines || {};
       (function () {
-        var DUR = 30;
-        var BAR = 1.875;                       // 128 BPM, four beats
-        // Scene boundaries on the downbeat: 3 + 3 + 3 + 3 + 2 + 2 bars = 16 bars = 30 s.
-        var BOUNDS = [0, 3 * BAR, 6 * BAR, 9 * BAR, 12 * BAR, 14 * BAR, DUR];
-        var WIPE = 0.72, STAG = 0.09, LEAD = WIPE + 2 * STAG; // the cover lands ON the downbeat
-        var scenes = [0, 1, 2, 3, 4, 5].map(function (i) { return document.getElementById("s" + i); });
+        var DUR = 30, BAR = 1.875, BEAT = BAR / 4;     // 128 BPM
+        // 2 + 2 + 2 + 4 + 2 + 2 + 2 bars = 16 bars = 30 s. Every change lands on a downbeat.
+        var BOUNDS = [0, 2 * BAR, 4 * BAR, 6 * BAR, 10 * BAR, 12 * BAR, 14 * BAR, DUR];
+        // The big section changes ride the «m» wipe; the rest are hard cuts on the beat.
+        var CUT = [null, "wipe", "hard", "wipe", "hard", "hard", "wipe"];
+        var WIPE = 0.72, STAG = 0.09, LEAD = WIPE + 2 * STAG;
+        var scenes = [0, 1, 2, 3, 4, 5, 6].map(function (i) { return document.getElementById("s" + i); });
 
         function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
         function inOut3(p) { return p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; }
-        function out3(p) { return 1 - Math.pow(1 - p, 3); }
+        function out4(p) { return 1 - Math.pow(1 - p, 4); }
 
-        // ---- The seam: three tables with the «m»'s round end sweep in from the
-        // right, top first, and carry the next scene in with them.
         function wipePath(t, ws) {
           var d = "", full = true;
           for (var i = 0; i < 3; i++) {
@@ -194,17 +224,10 @@
           }
           return full ? null : (d || "M0 0Z");
         }
-
-        // ---- The photo frame: its three tables slide in from the right edge,
-        // round end first, the same gesture as the seam at a smaller scale.
-        var WINS = [
-          { el: document.getElementById("win0"), at: 0.15, scene: 0 },
-          { el: document.getElementById("win3"), at: BOUNDS[3] + 0.05, scene: 3 }
-        ];
-        function winPath(t, at) {
+        function winPath(t, at, dur, stag) {
           var d = "";
           for (var i = 0; i < 3; i++) {
-            var p = inOut3(clamp((t - at - i * 0.12) / 1.0));
+            var p = inOut3(clamp((t - at - i * stag) / dur));
             var a = 1160 * (1 - p), y = 300 * i;
             if (a + 130 >= 1160) continue;
             d += "M" + (a + 130).toFixed(1) + " " + y + "H1160V" + (y + 260) + "H" + (a + 130).toFixed(1) +
@@ -213,48 +236,69 @@
           return d || "M0 0Z";
         }
 
-        // Everything with a clip is a pure function of the clock.
+        var win2 = document.getElementById("win2"), win4 = document.getElementById("win4");
+        var mont = win2.querySelectorAll("img");
+
         function draw(t) {
           for (var k = 0; k < scenes.length; k++) {
-            var ws = k === 0 ? -1 : BOUNDS[k] - LEAD;
+            var lead = CUT[k] === "wipe" ? LEAD : 0;
+            var ws = k === 0 ? -1 : BOUNDS[k] - lead;
             var gone = k + 1 < scenes.length && t >= BOUNDS[k + 1];
             var on = t >= ws && !gone;
             scenes[k].style.display = on ? "block" : "none";
-            if (on && k > 0) {
+            if (on && CUT[k] === "wipe") {
               var cp = wipePath(t, ws);
               scenes[k].style.clipPath = cp ? "path('" + cp + "')" : "none";
             }
           }
-          for (var w = 0; w < WINS.length; w++) {
-            var W = WINS[w];
-            W.el.style.clipPath = "path('" + winPath(t, W.at) + "')";
-            var local = Math.max(0, t - W.at);
-            W.el.firstElementChild.style.transform = "translate3d(" + (-16 * local).toFixed(2) + "px,0,0)";
-          }
+          // Scene 3: the frame opens fast, then the photos cut on every other beat,
+          // each landing with a small punch.
+          var a2 = BOUNDS[2];
+          win2.style.clipPath = "path('" + winPath(t, a2, 0.5, 0.06) + "')";
+          var l2 = Math.max(0, t - a2), step = 2 * BEAT;
+          var n = Math.min(3, Math.floor(l2 / step));
+          for (var i = 0; i < mont.length; i++) mont[i].style.visibility = i === n ? "visible" : "hidden";
+          var punch = 1.07 - 0.07 * out4(clamp((l2 - n * step) / 0.35));
+          win2.firstElementChild.style.transform = "translate3d(" + (-22 * l2).toFixed(2) + "px,0,0) scale(" + punch.toFixed(4) + ")";
+          // Scene 5: the frame opens on the cut and the picture drifts left.
+          var a4 = BOUNDS[4];
+          win4.style.clipPath = "path('" + winPath(t, a4, 0.7, 0.08) + "')";
+          win4.firstElementChild.style.transform = "translate3d(" + (-18 * Math.max(0, t - a4)).toFixed(2) + "px,0,0)";
         }
 
         var tl = gsap.timeline({ paused: true, onUpdate: function () { draw(tl.time()); } });
 
-        // ---- Text: every line arrives from the right and settles, staggered.
-        // The film's one direction is right to left, the same as the seams.
         for (var k = 0; k < scenes.length; k++) {
           var base = BOUNDS[k];
-          var items = scenes[k].querySelectorAll(".in");
-          for (var j = 0; j < items.length; j++) {
-            var at = base + parseFloat(items[j].getAttribute("data-at"));
-            tl.fromTo(items[j], { x: 90, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, at);
+          // Masked lines rise out of their baseline, hard and fast, on the beat.
+          var ups = scenes[k].querySelectorAll(".up");
+          for (var j = 0; j < ups.length; j++) {
+            var at = base + parseFloat(ups[j].getAttribute("data-at"));
+            tl.fromTo(ups[j], { yPercent: 110 }, { yPercent: 0, duration: 0.55, ease: "power4.out" }, at);
           }
-          // The outgoing scene gives way: it slides left a little while it is covered.
-          if (k + 1 < scenes.length) {
+          // Small copy slides in from the right.
+          var ins = scenes[k].querySelectorAll(".in");
+          for (var q = 0; q < ins.length; q++) {
+            var at2 = base + parseFloat(ins[q].getAttribute("data-at"));
+            tl.fromTo(ins[q], { x: 60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, at2);
+          }
+          // Index rules draw from the right.
+          var rules = scenes[k].querySelectorAll(".rule");
+          for (var r = 0; r < rules.length; r++) {
+            tl.fromTo(rules[r], { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.inOut" }, base + parseFloat(rules[r].getAttribute("data-at")));
+          }
+          if (k + 1 < scenes.length && CUT[k + 1] === "wipe") {
             tl.to(scenes[k].querySelector(".ct"), { x: -140, duration: LEAD, ease: "power2.in" }, BOUNDS[k + 1] - LEAD);
           }
         }
 
-        // ---- The closing «m»: drawn in one stroke, tone on tone, right to left.
+        // The ticker runs the whole services scene at constant speed, right to left.
+        tl.fromTo("#ticker", { x: 0 }, { x: -200 * (BOUNDS[4] - BOUNDS[3]), duration: BOUNDS[4] - BOUNDS[3], ease: "none" }, BOUNDS[3]);
+
         var mp = document.getElementById("bigm-path");
         var len = mp.getTotalLength();
         mp.style.strokeDasharray = len + " " + len;
-        tl.fromTo(mp, { strokeDashoffset: len }, { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" }, BOUNDS[5] - 0.2);
+        tl.fromTo(mp, { strokeDashoffset: len }, { strokeDashoffset: 0, duration: 1.4, ease: "power2.inOut" }, BOUNDS[6] - 0.2);
 
         tl.set({}, {}, DUR);
         window.__timelines["main"] = tl;

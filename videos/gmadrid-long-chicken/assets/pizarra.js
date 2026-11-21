@@ -304,7 +304,8 @@
     const mpt = (p) => (mirror ? [1000 - p[0], p[1]] : p);
     this.moves = {};
     this.runStart = {};
-    for (const id in START) this.runStart[id] = START[id].slice();
+    // posiciones de salida (en espejo, cada jugador ocupa la salida simétrica de su homólogo)
+    for (const id in START) this.runStart[mid(id)] = mpt(START[id]).slice();
     for (const id in DEF) this.runStart[id] = DEF[id].slice();
     this.runArrows = [];
     this.runCallouts = [];
@@ -484,6 +485,7 @@
   window.Pizarra = {
     ROLES,
     build(cfg) {
+      if (cfg.start) for (const k in cfg.start) START[k] = cfg.start[k].slice();
       const root = document.getElementById("root");
       const E = new Engine(root);
       const tl = E.tl;

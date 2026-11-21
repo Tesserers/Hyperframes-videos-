@@ -144,8 +144,8 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="60.1" data-width="1080" data-height="1920">
-      <div id="scene" class="scene clip" data-start="0" data-duration="60.1" data-track-index="0">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="68.9" data-width="1080" data-height="1920">
+      <div id="scene" class="scene clip" data-start="0" data-duration="68.9" data-track-index="0">
 
         <div id="hud-top">
           <div class="hud-logo"><img src="assets/gmadrid-logo.png" alt="" /></div>
@@ -180,11 +180,11 @@
           <div class="o-line o-2">O «ESCÁNDALO»</div>
         </div>
       </div>
-      <audio id="bgm" src="assets/music/brisk-beat.mp3" data-start="0" data-duration="60.1" data-track-index="1" data-volume="0.9"></audio>
+      <audio id="bgm" src="assets/music/brisk-beat.mp3" data-start="0" data-duration="68.9" data-track-index="1" data-volume="0.9"></audio>
     </div>
     <script src="assets/pizarra.js"></script>
     <script>
-      const PLAY = {"num": "02", "title": ["LA", "PROHIBIDA"], "accent": 1, "titleSize": 116, "introScale": 1.0, "subtitle": "O «ESCÁNDALO»", "sideMain": "◀ POR LA <b>IZQUIERDA</b>", "sideMirror": "▶ POR LA <b>DERECHA</b>", "next": "PRÓXIMA: <b>LONG CHICKEN</b>", "ball": "CE", "start": {"PI": [232, 292]}, "intro": "La inicia el lateral: permuta entre lateral {LI} y central {CE}. El pivote {PI} se coloca sobre el 2 de ese lado.", "steps": [{"cap": "El central {CE} pasa el balón al lateral izquierdo {LI}.", "acts": [{"pass": ["CE", "LI"], "at": 0.1, "dur": 0.55}]}, {"cap": "El lateral {LI} se la pasa al extremo {EI}.", "acts": [{"pass": ["LI", "EI"], "at": 0.1, "dur": 0.6}]}, {"cap": "Tras pasar, el lateral {LI} ocupa la posición <em>por delante</em> del central.", "acts": [{"move": "LI", "pts": [[330, 455], [470, 470]], "dur": 1.4}]}, {"cap": "El central {CE} hace una <em>trayectoria amplia</em> y ocupa el puesto de lateral.", "acts": [{"move": "CE", "pts": [[450, 700], [320, 700], [225, 610]], "dur": 1.8}]}, {"cap": "El extremo {EI} retiene el balón… y se la da a {CE}, ahora lateral, que <em>entra en carrera</em>.", "acts": [{"call": "EI", "text": "¡RETIENE!", "at": 0, "hold": 1.0}, {"move": "CE", "pts": [[262, 520], [318, 430]], "at": 0.8, "dur": 1.3, "ease": "power1.in"}, {"pass": ["EI", "CE"], "at": 1.15, "dur": 0.55}]}, {"cap": "Y finaliza con <em>tiro en carrera</em>.", "acts": [{"shot": "CE", "at": 0.1, "dur": 0.45}], "after": 1.0}], "key": "La inicia el lateral: pasa al extremo, se mete <em>por delante</em> del central y el central <em>sale amplio</em> para entrar de lateral.", "mirrorCap": "Prohibida por la derecha: misma jugada en espejo. Inicia {LD} con el extremo {ED}."};
+      const PLAY = {"num": "02", "title": ["LA", "PROHIBIDA"], "accent": 1, "titleSize": 116, "introScale": 1.0, "subtitle": "O «ESCÁNDALO»", "sideMain": "◀ POR LA <b>IZQUIERDA</b>", "sideMirror": "▶ POR LA <b>DERECHA</b>", "next": "PRÓXIMA: <b>LONG CHICKEN</b>", "ball": "CE", "start": {"PI": [232, 292]}, "intro": "La inicia el lateral: permuta entre lateral {LI} y central {CE}. El pivote {PI} se coloca sobre el 2 de ese lado.", "steps": [{"cap": "El central {CE} pasa el balón al lateral izquierdo {LI}.", "acts": [{"pass": ["CE", "LI"], "at": 0.1, "dur": 0.55}]}, {"cap": "El lateral {LI} se la pasa al extremo {EI}, que <em>sale un poco hacia delante</em> para recibir.", "acts": [{"move": "EI", "pts": [[118, 212]], "at": 0, "dur": 0.9, "ease": "power2.out"}, {"pass": ["LI", "EI"], "at": 0.2, "dur": 0.6}]}, {"cap": "Tras pasar, el lateral {LI} ocupa la posición <em>por delante</em> del central.", "acts": [{"move": "LI", "pts": [[330, 455], [470, 470]], "dur": 1.4}]}, {"cap": "El central {CE} hace una <em>trayectoria amplia</em> y ocupa el puesto de lateral.", "acts": [{"move": "CE", "pts": [[450, 700], [320, 700], [225, 610]], "dur": 1.8}]}, {"cap": "El extremo {EI} retiene el balón… y se la da a {CE}, ahora lateral, que <em>entra en carrera</em>.", "acts": [{"call": "EI", "text": "¡RETIENE!", "at": 0, "hold": 1.0}, {"move": "CE", "pts": [[262, 520], [318, 430]], "at": 0.8, "dur": 1.3, "ease": "power1.in"}, {"pass": ["EI", "CE"], "at": 1.15, "dur": 0.55}]}, {"cap": "{CE} decide: si el pivote {PI} le abre hueco, <em>tira</em>. Si no, se la pasa al pivote, al central {LI} o al extremo {EI}.", "acts": [{"opts": "CE", "to": ["goal", "PI", "LI", "EI"], "at": 0, "hold": 2.6}], "after": 1.0}], "key": "La inicia el lateral: pasa al extremo, se mete <em>por delante</em> del central y el central <em>sale amplio</em> para entrar de lateral.", "mirrorCap": "Prohibida por la derecha: misma jugada en espejo. Inicia {LD} con el extremo {ED}."};
       const tl = Pizarra.build(PLAY);
       window.__timelines["main"] = tl;
     </script>

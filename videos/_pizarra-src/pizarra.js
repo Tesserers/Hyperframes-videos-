@@ -415,7 +415,7 @@
           const s = resample([from, q], 10).pts;
           const ta = at + k * 0.25 * sp;
           const og = this.drawPath(s, ta, 0.4 * sp, isGoal ? "#ffffff" : ROLES[m(o)].color, { dashed: true, ease: "none", opacity: 0.9, width: 5 });
-          const lbl = isGoal ? "TIRO" : "PASE";
+          const lbl = isGoal ? "TIRO SI HAY HUECO" : "PASE";
           const lp = isGoal ? [q[0], 40] : q;
           dimLater(og, ta + 0.4 * sp);
           this.callout(lp[0], lp[1], lbl, isGoal ? "#ffffff" : ROLES[m(o)].color, ta + 0.3 * sp, null, isGoal ? "small low" : "small");

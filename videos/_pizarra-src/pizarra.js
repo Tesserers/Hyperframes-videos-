@@ -130,11 +130,23 @@
     return svg;
   }
 
+  const YAWS = [];
+  let ARENA = false;
+  function upright(parent) {
+    // en modo pabellón, cada figura lleva una capa que compensa el giro de la cámara
+    if (ARENA) {
+      const yaw = el("div", "yaw", parent);
+      YAWS.push(yaw);
+      parent = yaw;
+    }
+    return el("div", "bb-up", parent);
+  }
+
   function billboard(plane, x, y, cls) {
     const wrap = el("div", "bb " + (cls || ""), plane);
     wrap.style.left = PX(x) + "px";
     wrap.style.top = PY(y) + "px";
-    const fig = el("div", "bb-up", wrap);
+    const fig = upright(wrap);
     return { wrap, fig };
   }
 
@@ -157,7 +169,7 @@
   // ---------- motor ----------
   function Engine(root) {
     this.root = root;
-    this.plane = root.querySelector("#plane");
+    this.plane = root.querySelector("#orbit") || root.querySelector("#plane");
     this.capBox = root.querySelector("#caps");
     this.tl = gsap.timeline({ paused: true });
     this.moves = {}; // id -> [{t0,dur,s,ease}]
@@ -168,7 +180,8 @@
   }
 
   Engine.prototype.setup = function () {
-    buildCourt(this.plane);
+    if (ARENA && window.PizarraArena) window.PizarraArena.court(this.plane, { svgEl, el, OY });
+    else buildCourt(this.plane);
     // portería
     const goal = billboard(this.plane, 500, 0, "goal");
     goal.fig.innerHTML = `<svg viewBox="0 0 170 110" width="170" height="110">
@@ -187,7 +200,7 @@
     // balón
     const b = el("div", "ent ball-ent", this.plane);
     const shadow = el("div", "shadow ball-shadow", b);
-    const up = el("div", "bb-up", b);
+    const up = upright(b);
     const lift = el("div", "lift", up);
     const ballDot = el("div", "ball", lift);
     this.ball = { node: b, lift, shadow, fade: [ballDot, shadow] };
@@ -197,9 +210,10 @@
     const n = el("div", "ent " + (isDef ? "def" : "att"), this.plane);
     n.id = "e-" + id;
     el("div", "shadow", n);
-    const up = el("div", "bb-up", n);
+    if (ARENA && !isDef) el("div", "ring", n).style.setProperty("--c", role.color);
+    const up = upright(n);
     const pop = el("div", "pop", up);
-    pop.innerHTML = figureSVG(role ? role.color : null, isDef, role ? id : null);
+    pop.innerHTML = (ARENA && window.PizarraArena ? window.PizarraArena.figureSVG : figureSVG)(role ? role.color : null, isDef, role ? id : null);
     this.ents[id] = { node: n, pop, isDef };
     this.base[id] = pos.slice();
   };
@@ -486,10 +500,13 @@
     ROLES,
     build(cfg) {
       if (cfg.start) for (const k in cfg.start) START[k] = cfg.start[k].slice();
+      ARENA = !!(cfg.arena && window.PizarraArena);
       const root = document.getElementById("root");
       const E = new Engine(root);
       const tl = E.tl;
       E.setup();
+      if (ARENA) window.PizarraArena.setup(E, { el, YAWS, OY });
+      const marks = {};
       const q = (s) => root.querySelector(s);
 
       // INTRO 0 → 3.4
@@ -526,6 +543,8 @@
 
       // CLAVES: todo el dibujo a la vista
       tl.to(E.runArrows, { opacity: 1, duration: 0.4 }, t);
+      marks.decision = r1.stepTimes[r1.stepTimes.length - 1];
+      marks.key = t;
       const tk = readTime(cfg.key);
       E.caption("LA CLAVE", cfg.key, t, t + tk);
       t += tk;
@@ -542,18 +561,23 @@
       tl.to(pops, { autoAlpha: 1, scale: 1, duration: 0.35, ease: "back.out(2)", stagger: 0.03 }, t + 0.2);
       tl.to(E.ball.fade, { autoAlpha: 1, duration: 0.3 }, t + 0.5);
       const t2 = t + 0.9;
+      marks.mirror = t;
       const r2 = E.runScript({ t0: t2, steps, mirror: true, speed: 0.62, lead: 0.3, ball: cfg.ball, bakeFrom: t });
       t = Math.max(r2.tEnd + 0.8, t + readTime(cfg.mirrorCap));
       E.caption("EN ESPEJO", cfg.mirrorCap, t2 - 0.9, t);
 
       // OUTRO
+      marks.outro = t;
       tl.to(["#stage", "#legend", "#hud-top", "#head"], { autoAlpha: 0, y: -60, duration: 0.5, ease: "power2.in" }, t);
       tl.fromTo("#outro", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, t + 0.35);
       tl.fromTo("#outro-badge", { scale: 0.6, rotation: 10 }, { scale: 1, rotation: 0, duration: 0.7, ease: "back.out(1.8)" }, t + 0.35);
       tl.fromTo("#outro .o-line", { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.12 }, t + 0.6);
       t += 3.4;
 
+      marks.end = t;
+      if (ARENA) window.PizarraArena.animate(E, marks, { YAWS });
       window.__playLength = t;
+      window.__marks = marks;
       return tl;
     },
   };

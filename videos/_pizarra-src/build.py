@@ -12,6 +12,7 @@ VIDEOS = os.path.dirname(HERE)
 PLAYS = {
     "poni": {
         "num": "01",
+        "music": "poniclub.mp3",
         "title": ["LA", "PONI"],
         "accent": 1,
         "titleSize": 150,
@@ -137,16 +138,24 @@ def main():
             .replace("__PLAY_JSON__", json.dumps(cfg, ensure_ascii=False))
         )
         open(os.path.join(proj, "index.html"), "w").write(html)
-        # música (Brisk Beat, aportada por el club): recorte a la duración del vídeo + fundido final
+        # música: Brisk Beat por defecto; una jugada puede llevar su propio tema ("music").
+        # Si el tema es algo más corto que el vídeo, se estira (sin cambiar el tono) para que
+        # termine con el vídeo; si es más largo, se recorta con fundido final.
         mdir = os.path.join(proj, "assets", "music")
         os.makedirs(mdir, exist_ok=True)
         for old in os.listdir(mdir):
             os.remove(os.path.join(mdir, old))
         d = float(duration)
-        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", os.path.join(HERE, "brisk-beat.m4a"), "-t", duration,
-                        "-af", f"afade=t=out:st={d - 2.5:.2f}:d=2.5,loudnorm=I=-16:TP=-1.5:LRA=11",
+        src = os.path.join(HERE, cfg.get("music", "brisk-beat.m4a"))
+        sdur = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
+                                     "-of", "csv=p=0", src], capture_output=True, text=True, check=True).stdout)
+        chain = []
+        if sdur < d:
+            chain.append(f"atempo={sdur / d:.5f}")
+        chain += [f"afade=t=out:st={d - 2.5:.2f}:d=2.5", "loudnorm=I=-16:TP=-1.5:LRA=11"]
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", src, "-t", duration, "-af", ",".join(chain),
                         "-ar", "44100", "-c:a", "libmp3lame", "-b:a", "192k",
-                        os.path.join(mdir, "brisk-beat.mp3")], check=True)
+                        os.path.join(mdir, "bgm.mp3")], check=True)
         print("ok", key, duration)
 
 

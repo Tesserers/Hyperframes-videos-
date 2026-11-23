@@ -7,30 +7,44 @@
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1920px; height: 1080px; overflow: hidden; }
-      body { background: #191919; }
-      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--base, #191919); }
-      #stage { position: absolute; inset: 0; }
-      /* The «m»'s table, as a capsule of light. Depth is blur: the further back,
-         the softer and the slower. */
-      .pill { position: absolute; left: 0; top: 0; will-change: transform; }
-      #grain { position: absolute; inset: 0; background: url(assets/fx/grain.png) repeat; opacity: .07; mix-blend-mode: overlay; pointer-events: none; }
+      body { background: #A61C1C; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--base, #A61C1C); }
+      #art { position: absolute; inset: 0; width: 1920px; height: 1080px; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="20"
+    <div id="root" data-composition-id="main" data-start="0" data-duration="24"
          data-width="1920" data-height="1080"
-         data-composition-variables='{"base": "carbon"}'>
-      <div id="stage" class="clip" data-start="0" data-duration="20" data-track-index="0"></div>
-      <div id="grain" class="clip" data-start="0" data-duration="20" data-track-index="1"></div>
+         data-composition-variables='{"base": "rojo"}'>
+      <svg id="art" class="clip" data-start="0" data-duration="24" data-track-index="0"
+           viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- The brandkit symbol, exactly: three tables, one stroke, one radius. -->
+          <mask id="mk" maskUnits="userSpaceOnUse" x="0" y="0" width="1920" height="1080">
+            <g id="sym">
+              <path id="symp" d="M110 5H25A20 20 0 0 0 25 45H110M25 45A20 20 0 0 0 25 85H110"
+                    fill="none" stroke="#fff" stroke-width="10"/>
+            </g>
+          </mask>
+          <filter id="soft" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation="2.2"/></filter>
+        </defs>
+        <g mask="url(#mk)">
+          <rect id="fill" x="0" y="0" width="1920" height="1080" fill="#F6F3EE"/>
+          <g id="photos" filter="url(#soft)">
+            <image id="p0" href="assets/photos/01-bosque.jpg" x="-80" y="-60" width="2080" height="1200" preserveAspectRatio="xMidYMid slice" opacity="0"/>
+            <image id="p1" href="assets/photos/02-casa.jpg"   x="-80" y="-60" width="2080" height="1200" preserveAspectRatio="xMidYMid slice" opacity="0"/>
+            <image id="p2" href="assets/photos/04-mesa.jpg"   x="-80" y="-60" width="2080" height="1200" preserveAspectRatio="xMidYMid slice" opacity="0"/>
+          </g>
+        </g>
+      </svg>
     </div>
 
     <script>
       window.__timelines = window.__timelines || {};
       (function () {
-        var DUR = 20, FPS = 30, W = 1920;
-
-        var BASES = { carbon: "#191919", rojo: "#A61C1C" };
-        var base = "carbon";
+        var DUR = 24;
+        var BASES = { rojo: "#A61C1C", carbon: "#191919" };
+        var base = "rojo";
         try {
           var vars = (window.__hyperframes && window.__hyperframes.getVariables) ? window.__hyperframes.getVariables() : null;
           if (vars && BASES[vars.base]) base = vars.base;
@@ -38,60 +52,49 @@
         document.getElementById("root").style.setProperty("--base", BASES[base]);
         document.body.style.background = BASES[base];
 
-        // Brand colours only. On the red base the reds swap for carbon and deep red.
-        var C = base === "rojo"
-          ? { a: "#191919", b: "#8E1616", c: "#C4433A", w: "#F6F3EE" }
-          : { a: "#A61C1C", b: "#8E1616", c: "#C4433A", w: "#F6F3EE" };
+        var sym = document.getElementById("sym"), symp = document.getElementById("symp");
+        var photos = document.getElementById("photos");
+        var P = [document.getElementById("p0"), document.getElementById("p1"), document.getElementById("p2")];
+        var LEN = symp.getTotalLength();
+        symp.style.strokeDasharray = LEN + " " + LEN;
 
-        // w,h: size · y: centre line · col · op: opacity · blur in px
-        // laps: how many times it crosses in one loop (an integer, so the loop is exact)
-        // ph: starting phase · amp/osc: a slow vertical swell, also a whole number of cycles
-        var P = [
-          { w: 1700, h: 460, y: 300, col: C.b, op: .95, blur: 140, laps: 1, ph: 0.10, amp: 50, osc: 1 },
-          { w: 1500, h: 400, y: 760, col: C.a, op: .95, blur: 120, laps: 1, ph: 0.62, amp: 40, osc: 2 },
-          { w: 1100, h: 300, y: 560, col: C.a, op: .85, blur: 100, laps: 1, ph: 0.38, amp: 60, osc: 1 },
-          { w:  900, h: 220, y: 180, col: C.c, op: .70, blur:  80, laps: 2, ph: 0.20, amp: 30, osc: 2 },
-          { w:  760, h: 160, y: 900, col: C.c, op: .75, blur:  70, laps: 2, ph: 0.70, amp: 30, osc: 3 },
-          { w:  680, h: 130, y: 440, col: C.w, op: .16, blur:  60, laps: 2, ph: 0.55, amp: 40, osc: 2 },
-          { w:  520, h:  80, y: 650, col: C.c, op: .55, blur:  16, laps: 3, ph: 0.15, amp: 20, osc: 3 },
-          { w:  380, h:  56, y: 300, col: C.w, op: .22, blur:  10, laps: 3, ph: 0.85, amp: 16, osc: 3 }
-        ];
+        // One state object, tweened; the SVG is written from it on every frame.
+        // Small: the symbol at 3x, centre-right. Large: 12x, bleeding off the right
+        // edge, its three tables 120 px thick and the left half of the frame clear.
+        var S = { s: 3, cx: 1300, cy: 540, drift: 0, dash: LEN, o0: 0, o1: 0, o2: 0, pan: 0 };
 
-        var stage = document.getElementById("stage");
-        var els = P.map(function (p) {
-          var d = document.createElement("div");
-          d.className = "pill";
-          d.style.width = p.w + "px"; d.style.height = p.h + "px";
-          d.style.borderRadius = (p.h / 2) + "px";
-          d.style.background = p.col; d.style.opacity = p.op;
-          d.style.filter = "blur(" + p.blur + "px)";
-          stage.appendChild(d);
-          return d;
-        });
-
-        var grain = document.getElementById("grain");
-
-        // Pure function of the clock. Every motion is a whole number of cycles per
-        // 20 s, so frame 600 would be frame 0: the loop is exact.
-        function draw(t) {
-          var f = t / DUR;
-          for (var i = 0; i < P.length; i++) {
-            var p = P[i], pad = p.blur * 2;
-            var span = W + p.w + 2 * pad;
-            var q = ((f * p.laps + p.ph) % 1 + 1) % 1;            // 0..1 across the frame
-            var x = W + pad - q * span;                            // enters right, leaves left
-            var y = p.y - p.h / 2 + p.amp * Math.sin(2 * Math.PI * (f * p.osc + p.ph));
-            els[i].style.transform = "translate3d(" + x.toFixed(2) + "px," + y.toFixed(2) + "px,0)";
-          }
-          // Animated grain: the same tile, moved to a new place every frame.
-          var n = Math.round(t * FPS);
-          grain.style.backgroundPosition = ((n * 137) % 512) + "px " + ((n * 271) % 512) + "px";
+        function apply() {
+          var tx = S.cx + S.drift - 55 * S.s, ty = S.cy - 45 * S.s;
+          sym.setAttribute("transform", "translate(" + tx.toFixed(2) + " " + ty.toFixed(2) + ") scale(" + S.s.toFixed(4) + ")");
+          symp.style.strokeDashoffset = S.dash.toFixed(3);
+          P[0].setAttribute("opacity", S.o0.toFixed(4));
+          P[1].setAttribute("opacity", S.o1.toFixed(4));
+          P[2].setAttribute("opacity", S.o2.toFixed(4));
+          photos.setAttribute("transform", "translate(" + S.pan.toFixed(2) + " 0)");
         }
 
-        var tl = gsap.timeline({ paused: true, onUpdate: function () { draw(tl.time()); } });
+        var tl = gsap.timeline({ paused: true, onUpdate: apply });
+        var E = "sine.inOut", G = "power2.inOut";
+
+        // 0 — the stroke draws itself, top table first, in one line.
+        tl.fromTo(S, { dash: LEN }, { dash: 0, duration: 2.8, ease: G }, 0.4);
+        // 1 — it grows into a supergraphic and its tables open onto the photographs.
+        tl.fromTo(S, { s: 3, cx: 1300 }, { s: 12, cx: 1520, duration: 4.4, ease: G }, 3.6);
+        tl.fromTo(S, { o0: 0 }, { o0: 1, duration: 2.2, ease: E }, 5.2);
+        // 2 — it rests, drifting left very slowly while the photographs change.
+        tl.fromTo(S, { drift: 0 }, { drift: -70, duration: 11.0, ease: E }, 8.0);
+        tl.fromTo(S, { pan: 0 }, { pan: -90, duration: 14.0, ease: "none" }, 5.2);
+        tl.fromTo(S, { o1: 0 }, { o1: 1, duration: 1.8, ease: E }, 11.2);
+        tl.fromTo(S, { o2: 0 }, { o2: 1, duration: 1.8, ease: E }, 15.0);
+        // 3 — it gathers itself back to the small symbol, the photographs give way
+        //     to the warm white, and the stroke erases itself the way it was drawn.
+        tl.fromTo(S, { s: 12, cx: 1520, drift: -70 }, { s: 3, cx: 1300, drift: 0, duration: 3.6, ease: G, immediateRender: false }, 19.0);
+        tl.fromTo(S, { o0: 1, o1: 1, o2: 1 }, { o0: 0, o1: 0, o2: 0, duration: 1.8, ease: E, immediateRender: false }, 19.2);
+        tl.fromTo(S, { dash: 0 }, { dash: -LEN, duration: 1.6, ease: G, immediateRender: false }, 22.2);
         tl.set({}, {}, DUR);
+
         window.__timelines["main"] = tl;
-        draw(0);
+        apply();
         tl.seek(0);
       })();
     </script>

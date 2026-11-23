@@ -8,60 +8,84 @@
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1920px; height: 1080px; overflow: hidden; }
       body { background: #191919; }
-      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #191919; }
-      /* The blur lives on one wrapper, oversized by 8% on every side so the
-         soft edge a blur leaves at the borders falls outside the frame. */
-      #stage { position: absolute; left: -160px; top: -90px; width: 2240px; height: 1260px; filter: blur(var(--blur, 28px)); }
-      .ph { position: absolute; inset: 0; will-change: transform, opacity; }
-      .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--base, #191919); }
+      #stage { position: absolute; inset: 0; }
+      /* The «m»'s table, as a capsule of light. Depth is blur: the further back,
+         the softer and the slower. */
+      .pill { position: absolute; left: 0; top: 0; will-change: transform; }
+      #grain { position: absolute; inset: 0; background: url(assets/fx/grain.png) repeat; opacity: .07; mix-blend-mode: overlay; pointer-events: none; }
     </style>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="20"
          data-width="1920" data-height="1080"
-         data-composition-variables='{"blur": 28}'>
-      <div id="stage" class="clip" data-start="0" data-duration="20" data-track-index="0">
-        <div class="ph"><img src="assets/photos/01-bosque.jpg" alt="" style="object-position:50% 60%"></div>
-        <div class="ph"><img src="assets/photos/02-casa.jpg" alt="" style="object-position:45% 55%"></div>
-        <div class="ph"><img src="assets/photos/03-conversacion.jpg" alt="" style="object-position:50% 35%"></div>
-        <div class="ph"><img src="assets/photos/04-mesa.jpg" alt="" style="object-position:55% 60%"></div>
-      </div>
+         data-composition-variables='{"base": "carbon"}'>
+      <div id="stage" class="clip" data-start="0" data-duration="20" data-track-index="0"></div>
+      <div id="grain" class="clip" data-start="0" data-duration="20" data-track-index="1"></div>
     </div>
 
     <script>
       window.__timelines = window.__timelines || {};
       (function () {
-        var DUR = 20, N = 4, SLOT = DUR / N;   // one photo every 5 s
-        var FADE = 1.6;                        // crossfade length
-        // Each photo drifts in its own direction at constant speed, and pushes in slowly.
-        var DRIFT = [[-14, -4], [12, 3], [-12, 4], [14, -3]];
+        var DUR = 20, FPS = 30, W = 1920;
 
+        var BASES = { carbon: "#191919", rojo: "#A61C1C" };
+        var base = "carbon";
         try {
           var vars = (window.__hyperframes && window.__hyperframes.getVariables) ? window.__hyperframes.getVariables() : null;
-          var b = vars && typeof vars.blur === "number" ? vars.blur : 28;
-          document.getElementById("stage").style.setProperty("--blur", b + "px");
-          if (b === 0) document.getElementById("stage").style.filter = "none";
+          if (vars && BASES[vars.base]) base = vars.base;
         } catch (e) {}
+        document.getElementById("root").style.setProperty("--base", BASES[base]);
+        document.body.style.background = BASES[base];
 
-        var ph = document.querySelectorAll(".ph");
+        // Brand colours only. On the red base the reds swap for carbon and deep red.
+        var C = base === "rojo"
+          ? { a: "#191919", b: "#8E1616", c: "#C4433A", w: "#F6F3EE" }
+          : { a: "#A61C1C", b: "#8E1616", c: "#C4433A", w: "#F6F3EE" };
 
-        // A pure function of the clock, taken modulo the loop length, so the
-        // last frame runs straight into the first: the loop is exact by construction.
+        // w,h: size · y: centre line · col · op: opacity · blur in px
+        // laps: how many times it crosses in one loop (an integer, so the loop is exact)
+        // ph: starting phase · amp/osc: a slow vertical swell, also a whole number of cycles
+        var P = [
+          { w: 1700, h: 460, y: 300, col: C.b, op: .95, blur: 140, laps: 1, ph: 0.10, amp: 50, osc: 1 },
+          { w: 1500, h: 400, y: 760, col: C.a, op: .95, blur: 120, laps: 1, ph: 0.62, amp: 40, osc: 2 },
+          { w: 1100, h: 300, y: 560, col: C.a, op: .85, blur: 100, laps: 1, ph: 0.38, amp: 60, osc: 1 },
+          { w:  900, h: 220, y: 180, col: C.c, op: .70, blur:  80, laps: 2, ph: 0.20, amp: 30, osc: 2 },
+          { w:  760, h: 160, y: 900, col: C.c, op: .75, blur:  70, laps: 2, ph: 0.70, amp: 30, osc: 3 },
+          { w:  680, h: 130, y: 440, col: C.w, op: .16, blur:  60, laps: 2, ph: 0.55, amp: 40, osc: 2 },
+          { w:  520, h:  80, y: 650, col: C.c, op: .55, blur:  16, laps: 3, ph: 0.15, amp: 20, osc: 3 },
+          { w:  380, h:  56, y: 300, col: C.w, op: .22, blur:  10, laps: 3, ph: 0.85, amp: 16, osc: 3 }
+        ];
+
+        var stage = document.getElementById("stage");
+        var els = P.map(function (p) {
+          var d = document.createElement("div");
+          d.className = "pill";
+          d.style.width = p.w + "px"; d.style.height = p.h + "px";
+          d.style.borderRadius = (p.h / 2) + "px";
+          d.style.background = p.col; d.style.opacity = p.op;
+          d.style.filter = "blur(" + p.blur + "px)";
+          stage.appendChild(d);
+          return d;
+        });
+
+        var grain = document.getElementById("grain");
+
+        // Pure function of the clock. Every motion is a whole number of cycles per
+        // 20 s, so frame 600 would be frame 0: the loop is exact.
         function draw(t) {
-          for (var k = 0; k < N; k++) {
-            var u = ((t - k * SLOT + FADE) % DUR + DUR) % DUR - FADE; // time since photo k finished fading in
-            var on = u < SLOT;                                            // visible from -FADE to SLOT
-            var el = ph[k];
-            el.style.display = on ? "block" : "none";
-            if (!on) continue;
-            var life = u + FADE;                                          // 0 .. SLOT + FADE
-            var o = u < 0 ? (u + FADE) / FADE : 1;
-            o = o * o * (3 - 2 * o);                                      // smoothstep
-            el.style.opacity = o.toFixed(4);
-            el.style.zIndex = u < 0 ? 2 : 1;
-            var s = 1.04 + 0.008 * life;
-            el.style.transform = "translate3d(" + (DRIFT[k][0] * life).toFixed(2) + "px," + (DRIFT[k][1] * life).toFixed(2) + "px,0) scale(" + s.toFixed(4) + ")";
+          var f = t / DUR;
+          for (var i = 0; i < P.length; i++) {
+            var p = P[i], pad = p.blur * 2;
+            var span = W + p.w + 2 * pad;
+            var q = ((f * p.laps + p.ph) % 1 + 1) % 1;            // 0..1 across the frame
+            var x = W + pad - q * span;                            // enters right, leaves left
+            var y = p.y - p.h / 2 + p.amp * Math.sin(2 * Math.PI * (f * p.osc + p.ph));
+            els[i].style.transform = "translate3d(" + x.toFixed(2) + "px," + y.toFixed(2) + "px,0)";
           }
+          // Animated grain: the same tile, moved to a new place every frame.
+          var n = Math.round(t * FPS);
+          grain.style.backgroundPosition = ((n * 137) % 512) + "px " + ((n * 271) % 512) + "px";
         }
 
         var tl = gsap.timeline({ paused: true, onUpdate: function () { draw(tl.time()); } });

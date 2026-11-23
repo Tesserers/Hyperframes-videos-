@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>edvm · patrón con scroll</title>
+<style>
+  * { margin: 0; box-sizing: border-box; }
+  body { background: #A61C1C; }
+  /* El patrón fachada del brandkit como fondo fijo de la sección. Se desplaza hacia
+     arriba al hacer scroll, más despacio que la página, y se funde con el rojo
+     arriba y abajo. */
+  .patron {
+    position: fixed; inset: 0; z-index: -1;
+    background: url(patron-m.svg) 0 0 / 480px 200px repeat;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 62%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 62%, transparent 100%);
+  }
+  section { height: 100vh; }
+  @media (prefers-reduced-motion: reduce) { .patron { background-position: 0 0 !important; } }
+</style>
+</head>
+<body>
+  <div class="patron" aria-hidden="true"></div>
+  <section></section><section></section><section></section>
+  <script>
+    // Las «m» suben al bajar la página, a la mitad de su velocidad.
+    var el = document.querySelector('.patron'), ticking = false;
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    addEventListener('scroll', function () {
+      if (reduce || ticking) return; ticking = true;
+      requestAnimationFrame(function () {
+        el.style.backgroundPosition = '0 ' + (-scrollY * 0.5) + 'px';
+        ticking = false;
+      });
+    }, { passive: true });
+  </script>
+</body>
+</html>

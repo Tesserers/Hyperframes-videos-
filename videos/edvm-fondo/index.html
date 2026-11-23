@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; }
+      body { background: #191919; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #191919; }
+      /* The blur lives on one wrapper, oversized by 8% on every side so the
+         soft edge a blur leaves at the borders falls outside the frame. */
+      #stage { position: absolute; left: -160px; top: -90px; width: 2240px; height: 1260px; filter: blur(var(--blur, 28px)); }
+      .ph { position: absolute; inset: 0; will-change: transform, opacity; }
+      .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="20"
+         data-width="1920" data-height="1080"
+         data-composition-variables='{"blur": 28}'>
+      <div id="stage" class="clip" data-start="0" data-duration="20" data-track-index="0">
+        <div class="ph"><img src="assets/photos/01-bosque.jpg" alt="" style="object-position:50% 60%"></div>
+        <div class="ph"><img src="assets/photos/02-casa.jpg" alt="" style="object-position:45% 55%"></div>
+        <div class="ph"><img src="assets/photos/03-conversacion.jpg" alt="" style="object-position:50% 35%"></div>
+        <div class="ph"><img src="assets/photos/04-mesa.jpg" alt="" style="object-position:55% 60%"></div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      (function () {
+        var DUR = 20, N = 4, SLOT = DUR / N;   // one photo every 5 s
+        var FADE = 1.6;                        // crossfade length
+        // Each photo drifts in its own direction at constant speed, and pushes in slowly.
+        var DRIFT = [[-14, -4], [12, 3], [-12, 4], [14, -3]];
+
+        try {
+          var vars = (window.__hyperframes && window.__hyperframes.getVariables) ? window.__hyperframes.getVariables() : null;
+          var b = vars && typeof vars.blur === "number" ? vars.blur : 28;
+          document.getElementById("stage").style.setProperty("--blur", b + "px");
+          if (b === 0) document.getElementById("stage").style.filter = "none";
+        } catch (e) {}
+
+        var ph = document.querySelectorAll(".ph");
+
+        // A pure function of the clock, taken modulo the loop length, so the
+        // last frame runs straight into the first: the loop is exact by construction.
+        function draw(t) {
+          for (var k = 0; k < N; k++) {
+            var u = ((t - k * SLOT + FADE) % DUR + DUR) % DUR - FADE; // time since photo k finished fading in
+            var on = u < SLOT;                                            // visible from -FADE to SLOT
+            var el = ph[k];
+            el.style.display = on ? "block" : "none";
+            if (!on) continue;
+            var life = u + FADE;                                          // 0 .. SLOT + FADE
+            var o = u < 0 ? (u + FADE) / FADE : 1;
+            o = o * o * (3 - 2 * o);                                      // smoothstep
+            el.style.opacity = o.toFixed(4);
+            el.style.zIndex = u < 0 ? 2 : 1;
+            var s = 1.04 + 0.008 * life;
+            el.style.transform = "translate3d(" + (DRIFT[k][0] * life).toFixed(2) + "px," + (DRIFT[k][1] * life).toFixed(2) + "px,0) scale(" + s.toFixed(4) + ")";
+          }
+        }
+
+        var tl = gsap.timeline({ paused: true, onUpdate: function () { draw(tl.time()); } });
+        tl.set({}, {}, DUR);
+        window.__timelines["main"] = tl;
+        draw(0);
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

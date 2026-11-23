@@ -13,51 +13,66 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="20"
+    <div id="root" data-composition-id="main" data-start="0" data-duration="24"
          data-width="1920" data-height="1080">
-      <svg id="art" class="clip" data-start="0" data-duration="20" data-track-index="0"
+      <svg id="art" class="clip" data-start="0" data-duration="24" data-track-index="0"
            viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
-        <g id="tunnel"></g>
+        <defs>
+          <!-- The opening: one of the «m»'s tables, as a capsule. It is sized so that,
+               centred on the frame, it just contains the whole 1920×1080 frame. -->
+          <clipPath id="door" clipPathUnits="userSpaceOnUse">
+            <rect x="-210" y="-260" width="2340" height="1600" rx="800" ry="800"/>
+          </clipPath>
+        </defs>
+        <g id="levels"></g>
       </svg>
     </div>
 
     <script>
       window.__timelines = window.__timelines || {};
       (function () {
-        var DUR = 20;
-        var PASSES = 6;          // six «m» flown through per loop: one every 3.33 s
-        var R = 5;               // each «m» is 5x the next one: it sits inside the gap of the one before, with air around it
-        var N = 5;               // how many are on screen at once
-        var S0 = 0.30;           // scale of the furthest one
-        var VX = 960, VY = 540;  // vanishing point: the centre of the frame
-        // The camera aims at the gap between the top and middle tables of every «m»:
-        // inner arc at x=25, tables end at x=110, gap from y=10 to y=40.
-        var GX = 67.5, GY = 25;
+        var DUR = 24, PASSES = 4;     // one full pass every 6 s
+        var M = 9;                    // the symbol at 9x: whole, centred, tables 90 px thick
+        // The camera aims at the centre of the middle table's stroke (x=75, y=45 in
+        // symbol units): it flies into the red. Inside that red, the next level waits
+        // behind a capsule-shaped opening, so small at first it is a speck.
+        var AX = 75, AY = 45;
+        var R = 480;                  // each level is 480x smaller than the one around it
+        var LEVELS = 3;
         var D = "M110 5H25A20 20 0 0 0 25 45H110M25 45A20 20 0 0 0 25 85H110";
+        var ns = "http://www.w3.org/2000/svg", root = document.getElementById("levels");
 
-        var ns = "http://www.w3.org/2000/svg", g = document.getElementById("tunnel");
-        var ms = [];
-        for (var i = 0; i < N; i++) {
-          var p = document.createElementNS(ns, "path");
-          p.setAttribute("d", D); p.setAttribute("fill", "none");
-          p.setAttribute("stroke", "#A61C1C"); p.setAttribute("stroke-width", "10");
-          g.insertBefore(p, g.firstChild);   // the nearest one is drawn last, on top
-          ms.push(p);
+        // Every level is the same picture: beige, the red symbol, and the door to the
+        // next level inside its middle table. Levels are siblings with absolute
+        // transforms, never nested, so the numbers stay precise however deep we go.
+        var L = [];
+        for (var k = 0; k < LEVELS; k++) {
+          var outer = document.createElementNS(ns, "g");
+          var inner = document.createElementNS(ns, "g");
+          if (k > 0) inner.setAttribute("clip-path", "url(#door)");
+          var bg = document.createElementNS(ns, "rect");
+          bg.setAttribute("x", "-300"); bg.setAttribute("y", "-300");
+          bg.setAttribute("width", "2520"); bg.setAttribute("height", "1680");
+          bg.setAttribute("fill", "#F6F3EE");
+          var m = document.createElementNS(ns, "path");
+          m.setAttribute("d", D); m.setAttribute("fill", "none");
+          m.setAttribute("stroke", "#A61C1C"); m.setAttribute("stroke-width", "10");
+          m.setAttribute("transform", "translate(" + (960 - AX * M) + " " + (540 - AY * M) + ") scale(" + M + ")");
+          inner.appendChild(bg); inner.appendChild(m); outer.appendChild(inner); root.appendChild(outer);
+          L.push(outer);
         }
 
-        // Exponential zoom, so the speed of travel feels constant. Everything is a
-        // function of how far along the tunnel we are, taken modulo one «m»: after
-        // each pass the set of «m» is the same set shifted by one, so the loop is exact.
+        // Exponential zoom towards the frame centre. One pass multiplies the zoom by R;
+        // at the end of a pass the next level fills the frame exactly as this one did at
+        // the start, so the picture repeats and the loop is exact.
         var cam = { z: 0 };
         function apply() {
           var f = cam.z - Math.floor(cam.z);
-          for (var k = 0; k < N; k++) {
-            var s = S0 * Math.pow(R, k + f);
-            var tx = VX - GX * s, ty = VY - GY * s;
-            ms[k].setAttribute("transform", "translate(" + tx.toFixed(3) + " " + ty.toFixed(3) + ") scale(" + s.toFixed(5) + ")");
-            // The furthest one fades up out of the beige as it arrives.
-            var o = k === 0 ? f : 1;
-            ms[k].setAttribute("opacity", (o * o * (3 - 2 * o)).toFixed(4));
+          for (var k = 0; k < LEVELS; k++) {
+            var Z = Math.pow(R, f - k);
+            var tx = 960 - 960 * Z, ty = 540 - 540 * Z;
+            L[k].setAttribute("transform", "translate(" + tx.toFixed(4) + " " + ty.toFixed(4) + ") scale(" + Z.toPrecision(8) + ")");
+            L[k].setAttribute("display", Z * 1600 < 0.5 ? "none" : "inline");
           }
         }
 

@@ -74,6 +74,14 @@ Feedback del cliente sobre la v1. Cambios:
   rehacer la versión interna basta con apuntar el `<audio id="bgm">` a
   `assets/bgm/plana-fix-your-accent.wav`.
 
+## Versión 8 — más plana
+
+- Fuera la retícula de fondo en todas las escenas: colores planos de marca (navy, azul,
+  amarillo). La retícula leía como plantilla genérica, no como Plana.
+- Fuera las cintas de texto cruzadas tras «plana.» y la tira que corría en el cierre. En su
+  lugar, «selección a tarifa plana.» en azul, palabra a palabra, apoyada bajo la línea
+  amarilla recién aplanada. El cierre queda en logo, claim, subrayado con pico y web.
+
 ## Assets
 
 - `assets/brand/borrador-referencia.mp4` — borrador de 10 s que aportó el cliente. De él salen

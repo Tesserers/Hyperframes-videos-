@@ -16,7 +16,6 @@
         --blue: #4fb3e8;
         --yellow: #ffd75e;
         --white: #f8fcff;
-        --grid-navy: #1a3b56;
       }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--navy); }
@@ -31,18 +30,6 @@
       .yellow { background: var(--yellow); color: var(--navy); }
       .blue { background: var(--blue); color: var(--navy); }
 
-      .grid {
-        position: absolute; left: -240px; top: -240px; width: 2400px; height: 1560px;
-        background-image:
-          linear-gradient(to right, var(--grid-navy) 0 2px, transparent 2px),
-          linear-gradient(to bottom, var(--grid-navy) 0 2px, transparent 2px);
-        background-size: 120px 120px;
-      }
-      .grid.soft {
-        background-image:
-          linear-gradient(to right, rgba(16, 36, 58, 0.14) 0 2px, transparent 2px),
-          linear-gradient(to bottom, rgba(16, 36, 58, 0.14) 0 2px, transparent 2px);
-      }
 
       /* Voz de marca en minúsculas, como «be smart, be plana». Para volver a
          mayúscula inicial basta con quitar esta regla. */
@@ -73,10 +60,7 @@
       /* 3a */
       #zig { position: absolute; left: 0; top: 0; }
       #w-plana { left: 90px; top: 150px; font-size: 600px; letter-spacing: -0.07em; }
-      .tape { position: absolute; left: -400px; width: 2720px; height: 116px; display: flex; align-items: center; overflow: hidden; }
-      .tape .run { font-weight: 900; font-size: 64px; letter-spacing: -0.02em; white-space: nowrap; color: var(--navy); }
-      #tapeA { top: 830px; background: var(--yellow); }
-      #tapeB { top: 890px; background: var(--blue); }
+      #s3a-sub { left: 100px; top: 795px; font-size: 120px; color: var(--blue); }
       /* 3b */
       #s3b-copy { left: 140px; top: 0; height: 1080px; display: flex; flex-direction: column; justify-content: center; font-size: 124px; }
       #sticker { position: absolute; left: 150px; top: 700px; font-weight: 900; font-size: 124px; letter-spacing: -0.05em; background: var(--yellow); color: var(--navy); padding: 6px 44px 26px 36px; border-radius: 90px; white-space: nowrap; }
@@ -112,8 +96,6 @@
       #s5-claim .ln { display: inline-block; vertical-align: top; }
       #s5-line { position: absolute; left: 0; top: 0; }
       #s5-url { position: absolute; left: 0; width: 1920px; top: 820px; text-align: center; font-weight: 800; font-size: 56px; color: var(--blue); letter-spacing: -0.01em; }
-      #ticker { position: absolute; left: 0; top: 990px; width: 1920px; height: 60px; overflow: hidden; }
-      #ticker .run { font-weight: 800; font-size: 32px; color: var(--blue); white-space: nowrap; letter-spacing: 0.01em; }
     </style>
   </head>
   <body>
@@ -123,7 +105,6 @@
 
       <!-- 1 · GANCHO (0–5): una palabra por golpe -->
       <div id="s1" class="clip scene navy" data-start="0" data-duration="4.6875" data-track-index="1">
-        <div class="grid" id="g1"></div>
         <div id="s1-cam" class="abs" style="inset: 0">
           <div class="big-word h lc" id="w1-0"><div class="ln"><span class="w">Contratar</span></div></div>
           <div class="big-word h lc" id="w1-1" style="font-size: 640px"><div class="ln"><span class="w">no</span></div></div>
@@ -146,13 +127,11 @@
       </div>
 
       <div id="s2b" class="clip scene navy" data-start="6.0938" data-duration="1.4062" data-track-index="1">
-        <div class="grid" id="g2b"></div>
         <div id="tiny-wrap"><div id="tiny" class="h lc" data-layout-allow-overflow>Letra pequeña.</div></div>
         <div id="asterisk">*</div>
       </div>
 
       <div id="s2c" class="clip scene blue" data-start="7.5" data-duration="1.7578" data-track-index="1">
-        <div class="grid soft" id="g2c"></div>
         <div id="s2c-copy" class="abs h lc" data-layout-allow-overlap>
           <div class="ln"><span class="w" data-layout-allow-overlap>Facturas</span> <span class="w" data-layout-allow-overlap>que</span></div>
           <div class="ln"><span class="w" data-layout-allow-overlap>nadie</span> <span class="w" data-layout-allow-overlap>espera.</span></div>
@@ -164,17 +143,14 @@
 
       <!-- 3 · LA RESPUESTA (9,875–18) -->
       <div id="s3a" class="clip scene navy" data-start="9.2578" data-duration="2.9297" data-track-index="1">
-        <div class="grid" id="g3a"></div>
         <svg id="zig" width="1920" height="1080" viewBox="0 0 1920 1080">
           <path id="zig-path" fill="none" stroke="#FFD75E" stroke-width="18" stroke-linejoin="round" stroke-linecap="round" d="M0 700 L1920 700" />
         </svg>
         <div id="w-plana" class="abs h lc" data-layout-allow-overlap><div class="ln" id="plana-ln">Plana.</div></div>
-        <div class="tape" id="tapeA" data-layout-allow-overlap><div class="run lc" id="runA" data-layout-allow-overlap>Selección a tarifa plana · Selección a tarifa plana · Selección a tarifa plana · Selección a tarifa plana · Selección a tarifa plana ·</div></div>
-        <div class="tape" id="tapeB" data-layout-allow-overlap><div class="run lc" id="runB" data-layout-allow-overlap>Sin porcentajes · Sin letra pequeña · Sin sorpresas · Sin porcentajes · Sin letra pequeña · Sin sorpresas · Sin porcentajes ·</div></div>
+        <div id="s3a-sub" class="abs h lc" data-layout-allow-overlap><div class="ln"><span class="w" data-layout-allow-overlap>Selección</span> <span class="w" data-layout-allow-overlap>a</span> <span class="w" data-layout-allow-overlap>tarifa</span> <span class="w" data-layout-allow-overlap>plana.</span></div></div>
       </div>
 
       <div id="s3b" class="clip scene navy" data-start="12.1875" data-duration="4.6875" data-track-index="1">
-        <div class="grid" id="g3b"></div>
         <div id="s3b-copy" class="abs h lc">
           <div class="ln"><span class="w">Precio</span> <span class="w">cerrado</span></div>
           <div class="ln"><span class="w">por</span> <span class="w">contratación.</span></div>
@@ -185,7 +161,6 @@
 
       <!-- 4 · BENEFICIOS (18–24,75) -->
       <div id="s4a" class="clip scene navy" data-start="16.875" data-duration="2.3438" data-track-index="1">
-        <div class="grid" id="g4a"></div>
         <div id="s4a-copy" class="abs h lc">
           <div class="ln"><span class="w">Talento</span></div>
           <div class="ln"><span class="w">que</span> <span class="w">encaja.</span></div>
@@ -193,7 +168,6 @@
       </div>
 
       <div id="s4b" class="clip scene blue" data-start="19.2188" data-duration="2.3438" data-track-index="1">
-        <div class="grid soft" id="g4b"></div>
         <div id="s4b-copy" class="abs h lc">
           <div class="ln"><span class="w">Proceso</span></div>
           <div class="ln"><span class="w">ágil.</span></div>
@@ -214,7 +188,6 @@
 
       <!-- 5 · CIERRE (24,75–30) -->
       <div id="s5" class="clip scene navy" data-start="23.2031" data-duration="6.7969" data-track-index="1">
-        <div class="grid" id="g5"></div>
         <div id="logo"><div id="logo-bar"></div></div>
         <div id="s5-claim" class="abs h lc">
           <div class="ln"><span class="w">Be</span> <span class="w">smart.</span></div>
@@ -224,7 +197,6 @@
           <path id="s5-line-path" fill="none" stroke="#FFD75E" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="" />
         </svg>
         <div id="s5-url">beplana.com</div>
-        <div id="ticker"><div class="run lc" id="runT">Sin porcentajes · Sin letra pequeña · Sin sorpresas · Sin porcentajes · Sin letra pequeña · Sin sorpresas · Sin porcentajes · Sin letra pequeña · Sin sorpresas ·</div></div>
       </div>
 
       <!-- Metraje -->
@@ -328,12 +300,6 @@
           tl.set("#flash", { autoAlpha: 0 }, 0);
           tl.set("#cam", { x: 0, y: 0 }, 0);
 
-          // ---------- rejillas: deriva continua hacia la izquierda
-          [["#g1", 0, 5], ["#g2b", 6.5, 1.5], ["#g2c", 8, 1.875], ["#g3a", 9.875, 3.125], ["#g3b", 13, 5],
-           ["#g4a", 18, 2.5], ["#g4b", 20.5, 2.5], ["#g5", 24.75, 5.25]].forEach(function (g) {
-            tl.fromTo(g[0], { x: 0 }, { x: -40 * g[2], ease: "none", duration: g[2] }, g[1]);
-          });
-
           // ---------- paneles de metraje solo en su ventana
           show("#m-tablet", 13, 18); show("#m-oficina", 18, 20.5); show("#notch-sq", 18.5, 20.5);
           show("#m-manos", 20.5, 23); show("#m-amarillo", 23, 24.75);
@@ -425,11 +391,8 @@
           var cPl = splitChars($("plana-ln"));
           pop(cPl, 10.03, 0.4, 0.035, 1.4);
           tl.fromTo("#w-plana", { scale: 1 }, { scale: 1.04, duration: 2.3, ease: "sine.inOut", transformOrigin: "0% 100%" }, 10.4);
-          tl.fromTo("#tapeA", { rotation: -5, xPercent: 100 }, { rotation: -5, xPercent: 0, duration: 0.35, ease: "power4.out" }, 10.75);
-          tl.fromTo("#tapeB", { rotation: 4, xPercent: -100 }, { rotation: 4, xPercent: 0, duration: 0.35, ease: "power4.out" }, 11.0);
-          tl.fromTo("#runA", { x: 0 }, { x: -900, duration: 2.25, ease: "none" }, 10.75);
-          tl.fromTo("#runB", { x: -900 }, { x: 0, duration: 2.0, ease: "none" }, 11.0);
-          tl.to(["#w-plana", "#zig", "#tapeA", "#tapeB"], { x: -420, filter: "blur(14px)", opacity: 0, duration: 0.25, ease: "power3.in", stagger: 0.02 }, 12.72);
+          pop(q("#s3a-sub .w"), 10.75, 0.3, 0.25, 1.3);
+          tl.to(["#w-plana", "#zig", "#s3a-sub"], { x: -420, filter: "blur(14px)", opacity: 0, duration: 0.25, ease: "power3.in", stagger: 0.02 }, 12.72);
 
           // ================= 3b · precio cerrado por contratación. + pegatina
           tl.set("#s3b-copy", { x: 0, filter: "blur(0px)", opacity: 1 }, 13.0);
@@ -493,12 +456,10 @@
           lp5.setAttribute("d", "");
           tl.fromTo(k5, { p: 0 }, { p: 0, duration: 1.25, ease: "none", onUpdate: function () { lp5.setAttribute("d", lineD()); } }, 24.75);
           tl.fromTo(k5, { b: 0 }, { b: 0, duration: 1.75, ease: "none", onUpdate: function () { lp5.setAttribute("d", lineD()); } }, 24.75);
-          tl.fromTo(k5, { p: 0 }, { p: 1, duration: 0.6, ease: "power3.inOut", onUpdate: function () { lp5.setAttribute("d", lineD()); } }, 26.0);
+          tl.fromTo(k5, { p: 0 }, { p: 1, duration: 0.35, ease: "power3.out", onUpdate: function () { lp5.setAttribute("d", lineD()); } }, 26.0);
           tl.fromTo(k5, { b: 0 }, { b: 1, duration: 0.3, ease: "back.out(3)", immediateRender: false, onUpdate: function () { lp5.setAttribute("d", lineD()); } }, 26.5);
           tl.fromTo("#s5-url", { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.35, ease: "power4.out" }, 28.0);
           shake(28.0, 10);
-          tl.fromTo("#ticker", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 }, 26.5);
-          tl.fromTo("#runT", { x: 0 }, { x: -700, duration: 3.5, ease: "none" }, 26.5);
           // logo: entra con el golpe del 25 y guiña al final (28,75)
           tl.fromTo("#logo", { scale: 0, rotation: -120 }, { scale: 1, rotation: 0, duration: 0.45, ease: "back.out(1.9)" }, 25.0);
           tl.fromTo("#logo-bar", { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power4.out" }, 25.3);
